@@ -87,7 +87,7 @@ currentAccount: any;
         this.loadAll();
     }
     ngOnInit() {
-        alert('sadf asdfs');
+     //   alert('sadf asdfs');
         this.loadAll();
         this.principal.identity().then((account) => {
             this.currentAccount = account;
@@ -99,10 +99,10 @@ currentAccount: any;
         });
     }
     load1(id) {
-        alert(id);
-        this.campaignGroupService.findProjects(id, 'project').subscribe((campaigns) => {
-             this.campaignGroups = [];  // campaigns;
-            alert(id);
+       // alert(id);
+        this.campaignGroupService.findProjects(id, 'project').subscribe((data) => {
+             this.campaignGroups = data;
+            // alert(data);
        },
        (err) => {
            alert('error');

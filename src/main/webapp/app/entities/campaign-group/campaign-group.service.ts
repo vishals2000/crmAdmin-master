@@ -31,7 +31,7 @@ export class CampaignGroupService {
             return res.json();
         });
     }
-    findProjects(id: string, project: string): Observable<CampaignGroup> {
+    findProjects(id: string, project: string): Observable<CampaignGroup[]> {
         return this.http.get(`${this.resourceUrl}/${project}/${id}`).map((res: Response) => {
             return res.json();
         }

@@ -18,6 +18,7 @@ export class CampaignGroupDialogComponent implements OnInit {
 
     campaignGroup: CampaignGroup;
     isSaving: boolean;
+    projectId: string;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -29,6 +30,7 @@ export class CampaignGroupDialogComponent implements OnInit {
 
     ngOnInit() {
         this.isSaving = false;
+        this.projectId = CampaignGroupPopupComponent.projectId;
     }
 
     clear() {
@@ -37,6 +39,7 @@ export class CampaignGroupDialogComponent implements OnInit {
 
     save() {
         this.isSaving = true;
+        this.campaignGroup.projectId = this.projectId;
         if (this.campaignGroup.id !== undefined) {
             this.subscribeToSaveResponse(
                 this.campaignGroupService.update(this.campaignGroup));
@@ -78,8 +81,8 @@ export class CampaignGroupDialogComponent implements OnInit {
 })
 export class CampaignGroupPopupComponent implements OnInit, OnDestroy {
 
+    static projectId: string;
     routeSub: any;
-
     constructor(
         private route: ActivatedRoute,
         private campaignGroupPopupService: CampaignGroupPopupService
@@ -87,6 +90,7 @@ export class CampaignGroupPopupComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.routeSub = this.route.params.subscribe((params) => {
+            CampaignGroupPopupComponent.projectId = params['projectId'];
             if ( params['id'] ) {
                 this.campaignGroupPopupService
                     .open(CampaignGroupDialogComponent as Component, params['id']);

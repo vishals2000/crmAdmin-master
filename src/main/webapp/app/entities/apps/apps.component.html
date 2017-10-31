@@ -16,22 +16,22 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="frontEnd"><span>Front End</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="product"><span>Product</span> <span class="fa fa-sort"></span></th>
+            <!-- <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th> -->
+            <!-- <th jhiSortBy="frontEnd"><span>Front End</span> <span class="fa fa-sort"></span></th> -->
+            <!-- <th jhiSortBy="product"><span>Product</span> <span class="fa fa-sort"></span></th> -->
             <th jhiSortBy="name"><span>Name</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="jurisdiction"><span>Jurisdiction</span> <span class="fa fa-sort"></span></th>
+            <!-- <th jhiSortBy="jurisdiction"><span>Jurisdiction</span> <span class="fa fa-sort"></span></th> -->
             <th jhiSortBy="description"><span>Description</span> <span class="fa fa-sort"></span></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let apps of apps ;trackBy: trackId">
-                <td><a [routerLink]="['/campaign-group/project', apps.id]">{{apps.id}}</a></td>
-                <td>{{apps.frontEnd}}</td>
-                <td>{{apps.product}}</td>
-                <td>{{apps.name}}</td>
-                <td>{{apps.jurisdiction}}</td>
+                <!-- <td><a [routerLink]="['/campaign-group/project', apps.id]">{{apps.id}}</a></td> -->
+                <!-- <td>{{apps.frontEnd}}</td> -->
+                <!-- <td>{{apps.product}}</td> -->
+                <td><a [routerLink]="['/campaign-group/project', apps.id]">{{apps.name}}</a></td>
+                <!-- <td>{{apps.jurisdiction}}</td> -->
                 <td>{{apps.description}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">

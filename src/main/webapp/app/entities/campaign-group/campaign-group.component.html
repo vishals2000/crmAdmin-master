@@ -1,7 +1,7 @@
 <div>
     <h2>
         <span>Campaign Groups</span>
-        <button class="btn btn-primary float-right jh-create-entity create-campaign-group" [routerLink]="['/', { outlets: { popup: ['campaign-group-new'] } }]">
+        <button class="btn btn-primary float-right jh-create-entity create-campaign-group" [routerLink]="['/', { outlets: { popup: 'campaign-group-new/'+ projectId } }]">
             <span class="fa fa-plus"></span>
             <span >
             Create new Campaign Group
@@ -16,23 +16,23 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th>
+            <!-- <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th> -->
             <th jhiSortBy="name"><span>Name</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="description"><span>Description</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="projectId"><span>Project Id</span> <span class="fa fa-sort"></span></th>
+            <!-- <th jhiSortBy="projectId"><span>Project Id</span> <span class="fa fa-sort"></span></th> -->
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let campaignGroup of campaignGroups ;trackBy: trackId">
-                <td><a [routerLink]="['../campaign-group', campaignGroup.id ]">{{campaignGroup.id}}</a></td>
-                <td>{{campaignGroup.name}}</td>
+                <!-- <td><a [routerLink]="['../campaign-group', campaignGroup.id ]">{{campaignGroup.id}}</a></td> -->
+                <td><a [routerLink]="['/campaign-template', campaignGroup.id ]">{{campaignGroup.name}}</a></td>
                 <td>{{campaignGroup.description}}</td>
-                <td>{{campaignGroup.projectId}}</td>
+                <!-- <td>{{campaignGroup.projectId}}</td> -->
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                [routerLink]="['../campaign-group', campaignGroup.id ]"
+                                [routerLink]="['/campaign-group', campaignGroup.id ]"
                                 class="btn btn-info btn-sm">
                             <span class="fa fa-eye"></span>
                             <span class="hidden-md-down">View</span>

@@ -62,7 +62,7 @@ export const campaignGroupRoute: Routes = [
 
 export const campaignGroupPopupRoute: Routes = [
     {
-        path: 'campaign-group-new',
+        path: 'campaign-group-new/:projectId',
         component: CampaignGroupPopupComponent,
         data: {
             authorities: ['ROLE_USER'],
