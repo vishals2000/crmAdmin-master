@@ -1,0 +1,49 @@
+
+<div *ngIf="messageContent">
+    <h2><span>Message Content</span> {{messageContent.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Front End</span></dt>
+        <dd>
+            <span>{{messageContent.frontEnd}}</span>
+        </dd>
+        <dt><span>Product</span></dt>
+        <dd>
+            <span>{{messageContent.product}}</span>
+        </dd>
+        <dt><span>Content Name</span></dt>
+        <dd>
+            <span>{{messageContent.contentName}}</span>
+        </dd>
+        <dt><span>Content Title</span></dt>
+        <dd>
+            <span>{{messageContent.contentTitle}}</span>
+        </dd>
+        <dt><span>Content Body</span></dt>
+        <dd>
+            <span>{{messageContent.contentBody}}</span>
+        </dd>
+        <dt><span>Meta Data</span></dt>
+        <dd>
+            <span>{{messageContent.metaData}}</span>
+        </dd>
+        <dt><span>Language</span></dt>
+        <dd>
+            <span>{{messageContent.language}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'message-content/'+ messageContent.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

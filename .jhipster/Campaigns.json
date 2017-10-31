@@ -1,0 +1,10 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [],
+    "dto": "mapstruct",
+    "service": "serviceImpl",
+    "entityTableName": "campaigns",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}

@@ -1,0 +1,110 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+    <div class="modal-header">
+        <h4 class="modal-title" id="myMessageContentLabel">Create or edit a Message Content</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!messageContent.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="messageContent.id" readonly />
+        </div>
+        <!-- <button type="button" (click)="populateFrontEnds()">GetDistinctFe1s</button> -->
+        <div class="form-group" [hidden]="messageContent.id">
+            <label class="form-control-label" for="field_frontEnd">Front End</label>
+            <select class="form-control" name="frontEnd" [(ngModel)]="messageContent.frontEnd" id="field_frontEnd" (change)="populateFeProducts(messageContent.frontEnd)" required>
+                <option *ngFor="let feFrontEnd of frontEnds" [ngValue]="feFrontEnd">{{feFrontEnd}}</option>
+            </select>
+            <!-- <input type="text" class="form-control" name="frontEnd" id="field_frontEnd" [(ngModel)]="messageContent.frontEnd" (change)="populateFeProducts()" required minlength="2" maxlength="2" /> -->
+            <div [hidden]="!(editForm.controls.frontEnd?.dirty && editForm.controls.frontEnd?.invalid)">
+                <small class="form-text text-danger" [hidden]="!editForm.controls.frontEnd?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger" [hidden]="!editForm.controls.frontEnd?.errors?.minlength">
+                   This field is required to be at least 2 characters.
+                </small>
+                <small class="form-text text-danger" [hidden]="!editForm.controls.frontEnd?.errors?.maxlength">
+                   This field cannot be longer than 2 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group" [hidden]="messageContent.id">
+            <label class="form-control-label" for="field_product">Product</label>
+            <!-- <select class="form-control" name="product" [(ngModel)]="messageContent.product" id="field_product"  required>
+                <option value="CASINO">CASINO</option>
+                <option value="POKER">POKER</option>
+                <option value="SPORTS">SPORTS</option>
+            </select> -->
+            <select class="form-control" name="product" [(ngModel)]="messageContent.product" id="field_product"  required>
+                <option *ngFor="let feProduct of feProducts" [ngValue]="feProduct.product">{{feProduct.product}}</option>
+            </select>
+            <div [hidden]="!(editForm.controls.product?.dirty && editForm.controls.product?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.product?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group" [hidden]="messageContent.id">
+            <label class="form-control-label" for="field_contentName">Content Name</label>
+            <input type="text" class="form-control" name="contentName" id="field_contentName"
+                [(ngModel)]="messageContent.contentName" required />
+            <div [hidden]="!(editForm.controls.contentName?.dirty && editForm.controls.contentName?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.contentName?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_contentTitle">Content Title</label>
+            <input type="text" class="form-control" name="contentTitle" id="field_contentTitle"
+                [(ngModel)]="messageContent.contentTitle" required />
+            <div [hidden]="!(editForm.controls.contentTitle?.dirty && editForm.controls.contentTitle?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.contentTitle?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_contentBody">Content Body</label>
+            <input type="text" class="form-control" name="contentBody" id="field_contentBody"
+                [(ngModel)]="messageContent.contentBody" required />
+            <div [hidden]="!(editForm.controls.contentBody?.dirty && editForm.controls.contentBody?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.contentBody?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_metaData">Meta Data</label>
+            <input type="text" class="form-control" name="metaData" id="field_metaData"
+                [(ngModel)]="messageContent.metaData"  />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_language">Language</label>
+            <!-- <input type="text" class="form-control" name="language" id="field_language" [(ngModel)]="messageContent.language" required /> -->
+            <select class="form-control" name="language" id="field_language" [(ngModel)]="messageContent.language" required>
+                <option *ngFor="let language of languages" [value]="language">{{language}}</option>
+            </select>
+            <div [hidden]="!(editForm.controls.language?.dirty && editForm.controls.language?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.language?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

@@ -1,0 +1,41 @@
+
+<div *ngIf="filterCriteria">
+    <h2><span>Filter Criteria</span> {{filterCriteria.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Front End</span></dt>
+        <dd>
+            <span>{{filterCriteria.frontEnd}}</span>
+        </dd>
+        <dt><span>Product</span></dt>
+        <dd>
+            <span>{{filterCriteria.product}}</span>
+        </dd>
+        <dt><span>Filter Item</span></dt>
+        <dd>
+            <span>{{filterCriteria.filterItem}}</span>
+        </dd>
+        <dt><span>Filter Query</span></dt>
+        <dd>
+            <span>{{filterCriteria.filterQuery}}</span>
+        </dd>
+        <dt><span>Filter Value</span></dt>
+        <dd>
+            <span>{{filterCriteria.filterValue}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <!-- <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'filter-criteria/'+ filterCriteria.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button> -->
+</div>

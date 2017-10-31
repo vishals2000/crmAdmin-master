@@ -1,0 +1,51 @@
+
+<div *ngIf="targetGroupCriteria">
+    <h2><span>Target Group Criteria</span> {{targetGroupCriteria.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Front End</span></dt>
+        <dd>
+            <span>{{targetGroupCriteria.frontEnd}}</span>
+        </dd>
+        <dt><span>Product</span></dt>
+        <dd>
+            <span>{{targetGroupCriteria.product}}</span>
+        </dd>
+        <dt><span>Name</span></dt>
+        <dd>
+            <span>{{targetGroupCriteria.name}}</span>
+        </dd>
+        <!-- <dt><span>Filter Option</span></dt>
+        <dd>
+            <span>{{targetGroupCriteria.filterOption}}</span>
+        </dd>
+        <dt><span>Filter Option Look Up</span></dt>
+        <dd>
+            <span>{{targetGroupCriteria.filterOptionLookUp}}</span>
+        </dd>
+        <dt><span>Filter Option Comparison</span></dt>
+        <dd>
+            <span>{{targetGroupCriteria.filterOptionComparison}}</span>
+        </dd>
+        <dt><span>Filter Option Value</span></dt>
+        <dd>
+            <span>{{targetGroupCriteria.filterOptionValue}}</span>
+        </dd> -->
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <!-- <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'target-group-criteria/'+ targetGroupCriteria.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button> -->
+</div>
+
+{{targetGroupCriteria | json}}

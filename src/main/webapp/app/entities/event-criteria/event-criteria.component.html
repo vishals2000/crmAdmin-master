@@ -1,0 +1,72 @@
+<div>
+    <h2>
+        <span>Event Criteria</span>
+        <button class="btn btn-primary float-right jh-create-entity create-event-criteria" [routerLink]="['/', { outlets: { popup: ['event-criteria-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span >
+            Create new Event Criteria
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="eventCriteria">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <!-- <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th> -->
+            <th jhiSortBy="frontEnd"><span>Front End</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="product"><span>Product</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="eventName"><span>Event Name</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="eventComparison"><span>Event Comparison</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="eventValue"><span>Event Value</span> <span class="fa fa-sort"></span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let eventCriteria of eventCriteria ;trackBy: trackId">
+                <!-- <td><a [routerLink]="['../event-criteria', eventCriteria.id ]">{{eventCriteria.id}}</a></td> -->
+                <td>{{eventCriteria.frontEnd}}</td>
+                <td>{{eventCriteria.product}}</td>
+                <td>{{eventCriteria.eventName}}</td>
+                <td>{{eventCriteria.eventComparison}}</td>
+                <td>{{eventCriteria.eventValue}}</td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../event-criteria', eventCriteria.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="hidden-md-down">View</span>
+                        </button>
+                        <!-- <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'event-criteria/'+ eventCriteria.id + '/edit'} }]"
+                                replaceUrl="true"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="hidden-md-down">Edit</span>
+                        </button> -->
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'event-criteria/'+ eventCriteria.id + '/delete'} }]"
+                                replaceUrl="true"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="hidden-md-down">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+        <div *ngIf="eventCriteria && eventCriteria.length">
+            <div class="row justify-content-center">
+                <jhi-item-count [page]="page" [total]="queryCount" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+            </div>
+            <div class="row justify-content-center">
+                <ngb-pagination [collectionSize]="totalItems" [(page)]="page" (pageChange)="loadPage(page)"></ngb-pagination>
+            </div>
+        </div>
+</div>

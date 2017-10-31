@@ -1,0 +1,119 @@
+<!-- <form [formGroup]="targetGroupCreationForm" role="form" novalidate (ngSubmit)="save()" #targetGroupCreationForm="ngForm"> -->
+<form [formGroup]="targetGroupCreationForm" role="form" novalidate (ngSubmit)="save()">
+    <div class="modal-header">
+        <h4 class="modal-title" id="myTargetGroupCriteriaLabel">Create or edit a Target Group Criteria</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">&times;</button>
+    </div>
+    <br/>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!targetGroupCriteria.id">
+            <label for="id">ID</label>
+            <input class="form-control" fromControlName="name" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_frontEnd">Front End</label>
+            <!-- <select class="form-control" formControlName="frontEnd" (change)="populateFeProducts(targetGroupCriteria.frontEnd)" required> -->
+            <select class="form-control" formControlName="frontEnd" id="field_frontEnd" (change)="populateFeProducts()" required>
+                <option *ngFor="let frontEnd of frontEnds" [value]="frontEnd">{{frontEnd}}</option>
+            </select>
+            <!-- <input type="text" class="form-control" formControlName="frontEnd" required minlength="2" maxlength="2" /> -->
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_product">Product</label>
+            <select class="form-control" formControlName="product" id="field_product" (change)="onProductChange()" required>
+                <option *ngFor="let product of products" [value]="product">{{product}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_name">Name</label>
+            <input type="text" class="form-control" formControlName="name" id="field_name" required minlength="3" />
+            <div [hidden]="!(targetGroupCreationForm.controls.name?.dirty && targetGroupCreationForm.controls.name?.invalid)">
+                <small class="form-text text-danger" [hidden]="!targetGroupCreationForm.controls.name?.errors?.required">
+                    This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!targetGroupCreationForm.controls.name?.errors?.minlength">
+                    This field is required to be at least 3 characters.
+                </small>
+            </div>
+        </div>
+        <div align="right">
+                Target Group Size {{targetGroupSize}} <button (click)="getTargetGroupSize()" type="button">Refresh</button>
+            </div>
+        <div formArrayName="targetGroupFilterCriteria" class="well well-lg">
+            <div *ngFor="let targetGroupFilterCriterion of targetGroupFilterCriteria.controls; let i=index" [formGroupName]="i" >
+                <!-- The repeated address template -->
+                <h4>TargetGroupFilterCriterion #{{i + 1}}</h4>
+                <div style="margin-left: 1em;">
+                    <div class="form-group">
+                        <label class="center-block">FilterOption:</label>
+                        <!-- <input class="form-control" formControlName="filterOption" (focus)="filterOptionFocus(i)"> -->
+                        <select class="form-control" formControlName="filterOption" (change)="onFilterOptionChange(i)">
+                            <option *ngFor="let filterOption of filterOptions" [value]="filterOption">{{filterOption}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group" [hidden]="isOptionLookUpHidden(i)">
+                        <label class="center-block">FilterOptionLookUp:</label>
+                        <!-- <input class="form-control" formControlName="filterOptionLookUp" required> -->
+                        <select class="form-control" formControlName="filterOptionLookUp">
+                            <option *ngFor="let filterOptionLookUp of getFilterOptionLookUpValues(i)" [value]="filterOptionLookUp">{{filterOptionLookUp}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="center-block">FilterOptionComparison:</label>
+                        <!-- <input class="form-control" formControlName="filterOptionComparison" required> -->
+                        <select class="form-control" formControlName="filterOptionComparison">
+                            <option *ngFor="let filterOption of getFilterOptionComparisonValues(i)" [value]="filterOption">{{filterOption}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group" [ngSwitch]="getFormControlType(i)" [hidden]="isOptionValueSelectionHidden(i)" optional>
+                        <label class="center-block">filterOptionValue:</label>
+                        <!-- <input class="form-control" formControlName="filterOptionValue"> -->
+                            <input class="form-control" formControlName="filterOptionValue" optional *ngSwitchCase="'textbox'">
+                            <input class="form-control" placeholder="yyyy-MM-dd" formControlName="filterOptionValue" optional *ngSwitchCase="'simpleDate'">
+                            <input class="form-control" placeholder="the value of N" formControlName="filterOptionValue" optional *ngSwitchCase="'daysCounter'">
+                            <input class="form-control" placeholder="version number" formControlName="filterOptionValue" optional *ngSwitchCase="'appVersionSelector'">
+                            <select class="form-control" formControlName="filterOptionValue" *ngSwitchCase="'dropdown'">
+                                <!-- <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option> -->
+                                <option *ngFor="let filterOption of getFilterOptionValueValues(i)" [value]="filterOption">{{filterOption}}</option>
+                            </select>
+                            <select class="form-control" formControlName="filterOptionValue" multiple *ngSwitchCase="'multiSelectDropdown'">
+                                <!-- <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option> -->
+                                <option *ngFor="let filterOption of getFilterOptionValueValues(i)" [value]="filterOption">{{filterOption}}</option>
+                            </select>
+                        <!-- <select class="form-control" formControlName="filterOptionValue">
+                            <option *ngFor="let filterOption of getFilterOptionValueValues(i)" [value]="filterOption">{{filterOption}}</option>
+                        </select> -->
+                    </div>
+                </div>
+                <!-- End of the repeated address template -->
+                <div align="right">
+                    <button (click)="removeTargetGroupFilterCriterion(i)" type="button">Remove Criterion</button>
+                </div>
+                <br>
+            </div>
+            <br>
+            <button (click)="addTargetGroupFilterCriterion()" type="button" [disabled]="frontEndOrProductInvalid">Add Criterion</button>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" [disabled]="isFormInvalid()" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>
+
+<!-- {{targetGroupSize | json}} -->
+<p>Form value: {{ targetGroupCreationForm.value | json }}</p>
+<!-- 
+{{targetGroupCreationForm.value.frontEnd}}
+{{targetGroupCreationForm.value.product}}
+{{this.targetGroupFilterCriteria.length}}
+filterOptions: {{targetGroupCreationForm.value.filterOptions}}
+<br/>
+Sharath
+{{filtersMap | json}} -->

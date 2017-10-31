@@ -1,0 +1,121 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myTargetGroupCriteriaLabel">Create or edit a Target Group Criteria</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!targetGroupCriteria.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="targetGroupCriteria.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_frontEnd">Front End</label>
+            <select class="form-control" name="frontEnd" [(ngModel)]="targetGroupCriteria.frontEnd" id="field_frontEnd" (change)="populateFeProducts(targetGroupCriteria.frontEnd)" required>
+                <option *ngFor="let feFrontEnd of frontEnds" [ngValue]="feFrontEnd">{{feFrontEnd}}</option>
+            </select>
+            <!-- <input type="text" class="form-control" name="frontEnd" id="field_frontEnd" [(ngModel)]="targetGroupCriteria.frontEnd" required minlength="2" maxlength="2" /> -->
+            <div [hidden]="!(editForm.controls.frontEnd?.dirty && editForm.controls.frontEnd?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.frontEnd?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.frontEnd?.errors?.minlength">
+                   This field is required to be at least 2 characters.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.frontEnd?.errors?.maxlength">
+                   This field cannot be longer than 2 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_product">Product</label>
+            <select class="form-control" name="product" [(ngModel)]="targetGroupCriteria.product" id="field_product"  required>
+                <option *ngFor="let feProduct of feProducts" [ngValue]="feProduct.product">{{feProduct.product}}</option>
+            </select>
+            <!-- <select class="form-control" name="product" [(ngModel)]="targetGroupCriteria.product" id="field_product"  required>
+                <option value="CASINO">CASINO</option>
+                <option value="POKER">POKER</option>
+                <option value="SPORTS">SPORTS</option>
+            </select> -->
+            <div [hidden]="!(editForm.controls.product?.dirty && editForm.controls.product?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.product?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_name">Name</label>
+            <input type="text" class="form-control" name="name" id="field_name"
+                [(ngModel)]="targetGroupCriteria.name" required minlength="3" />
+            <div [hidden]="!(editForm.controls.name?.dirty && editForm.controls.name?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.name?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.name?.errors?.minlength">
+                   This field is required to be at least 3 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_filterOption">Filter Option</label>
+            <input type="text" class="form-control" name="filterOption" id="field_filterOption"
+                [(ngModel)]="targetGroupCriteria.filterOption" required />
+            <div [hidden]="!(editForm.controls.filterOption?.dirty && editForm.controls.filterOption?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.filterOption?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_filterOptionLookUp">Filter Option Look Up</label>
+            <input type="text" class="form-control" name="filterOptionLookUp" id="field_filterOptionLookUp"
+                [(ngModel)]="targetGroupCriteria.filterOptionLookUp" required />
+            <div [hidden]="!(editForm.controls.filterOptionLookUp?.dirty && editForm.controls.filterOptionLookUp?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.filterOptionLookUp?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_filterOptionComparison">Filter Option Comparison</label>
+            <input type="text" class="form-control" name="filterOptionComparison" id="field_filterOptionComparison"
+                [(ngModel)]="targetGroupCriteria.filterOptionComparison" required />
+            <div [hidden]="!(editForm.controls.filterOptionComparison?.dirty && editForm.controls.filterOptionComparison?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.filterOptionComparison?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_filterOptionValue">Filter Option Value</label>
+            <input type="text" class="form-control" name="filterOptionValue" id="field_filterOptionValue"
+                [(ngModel)]="targetGroupCriteria.filterOptionValue" required />
+            <div [hidden]="!(editForm.controls.filterOptionValue?.dirty && editForm.controls.filterOptionValue?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.filterOptionValue?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

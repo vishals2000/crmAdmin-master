@@ -1,0 +1,41 @@
+
+<div *ngIf="eventCriteria">
+    <h2><span>Event Criteria</span> {{eventCriteria.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Front End</span></dt>
+        <dd>
+            <span>{{eventCriteria.frontEnd}}</span>
+        </dd>
+        <dt><span>Product</span></dt>
+        <dd>
+            <span>{{eventCriteria.product}}</span>
+        </dd>
+        <dt><span>Event Name</span></dt>
+        <dd>
+            <span>{{eventCriteria.eventName}}</span>
+        </dd>
+        <dt><span>Event Comparison</span></dt>
+        <dd>
+            <span>{{eventCriteria.eventComparison}}</span>
+        </dd>
+        <dt><span>Event Value</span></dt>
+        <dd>
+            <span>{{eventCriteria.eventValue}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <!-- <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'event-criteria/'+ eventCriteria.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button> -->
+</div>

@@ -1,0 +1,41 @@
+
+<div *ngIf="tagCriteria">
+    <h2><span>Tag Criteria</span> {{tagCriteria.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Front End</span></dt>
+        <dd>
+            <span>{{tagCriteria.frontEnd}}</span>
+        </dd>
+        <dt><span>Product</span></dt>
+        <dd>
+            <span>{{tagCriteria.product}}</span>
+        </dd>
+        <dt><span>Tag Name</span></dt>
+        <dd>
+            <span>{{tagCriteria.tagName}}</span>
+        </dd>
+        <dt><span>Tag Comparison</span></dt>
+        <dd>
+            <span>{{tagCriteria.tagComparison}}</span>
+        </dd>
+        <dt><span>Tag Value</span></dt>
+        <dd>
+            <span>{{tagCriteria.tagValue}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <!-- <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'tag-criteria/'+ tagCriteria.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button> -->
+</div>

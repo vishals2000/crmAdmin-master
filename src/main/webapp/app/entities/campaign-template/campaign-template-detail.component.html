@@ -1,0 +1,65 @@
+
+<div *ngIf="campaignTemplate">
+    <h2><span>Campaign Template</span> {{campaignTemplate.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Front End</span></dt>
+        <dd>
+            <span>{{campaignTemplate.frontEnd}}</span>
+        </dd>
+        <dt><span>Product</span></dt>
+        <dd>
+            <span>{{campaignTemplate.product}}</span>
+        </dd>
+        <dt><span>Campaign Name</span></dt>
+        <dd>
+            <span>{{campaignTemplate.campaignName}}</span>
+        </dd>
+        <dt><span>Campaign Description</span></dt>
+        <dd>
+            <span>{{campaignTemplate.campaignDescription}}</span>
+        </dd>
+        <dt><span>Start Date</span></dt>
+        <dd>
+            <span>{{campaignTemplate.startDate | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span>Recurrence Type</span></dt>
+        <dd>
+            <span>{{campaignTemplate.recurrenceType}}</span>
+        </dd>
+        <dt><span>Recurrence End Date</span></dt>
+        <dd>
+            <span>{{campaignTemplate.recurrenceEndDate | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span>Message Content Id</span></dt>
+        <dd>
+            <span>{{campaignTemplate.messageContentId}}</span>
+        </dd>
+        <dt><span>Target Group Id</span></dt>
+        <dd>
+            <span>{{campaignTemplate.targetGroupId}}</span>
+        </dd>
+        <dt><span>Scheduled Time</span></dt>
+        <dd>
+            <span>{{campaignTemplate.scheduledTime}}</span>
+        </dd>
+        <dt><span>In Player Timezone</span></dt>
+        <dd>
+            <span>{{campaignTemplate.inPlayerTimezone}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>
