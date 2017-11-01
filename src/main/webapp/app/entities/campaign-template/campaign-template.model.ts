@@ -15,8 +15,8 @@ const enum RecurrenceType {
 export class CampaignTemplate implements BaseEntity {
     constructor(
         public id?: string,
-        public frontEnd?: string,
-        public product?: Product,
+       public frontEnd?: string,
+        // public product?: Product,
         public campaignName?: string,
         public campaignDescription?: string,
         public startDate?: any,
@@ -26,6 +26,7 @@ export class CampaignTemplate implements BaseEntity {
         public targetGroupId?: string,
         public scheduledTime?: string,
         public inPlayerTimezone?: boolean,
+        public campaignGroupId?: string,
     ) {
         this.inPlayerTimezone = false;
     }

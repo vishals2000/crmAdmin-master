@@ -26,7 +26,7 @@
             <tbody>
             <tr *ngFor="let campaignGroup of campaignGroups ;trackBy: trackId">
                 <!-- <td><a [routerLink]="['../campaign-group', campaignGroup.id ]">{{campaignGroup.id}}</a></td> -->
-                <td><a [routerLink]="['/campaign-template', campaignGroup.id ]">{{campaignGroup.name}}</a></td>
+                <td><a [routerLink]="['/campaign-template/group', campaignGroup.id ]">{{campaignGroup.name}}</a></td>
                 <td>{{campaignGroup.description}}</td>
                 <!-- <td>{{campaignGroup.projectId}}</td> -->
                 <td class="text-right">

@@ -2,20 +2,13 @@ package com.gvc.crmadmin.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.gvc.crmadmin.domain.CampaignTemplate;
-import com.gvc.crmadmin.domain.MessageContent;
-import com.gvc.crmadmin.domain.TargetGroupCriteria;
-import com.gvc.crmadmin.domain.fcm.PushNotificationCampaignTemplate;
-import com.gvc.crmadmin.domain.fcm.RecurrenceDetail;
 import com.gvc.crmadmin.service.CampaignTemplateService;
-import com.gvc.crmadmin.service.MessageContentService;
-import com.gvc.crmadmin.service.TargetGroupCriteriaService;
 import com.gvc.crmadmin.web.rest.util.HeaderUtil;
 import com.gvc.crmadmin.web.rest.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.ApiParam;
+import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -24,12 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -46,12 +36,6 @@ public class CampaignTemplateResource {
 
     private final CampaignTemplateService campaignTemplateService;
 
-    @Autowired
-    private TargetGroupCriteriaService targetGroupCriteriaService;
-
-    @Autowired
-    private MessageContentService messageContentService;
-
     public CampaignTemplateResource(CampaignTemplateService campaignTemplateService) {
         this.campaignTemplateService = campaignTemplateService;
     }
@@ -67,26 +51,13 @@ public class CampaignTemplateResource {
     @Timed
     public ResponseEntity<CampaignTemplate> createCampaignTemplate(@Valid @RequestBody CampaignTemplate campaignTemplate) throws URISyntaxException {
         log.debug("REST request to save CampaignTemplate : {}", campaignTemplate);
-        /*if (campaignTemplate.getId() != null) {
+        if (campaignTemplate.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new campaignTemplate cannot already have an ID")).body(null);
-        }*/
-        CampaignTemplate result;
-        CampaignTemplate campaignTemplateFromDB = campaignTemplateService.findOne(campaignTemplate.getId());
-        if (campaignTemplateFromDB == null) {
-            result = campaignTemplateService.save(campaignTemplate);
-        } else{
-            return ResponseEntity.badRequest()
-                .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, campaignTemplateFromDB.getId(), "Campaign Template with the given campaignName exists"))
-                .body(campaignTemplateFromDB);
         }
-        try {
-            return ResponseEntity.created(new URI(URLEncoder.encode("/api/campaign-templates/" + result.getId(), "UTF-8")))
-                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId()))
-                .body(result);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return null;
-        }
+        CampaignTemplate result = campaignTemplateService.save(campaignTemplate);
+        return ResponseEntity.created(new URI("/api/campaign-templates/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+            .body(result);
     }
 
     /**
@@ -138,39 +109,6 @@ public class CampaignTemplateResource {
         log.debug("REST request to get CampaignTemplate : {}", id);
         CampaignTemplate campaignTemplate = campaignTemplateService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(campaignTemplate));
-    }
-
-    @GetMapping("/campaign-templates-push-notification/{id}")
-    @Timed
-    public ResponseEntity<PushNotificationCampaignTemplate> getPushNotificationCampaign(@PathVariable String id) {
-        log.debug("REST request to get CampaignTemplate : {}", id);
-        CampaignTemplate campaignTemplate = campaignTemplateService.findOne(id);
-        log.info(campaignTemplate.toString());
-        TargetGroupCriteria targetGroupCriteria = targetGroupCriteriaService.findByFrontEndAndProductAndName(campaignTemplate.getFrontEnd(), campaignTemplate.getProduct(), campaignTemplate.getTargetGroupId());
-        log.info(targetGroupCriteria.toString());
-        List<String> campaignMessageContentIds = new ArrayList<>();
-        campaignMessageContentIds.add(campaignTemplate.getMessageContentId());
-        List<MessageContent> messageContentList = new ArrayList<>();
-        //TODO: Change to list of IDs
-        for(String messageContentId: campaignMessageContentIds){
-            MessageContent messageContent = messageContentService.findByFrontEndAndProductAndName(campaignTemplate.getFrontEnd(), campaignTemplate.getProduct(), messageContentId);
-            log.info(messageContent.toString());
-            messageContentList.add(messageContent);
-        }
-
-        PushNotificationCampaignTemplate pushNotificationCampaignTemplate = new PushNotificationCampaignTemplate();
-        pushNotificationCampaignTemplate
-            .setFrontEnd(campaignTemplate.getFrontEnd())
-            .setProduct(campaignTemplate.getProduct())
-            .setCampaignName(campaignTemplate.getCampaignName())
-            .setCampaignDescription(campaignTemplate.getCampaignDescription())
-            .setTargetGroupFilterCriterionList(Arrays.asList(targetGroupCriteria.getTargetGroupFilterCriteria()))
-            .setMessageContentList(messageContentList)
-            .setRecurrenceDetail(new RecurrenceDetail(campaignTemplate.getStartDate().toString(), campaignTemplate.getRecurrenceEndDate().toString(), campaignTemplate.getRecurrenceType().name()))
-            .setInPlayerTimezone(campaignTemplate.isInPlayerTimezone())
-            .setScheduledTime(campaignTemplate.getScheduledTime() + ":00");
-
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(pushNotificationCampaignTemplate));
     }
 
     /**

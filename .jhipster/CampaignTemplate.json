@@ -78,6 +78,10 @@
         {
             "fieldName": "inPlayerTimezone",
             "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "campaignGroupId",
+            "fieldType": "String"
         }
     ],
     "dto": "no",

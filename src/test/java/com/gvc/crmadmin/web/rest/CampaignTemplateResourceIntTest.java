@@ -73,6 +73,9 @@ public class CampaignTemplateResourceIntTest {
     private static final Boolean DEFAULT_IN_PLAYER_TIMEZONE = false;
     private static final Boolean UPDATED_IN_PLAYER_TIMEZONE = true;
 
+    private static final String DEFAULT_CAMPAIGN_GROUP_ID = "AAAAAAAAAA";
+    private static final String UPDATED_CAMPAIGN_GROUP_ID = "BBBBBBBBBB";
+
     @Autowired
     private CampaignTemplateRepository campaignTemplateRepository;
 
@@ -120,7 +123,8 @@ public class CampaignTemplateResourceIntTest {
             .messageContentId(DEFAULT_MESSAGE_CONTENT_ID)
             .targetGroupId(DEFAULT_TARGET_GROUP_ID)
             .scheduledTime(DEFAULT_SCHEDULED_TIME)
-            .inPlayerTimezone(DEFAULT_IN_PLAYER_TIMEZONE);
+            .inPlayerTimezone(DEFAULT_IN_PLAYER_TIMEZONE)
+            .campaignGroupId(DEFAULT_CAMPAIGN_GROUP_ID);
         return campaignTemplate;
     }
 
@@ -155,6 +159,7 @@ public class CampaignTemplateResourceIntTest {
         assertThat(testCampaignTemplate.getTargetGroupId()).isEqualTo(DEFAULT_TARGET_GROUP_ID);
         assertThat(testCampaignTemplate.getScheduledTime()).isEqualTo(DEFAULT_SCHEDULED_TIME);
         assertThat(testCampaignTemplate.isInPlayerTimezone()).isEqualTo(DEFAULT_IN_PLAYER_TIMEZONE);
+        assertThat(testCampaignTemplate.getCampaignGroupId()).isEqualTo(DEFAULT_CAMPAIGN_GROUP_ID);
     }
 
     @Test
@@ -348,7 +353,8 @@ public class CampaignTemplateResourceIntTest {
             .andExpect(jsonPath("$.[*].messageContentId").value(hasItem(DEFAULT_MESSAGE_CONTENT_ID.toString())))
             .andExpect(jsonPath("$.[*].targetGroupId").value(hasItem(DEFAULT_TARGET_GROUP_ID.toString())))
             .andExpect(jsonPath("$.[*].scheduledTime").value(hasItem(DEFAULT_SCHEDULED_TIME.toString())))
-            .andExpect(jsonPath("$.[*].inPlayerTimezone").value(hasItem(DEFAULT_IN_PLAYER_TIMEZONE.booleanValue())));
+            .andExpect(jsonPath("$.[*].inPlayerTimezone").value(hasItem(DEFAULT_IN_PLAYER_TIMEZONE.booleanValue())))
+            .andExpect(jsonPath("$.[*].campaignGroupId").value(hasItem(DEFAULT_CAMPAIGN_GROUP_ID.toString())));
     }
 
     @Test
@@ -371,7 +377,8 @@ public class CampaignTemplateResourceIntTest {
             .andExpect(jsonPath("$.messageContentId").value(DEFAULT_MESSAGE_CONTENT_ID.toString()))
             .andExpect(jsonPath("$.targetGroupId").value(DEFAULT_TARGET_GROUP_ID.toString()))
             .andExpect(jsonPath("$.scheduledTime").value(DEFAULT_SCHEDULED_TIME.toString()))
-            .andExpect(jsonPath("$.inPlayerTimezone").value(DEFAULT_IN_PLAYER_TIMEZONE.booleanValue()));
+            .andExpect(jsonPath("$.inPlayerTimezone").value(DEFAULT_IN_PLAYER_TIMEZONE.booleanValue()))
+            .andExpect(jsonPath("$.campaignGroupId").value(DEFAULT_CAMPAIGN_GROUP_ID.toString()));
     }
 
     @Test
@@ -401,7 +408,8 @@ public class CampaignTemplateResourceIntTest {
             .messageContentId(UPDATED_MESSAGE_CONTENT_ID)
             .targetGroupId(UPDATED_TARGET_GROUP_ID)
             .scheduledTime(UPDATED_SCHEDULED_TIME)
-            .inPlayerTimezone(UPDATED_IN_PLAYER_TIMEZONE);
+            .inPlayerTimezone(UPDATED_IN_PLAYER_TIMEZONE)
+            .campaignGroupId(UPDATED_CAMPAIGN_GROUP_ID);
 
         restCampaignTemplateMockMvc.perform(put("/api/campaign-templates")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -423,6 +431,7 @@ public class CampaignTemplateResourceIntTest {
         assertThat(testCampaignTemplate.getTargetGroupId()).isEqualTo(UPDATED_TARGET_GROUP_ID);
         assertThat(testCampaignTemplate.getScheduledTime()).isEqualTo(UPDATED_SCHEDULED_TIME);
         assertThat(testCampaignTemplate.isInPlayerTimezone()).isEqualTo(UPDATED_IN_PLAYER_TIMEZONE);
+        assertThat(testCampaignTemplate.getCampaignGroupId()).isEqualTo(UPDATED_CAMPAIGN_GROUP_ID);
     }
 
     @Test

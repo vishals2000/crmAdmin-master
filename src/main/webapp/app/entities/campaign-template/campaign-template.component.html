@@ -1,7 +1,7 @@
 <div>
     <h2>
         <span>Campaign Templates</span>
-        <button class="btn btn-primary float-right jh-create-entity create-campaign-template" [routerLink]="['/', { outlets: { popup: ['campaign-template-new'] } }]">
+        <button class="btn btn-primary float-right jh-create-entity create-campaign-template" [routerLink]="['/campaign-template-new']">
             <span class="fa fa-plus"></span>
             <span >
             Create new Campaign Template
@@ -18,8 +18,8 @@
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <!-- <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th> -->
-            <th jhiSortBy="frontEnd"><span>Front End</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="product"><span>Product</span> <span class="fa fa-sort"></span></th>
+            <!-- <th jhiSortBy="frontEnd"><span>Front End</span> <span class="fa fa-sort"></span></th> -->
+            <!-- <th jhiSortBy="product"><span>Product</span> <span class="fa fa-sort"></span></th> -->
             <th jhiSortBy="campaignName"><span>Campaign Name</span> <span class="fa fa-sort"></span></th>
             <!-- <th jhiSortBy="campaignDescription"><span>Campaign Description</span> <span class="fa fa-sort"></span></th> -->
             <th jhiSortBy="startDate"><span>Start Date</span> <span class="fa fa-sort"></span></th>
@@ -29,14 +29,15 @@
             <!-- <th jhiSortBy="targetGroupId"><span>Target Group Id</span> <span class="fa fa-sort"></span></th> -->
             <th jhiSortBy="scheduledTime"><span>Scheduled Time</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="inPlayerTimezone"><span>In Player Timezone</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="campaignGroupId"><span>Campaign Group Id</span> <span class="fa fa-sort"></span></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let campaignTemplate of campaignTemplates ;trackBy: trackId">
                 <!-- <td><a [routerLink]="['../campaign-template', campaignTemplate.id ]">{{campaignTemplate.id}}</a></td> -->
-                <td>{{campaignTemplate.frontEnd}}</td>
-                <td>{{campaignTemplate.product}}</td>
+                <!-- <td>{{campaignTemplate.frontEnd}}</td> -->
+                <!-- <td>{{campaignTemplate.product}}</td> -->
                 <td>{{campaignTemplate.campaignName}}</td>
                 <!-- <td>{{campaignTemplate.campaignDescription}}</td> -->
                 <td>{{campaignTemplate.startDate | date:'mediumDate'}}</td>
@@ -46,16 +47,18 @@
                 <!-- <td>{{campaignTemplate.targetGroupId}}</td> -->
                 <td>{{campaignTemplate.scheduledTime}}</td>
                 <td>{{campaignTemplate.inPlayerTimezone}}</td>
+                <td>{{campaignTemplate.campaignGroupId}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
+                        {{ campaignTemplate.id }}
                         <button type="submit"
-                                [routerLink]="['../campaign-template', campaignTemplate.id ]"
+                        [routerLink]="['/campaign-template', campaignTemplate.id ]"
                                 class="btn btn-info btn-sm">
                             <span class="fa fa-eye"></span>
                             <span class="hidden-md-down">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/edit'} }]"
+                                [routerLink]="['/campaign-template/edit', campaignTemplate.id]"
                                 replaceUrl="true"
                                 class="btn btn-primary btn-sm">
                             <span class="fa fa-pencil"></span>
@@ -63,13 +66,13 @@
                         </button>
                         <!-- <button type="button" class="btn btn-info btn-sm" (click)="runCampaign(campaignTemplate)">Launch</button> -->
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/launch'} }]"
-                                replaceUrl="true"
-                                class="btn btn-info btn-sm">
-                            <!-- <span class="fa fa-remove"></span> -->
-                            <span class="hidden-md-down">Launch</span>
-                        </button>
-                        <button type="submit"
+                        [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/launch'} }]"
+                        replaceUrl="true"
+                        class="btn btn-info btn-sm">
+                    <!-- <span class="fa fa-remove"></span> -->
+                    <span class="hidden-md-down">Launch</span>
+                </button>
+                <button type="submit"
                                 [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/delete'} }]"
                                 replaceUrl="true"
                                 class="btn btn-danger btn-sm">

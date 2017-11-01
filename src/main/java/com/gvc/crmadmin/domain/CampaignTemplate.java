@@ -1,19 +1,16 @@
 package com.gvc.crmadmin.domain;
 
-import com.gvc.crmadmin.domain.enumeration.Product;
-import com.gvc.crmadmin.domain.enumeration.RecurrenceType;
-import com.gvc.crmadmin.service.util.Utils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
+
+import com.gvc.crmadmin.domain.enumeration.Product;
+
+import com.gvc.crmadmin.domain.enumeration.RecurrenceType;
 
 /**
  * A CampaignTemplate.
@@ -27,7 +24,7 @@ public class CampaignTemplate implements Serializable {
 
     @NotNull
     @Size(min = 2, max = 2)
-    @Field("frontEnd")
+    @Field("front_end")
     private String frontEnd;
 
     @NotNull
@@ -35,10 +32,10 @@ public class CampaignTemplate implements Serializable {
     private Product product;
 
     @NotNull
-    @Field("campaignName")
+    @Field("campaign_name")
     private String campaignName;
 
-    @Field("campaignDescription")
+    @Field("campaign_description")
     private String campaignDescription;
 
     @NotNull
@@ -68,9 +65,11 @@ public class CampaignTemplate implements Serializable {
     @Field("in_player_timezone")
     private Boolean inPlayerTimezone;
 
+    @Field("campaign_group_id")
+    private String campaignGroupId;
+
     // jhipster-needle-entity-add-field - Jhipster will add fields here, do not remove
     public String getId() {
-        this.initialize();
         return id;
     }
 
@@ -110,13 +109,11 @@ public class CampaignTemplate implements Serializable {
 
     public CampaignTemplate campaignName(String campaignName) {
         this.campaignName = campaignName;
-        this.initialize();
         return this;
     }
 
     public void setCampaignName(String campaignName) {
         this.campaignName = campaignName;
-        this.initialize();
     }
 
     public String getCampaignDescription() {
@@ -222,6 +219,19 @@ public class CampaignTemplate implements Serializable {
     public void setInPlayerTimezone(Boolean inPlayerTimezone) {
         this.inPlayerTimezone = inPlayerTimezone;
     }
+
+    public String getCampaignGroupId() {
+        return campaignGroupId;
+    }
+
+    public CampaignTemplate campaignGroupId(String campaignGroupId) {
+        this.campaignGroupId = campaignGroupId;
+        return this;
+    }
+
+    public void setCampaignGroupId(String campaignGroupId) {
+        this.campaignGroupId = campaignGroupId;
+    }
     // jhipster-needle-entity-add-getters-setters - Jhipster will add getters and setters here, do not remove
 
     @Override
@@ -244,16 +254,22 @@ public class CampaignTemplate implements Serializable {
         return Objects.hashCode(getId());
     }
 
-    private void initialize() {
-        StringBuilder sb = new StringBuilder(10);
-        sb.append(getFrontEnd()).append(Utils.UNDER_SCORE);
-        sb.append(getProduct().name()).append(Utils.UNDER_SCORE);
-        sb.append(getCampaignName());
-        setId(sb.toString());
-    }
-
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return "CampaignTemplate{" +
+            "id=" + getId() +
+            ", frontEnd='" + getFrontEnd() + "'" +
+            ", product='" + getProduct() + "'" +
+            ", campaignName='" + getCampaignName() + "'" +
+            ", campaignDescription='" + getCampaignDescription() + "'" +
+            ", startDate='" + getStartDate() + "'" +
+            ", recurrenceType='" + getRecurrenceType() + "'" +
+            ", recurrenceEndDate='" + getRecurrenceEndDate() + "'" +
+            ", messageContentId='" + getMessageContentId() + "'" +
+            ", targetGroupId='" + getTargetGroupId() + "'" +
+            ", scheduledTime='" + getScheduledTime() + "'" +
+            ", inPlayerTimezone='" + isInPlayerTimezone() + "'" +
+            ", campaignGroupId='" + getCampaignGroupId() + "'" +
+            "}";
     }
 }

@@ -89,9 +89,11 @@ export class CampaignGroupPopupComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit() {
+        alert(this.route.params['id'])
         this.routeSub = this.route.params.subscribe((params) => {
             CampaignGroupPopupComponent.projectId = params['projectId'];
             if ( params['id'] ) {
+                alert (params['id']);
                 this.campaignGroupPopupService
                     .open(CampaignGroupDialogComponent as Component, params['id']);
             } else {

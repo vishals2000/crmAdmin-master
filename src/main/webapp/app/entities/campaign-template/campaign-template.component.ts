@@ -20,6 +20,7 @@ currentAccount: any;
     error: any;
     success: any;
     eventSubscriber: Subscription;
+    private subscription: Subscription;
     routeData: any;
     links: any;
     totalItems: any;
@@ -30,6 +31,7 @@ currentAccount: any;
     previousPage: any;
     reverse: any;
     results: string[];
+    groupId: string;
 
     constructor(
         private campaignTemplateService: CampaignTemplateService,
@@ -37,6 +39,7 @@ currentAccount: any;
         private alertService: JhiAlertService,
         private principal: Principal,
         private activatedRoute: ActivatedRoute,
+        private route: ActivatedRoute,
         private router: Router,
         private eventManager: JhiEventManager,
         private paginationUtil: JhiPaginationUtil,
@@ -127,12 +130,48 @@ currentAccount: any;
         this.loadAll();
     }
     ngOnInit() {
+        // alert('asfsadfsa');
         this.loadAll();
         this.principal.identity().then((account) => {
             this.currentAccount = account;
         });
         this.registerChangeInCampaignTemplates();
+        this.subscription = this.route.params.subscribe((params) => {
+            this.load1(params['id']);
+            this.groupId = params['id'];
+        });
     }
+
+    load1(id) {
+    // alert(id);
+     this.campaignTemplateService.findCampGroups(id, 'group').subscribe((data) => {
+          this.campaignTemplates = data;
+         // alert(data);
+    },
+    (err) => {
+        alert('error');
+        this.campaignTemplates = [{
+                    'id' : '59f47d8513b80ad7286ec255',
+                    'campaignName' : 'Partypoker App',
+                    'campaignDescription' : 'This is Partypoker application'
+                  },
+                  {
+                     'id' : '59f47d8513b80ad7286ec255',
+                     'campaignName' : 'Partypoker App',
+                     'campaignDescription' : 'This is Partypoker application'
+                   },
+                   {
+                     'id' : '59f47d8513b80ad7286ec255',
+                     'campaignName' : 'Partypoker App',
+                     'campaignDescription' : 'This is Partypoker application'
+                   },
+                   {
+                     'id' : '59f47d8513b80ad7286ec255',
+                     'campaignName' : 'Partypoker App',
+                     'campaignDescription' : 'This is Partypoker application'
+                   }]
+         });
+}
 
     ngOnDestroy() {
         this.eventManager.destroy(this.eventSubscriber);
