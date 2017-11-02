@@ -1,23 +1,20 @@
-import { Component, OnInit, AfterViewInit, Renderer, ElementRef,ViewEncapsulation } from '@angular/core';
-import { NgbModalRef,NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, AfterViewInit, Renderer, ElementRef, ViewEncapsulation } from '@angular/core';
+import { NgbModalRef, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 import { Account, LoginModalService, Principal } from '../shared';
 import { Router } from '@angular/router';
 import { LoginService } from '../shared/login/login.service';
 import { StateStorageService } from '../shared/auth/state-storage.service';
 
-
-
 @Component({
     selector: 'jhi-home',
     templateUrl: './home.component.html',
-	encapsulation: ViewEncapsulation.None,
+    encapsulation: ViewEncapsulation.None,
     styleUrls: [
         'home.css'
     ]
-
 })
-export class HomeComponent implements OnInit,AfterViewInit {
+export class HomeComponent implements OnInit, AfterViewInit {
 
     account: Account;
     modalRef: NgbModalRef;
@@ -31,14 +28,13 @@ export class HomeComponent implements OnInit,AfterViewInit {
         private principal: Principal,
         private loginModalService: LoginModalService,
         private eventManager: JhiEventManager,
-            private loginService: LoginService,
-            private stateStorageService: StateStorageService,
-            private elementRef: ElementRef,
-            private renderer: Renderer,
-            private router: Router,
-            //public activeModal: NgbActiveModal
+        private loginService: LoginService,
+        private stateStorageService: StateStorageService,
+        private elementRef: ElementRef,
+        private renderer: Renderer,
+        private router: Router
     ) {
-            this.credentials = {};
+        this.credentials = {};
     }
 
     ngOnInit() {
@@ -61,48 +57,45 @@ export class HomeComponent implements OnInit,AfterViewInit {
     }
 
     ngAfterViewInit() {
-            this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#username'), 'focus', []);
-        }
+        this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#username'), 'focus', []);
+    }
 
-        cancel() {
-            this.credentials = {
-                username: null,
-                password: null,
-                rememberMe: true
-            };
+    cancel() {
+        this.credentials = {
+            username: null,
+            password: null,
+            rememberMe: true
+        };
+        this.authenticationError = false;
+    }
+
+    login() {
+        this.loginService.login({
+            username: this.username,
+            password: this.password,
+            rememberMe: this.rememberMe
+        }).then(() => {
             this.authenticationError = false;
-        }
+            if (this.router.url === '/register' || (/^\/activate\//.test(this.router.url)) ||
+                (/^\/reset\//.test(this.router.url))) {
+                this.router.navigate(['']);
+            }
 
-        login() {
-            this.loginService.login({
-                username: this.username,
-                password: this.password,
-                rememberMe: this.rememberMe
-            }).then(() => {
-                this.authenticationError = false;
-                //this.activeModal.dismiss('login success');
-                if (this.router.url === '/register' || (/^\/activate\//.test(this.router.url)) ||
-                    (/^\/reset\//.test(this.router.url))) {
-                    this.router.navigate(['']);
-                }
-
-                this.eventManager.broadcast({
-                    name: 'authenticationSuccess',
-                    content: 'Sending Authentication Success'
-                });
-                 this.router.navigate(['/apps']);
-            }).catch(() => {
-                this.authenticationError = true;
+            this.eventManager.broadcast({
+                name: 'authenticationSuccess',
+                content: 'Sending Authentication Success'
             });
-        }
+            this.router.navigate(['/apps']);
+        }).catch(() => {
+            this.authenticationError = true;
+        });
+    }
 
-        register() {
-            this.router.navigate(['/register']);
-        }
+    register() {
+        this.router.navigate(['/register']);
+    }
 
-        requestResetPassword() {
-            this.router.navigate(['/reset', 'request']);
-        }
-
-
+    requestResetPassword() {
+        this.router.navigate(['/reset', 'request']);
+    }
 }
