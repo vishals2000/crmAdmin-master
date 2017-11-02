@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {ViewEncapsulation} from '@angular/core';
 import { Router, ActivatedRouteSnapshot, NavigationEnd, RoutesRecognized } from '@angular/router';
 
 import { Title } from '@angular/platform-browser';
@@ -6,7 +7,11 @@ import { StateStorageService } from '../../shared';
 
 @Component({
     selector: 'jhi-main',
-    templateUrl: './main.component.html'
+    templateUrl: './main.component.html',
+	encapsulation: ViewEncapsulation.None,
+	styleUrls: [
+    'mystyles.css'
+    ]
 })
 export class JhiMainComponent implements OnInit {
 
