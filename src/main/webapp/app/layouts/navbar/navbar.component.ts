@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {ViewEncapsulation} from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
@@ -10,6 +11,7 @@ import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
 @Component({
     selector: 'jhi-navbar',
     templateUrl: './navbar.component.html',
+	encapsulation: ViewEncapsulation.None,
     styleUrls: [
         'navbar.css'
     ]

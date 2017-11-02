@@ -55,29 +55,29 @@
                         [routerLink]="['/campaign-template', campaignTemplate.id ]"
                                 class="btn btn-info btn-sm">
                             <span class="fa fa-eye"></span>
-                            <span class="hidden-md-down">View</span>
+                            <!--<span class="hidden-md-down">View</span>-->
                         </button>
                         <button type="submit"
                                 [routerLink]="['/campaign-template/edit', campaignTemplate.id]"
                                 replaceUrl="true"
                                 class="btn btn-primary btn-sm">
                             <span class="fa fa-pencil"></span>
-                            <span class="hidden-md-down">Edit</span>
+                            <!--<span class="hidden-md-down">Edit</span>-->
                         </button>
                         <!-- <button type="button" class="btn btn-info btn-sm" (click)="runCampaign(campaignTemplate)">Launch</button> -->
                         <button type="submit"
                         [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/launch'} }]"
                         replaceUrl="true"
                         class="btn btn-info btn-sm">
-                    <!-- <span class="fa fa-remove"></span> -->
-                    <span class="hidden-md-down">Launch</span>
+                     <span class="fa fa-rocket"></span>
+                    <!--<span class="hidden-md-down">Launch</span>-->
                 </button>
                 <button type="submit"
                                 [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/delete'} }]"
                                 replaceUrl="true"
                                 class="btn btn-danger btn-sm">
-                            <span class="fa fa-remove"></span>
-                            <span class="hidden-md-down">Delete</span>
+                            <span class="fa fa-trash"></span>
+                            <!--<span class="hidden-md-down">Delete</span>-->
                         </button>
                     </div>
                 </td>

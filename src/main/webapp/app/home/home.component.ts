@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {ViewEncapsulation} from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
@@ -7,8 +8,10 @@ import { Account, LoginModalService, Principal } from '../shared';
 @Component({
     selector: 'jhi-home',
     templateUrl: './home.component.html',
+	encapsulation: ViewEncapsulation.None,
     styleUrls: [
-        'home.css'
+        'home.css',
+		'mystyles.css'
     ]
 
 })
