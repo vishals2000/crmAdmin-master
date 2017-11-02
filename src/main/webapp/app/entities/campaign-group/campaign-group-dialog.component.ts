@@ -18,7 +18,6 @@ export class CampaignGroupDialogComponent implements OnInit {
 
     campaignGroup: CampaignGroup;
     isSaving: boolean;
-    projectId: string;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -30,7 +29,9 @@ export class CampaignGroupDialogComponent implements OnInit {
 
     ngOnInit() {
         this.isSaving = false;
-        this.projectId = CampaignGroupPopupComponent.projectId;
+        this.campaignGroupService.currentGroupId.subscribe((appId) => {
+            this.campaignGroup.projectId = appId;
+        });
     }
 
     clear() {
@@ -39,7 +40,6 @@ export class CampaignGroupDialogComponent implements OnInit {
 
     save() {
         this.isSaving = true;
-        this.campaignGroup.projectId = this.projectId;
         if (this.campaignGroup.id !== undefined) {
             this.subscribeToSaveResponse(
                 this.campaignGroupService.update(this.campaignGroup));
@@ -55,7 +55,7 @@ export class CampaignGroupDialogComponent implements OnInit {
     }
 
     private onSaveSuccess(result: CampaignGroup) {
-        this.eventManager.broadcast({ name: 'campaignGroupListModification', content: 'OK'});
+        this.eventManager.broadcast({ name: 'campaignGroupListModification', content: 'OK' });
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
@@ -81,19 +81,16 @@ export class CampaignGroupDialogComponent implements OnInit {
 })
 export class CampaignGroupPopupComponent implements OnInit, OnDestroy {
 
-    static projectId: string;
     routeSub: any;
     constructor(
         private route: ActivatedRoute,
         private campaignGroupPopupService: CampaignGroupPopupService
-    ) {}
+    ) { }
 
     ngOnInit() {
-        alert(this.route.params['id'])
+        // alert(this.route.params['id'])
         this.routeSub = this.route.params.subscribe((params) => {
-            CampaignGroupPopupComponent.projectId = params['projectId'];
-            if ( params['id'] ) {
-                alert (params['id']);
+            if (params['id']) {
                 this.campaignGroupPopupService
                     .open(CampaignGroupDialogComponent as Component, params['id']);
             } else {

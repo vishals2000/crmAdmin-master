@@ -4,13 +4,21 @@ import { Observable } from 'rxjs/Rx';
 
 import { CampaignGroup } from './campaign-group.model';
 import { ResponseWrapper, createRequestOption } from '../../shared';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class CampaignGroupService {
 
     private resourceUrl = 'api/campaign-group';
 
+    private messageSource = new BehaviorSubject<string>('');
+    currentGroupId = this.messageSource.asObservable();
+
     constructor(private http: Http) { }
+
+    changeGroupId(groupId: string) {
+        this.messageSource.next(groupId);
+    }
 
     create(campaignGroup: CampaignGroup): Observable<CampaignGroup> {
         const copy = this.convert(campaignGroup);
@@ -35,7 +43,7 @@ export class CampaignGroupService {
         return this.http.get(`${this.resourceUrl}/${project}/${id}`).map((res: Response) => {
             return res.json();
         }
-    );
+        );
     }
     query(req?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(req);
