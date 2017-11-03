@@ -71,3 +71,22 @@ export class CampaignTemplateFilterCriterion {
     ) {
     }
 }
+
+export class CampaignTargetGroupSizeRequest {
+    constructor(
+        public frontEnd: string,
+        public product: string,
+        public targetGroupFilterCriteria?: TargetGroupFilterCriterionSizeRequest[],
+    ) {
+    }
+}
+
+export class TargetGroupFilterCriterionSizeRequest {
+    constructor(
+        public filterOption: string,
+        public filterOptionLookUp: string,
+        public filterOptionComparison: string,
+        public filterOptionValue: string[],
+    ) {
+    }
+}
