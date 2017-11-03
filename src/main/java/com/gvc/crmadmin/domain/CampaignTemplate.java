@@ -8,9 +8,13 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import com.gvc.crmadmin.domain.enumeration.Product;
-
 import com.gvc.crmadmin.domain.enumeration.RecurrenceType;
+
+import com.gvc.crmadmin.domain.enumeration.FilterOption;
+
+import com.gvc.crmadmin.domain.enumeration.FilterOptionComparison;
+
+import com.gvc.crmadmin.domain.enumeration.LanguageComparision;
 
 /**
  * A CampaignTemplate.
@@ -21,15 +25,6 @@ public class CampaignTemplate implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     private String id;
-
-    @NotNull
-    @Size(min = 2, max = 2)
-    @Field("front_end")
-    private String frontEnd;
-
-    @NotNull
-    @Field("product")
-    private Product product;
 
     @NotNull
     @Field("campaign_name")
@@ -51,14 +46,6 @@ public class CampaignTemplate implements Serializable {
     private LocalDate recurrenceEndDate;
 
     @NotNull
-    @Field("message_content_id")
-    private String messageContentId;
-
-    @NotNull
-    @Field("target_group_id")
-    private String targetGroupId;
-
-    @NotNull
     @Field("scheduled_time")
     private String scheduledTime;
 
@@ -68,6 +55,30 @@ public class CampaignTemplate implements Serializable {
     @Field("campaign_group_id")
     private String campaignGroupId;
 
+    @Field("filter_option")
+    private FilterOption filterOption;
+
+    @Field("filter_option_comparison")
+    private FilterOptionComparison filterOptionComparison;
+
+    @Field("filter_option_value")
+    private String filterOptionValue;
+
+    @Field("content_name")
+    private String contentName;
+
+    @Field("content_title")
+    private String contentTitle;
+
+    @Field("content_body")
+    private String contentBody;
+
+    @Field("meta_data")
+    private String metaData;
+
+    @Field("language_comparision")
+    private LanguageComparision languageComparision;
+
     // jhipster-needle-entity-add-field - Jhipster will add fields here, do not remove
     public String getId() {
         return id;
@@ -75,32 +86,6 @@ public class CampaignTemplate implements Serializable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getFrontEnd() {
-        return frontEnd;
-    }
-
-    public CampaignTemplate frontEnd(String frontEnd) {
-        this.frontEnd = frontEnd;
-        return this;
-    }
-
-    public void setFrontEnd(String frontEnd) {
-        this.frontEnd = frontEnd;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public CampaignTemplate product(Product product) {
-        this.product = product;
-        return this;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
     }
 
     public String getCampaignName() {
@@ -168,32 +153,6 @@ public class CampaignTemplate implements Serializable {
         this.recurrenceEndDate = recurrenceEndDate;
     }
 
-    public String getMessageContentId() {
-        return messageContentId;
-    }
-
-    public CampaignTemplate messageContentId(String messageContentId) {
-        this.messageContentId = messageContentId;
-        return this;
-    }
-
-    public void setMessageContentId(String messageContentId) {
-        this.messageContentId = messageContentId;
-    }
-
-    public String getTargetGroupId() {
-        return targetGroupId;
-    }
-
-    public CampaignTemplate targetGroupId(String targetGroupId) {
-        this.targetGroupId = targetGroupId;
-        return this;
-    }
-
-    public void setTargetGroupId(String targetGroupId) {
-        this.targetGroupId = targetGroupId;
-    }
-
     public String getScheduledTime() {
         return scheduledTime;
     }
@@ -232,6 +191,110 @@ public class CampaignTemplate implements Serializable {
     public void setCampaignGroupId(String campaignGroupId) {
         this.campaignGroupId = campaignGroupId;
     }
+
+    public FilterOption getFilterOption() {
+        return filterOption;
+    }
+
+    public CampaignTemplate filterOption(FilterOption filterOption) {
+        this.filterOption = filterOption;
+        return this;
+    }
+
+    public void setFilterOption(FilterOption filterOption) {
+        this.filterOption = filterOption;
+    }
+
+    public FilterOptionComparison getFilterOptionComparison() {
+        return filterOptionComparison;
+    }
+
+    public CampaignTemplate filterOptionComparison(FilterOptionComparison filterOptionComparison) {
+        this.filterOptionComparison = filterOptionComparison;
+        return this;
+    }
+
+    public void setFilterOptionComparison(FilterOptionComparison filterOptionComparison) {
+        this.filterOptionComparison = filterOptionComparison;
+    }
+
+    public String getFilterOptionValue() {
+        return filterOptionValue;
+    }
+
+    public CampaignTemplate filterOptionValue(String filterOptionValue) {
+        this.filterOptionValue = filterOptionValue;
+        return this;
+    }
+
+    public void setFilterOptionValue(String filterOptionValue) {
+        this.filterOptionValue = filterOptionValue;
+    }
+
+    public String getContentName() {
+        return contentName;
+    }
+
+    public CampaignTemplate contentName(String contentName) {
+        this.contentName = contentName;
+        return this;
+    }
+
+    public void setContentName(String contentName) {
+        this.contentName = contentName;
+    }
+
+    public String getContentTitle() {
+        return contentTitle;
+    }
+
+    public CampaignTemplate contentTitle(String contentTitle) {
+        this.contentTitle = contentTitle;
+        return this;
+    }
+
+    public void setContentTitle(String contentTitle) {
+        this.contentTitle = contentTitle;
+    }
+
+    public String getContentBody() {
+        return contentBody;
+    }
+
+    public CampaignTemplate contentBody(String contentBody) {
+        this.contentBody = contentBody;
+        return this;
+    }
+
+    public void setContentBody(String contentBody) {
+        this.contentBody = contentBody;
+    }
+
+    public String getMetaData() {
+        return metaData;
+    }
+
+    public CampaignTemplate metaData(String metaData) {
+        this.metaData = metaData;
+        return this;
+    }
+
+    public void setMetaData(String metaData) {
+        this.metaData = metaData;
+    }
+
+    public LanguageComparision getLanguageComparision() {
+        return languageComparision;
+    }
+
+    public CampaignTemplate languageComparision(LanguageComparision languageComparision) {
+        this.languageComparision = languageComparision;
+        return this;
+    }
+
+    public void setLanguageComparision(LanguageComparision languageComparision) {
+        this.languageComparision = languageComparision;
+    }
     // jhipster-needle-entity-add-getters-setters - Jhipster will add getters and setters here, do not remove
 
     @Override
@@ -258,18 +321,22 @@ public class CampaignTemplate implements Serializable {
     public String toString() {
         return "CampaignTemplate{" +
             "id=" + getId() +
-            ", frontEnd='" + getFrontEnd() + "'" +
-            ", product='" + getProduct() + "'" +
             ", campaignName='" + getCampaignName() + "'" +
             ", campaignDescription='" + getCampaignDescription() + "'" +
             ", startDate='" + getStartDate() + "'" +
             ", recurrenceType='" + getRecurrenceType() + "'" +
             ", recurrenceEndDate='" + getRecurrenceEndDate() + "'" +
-            ", messageContentId='" + getMessageContentId() + "'" +
-            ", targetGroupId='" + getTargetGroupId() + "'" +
             ", scheduledTime='" + getScheduledTime() + "'" +
             ", inPlayerTimezone='" + isInPlayerTimezone() + "'" +
             ", campaignGroupId='" + getCampaignGroupId() + "'" +
+            ", filterOption='" + getFilterOption() + "'" +
+            ", filterOptionComparison='" + getFilterOptionComparison() + "'" +
+            ", filterOptionValue='" + getFilterOptionValue() + "'" +
+            ", contentName='" + getContentName() + "'" +
+            ", contentTitle='" + getContentTitle() + "'" +
+            ", contentBody='" + getContentBody() + "'" +
+            ", metaData='" + getMetaData() + "'" +
+            ", languageComparision='" + getLanguageComparision() + "'" +
             "}";
     }
 }

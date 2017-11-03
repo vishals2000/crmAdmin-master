@@ -15,12 +15,13 @@ import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http'
 })
 export class CampaignTemplateComponent implements OnInit, OnDestroy {
 
-currentAccount: any;
+    currentAccount: any;
     campaignTemplates: CampaignTemplate[];
     error: any;
     success: any;
     eventSubscriber: Subscription;
     private subscription: Subscription;
+
     routeData: any;
     links: any;
     totalItems: any;
@@ -32,7 +33,6 @@ currentAccount: any;
     reverse: any;
     results: string[];
     groupId: string;
-
     constructor(
         private campaignTemplateService: CampaignTemplateService,
         private parseLinks: JhiParseLinks,
@@ -40,14 +40,17 @@ currentAccount: any;
         private principal: Principal,
         private activatedRoute: ActivatedRoute,
         private route: ActivatedRoute,
+
         private router: Router,
         private eventManager: JhiEventManager,
         private paginationUtil: JhiPaginationUtil,
         private paginationConfig: PaginationConfig,
         private http: HttpClient
+
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.results = [];
+
         this.routeData = this.activatedRoute.data.subscribe((data) => {
             this.page = data['pagingParams'].page;
             this.previousPage = data['pagingParams'].page;
@@ -60,10 +63,11 @@ currentAccount: any;
         this.campaignTemplateService.query({
             page: this.page - 1,
             size: this.itemsPerPage,
-            sort: this.sort()}).subscribe(
+            sort: this.sort()
+        }).subscribe(
             (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
             (res: ResponseWrapper) => this.onError(res.json)
-        );
+            );
     }
     loadPage(page: number) {
         if (page !== this.previousPage) {
@@ -72,7 +76,8 @@ currentAccount: any;
         }
     }
     transition() {
-        this.router.navigate(['/campaign-template'], {queryParams:
+        this.router.navigate(['/campaign-template'], {
+            queryParams:
             {
                 page: this.page,
                 size: this.itemsPerPage,
@@ -80,45 +85,6 @@ currentAccount: any;
             }
         });
         this.loadAll();
-    }
-
-    runCampaign(campaignTemplate) {
-        this.campaignTemplateService.getPushNotificationCampaignTemplate(
-            {
-                campaignTemplateId: campaignTemplate.id
-            }
-        ).subscribe(
-            (res: ResponseWrapper) => this.onPushNotificationCampaignTemplate(res.json, res.headers),
-            (res: ResponseWrapper) => this.onError(res.json)
-        );
-    }
-
-    testHttpCall() {
-        const body = '{ "product" : "POKER",' +
-        '"frontEnd" :"pp",' +
-        '"campaignName" :"testCampaignName",' +
-        '"campaignDescription" :"testCampaignDescription",' +
-        '"filterCriteria" : [{"field" : "key1", "op":"in", "value":"value1"}],' +
-        '"recurrenceDetail" : {"startDate" : "2017-09-26", "recurrenceEndDate" : "2017-09-29", "recurrenceType" : "NONE"},' +
-        '"messageContentList" : [ {"contentName" : "contentNameOne",' +
-                                    '"contentTitle" : "contentTitleOne",' +
-                                    '"contentBody" : "contentBodyOne",' +
-                                    '"metaData" : {"metaKey1" :"metaValue1", "metaKey2" :"metaValue2"},' +
-                                    '"scheduledTime" : "2017-09-26 06:07:19",' +
-                                    '"inPlayerTimezone" : "true",' +
-                                    '"filterCriteria" : {"key1" : "value1", "key3":"value3" }},' +
-                                    '{"contentName" : "contentNameTwo", ' +
-                                    '"contentTitle" : "contentTitleTwo",' +
-                                    '"contentBody" : "contentBodyTwo",' +
-                                    '"metaData" : {"metaKey3" :"metaValue3", "metaKey4" :"metaValue4"},' +
-                                    '"scheduledTime" : "2017-09-26 06:07:19",' +
-                                    '"inPlayerTimezone" : "false",' +
-                                    '"filterCriteria" : {"key1" : "value1", "key4":"value4", "key5":"value5" }}]}'
-        // this.http.get('http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/getCampaignMetaData').subscribe((data) => console.log(data))
-        const req = this.http.post('http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/pushNotificationCampaign', body, {
-            headers: new HttpHeaders().set('Content-Type', 'application/json'),
-          })
-        req.subscribe();
     }
 
     clear() {
@@ -130,7 +96,7 @@ currentAccount: any;
         this.loadAll();
     }
     ngOnInit() {
-        // alert('asfsadfsa');
+        // this.campaignTemplateService.cuttentMesage.subscribe((message) => this.groupId = message);
         this.loadAll();
         this.principal.identity().then((account) => {
             this.currentAccount = account;
@@ -138,40 +104,41 @@ currentAccount: any;
         this.registerChangeInCampaignTemplates();
         this.subscription = this.route.params.subscribe((params) => {
             this.load1(params['id']);
-            this.groupId = params['id'];
+            this.campaignTemplateService.changeMessage(params['id']);
         });
     }
 
     load1(id) {
-    // alert(id);
-     this.campaignTemplateService.findCampGroups(id, 'group').subscribe((data) => {
-          this.campaignTemplates = data;
-         // alert(data);
-    },
-    (err) => {
-        alert('error');
-        this.campaignTemplates = [{
-                    'id' : '59f47d8513b80ad7286ec255',
-                    'campaignName' : 'Partypoker App',
-                    'campaignDescription' : 'This is Partypoker application'
-                  },
-                  {
-                     'id' : '59f47d8513b80ad7286ec255',
-                     'campaignName' : 'Partypoker App',
-                     'campaignDescription' : 'This is Partypoker application'
-                   },
-                   {
-                     'id' : '59f47d8513b80ad7286ec255',
-                     'campaignName' : 'Partypoker App',
-                     'campaignDescription' : 'This is Partypoker application'
-                   },
-                   {
-                     'id' : '59f47d8513b80ad7286ec255',
-                     'campaignName' : 'Partypoker App',
-                     'campaignDescription' : 'This is Partypoker application'
-                   }]
-         });
-}
+        // alert(id);
+        this.campaignTemplateService.findCampGroups(id, 'group').subscribe((data) => {
+            this.campaignTemplates = data;
+            // alert(data);
+        },
+            (err) => {
+               // alert(err);
+                console.log(err);
+                // this.campaignTemplates = [{
+                //     'id': '59f47d8513b80ad7286ec255',
+                //     'campaignName': 'Partypoker App',
+                //     'campaignDescription': 'This is Partypoker application'
+                // },
+                // {
+                //     'id': '59f47d8513b80ad7286ec255',
+                //     'campaignName': 'Partypoker App',
+                //     'campaignDescription': 'This is Partypoker application'
+                // },
+                // {
+                //     'id': '59f47d8513b80ad7286ec255',
+                //     'campaignName': 'Partypoker App',
+                //     'campaignDescription': 'This is Partypoker application'
+                // },
+                // {
+                //     'id': '59f47d8513b80ad7286ec255',
+                //     'campaignName': 'Partypoker App',
+                //     'campaignDescription': 'This is Partypoker application'
+                // }]
+            });
+    }
 
     ngOnDestroy() {
         this.eventManager.destroy(this.eventSubscriber);
@@ -198,15 +165,6 @@ currentAccount: any;
         this.queryCount = this.totalItems;
         // this.page = pagingParams.page;
         this.campaignTemplates = data;
-    }
-
-    private onPushNotificationCampaignTemplate(data, headers) {
-        console.log(data);
-        const req = this.http.post('http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/pushNotificationCampaign',
-        JSON.stringify(data), {
-            headers: new HttpHeaders().set('Content-Type', 'application/json'),
-          })
-        req.subscribe();
     }
     private onError(error) {
         this.alertService.error(error.message, null, null);

@@ -5,12 +5,15 @@ import { JhiDateUtils } from 'ng-jhipster';
 
 import { CampaignTemplate } from './campaign-template.model';
 import { ResponseWrapper, createRequestOption } from '../../shared';
+import { BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class CampaignTemplateService {
 
     private resourceUrl = 'api/campaign-templates';
 
+    private messageSource = new BehaviorSubject<string>('default messgae');
+    cuttentMesage = this.messageSource.asObservable();
     constructor(private http: Http, private dateUtils: JhiDateUtils) { }
 
     create(campaignTemplate: CampaignTemplate): Observable<CampaignTemplate> {
@@ -20,6 +23,10 @@ export class CampaignTemplateService {
             this.convertItemFromServer(jsonResponse);
             return jsonResponse;
         });
+    }
+
+    changeMessage(message: string) {
+        this.messageSource.next(message);
     }
 
     update(campaignTemplate: CampaignTemplate): Observable<CampaignTemplate> {

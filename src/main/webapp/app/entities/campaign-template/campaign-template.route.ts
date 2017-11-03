@@ -8,7 +8,6 @@ import { CampaignTemplateComponent } from './campaign-template.component';
 import { CampaignTemplateDetailComponent } from './campaign-template-detail.component';
 import { CampaignTemplatePopupComponent } from './campaign-template-dialog.component';
 import { CampaignTemplateDeletePopupComponent } from './campaign-template-delete-dialog.component';
-import { CampaignTemplateDialogComponent } from './campaign-template-dialog.component';
 
 @Injectable()
 export class CampaignTemplateResolvePagingParams implements Resolve<any> {
@@ -28,6 +27,17 @@ export class CampaignTemplateResolvePagingParams implements Resolve<any> {
 
 export const campaignTemplateRoute: Routes = [
     {
+        path: 'campaign-template/group/:id',
+        component: CampaignTemplateComponent,
+        resolve: {
+            'pagingParams': CampaignTemplateResolvePagingParams
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'CampaignTemplates'
+        }
+    },
+    {
         path: 'campaign-template',
         component: CampaignTemplateComponent,
         resolve: {
@@ -46,41 +56,29 @@ export const campaignTemplateRoute: Routes = [
             pageTitle: 'CampaignTemplates'
         },
         canActivate: [UserRouteAccessService]
-    },
-    {
-        path: 'campaign-template/group/:id',
-        component: CampaignTemplateComponent,
-        resolve: {
-            'pagingParams': CampaignTemplateResolvePagingParams
-        },
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'CampaignTemplates'
-        },
-        canActivate: [UserRouteAccessService]
-    },
-    {
-        path: 'campaign-template-new',
-        component: CampaignTemplateDialogComponent,
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'CampaignTemplates'
-        },
-        canActivate: [UserRouteAccessService],
-        // outlet: 'popup'
     }
 ];
 
 export const campaignTemplatePopupRoute: Routes = [
     {
-        path: 'campaign-template/edit/:id',
-        component: CampaignTemplateDialogComponent,
+        path: 'campaign-template-new',
+        component: CampaignTemplatePopupComponent,
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'CampaignTemplates'
         },
         canActivate: [UserRouteAccessService],
-        // outlet: 'popup'
+        outlet: 'popup'
+    },
+    {
+        path: 'campaign-template/:id/edit',
+        component: CampaignTemplatePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'CampaignTemplates'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
     {
         path: 'campaign-template/:id/delete',
