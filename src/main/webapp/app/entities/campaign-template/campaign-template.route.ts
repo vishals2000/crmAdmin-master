@@ -27,7 +27,7 @@ export class CampaignTemplateResolvePagingParams implements Resolve<any> {
 
 export const campaignTemplateRoute: Routes = [
     {
-        path: 'campaign-template/group/:id',
+        path: 'campaign-template/group/:id/:name',
         component: CampaignTemplateComponent,
         resolve: {
             'pagingParams': CampaignTemplateResolvePagingParams

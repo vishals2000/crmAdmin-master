@@ -33,6 +33,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     reverse: any;
     results: string[];
     groupId: string;
+    groupName : string;
     constructor(
         private campaignTemplateService: CampaignTemplateService,
         private parseLinks: JhiParseLinks,
@@ -103,7 +104,8 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         });
         this.registerChangeInCampaignTemplates();
         this.subscription = this.route.params.subscribe((params) => {
-            this.groupId = params['id']; 
+            this.groupId = params['id'];
+            this.groupName = params['name']; 
             this.load1(this.groupId);
             this.campaignTemplateService.changeMessage(this.groupId);
         });

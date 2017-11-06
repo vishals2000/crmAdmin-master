@@ -1,6 +1,6 @@
 <div>
     <h2>
-        <span>Campaign Groups in {{projectId}}</span>
+        <span>Campaign Groups in "{{projectName}}"</span>
         <button class="btn btn-primary float-right jh-create-entity create-campaign-group" [routerLink]="['/', { outlets: { popup: 'campaign-group-new' } }]">
             <span class="fa fa-plus"></span>
             <span >
@@ -26,7 +26,7 @@
             <tbody>
             <tr *ngFor="let campaignGroup of campaignGroups ;trackBy: trackId">
                 <!-- <td><a [routerLink]="['../campaign-group', campaignGroup.id ]">{{campaignGroup.id}}</a></td> -->
-                <td><a [routerLink]="['/campaign-template/group', campaignGroup.id ]">{{campaignGroup.name}}</a></td>
+                <td><a [routerLink]="['/campaign-template/group', campaignGroup.id, campaignGroup.name]">{{campaignGroup.name}}</a></td>
                 <td>{{campaignGroup.description}}</td>
                 <!-- <td>{{campaignGroup.projectId}}</td> -->
                 <td class="text-right">

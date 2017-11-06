@@ -27,7 +27,7 @@ export class CampaignGroupResolvePagingParams implements Resolve<any> {
 
 export const campaignGroupRoute: Routes = [
     {
-        path: 'campaign-group/project/:id',
+        path: 'campaign-group/project/:id/:name',
         component: CampaignGroupComponent,
         resolve: {
             'pagingParams': CampaignGroupResolvePagingParams
