@@ -1,3 +1,7 @@
+.idea
+.jhipster
+.vscode
+out
 .classpath
 .settings
 .project
