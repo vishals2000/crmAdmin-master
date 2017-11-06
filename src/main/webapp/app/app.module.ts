@@ -17,6 +17,7 @@ import { NgbdTimepickerBasicComponent } from './entities/campaign-template/campa
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
+import { CrmAdminDashboardModule } from './dashboard/dashboard.module';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 
 import {
@@ -42,6 +43,7 @@ import {
         NgbModule.forRoot(),
         ReactiveFormsModule,
         HttpClientModule,
+        CrmAdminDashboardModule,
         // jhipster-needle-angular-add-module JHipster will add new module here
     ],
     declarations: [
