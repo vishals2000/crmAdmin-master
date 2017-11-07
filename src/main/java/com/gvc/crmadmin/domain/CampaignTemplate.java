@@ -77,6 +77,9 @@ public class CampaignTemplate implements Serializable {
     @Field("language_comparision")
     private LanguageComparision languageComparision;
 
+    @Field("languageSelected")
+    private String languageSelected;
+
     // jhipster-needle-entity-add-field - Jhipster will add fields here, do not remove
     public String getId() {
         this.initialize();
@@ -344,5 +347,17 @@ public class CampaignTemplate implements Serializable {
             ", metaData='" + getMetaData() + "'" +
             ", languageComparision='" + getLanguageComparision() + "'" +
             "}";
+    }
+
+    public Boolean getInPlayerTimezone() {
+        return inPlayerTimezone;
+    }
+
+    public String getLanguageSelected() {
+        return languageSelected;
+    }
+
+    public void setLanguageSelected(String languageSelected) {
+        this.languageSelected = languageSelected;
     }
 }
