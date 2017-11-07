@@ -98,7 +98,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     }
     ngOnInit() {
         // this.campaignTemplateService.cuttentMesage.subscribe((message) => this.groupId = message);
-        this.loadAll();
+        // this.loadAll();
         this.principal.identity().then((account) => {
             this.currentAccount = account;
         });

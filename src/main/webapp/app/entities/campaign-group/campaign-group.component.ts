@@ -88,12 +88,12 @@ currentAccount: any;
         this.loadAll();
     }
     ngOnInit() {
-        this.loadAll();
+        // this.loadAll();
         this.principal.identity().then((account) => {
             this.currentAccount = account;
         });
         this.registerChangeInCampaignGroups();
-        this.subscription = this.route.params.subscribe((params) => {            
+        this.subscription = this.route.params.subscribe((params) => {
             this.projectId = params['id'];
             this.projectName = params['name'];
             this.load1(this.projectId);
