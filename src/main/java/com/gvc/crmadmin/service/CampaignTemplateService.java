@@ -64,4 +64,10 @@ public class CampaignTemplateService {
         log.debug("Request to delete CampaignTemplate : {}", id);
         campaignTemplateRepository.delete(id);
     }
+
+    public Page<CampaignTemplate> findByCampaignGroupId(Pageable pageable, String campaignGroupId) {
+        log.debug("Request to get all campaign Template for campaign Group Id " + campaignGroupId);
+        Page<CampaignTemplate> result = campaignTemplateRepository.findByCampaignGroupId(campaignGroupId, pageable);
+        return result;
+    }
 }

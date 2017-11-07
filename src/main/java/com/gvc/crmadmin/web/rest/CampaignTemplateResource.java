@@ -5,8 +5,8 @@ import com.gvc.crmadmin.domain.CampaignTemplate;
 import com.gvc.crmadmin.service.CampaignTemplateService;
 import com.gvc.crmadmin.web.rest.util.HeaderUtil;
 import com.gvc.crmadmin.web.rest.util.PaginationUtil;
-import io.swagger.annotations.ApiParam;
 import io.github.jhipster.web.util.ResponseUtil;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -17,9 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,14 +50,23 @@ public class CampaignTemplateResource {
      */
     @PostMapping("/campaign-templates")
     @Timed
-    public ResponseEntity<CampaignTemplate> createCampaignTemplate(@Valid @RequestBody CampaignTemplate campaignTemplate) throws URISyntaxException {
+    public ResponseEntity<CampaignTemplate> createCampaignTemplate(@Valid @RequestBody CampaignTemplate campaignTemplate) throws URISyntaxException, UnsupportedEncodingException {
         log.debug("REST request to save CampaignTemplate : {}", campaignTemplate);
-        if (campaignTemplate.getId() != null) {
+        /*if (campaignTemplate.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new campaignTemplate cannot already have an ID")).body(null);
+        }*/
+
+        CampaignTemplate result;
+        CampaignTemplate campaignTemplateFromDB = campaignTemplateService.findOne(campaignTemplate.getId());
+        if(campaignTemplateFromDB == null){
+            result = campaignTemplateService.save(campaignTemplate);
+        } else{
+            return ResponseEntity.badRequest()
+                .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, campaignTemplateFromDB.getId(), "Campaign Template with the given name exists"))
+                .body(campaignTemplateFromDB);
         }
-        CampaignTemplate result = campaignTemplateService.save(campaignTemplate);
-        return ResponseEntity.created(new URI("/api/campaign-templates/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+        return ResponseEntity.created(new URI(URLEncoder.encode("/api/campaign-templates/group/" + result.getCampaignGroupId(), "UTF-8")))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId()))
             .body(result);
     }
 
@@ -71,7 +81,7 @@ public class CampaignTemplateResource {
      */
     @PutMapping("/campaign-templates")
     @Timed
-    public ResponseEntity<CampaignTemplate> updateCampaignTemplate(@Valid @RequestBody CampaignTemplate campaignTemplate) throws URISyntaxException {
+    public ResponseEntity<CampaignTemplate> updateCampaignTemplate(@Valid @RequestBody CampaignTemplate campaignTemplate) throws URISyntaxException, UnsupportedEncodingException {
         log.debug("REST request to update CampaignTemplate : {}", campaignTemplate);
         if (campaignTemplate.getId() == null) {
             return createCampaignTemplate(campaignTemplate);
@@ -109,6 +119,15 @@ public class CampaignTemplateResource {
         log.debug("REST request to get CampaignTemplate : {}", id);
         CampaignTemplate campaignTemplate = campaignTemplateService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(campaignTemplate));
+    }
+
+    @GetMapping("/campaign-templates/group/{campaignGroupId}")
+    @Timed
+    public ResponseEntity<List<CampaignTemplate>> getAllCampaignGroups(@ApiParam Pageable pageable, @PathVariable String campaignGroupId) {
+        log.debug("REST request to get a page of CampaignGroups with projectId");
+        Page<CampaignTemplate> page = campaignTemplateService.findByCampaignGroupId(pageable, campaignGroupId);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/campaign-group");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**

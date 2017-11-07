@@ -1,20 +1,18 @@
 package com.gvc.crmadmin.domain;
 
+import com.gvc.crmadmin.domain.enumeration.FilterOption;
+import com.gvc.crmadmin.domain.enumeration.FilterOptionComparison;
+import com.gvc.crmadmin.domain.enumeration.LanguageComparision;
+import com.gvc.crmadmin.domain.enumeration.RecurrenceType;
+import com.gvc.crmadmin.service.util.Utils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import javax.validation.constraints.*;
+
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
-
-import com.gvc.crmadmin.domain.enumeration.RecurrenceType;
-
-import com.gvc.crmadmin.domain.enumeration.FilterOption;
-
-import com.gvc.crmadmin.domain.enumeration.FilterOptionComparison;
-
-import com.gvc.crmadmin.domain.enumeration.LanguageComparision;
 
 /**
  * A CampaignTemplate.
@@ -81,7 +79,15 @@ public class CampaignTemplate implements Serializable {
 
     // jhipster-needle-entity-add-field - Jhipster will add fields here, do not remove
     public String getId() {
+        this.initialize();
         return id;
+    }
+
+    private void initialize() {
+        StringBuilder sb = new StringBuilder(10);
+        sb.append(getCampaignGroupId()).append(Utils.UNDER_SCORE);
+        sb.append(getCampaignName());
+        setId(sb.toString());
     }
 
     public void setId(String id) {
