@@ -16,21 +16,21 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th>
+            <!-- <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th> -->
             <th jhiSortBy="campaignName"><span>Campaign Name</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="campaignDescription"><span>Campaign Description</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="startDate"><span>Start Date</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="recurrenceType"><span>Recurrence Type</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="recurrenceEndDate"><span>Recurrence End Date</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="scheduledTime"><span>Scheduled Time</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="inPlayerTimezone"><span>In Player Timezone</span> <span class="fa fa-sort"></span></th>
-            <!-- <th jhiSortBy="campaignGroupId"><span>Campaign Group Id</span> <span class="fa fa-sort"></span></th>
+            <!-- <th jhiSortBy="inPlayerTimezone"><span>In Player Timezone</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="campaignGroupId"><span>Campaign Group Id</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="filterOption"><span>Filter Option</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="filterOptionComparison"><span>Filter Option Comparison</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="filterOptionValue"><span>Filter Option Value</span> <span class="fa fa-sort"></span></th> -->
+            <th jhiSortBy="filterOptionValue"><span>Filter Option Value</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="contentName"><span>Content Name</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="contentTitle"><span>Content Title</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="contentBody"><span>Content Body</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="contentBody"><span>Content Body</span> <span class="fa fa-sort"></span></th> -->
             <!-- <th jhiSortBy="metaData"><span>Meta Data</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="languageComparision"><span>Language Comparision</span> <span class="fa fa-sort"></span></th> -->
             <th></th>
@@ -38,21 +38,21 @@
             </thead>
             <tbody>
             <tr *ngFor="let campaignTemplate of campaignTemplates ;trackBy: trackId">
-                <td><a [routerLink]="['../campaign-template', campaignTemplate.id ]">{{campaignTemplate.id}}</a></td>
+                <!-- <td><a [routerLink]="['../campaign-template', campaignTemplate.id ]">{{campaignTemplate.id}}</a></td> -->
                 <td>{{campaignTemplate.campaignName}}</td>
                 <td>{{campaignTemplate.campaignDescription}}</td>
                 <td>{{campaignTemplate.startDate | date:'mediumDate'}}</td>
                 <td>{{campaignTemplate.recurrenceType}}</td>
                 <td>{{campaignTemplate.recurrenceEndDate | date:'mediumDate'}}</td>
                 <td>{{campaignTemplate.scheduledTime}}</td>
-                <td>{{campaignTemplate.inPlayerTimezone}}</td>
-                <!-- <td>{{campaignTemplate.campaignGroupId}}</td>
+                <!-- <td>{{campaignTemplate.inPlayerTimezone}}</td>
+                <td>{{campaignTemplate.campaignGroupId}}</td>
                 <td>{{campaignTemplate.filterOption}}</td>
                 <td>{{campaignTemplate.filterOptionComparison}}</td>
-                <td>{{campaignTemplate.filterOptionValue}}</td> -->
+                <td>{{campaignTemplate.filterOptionValue}}</td>
                 <td>{{campaignTemplate.contentName}}</td>
                 <td>{{campaignTemplate.contentTitle}}</td>
-                <td>{{campaignTemplate.contentBody}}</td>
+                <td>{{campaignTemplate.contentBody}}</td> -->
                 <!-- <td>{{campaignTemplate.metaData}}</td>
                 <td>{{campaignTemplate.languageComparision}}</td> -->
                 <td class="text-right">
