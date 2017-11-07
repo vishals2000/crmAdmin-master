@@ -8,8 +8,8 @@ import { StateStorageService } from '../../shared';
 @Component({
     selector: 'jhi-main',
     templateUrl: './main.component.html',
-	encapsulation: ViewEncapsulation.None,
-	styleUrls: [
+    encapsulation: ViewEncapsulation.None,
+    styleUrls: [
     'mystyles.css'
     ]
 })

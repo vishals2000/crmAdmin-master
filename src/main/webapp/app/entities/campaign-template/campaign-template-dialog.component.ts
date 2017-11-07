@@ -148,13 +148,12 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 optionValues.push(targetGroupFilter.get('filterOptionValue').value);
             }
             targetGroupFilterCriteria.push(new TargetGroupFilterCriterionSizeRequest(targetGroupFilter.get('filterOption').value,
-            
                 targetGroupFilter.get('filterOptionLookUp').value,
                 targetGroupFilter.get('filterOptionComparison').value,
                 optionValues));
             formLengthIterator = formLengthIterator + 1;
         }
-        const body = new CampaignTargetGroupSizeRequest('pp', 'POKER' ,targetGroupFilterCriteria);
+        const body = new CampaignTargetGroupSizeRequest('pp', 'POKER', targetGroupFilterCriteria);
             // this.campaignTemplateGroupCreationForm.get('frontEnd').value,
             // this.campaignTemplateGroupCreationForm.get('product').value,
             // targetGroupFilterCriteria);

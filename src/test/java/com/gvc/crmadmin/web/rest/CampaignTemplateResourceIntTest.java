@@ -1,12 +1,12 @@
 package com.gvc.crmadmin.web.rest;
 
 import com.gvc.crmadmin.CrmAdminApp;
-
 import com.gvc.crmadmin.domain.CampaignTemplate;
+import com.gvc.crmadmin.domain.enumeration.Product;
+import com.gvc.crmadmin.domain.enumeration.RecurrenceType;
 import com.gvc.crmadmin.repository.CampaignTemplateRepository;
 import com.gvc.crmadmin.service.CampaignTemplateService;
 import com.gvc.crmadmin.web.rest.errors.ExceptionTranslator;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,9 +28,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import com.gvc.crmadmin.domain.enumeration.Product;
-import com.gvc.crmadmin.domain.enumeration.RecurrenceType;
 /**
  * Test class for the CampaignTemplateResource REST controller.
  *
@@ -113,15 +110,11 @@ public class CampaignTemplateResourceIntTest {
      */
     public static CampaignTemplate createEntity() {
         CampaignTemplate campaignTemplate = new CampaignTemplate()
-            .frontEnd(DEFAULT_FRONT_END)
-            .product(DEFAULT_PRODUCT)
             .campaignName(DEFAULT_CAMPAIGN_NAME)
             .campaignDescription(DEFAULT_CAMPAIGN_DESCRIPTION)
             .startDate(DEFAULT_START_DATE)
             .recurrenceType(DEFAULT_RECURRENCE_TYPE)
             .recurrenceEndDate(DEFAULT_RECURRENCE_END_DATE)
-            .messageContentId(DEFAULT_MESSAGE_CONTENT_ID)
-            .targetGroupId(DEFAULT_TARGET_GROUP_ID)
             .scheduledTime(DEFAULT_SCHEDULED_TIME)
             .inPlayerTimezone(DEFAULT_IN_PLAYER_TIMEZONE)
             .campaignGroupId(DEFAULT_CAMPAIGN_GROUP_ID);
@@ -148,15 +141,11 @@ public class CampaignTemplateResourceIntTest {
         List<CampaignTemplate> campaignTemplateList = campaignTemplateRepository.findAll();
         assertThat(campaignTemplateList).hasSize(databaseSizeBeforeCreate + 1);
         CampaignTemplate testCampaignTemplate = campaignTemplateList.get(campaignTemplateList.size() - 1);
-        assertThat(testCampaignTemplate.getFrontEnd()).isEqualTo(DEFAULT_FRONT_END);
-        assertThat(testCampaignTemplate.getProduct()).isEqualTo(DEFAULT_PRODUCT);
         assertThat(testCampaignTemplate.getCampaignName()).isEqualTo(DEFAULT_CAMPAIGN_NAME);
         assertThat(testCampaignTemplate.getCampaignDescription()).isEqualTo(DEFAULT_CAMPAIGN_DESCRIPTION);
         assertThat(testCampaignTemplate.getStartDate()).isEqualTo(DEFAULT_START_DATE);
         assertThat(testCampaignTemplate.getRecurrenceType()).isEqualTo(DEFAULT_RECURRENCE_TYPE);
         assertThat(testCampaignTemplate.getRecurrenceEndDate()).isEqualTo(DEFAULT_RECURRENCE_END_DATE);
-        assertThat(testCampaignTemplate.getMessageContentId()).isEqualTo(DEFAULT_MESSAGE_CONTENT_ID);
-        assertThat(testCampaignTemplate.getTargetGroupId()).isEqualTo(DEFAULT_TARGET_GROUP_ID);
         assertThat(testCampaignTemplate.getScheduledTime()).isEqualTo(DEFAULT_SCHEDULED_TIME);
         assertThat(testCampaignTemplate.isInPlayerTimezone()).isEqualTo(DEFAULT_IN_PLAYER_TIMEZONE);
         assertThat(testCampaignTemplate.getCampaignGroupId()).isEqualTo(DEFAULT_CAMPAIGN_GROUP_ID);
@@ -180,39 +169,6 @@ public class CampaignTemplateResourceIntTest {
         assertThat(campaignTemplateList).hasSize(databaseSizeBeforeCreate);
     }
 
-    @Test
-    public void checkFrontEndIsRequired() throws Exception {
-        int databaseSizeBeforeTest = campaignTemplateRepository.findAll().size();
-        // set the field null
-        campaignTemplate.setFrontEnd(null);
-
-        // Create the CampaignTemplate, which fails.
-
-        restCampaignTemplateMockMvc.perform(post("/api/campaign-templates")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(campaignTemplate)))
-            .andExpect(status().isBadRequest());
-
-        List<CampaignTemplate> campaignTemplateList = campaignTemplateRepository.findAll();
-        assertThat(campaignTemplateList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    public void checkProductIsRequired() throws Exception {
-        int databaseSizeBeforeTest = campaignTemplateRepository.findAll().size();
-        // set the field null
-        campaignTemplate.setProduct(null);
-
-        // Create the CampaignTemplate, which fails.
-
-        restCampaignTemplateMockMvc.perform(post("/api/campaign-templates")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(campaignTemplate)))
-            .andExpect(status().isBadRequest());
-
-        List<CampaignTemplate> campaignTemplateList = campaignTemplateRepository.findAll();
-        assertThat(campaignTemplateList).hasSize(databaseSizeBeforeTest);
-    }
 
     @Test
     public void checkCampaignNameIsRequired() throws Exception {
@@ -270,40 +226,6 @@ public class CampaignTemplateResourceIntTest {
         int databaseSizeBeforeTest = campaignTemplateRepository.findAll().size();
         // set the field null
         campaignTemplate.setRecurrenceEndDate(null);
-
-        // Create the CampaignTemplate, which fails.
-
-        restCampaignTemplateMockMvc.perform(post("/api/campaign-templates")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(campaignTemplate)))
-            .andExpect(status().isBadRequest());
-
-        List<CampaignTemplate> campaignTemplateList = campaignTemplateRepository.findAll();
-        assertThat(campaignTemplateList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    public void checkMessageContentIdIsRequired() throws Exception {
-        int databaseSizeBeforeTest = campaignTemplateRepository.findAll().size();
-        // set the field null
-        campaignTemplate.setMessageContentId(null);
-
-        // Create the CampaignTemplate, which fails.
-
-        restCampaignTemplateMockMvc.perform(post("/api/campaign-templates")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(campaignTemplate)))
-            .andExpect(status().isBadRequest());
-
-        List<CampaignTemplate> campaignTemplateList = campaignTemplateRepository.findAll();
-        assertThat(campaignTemplateList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    public void checkTargetGroupIdIsRequired() throws Exception {
-        int databaseSizeBeforeTest = campaignTemplateRepository.findAll().size();
-        // set the field null
-        campaignTemplate.setTargetGroupId(null);
 
         // Create the CampaignTemplate, which fails.
 
@@ -398,15 +320,11 @@ public class CampaignTemplateResourceIntTest {
         // Update the campaignTemplate
         CampaignTemplate updatedCampaignTemplate = campaignTemplateRepository.findOne(campaignTemplate.getId());
         updatedCampaignTemplate
-            .frontEnd(UPDATED_FRONT_END)
-            .product(UPDATED_PRODUCT)
             .campaignName(UPDATED_CAMPAIGN_NAME)
             .campaignDescription(UPDATED_CAMPAIGN_DESCRIPTION)
             .startDate(UPDATED_START_DATE)
             .recurrenceType(UPDATED_RECURRENCE_TYPE)
             .recurrenceEndDate(UPDATED_RECURRENCE_END_DATE)
-            .messageContentId(UPDATED_MESSAGE_CONTENT_ID)
-            .targetGroupId(UPDATED_TARGET_GROUP_ID)
             .scheduledTime(UPDATED_SCHEDULED_TIME)
             .inPlayerTimezone(UPDATED_IN_PLAYER_TIMEZONE)
             .campaignGroupId(UPDATED_CAMPAIGN_GROUP_ID);
@@ -420,15 +338,11 @@ public class CampaignTemplateResourceIntTest {
         List<CampaignTemplate> campaignTemplateList = campaignTemplateRepository.findAll();
         assertThat(campaignTemplateList).hasSize(databaseSizeBeforeUpdate);
         CampaignTemplate testCampaignTemplate = campaignTemplateList.get(campaignTemplateList.size() - 1);
-        assertThat(testCampaignTemplate.getFrontEnd()).isEqualTo(UPDATED_FRONT_END);
-        assertThat(testCampaignTemplate.getProduct()).isEqualTo(UPDATED_PRODUCT);
         assertThat(testCampaignTemplate.getCampaignName()).isEqualTo(UPDATED_CAMPAIGN_NAME);
         assertThat(testCampaignTemplate.getCampaignDescription()).isEqualTo(UPDATED_CAMPAIGN_DESCRIPTION);
         assertThat(testCampaignTemplate.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testCampaignTemplate.getRecurrenceType()).isEqualTo(UPDATED_RECURRENCE_TYPE);
         assertThat(testCampaignTemplate.getRecurrenceEndDate()).isEqualTo(UPDATED_RECURRENCE_END_DATE);
-        assertThat(testCampaignTemplate.getMessageContentId()).isEqualTo(UPDATED_MESSAGE_CONTENT_ID);
-        assertThat(testCampaignTemplate.getTargetGroupId()).isEqualTo(UPDATED_TARGET_GROUP_ID);
         assertThat(testCampaignTemplate.getScheduledTime()).isEqualTo(UPDATED_SCHEDULED_TIME);
         assertThat(testCampaignTemplate.isInPlayerTimezone()).isEqualTo(UPDATED_IN_PLAYER_TIMEZONE);
         assertThat(testCampaignTemplate.getCampaignGroupId()).isEqualTo(UPDATED_CAMPAIGN_GROUP_ID);
