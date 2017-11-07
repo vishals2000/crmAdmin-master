@@ -1,10 +1,12 @@
 package com.gvc.crmadmin.domain;
 
-import org.bson.types.ObjectId;
+import com.gvc.crmadmin.service.util.Utils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import javax.validation.constraints.*;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -33,7 +35,15 @@ public class CampaignGroup implements Serializable {
 
     // jhipster-needle-entity-add-field - Jhipster will add fields here, do not remove
     public String getId() {
+        this.initialize();
         return id;
+    }
+
+    private void initialize() {
+        StringBuilder sb = new StringBuilder(10);
+        sb.append(getProjectId()).append(Utils.UNDER_SCORE);
+        sb.append(getName());
+        setId(sb.toString());
     }
 
     public void setId(String id) {

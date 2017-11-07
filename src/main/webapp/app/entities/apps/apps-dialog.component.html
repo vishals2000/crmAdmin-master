@@ -14,8 +14,7 @@
         </div>
         <div class="form-group">
             <label class="form-control-label" for="field_frontEnd">Front End</label>
-            <input type="text" class="form-control" name="frontEnd" id="field_frontEnd"
-                [(ngModel)]="apps.frontEnd" required minlength="2" maxlength="2" />
+            <input type="text" class="form-control" name="frontEnd" id="field_frontEnd" [(ngModel)]="apps.frontEnd" required/>
             <div [hidden]="!(editForm.controls.frontEnd?.dirty && editForm.controls.frontEnd?.invalid)">
                 <small class="form-text text-danger"
                    [hidden]="!editForm.controls.frontEnd?.errors?.required">

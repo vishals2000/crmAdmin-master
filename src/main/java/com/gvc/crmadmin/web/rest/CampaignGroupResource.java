@@ -5,8 +5,8 @@ import com.gvc.crmadmin.domain.CampaignGroup;
 import com.gvc.crmadmin.service.CampaignGroupService;
 import com.gvc.crmadmin.web.rest.util.HeaderUtil;
 import com.gvc.crmadmin.web.rest.util.PaginationUtil;
-import io.swagger.annotations.ApiParam;
 import io.github.jhipster.web.util.ResponseUtil;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -17,9 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,14 +50,23 @@ public class CampaignGroupResource {
      */
     @PostMapping("/campaign-group")
     @Timed
-    public ResponseEntity<CampaignGroup> createCampaignGroup(@Valid @RequestBody CampaignGroup campaignGroup) throws URISyntaxException {
+    public ResponseEntity<CampaignGroup> createCampaignGroup(@Valid @RequestBody CampaignGroup campaignGroup) throws URISyntaxException, UnsupportedEncodingException {
         log.debug("REST request to save CampaignGroup : {}", campaignGroup);
-        if (campaignGroup.getId() != null) {
+        /*if (campaignGroup.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new campaignGroup cannot already have an ID")).body(null);
+        }*/
+
+        CampaignGroup result;
+        CampaignGroup campaignGroupFromDB = campaignGroupService.findOne(campaignGroup.getId());
+        if(campaignGroupFromDB == null){
+            result = campaignGroupService.save(campaignGroup);
+        } else{
+            return ResponseEntity.badRequest()
+                .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, campaignGroupFromDB.getId(), "Campaign Group with the given name exists"))
+                .body(campaignGroupFromDB);
         }
-        CampaignGroup result = campaignGroupService.save(campaignGroup);
-        return ResponseEntity.created(new URI("/api/campaign-group/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+        return ResponseEntity.created(new URI(URLEncoder.encode("/api/campaign-group/project/" + result.getProjectId(), "UTF-8")))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId()))
             .body(result);
     }
 
@@ -71,7 +81,7 @@ public class CampaignGroupResource {
      */
     @PutMapping("/campaign-group")
     @Timed
-    public ResponseEntity<CampaignGroup> updateCampaignGroup(@Valid @RequestBody CampaignGroup campaignGroup) throws URISyntaxException {
+    public ResponseEntity<CampaignGroup> updateCampaignGroup(@Valid @RequestBody CampaignGroup campaignGroup) throws URISyntaxException, UnsupportedEncodingException {
         log.debug("REST request to update CampaignGroup : {}", campaignGroup);
         if (campaignGroup.getId() == null) {
             return createCampaignGroup(campaignGroup);
@@ -97,9 +107,9 @@ public class CampaignGroupResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
-    @GetMapping("/campaign-group/project/{appId}")
+    @GetMapping("/campaign-group/project/{projectId}")
     @Timed
-    public ResponseEntity<List<CampaignGroup>> getAllCampaignGroups(@ApiParam Pageable pageable, String projectId) {
+    public ResponseEntity<List<CampaignGroup>> getAllCampaignGroups(@ApiParam Pageable pageable,@PathVariable String projectId) {
         log.debug("REST request to get a page of CampaignGroups with projectId");
         Page<CampaignGroup> page = campaignGroupService.findByProjectId(pageable, projectId);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/campaign-group");

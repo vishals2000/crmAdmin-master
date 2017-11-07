@@ -5,8 +5,8 @@ import com.gvc.crmadmin.domain.Apps;
 import com.gvc.crmadmin.service.AppsService;
 import com.gvc.crmadmin.web.rest.util.HeaderUtil;
 import com.gvc.crmadmin.web.rest.util.PaginationUtil;
-import io.swagger.annotations.ApiParam;
 import io.github.jhipster.web.util.ResponseUtil;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -17,9 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,14 +50,23 @@ public class AppsResource {
      */
     @PostMapping("/apps")
     @Timed
-    public ResponseEntity<Apps> createApps(@Valid @RequestBody Apps apps) throws URISyntaxException {
+    public ResponseEntity<Apps> createApps(@Valid @RequestBody Apps apps) throws URISyntaxException, UnsupportedEncodingException {
         log.debug("REST request to save Apps : {}", apps);
-        if (apps.getId() != null) {
+        /*if (apps.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new apps cannot already have an ID")).body(null);
+        }*/
+
+        Apps result;
+        Apps appFromDB = appsService.findOne(apps.getId());
+        if(appFromDB == null){
+            result = appsService.save(apps);
+        } else{
+            return ResponseEntity.badRequest()
+                .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, appFromDB.getId(), "App with the given frontEnd and product exists"))
+                .body(appFromDB);
         }
-        Apps result = appsService.save(apps);
-        return ResponseEntity.created(new URI("/api/apps/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+        return ResponseEntity.created(new URI(URLEncoder.encode("/api/apps/" + result.getId(), "UTF-8")))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId()))
             .body(result);
     }
 
@@ -71,7 +81,7 @@ public class AppsResource {
      */
     @PutMapping("/apps")
     @Timed
-    public ResponseEntity<Apps> updateApps(@Valid @RequestBody Apps apps) throws URISyntaxException {
+    public ResponseEntity<Apps> updateApps(@Valid @RequestBody Apps apps) throws URISyntaxException, UnsupportedEncodingException {
         log.debug("REST request to update Apps : {}", apps);
         if (apps.getId() == null) {
             return createApps(apps);
