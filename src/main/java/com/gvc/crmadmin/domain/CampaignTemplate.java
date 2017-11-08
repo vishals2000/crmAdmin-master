@@ -80,6 +80,9 @@ public class CampaignTemplate implements Serializable {
     @Field("languageSelected")
     private String languageSelected;
 
+    @Field("targetGroupFilterCriteria")
+    private TargetGroupCriteria.TargetGroupFilterCriterion[] targetGroupFilterCriteria;
+
     // jhipster-needle-entity-add-field - Jhipster will add fields here, do not remove
     public String getId() {
         this.initialize();
@@ -359,5 +362,13 @@ public class CampaignTemplate implements Serializable {
 
     public void setLanguageSelected(String languageSelected) {
         this.languageSelected = languageSelected;
+    }
+
+    public TargetGroupCriteria.TargetGroupFilterCriterion[] getTargetGroupFilterCriteria() {
+        return targetGroupFilterCriteria;
+    }
+
+    public void setTargetGroupFilterCriteria(TargetGroupCriteria.TargetGroupFilterCriterion[] targetGroupFilterCriteria) {
+        this.targetGroupFilterCriteria = targetGroupFilterCriteria;
     }
 }
