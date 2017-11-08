@@ -101,10 +101,8 @@ currentAccount: any;
         });
     }
     load1(id) {
-       // alert(id);
         this.campaignGroupService.findProjects(id, 'project').subscribe((data) => {
              this.campaignGroups = data;
-            // alert(data);
        },
        (err) => {
            alert('error');
@@ -139,7 +137,8 @@ currentAccount: any;
         return item.id;
     }
     registerChangeInCampaignGroups() {
-        this.eventSubscriber = this.eventManager.subscribe('campaignGroupListModification', (response) => this.loadAll());
+        this.eventSubscriber = this.eventManager.subscribe('campaignGroupListModification', (response) => 
+        this.load1(this.projectId));
     }
 
     sort() {

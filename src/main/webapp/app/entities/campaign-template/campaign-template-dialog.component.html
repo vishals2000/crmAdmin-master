@@ -21,6 +21,7 @@
                    [hidden]="!campaignTemplateGroupCreationForm.controls.campaignName?.errors?.required">
                    This field is required.
                 </small>
+            </div>
         </div>
         <div class="form-group">
             <label class="form-control-label" for="field_campaignDescription">Campaign Description</label>
@@ -84,7 +85,7 @@
                 
         <div class="form-group">            
             <label for="field_inPlayerTimezone">In Player Timezone</label>&nbsp;&nbsp;
-            <input type="checkbox"name="inPlayerTimezone" id="field_inPlayerTimezone" formControlName="inPlayerTimezone" />
+            <input type="checkbox" name="inPlayerTimezone" id="field_inPlayerTimezone" formControlName="inPlayerTimezone" />
         </div>
 
         <div align="right">
@@ -149,7 +150,6 @@
 
 </div>
 
-
         <div class="form-group">
             <label class="form-control-label" for="field_contentName">Content Name</label>
             <input type="text" class="form-control" name="contentName" id="field_contentName"
@@ -177,11 +177,10 @@
                 <option value="isnot">is not</option>
             </select>
         </div>
-        <div class="form-group"></div>
+        <div class="form-group">
         <select class="form-control" name="languageSelected" formControlName="languageSelected" id="languageSelected" >
             <option *ngFor="let language of languagesList" [value]="language">{{language}}</option>         
-        </select>
-           
+        </select>           
         </div>
     </div>
     <div class="modal-footer">

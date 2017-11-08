@@ -31,6 +31,12 @@ const enum LanguageComparision {
 }
 
 export class CampaignTemplate implements BaseEntity {
+    // id: string;
+    frontEnd = '';
+    product = '';
+    name = '';
+    targetGroupFilterCriteria: CampaignTemplateFilterCriterion[];
+
     constructor(
         public id?: string,
         public campaignName?: string,
@@ -41,16 +47,19 @@ export class CampaignTemplate implements BaseEntity {
         public scheduledTime?: string,
         public inPlayerTimezone?: boolean,
         public campaignGroupId?: string,
-        public filterOption?: FilterOption,
-        public filterOptionComparison?: FilterOptionComparison,
-        public filterOptionValue?: string,
+        // public campaignTemplateFilterCriteria?: CampaignTemplateFilterCriterion[],
+        // public filterOption?: FilterOption,
+        // public filterOptionComparison?: FilterOptionComparison,
+        // public filterOptionValue?: string,
         public contentName?: string,
         public contentTitle?: string,
         public contentBody?: string,
         public metaData?: string,
         public languageComparision?: LanguageComparision,
+        public languageSelected?: string,
     ) {
         this.inPlayerTimezone = false;
+        // this.campaignTemplateFilterCriteria = [];
     }
 }
 

@@ -84,7 +84,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
 
     save() {
         this.isSaving = true;
-        if (this.campaignTemplate.id !== undefined) {
+        if (this.campaignTemplateGroupCreationForm.value.id !== undefined) {            
             this.subscribeToSaveResponse(
                 this.campaignTemplateService.update(this.campaignTemplateGroupCreationForm.value));
         } else {
@@ -102,7 +102,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             this.campaignTemplate = new CampaignTemplate();
         }
         this.campaignTemplateGroupCreationForm = this.fb.group({
-            id: '',
+            // id: '',
             campaignName: (!this.campaignTemplate.campaignName) ? '' : this.campaignTemplate.campaignName,
             campaignDescription: (!this.campaignTemplate.campaignDescription) ? '' : this.campaignTemplate.campaignDescription,
             startDate: (!this.campaignTemplate.startDate) ? '' : this.campaignTemplate.startDate,

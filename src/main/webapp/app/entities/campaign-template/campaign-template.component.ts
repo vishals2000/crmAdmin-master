@@ -151,7 +151,8 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         return item.id;
     }
     registerChangeInCampaignTemplates() {
-        this.eventSubscriber = this.eventManager.subscribe('campaignTemplateListModification', (response) => this.loadAll());
+        this.eventSubscriber = this.eventManager.subscribe('campaignTemplateListModification', (response) => 
+        this.load1(this.groupId));
     }
 
     sort() {

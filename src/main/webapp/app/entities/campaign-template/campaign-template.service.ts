@@ -3,7 +3,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { JhiDateUtils } from 'ng-jhipster';
 
-import { CampaignTemplate } from './campaign-template.model';
+import { CampaignTemplate, CampaignTemplateFilterCriterion } from './campaign-template.model';
 import { ResponseWrapper, createRequestOption } from '../../shared';
 import { BehaviorSubject} from 'rxjs/BehaviorSubject';
 
@@ -85,11 +85,44 @@ export class CampaignTemplateService {
     }
 
     private convert(campaignTemplate: CampaignTemplate): CampaignTemplate {
+
         const copy: CampaignTemplate = Object.assign({}, campaignTemplate);
-        copy.startDate = this.dateUtils
-            .convertLocalDateToServer(campaignTemplate.startDate);
-        copy.recurrenceEndDate = this.dateUtils
-            .convertLocalDateToServer(campaignTemplate.recurrenceEndDate);
-        return copy;
+        const campaignTemplateCopy: CampaignTemplate = new CampaignTemplate();
+        campaignTemplateCopy.frontEnd = campaignTemplate.frontEnd;
+        campaignTemplateCopy.product = campaignTemplate.product;
+        campaignTemplateCopy.id = campaignTemplate.id;
+        campaignTemplateCopy.name = campaignTemplate.name;
+        campaignTemplateCopy.campaignName = campaignTemplate.campaignName;
+        campaignTemplateCopy.campaignDescription = campaignTemplate.campaignDescription;
+        campaignTemplateCopy.startDate = campaignTemplate.startDate;
+        campaignTemplateCopy.recurrenceType = campaignTemplate.recurrenceType;
+        campaignTemplateCopy.recurrenceEndDate = campaignTemplate.recurrenceEndDate;
+        campaignTemplateCopy.inPlayerTimezone = campaignTemplate.inPlayerTimezone;
+        campaignTemplateCopy.scheduledTime = campaignTemplate.scheduledTime;
+        campaignTemplateCopy.contentName = campaignTemplate.contentName;
+        campaignTemplateCopy.contentTitle = campaignTemplate.contentTitle;
+        campaignTemplateCopy.contentBody = campaignTemplate.contentBody;
+        campaignTemplateCopy.metaData = campaignTemplate.metaData;
+        campaignTemplateCopy.languageComparision = campaignTemplate.languageComparision;
+        campaignTemplateCopy.languageSelected = campaignTemplate.languageSelected;
+
+        const campaignTemplateFilterCriteria: CampaignTemplateFilterCriterion[] = [];
+        for (const campaignTemplateFilterCriterion of campaignTemplate.targetGroupFilterCriteria) {
+            if (Array.isArray(campaignTemplateFilterCriterion.filterOptionValue)) {
+                campaignTemplateFilterCriteria.push(new CampaignTemplateFilterCriterion(campaignTemplateFilterCriterion.filterOption,
+                    campaignTemplateFilterCriterion.filterOptionLookUp,
+                    campaignTemplateFilterCriterion.filterOptionComparison,
+                    campaignTemplateFilterCriterion.filterOptionValue));
+            } else {
+                const optionValues: string[] = [];
+                optionValues.push(campaignTemplateFilterCriterion.filterOptionValue);
+                campaignTemplateFilterCriteria.push(new CampaignTemplateFilterCriterion(campaignTemplateFilterCriterion.filterOption,
+                    campaignTemplateFilterCriterion.filterOptionLookUp,
+                    campaignTemplateFilterCriterion.filterOptionComparison,
+                    optionValues));
+            }
+        }
+        campaignTemplateCopy.targetGroupFilterCriteria = campaignTemplateFilterCriteria;
+        return campaignTemplateCopy;
     }
 }
