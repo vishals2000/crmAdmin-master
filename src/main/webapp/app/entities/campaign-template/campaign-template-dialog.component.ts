@@ -40,7 +40,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     countries: string[];
     languagesList: string[];
     targetGroupSize: number;
-    time : SimpleTime;
+    time: SimpleTime;
     operatingSystems: string[] = ['amazon', 'kindle', 'android'];
 
     constructor(
@@ -93,13 +93,35 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + (this.time.hour < 10 ? '0' + this.time.hour : this.time.hour) + ':' +
         (this.time.minute < 10 ? '0' + this.time.minute : this.time.minute);
 
-        if (this.campaignTemplateGroupCreationForm.value.id !== undefined) {            
+        if (this.campaignTemplateGroupCreationForm.value.id !== null) {
+
             this.subscribeToSaveResponse(
                 this.campaignTemplateService.update(this.campaignTemplateGroupCreationForm.value));
         } else {
             this.subscribeToSaveResponse(
                 this.campaignTemplateService.create(this.campaignTemplateGroupCreationForm.value));
         }
+    }
+
+    prepareSaveTargetGroupCriteria(): CampaignTemplate {
+        const formModel = this.campaignTemplateGroupCreationForm.value;
+
+        // deep copy of form model lairs
+        const targetGroupFilterCriteriaDeepCopy: CampaignTemplateFilterCriterion[] = formModel.targetGroupFilterCriteria.map(
+          (targetGroupFilterCriterion: CampaignTemplateFilterCriterion) => Object.assign({}, targetGroupFilterCriterion)
+        );
+
+        // return new `TargetGroupCriteria` object containing a combination of original targetGroupCriteria value(s)
+        // and deep copies of changed form model values
+        const saveTargetGroupCriteria: CampaignTemplate = {
+          id: this.campaignTemplate.id,
+          name: formModel.name as string,
+          frontEnd: formModel.frontEnd as string,
+          product: formModel.product as string,
+          // targetGroupFilterCriteria: formModel.targetGroupFilterCriteria // <-- bad!
+          targetGroupFilterCriteria: targetGroupFilterCriteriaDeepCopy
+        };
+        return saveTargetGroupCriteria;
     }
 
     addCampaignTemplateFilterCriterion() {
@@ -128,7 +150,8 @@ export class CampaignTemplateDialogComponent implements OnInit {
             contentBody: (!this.campaignTemplate.contentBody) ? '' : this.campaignTemplate.contentBody,
             metaData: (!this.campaignTemplate.metaData) ? '' : this.campaignTemplate.metaData,
             languageComparision: (!this.campaignTemplate.languageComparision) ? '' : this.campaignTemplate.languageComparision,
-            targetGroupFilterCriteria: this.fb.array([]),
+            targetGroupFilterCriteria: (!this.campaignTemplate.targetGroupFilterCriteria) ? this.fb.array([]) : this.campaignTemplate.targetGroupFilterCriteria,
+            // targetGroupFilterCriteria: this.fb.array([]),
             time: '',
             languageSelected: (!this.campaignTemplate.languageSelected) ? '' : this.campaignTemplate.languageSelected,
         });

@@ -83,7 +83,7 @@ export class CampaignTemplateService {
         entity.recurrenceEndDate = this.dateUtils
             .convertLocalDateFromServer(entity.recurrenceEndDate);
     }
-    
+
     private convert(campaignTemplate: CampaignTemplate): CampaignTemplate {
 
         const copy: CampaignTemplate = Object.assign({}, campaignTemplate);
@@ -110,14 +110,16 @@ export class CampaignTemplateService {
         const campaignTemplateFilterCriteria: CampaignTemplateFilterCriterion[] = [];
         for (const campaignTemplateFilterCriterion of campaignTemplate.targetGroupFilterCriteria) {
             if (Array.isArray(campaignTemplateFilterCriterion.filterOptionValue)) {
-                campaignTemplateFilterCriteria.push(new CampaignTemplateFilterCriterion(campaignTemplateFilterCriterion.filterOption,
+                campaignTemplateFilterCriteria.push(new CampaignTemplateFilterCriterion(
+                    campaignTemplateFilterCriterion.filterOption,
                     campaignTemplateFilterCriterion.filterOptionLookUp,
                     campaignTemplateFilterCriterion.filterOptionComparison,
                     campaignTemplateFilterCriterion.filterOptionValue));
             } else {
                 const optionValues: string[] = [];
                 optionValues.push(campaignTemplateFilterCriterion.filterOptionValue);
-                campaignTemplateFilterCriteria.push(new CampaignTemplateFilterCriterion(campaignTemplateFilterCriterion.filterOption,
+                campaignTemplateFilterCriteria.push(new CampaignTemplateFilterCriterion(
+                    campaignTemplateFilterCriterion.filterOption,
                     campaignTemplateFilterCriterion.filterOptionLookUp,
                     campaignTemplateFilterCriterion.filterOptionComparison,
                     optionValues));

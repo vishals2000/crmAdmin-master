@@ -137,7 +137,7 @@ currentAccount: any;
         return item.id;
     }
     registerChangeInCampaignGroups() {
-        this.eventSubscriber = this.eventManager.subscribe('campaignGroupListModification', (response) => 
+        this.eventSubscriber = this.eventManager.subscribe('campaignGroupListModification', (response) =>
         this.load1(this.projectId));
     }
 
