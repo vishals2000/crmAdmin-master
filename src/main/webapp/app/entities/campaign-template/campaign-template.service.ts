@@ -83,7 +83,7 @@ export class CampaignTemplateService {
         entity.recurrenceEndDate = this.dateUtils
             .convertLocalDateFromServer(entity.recurrenceEndDate);
     }
-
+    
     private convert(campaignTemplate: CampaignTemplate): CampaignTemplate {
 
         const copy: CampaignTemplate = Object.assign({}, campaignTemplate);
@@ -94,9 +94,9 @@ export class CampaignTemplateService {
         campaignTemplateCopy.name = campaignTemplate.name;
         campaignTemplateCopy.campaignName = campaignTemplate.campaignName;
         campaignTemplateCopy.campaignDescription = campaignTemplate.campaignDescription;
-        campaignTemplateCopy.startDate = campaignTemplate.startDate;
+        campaignTemplateCopy.startDate = this.dateUtils.convertLocalDateToServer(campaignTemplate.startDate);
         campaignTemplateCopy.recurrenceType = campaignTemplate.recurrenceType;
-        campaignTemplateCopy.recurrenceEndDate = campaignTemplate.recurrenceEndDate;
+        campaignTemplateCopy.recurrenceEndDate = this.dateUtils.convertLocalDateToServer(campaignTemplate.recurrenceEndDate);
         campaignTemplateCopy.inPlayerTimezone = campaignTemplate.inPlayerTimezone;
         campaignTemplateCopy.scheduledTime = campaignTemplate.scheduledTime;
         campaignTemplateCopy.contentName = campaignTemplate.contentName;

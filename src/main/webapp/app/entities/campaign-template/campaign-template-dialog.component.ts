@@ -75,7 +75,6 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.populateTagsMaps();
         this.populateFiltersMap();
         this.populateLanguagesList();
-        // alert(this.campaignTemplate.campaignGroupId);
     }
 
     clear() {
@@ -689,7 +688,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         const filterOptionComparisonSelected: string = targetGroupCriterionFormControl.get('filterOptionComparison').value;
         // const productSelected: string = this.campaignTemplateGroupCreationForm.get('product').value;
         // let productSelected: string = this.campaignTemplateGroupCreationForm.get('product').value;
-        const productSelected = 'POKER';
+        const productSelected:string = 'POKER';
 
         const optionValues: string[] = [];
         if (filterOptionSelected && filterOptionSelected !== '' &&
