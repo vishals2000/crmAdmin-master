@@ -40,6 +40,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     countries: string[];
     languagesList: string[];
     targetGroupSize: number;
+    time : SimpleTime;
     operatingSystems: string[] = ['amazon', 'kindle', 'android'];
 
     constructor(
@@ -65,6 +66,11 @@ export class CampaignTemplateDialogComponent implements OnInit {
 
     ngOnInit() {
         this.isSaving = false;
+        if (this.campaignTemplate && this.campaignTemplate.scheduledTime && this.campaignTemplate.scheduledTime.substr(0, 2) && this.campaignTemplate.scheduledTime.substr(3, 2)) {
+            this.time = new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0, 2)), Number(this.campaignTemplate.scheduledTime.substr(3, 2)));
+        } else {
+            this.time = new SimpleTime(11, 0);
+        }
         this.campaignTemplateService.cuttentMesage.subscribe((message) => {
             this.campaignTemplate.campaignGroupId = message;
         });
@@ -83,6 +89,10 @@ export class CampaignTemplateDialogComponent implements OnInit {
 
     save() {
         this.isSaving = true;
+
+        this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + (this.time.hour < 10 ? '0' + this.time.hour : this.time.hour) + ':' +
+        (this.time.minute < 10 ? '0' + this.time.minute : this.time.minute);
+
         if (this.campaignTemplateGroupCreationForm.value.id !== undefined) {            
             this.subscribeToSaveResponse(
                 this.campaignTemplateService.update(this.campaignTemplateGroupCreationForm.value));
@@ -101,26 +111,26 @@ export class CampaignTemplateDialogComponent implements OnInit {
             this.campaignTemplate = new CampaignTemplate();
         }
         this.campaignTemplateGroupCreationForm = this.fb.group({
-            // id: '',
+            id: (!this.campaignTemplate.id) ? null : this.campaignTemplate.id,
             campaignName: (!this.campaignTemplate.campaignName) ? '' : this.campaignTemplate.campaignName,
             campaignDescription: (!this.campaignTemplate.campaignDescription) ? '' : this.campaignTemplate.campaignDescription,
             startDate: (!this.campaignTemplate.startDate) ? '' : this.campaignTemplate.startDate,
-            recurrenceType: 'NONE',
+            recurrenceType: (!this.campaignTemplate.recurrenceType) ? '' : this.campaignTemplate.recurrenceType,
             recurrenceEndDate: (!this.campaignTemplate.recurrenceEndDate) ? '' : this.campaignTemplate.recurrenceEndDate,
             scheduledTime: (!this.campaignTemplate.scheduledTime) ? '' : this.campaignTemplate.scheduledTime,
             inPlayerTimezone: (!this.campaignTemplate.inPlayerTimezone) ? false : this.campaignTemplate.inPlayerTimezone,
             campaignGroupId: (!this.campaignTemplate.campaignGroupId) ? '' : this.campaignTemplate.campaignGroupId,
-            filterOption: 0,
-            filterOptionComparison: 0,
-            filterOptionValue: '',
-            contentName: '',
-            contentTitle: '',
-            contentBody: '',
-            metaData: '',
-            languageComparision: 0,
+            // filterOption: 0,
+            // filterOptionComparison: 0,
+            // filterOptionValue: '',
+            contentName: (!this.campaignTemplate.contentName) ? '' : this.campaignTemplate.contentName,
+            contentTitle: (!this.campaignTemplate.contentTitle) ? '' : this.campaignTemplate.contentTitle,
+            contentBody: (!this.campaignTemplate.contentBody) ? '' : this.campaignTemplate.contentBody,
+            metaData: (!this.campaignTemplate.metaData) ? '' : this.campaignTemplate.metaData,
+            languageComparision: (!this.campaignTemplate.languageComparision) ? '' : this.campaignTemplate.languageComparision,
             targetGroupFilterCriteria: this.fb.array([]),
             time: '',
-            languageSelected: ''
+            languageSelected: (!this.campaignTemplate.languageSelected) ? '' : this.campaignTemplate.languageSelected,
         });
         // (<FormControl>this.campaignTemplateGroupCreationForm.controls['recurrenceType']).setValue('NONE');
     }

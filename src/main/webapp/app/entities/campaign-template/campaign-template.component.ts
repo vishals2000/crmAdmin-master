@@ -112,12 +112,10 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     }
 
     load1(id) {
-        // alert(id);
         this.campaignTemplateService.findCampGroups(id, 'group').subscribe((data) => {
             this.campaignTemplates = data;
-            // alert(data);
         },
-            (err) => {
+        (err) => {
                // alert(err);
                 console.log(err);
                 // this.campaignTemplates = [{

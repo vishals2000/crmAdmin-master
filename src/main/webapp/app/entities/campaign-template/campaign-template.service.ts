@@ -92,6 +92,7 @@ export class CampaignTemplateService {
         campaignTemplateCopy.product = campaignTemplate.product;
         campaignTemplateCopy.id = campaignTemplate.id;
         campaignTemplateCopy.name = campaignTemplate.name;
+        campaignTemplateCopy.campaignGroupId = campaignTemplate.campaignGroupId;
         campaignTemplateCopy.campaignName = campaignTemplate.campaignName;
         campaignTemplateCopy.campaignDescription = campaignTemplate.campaignDescription;
         campaignTemplateCopy.startDate = this.dateUtils.convertLocalDateToServer(campaignTemplate.startDate);
