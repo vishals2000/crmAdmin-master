@@ -19,15 +19,15 @@
                     <span>Apps</span>
                 </a>
             </li>
-            <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="dashboard-menu">
+            <li *ngSwitchCase="true" routerLink="linechart" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link" id="dashboard-menu">
                     <span>
                         <i class="fa fa-area-chart" aria-hidden="true"></i>
-                        <span>Dashboard</span>
+                        <span>Insights</span>
                         <b class="caret"></b>
                     </span>
                 </a>
-                <ul class="dropdown-menu" ngbDropdownMenu>
+                <!-- <ul class="dropdown-menu" ngbDropdownMenu>
                     <li uiSrefActive="active">
                         <a class="dropdown-item" routerLink="barchart" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-bar-chart" aria-hidden="true"></i>
@@ -64,7 +64,7 @@
                             <span>RadarChart</span>
                         </a>
                     </li>
-                </ul>
+                </ul> -->
             </li>
             <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here 
             <li *ngSwitchCase="true" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
@@ -83,7 +83,7 @@
                 </a>
             </li>
             -->
-            <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <!-- <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
                     <span>
                         <i class="fa fa-th-list" aria-hidden="true"></i>
@@ -131,7 +131,7 @@
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                             <span>Projects</span>
                         </a>
-                    </li>
+                    </li> -->
                     <!-- <li>
                         <a class="dropdown-item" routerLink="apps" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
@@ -139,8 +139,8 @@
                         </a>
                     </li> -->
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
-                </ul>
-            </li>
+                <!-- </ul>
+            </li> -->
             <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
                     <span>

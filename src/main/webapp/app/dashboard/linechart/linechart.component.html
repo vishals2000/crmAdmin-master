@@ -3,7 +3,7 @@
         <span>Insights</span>
         
         <div class="row boxes">
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" (click)="getMessages();">
                 <div class="big-box">
                     <div class="icon"><i class="fa fa-envelope"></i> </div>
                     <div class="count">76</div>
@@ -11,7 +11,7 @@
                     <p>Lorem ipsum psdea itgum rixt.</p>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" (click)="getTotalUsers();">
                 <div class="big-box">
                     <div class="icon"><i class="fa fa-users"></i> </div>
                     <div class="count">863</div>
@@ -19,15 +19,15 @@
                     <p>Lorem ipsum psdea itgum rixt.</p>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div class="big-box active">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" (click)="getUniqueUsers();">
+                <div class="big-box">
                     <div class="icon"><i class="fa fa-user"></i> </div>
                     <div class="count">19</div>
                     <h3>Daily Unique Users</h3>
                     <p>Lorem ipsum psdea itgum rixt.</p>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" (click)="getSessions();">
                 <div class="big-box">
                     <div class="icon"><i class="fa fa-clock-o"></i> </div>
                     <div class="count">179</div>
@@ -43,9 +43,9 @@
                 <div class="insight-graph-container">
                     <div class="row panel-title">
                         <div class="col-md-6">
-                            <h3>Daily Unique Users</h3>
+                            <h3>{{chartHeading}}</h3>
                         </div>
-                        <div class="col-md-6">
+                        <!-- <div class="col-md-6">
     
                             <div class="pull-right">
                                 <div class="insight-calendar-box">
@@ -67,7 +67,7 @@
                             </div>
     
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-md-12 col-sm-12 col-xs-12">
                                 <p-growl [value]="msgs"></p-growl>
                                 <p-chart type="line" [data]="data" (onDataSelect)="selectData($event)"></p-chart>                        
