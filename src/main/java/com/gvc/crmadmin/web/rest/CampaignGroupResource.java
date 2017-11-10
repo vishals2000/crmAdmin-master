@@ -1,7 +1,10 @@
 package com.gvc.crmadmin.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.gvc.crmadmin.domain.Apps;
 import com.gvc.crmadmin.domain.CampaignGroup;
+import com.gvc.crmadmin.domain.FrontendProduct;
+import com.gvc.crmadmin.service.AppsService;
 import com.gvc.crmadmin.service.CampaignGroupService;
 import com.gvc.crmadmin.web.rest.util.HeaderUtil;
 import com.gvc.crmadmin.web.rest.util.PaginationUtil;
@@ -9,6 +12,7 @@ import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -34,6 +38,9 @@ public class CampaignGroupResource {
     private final Logger log = LoggerFactory.getLogger(CampaignGroupResource.class);
 
     private static final String ENTITY_NAME = "campaignGroup";
+
+    @Autowired
+    private AppsService appsService;
 
     private final CampaignGroupService campaignGroupService;
 
@@ -114,6 +121,22 @@ public class CampaignGroupResource {
         Page<CampaignGroup> page = campaignGroupService.findByProjectId(pageable, projectId);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/campaign-group");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/campaign-group/feProduct/{campaignGroupId}")
+    @Timed
+    public ResponseEntity<FrontendProduct> getFeProduct(@ApiParam Pageable pageable, @PathVariable String campaignGroupId) {
+        log.debug("REST request to get frontEnd and Product for campaign group " + campaignGroupId);
+        CampaignGroup campaignGroup = campaignGroupService.findOne(campaignGroupId);
+
+        FrontendProduct frontendProduct = new FrontendProduct("","");
+        if(campaignGroup != null) {
+            Apps app = appsService.findOne(campaignGroup.getProjectId());
+            if(app != null) {
+                frontendProduct = new FrontendProduct(app.getFrontEnd(), app.getProduct().name());
+            }
+        }
+        return ResponseUtil.wrapOrNotFound(Optional.of(frontendProduct));
     }
 
     /**
