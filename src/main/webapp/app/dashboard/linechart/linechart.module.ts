@@ -10,7 +10,7 @@ import {
 } from './';
 
 const DASHBOARD_STATES = [
-    linechartRoute
+    ...linechartRoute
 ];
 
 @NgModule({
