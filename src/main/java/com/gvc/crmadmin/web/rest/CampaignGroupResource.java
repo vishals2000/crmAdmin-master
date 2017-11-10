@@ -125,7 +125,7 @@ public class CampaignGroupResource {
 
     @GetMapping("/campaign-group/feProduct/{campaignGroupId}")
     @Timed
-    public ResponseEntity<FrontendProduct> getFeProduct(@ApiParam Pageable pageable, @PathVariable String campaignGroupId) {
+    public ResponseEntity<FrontendProduct> getFeProduct(@PathVariable String campaignGroupId) {
         log.debug("REST request to get frontEnd and Product for campaign group " + campaignGroupId);
         CampaignGroup campaignGroup = campaignGroupService.findOne(campaignGroupId);
 
