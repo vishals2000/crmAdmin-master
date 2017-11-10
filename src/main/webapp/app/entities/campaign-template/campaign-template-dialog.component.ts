@@ -65,15 +65,12 @@ export class CampaignTemplateDialogComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.isSaving = false;
-        if (this.campaignTemplate && this.campaignTemplate.scheduledTime && this.campaignTemplate.scheduledTime.substr(0, 2) && this.campaignTemplate.scheduledTime.substr(3, 2)) {
-            this.time = new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0, 2)), Number(this.campaignTemplate.scheduledTime.substr(3, 2)));
-        } else {
-            this.time = new SimpleTime(11, 0);
-        }
-        this.campaignTemplateService.cuttentMesage.subscribe((message) => {
-            this.campaignTemplate.campaignGroupId = message;
-        });
+        this.isSaving = false;               
+        this.campaignTemplateService.currentMesage.subscribe((message) => {
+            this.campaignTemplate.campaignGroupId = message[0];
+            this.campaignTemplate.frontEnd = message[1];
+            this.campaignTemplate.product = message[2];
+        });        
         this.createForm();
         this.prepareData();
         this.populateCountries();
@@ -82,6 +79,12 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.populateTagsMaps();
         this.populateFiltersMap();
         this.populateLanguagesList();
+
+        if (this.campaignTemplate && this.campaignTemplate.scheduledTime && this.campaignTemplate.scheduledTime.substr(0, 2) && this.campaignTemplate.scheduledTime.substr(3, 2)) {
+            this.time = new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0, 2)), Number(this.campaignTemplate.scheduledTime.substr(3, 2)));
+        } else {
+            this.time = new SimpleTime(11, 0);
+        }
     }
 
     clear() {
@@ -130,11 +133,13 @@ export class CampaignTemplateDialogComponent implements OnInit {
     }
 
     createForm() {
-        if (!this.campaignTemplate) {
+        if(!this.campaignTemplate) {
             this.campaignTemplate = new CampaignTemplate();
         }
         this.campaignTemplateGroupCreationForm = this.fb.group({
             id: (!this.campaignTemplate.id) ? null : this.campaignTemplate.id,
+            frontEnd: (!this.campaignTemplate.frontEnd) ? '' : this.campaignTemplate.frontEnd,
+            product: (!this.campaignTemplate.product) ? '' : this.campaignTemplate.product,
             campaignName: (!this.campaignTemplate.campaignName) ? '' : this.campaignTemplate.campaignName,
             campaignDescription: (!this.campaignTemplate.campaignDescription) ? '' : this.campaignTemplate.campaignDescription,
             startDate: (!this.campaignTemplate.startDate) ? '' : this.campaignTemplate.startDate,
@@ -168,10 +173,19 @@ export class CampaignTemplateDialogComponent implements OnInit {
             //     (c: CampaignTemplateFilterCriterion) => Object.assign({}, c)
             // );
             
-            for (var i=0; i< this.campaignTemplate.targetGroupFilterCriteria.length; i++) {
-                this.targetGroupFilterCriteria.push(this.fb.group(this.campaignTemplate.targetGroupFilterCriteria[i]));
-            }  
-        }        
+            // public filterOption: string,
+            // public filterOptionLookUp: string,
+            // public filterOptionComparison: string,
+            // public filterOptionValue: string[]
+            // this.targetGroupFilterCriteria.push(this.fb.group(new CampaignTemplateFilterCriterion(i.filterOption, 
+                // i.filterOptionLookUp, i.filterOptionComparison,i.filterOptionValue)));
+
+            for (let i of this.campaignTemplate.targetGroupFilterCriteria) {
+                // this.targetGroupFilterCriteria.push(this.fb.group(i));
+                this.targetGroupFilterCriteria.push(this.fb.group(new CampaignTemplateFilterCriterion(i.filterOption, 
+                    i.filterOptionLookUp, i.filterOptionComparison,i.filterOptionValue)));
+            }
+        }    
     }
     populateLanguagesList() {
         this.languagesList = LANGUAGES;
@@ -197,10 +211,10 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 optionValues));
             formLengthIterator = formLengthIterator + 1;
         }
-        const body = new CampaignTargetGroupSizeRequest('pp', 'POKER', targetGroupFilterCriteria);
-            // this.campaignTemplateGroupCreationForm.get('frontEnd').value,
-            // this.campaignTemplateGroupCreationForm.get('product').value,
-            // targetGroupFilterCriteria);
+        const body = new CampaignTargetGroupSizeRequest(
+            this.campaignTemplateGroupCreationForm.get('frontEnd').value,
+            this.campaignTemplateGroupCreationForm.get('product').value,
+            targetGroupFilterCriteria);
         const req = this.http.post('http://trdev-player-metrics-collector-api-container.ivycomptech.co.in/api/rest/mcsgateway/v1/getTargetGroupSize', body, {
             headers: new HttpHeaders().set('Content-Type', 'application/json'),
         })
@@ -422,10 +436,8 @@ export class CampaignTemplateDialogComponent implements OnInit {
         const lookupValues: string[] = [];
 
         if (targetGroupFiltersFilterOptionValues && targetGroupFiltersFilterOptionValues !== '') {
-            // switch (this.campaignTemplateGroupCreationForm.get('product').value) {
-            const productDummy = 'POKER';
-            switch (productDummy) {
-                case 'POKER': {
+            switch (this.campaignTemplateGroupCreationForm.get('product').value) {
+                case 'SPORTS': {
                     if (targetGroupCriterionFormControl.get('filterOption').value) {
                         switch (targetGroupCriterionFormControl.get('filterOption').value) {
                             case 'Event': {
@@ -448,7 +460,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                     return [''];
                 }
                 case 'POKER': {
-                    alert(targetGroupCriterionFormControl.get('filterOption').value);
+                    // alert(targetGroupCriterionFormControl.get('filterOption').value);
                     if (targetGroupCriterionFormControl.get('filterOption').value) {
                         switch (targetGroupCriterionFormControl.get('filterOption').value) {
                             case 'Event': {
@@ -470,7 +482,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                     }
                     return [''];
                 }
-                case 'POKER': {
+                case 'CASINO': {
                     if (targetGroupCriterionFormControl.get('filterOption').value) {
                         switch (targetGroupCriterionFormControl.get('filterOption').value) {
                             case 'Event': {
@@ -500,6 +512,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     }
     getFilterOptionComparisonValues(index) {
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
+        const product = this.campaignTemplateGroupCreationForm.get('product').value;
         const targetGroupCriterionFormControl: AbstractControl = targetGroupFilters.at(index);
         const targetGroupFiltersFilterOptionSelected: string = targetGroupCriterionFormControl.get('filterOption').value;
         const filterOptionComparisonValues: string[] = [];
@@ -555,8 +568,8 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 }
                     break;
                 case 'Event': {
-                    switch ('POKER') {
-                        case 'POKER': {
+                    switch (product) {
+                        case 'SPORTS': {
                             const filterOptionLookUpSelected: string = targetGroupCriterionFormControl.get('filterOptionLookUp').value;
                             if (filterOptionLookUpSelected) {
                                 const filterOptionLookUpComparisonVsValue: Map<string, string> = this.sportsEventsMap.get(filterOptionLookUpSelected);
@@ -576,7 +589,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                             }
                         }
                             break;
-                        case 'POKER': {
+                        case 'CASINO': {
                             const filterOptionLookUpSelected: string = targetGroupCriterionFormControl.get('filterOptionLookUp').value;
                             if (filterOptionLookUpSelected) {
                                 const filterOptionLookUpComparisonVsValue: Map<string, string> = this.casinoEventsMap.get(filterOptionLookUpSelected);
@@ -591,8 +604,8 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 }
                     break;
                 case 'Tag': {
-                    switch ('POKER') {
-                        case 'POKER': {
+                    switch (product) {
+                        case 'SPORTS': {
                             const filterOptionLookUpSelected: string = targetGroupCriterionFormControl.get('filterOptionLookUp').value;
                             if (filterOptionLookUpSelected) {
                                 const filterOptionLookUpComparisonVsValue: Map<string, string[]> = this.sportsTagsMap.get(filterOptionLookUpSelected);
@@ -612,7 +625,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                             }
                         }
                             break;
-                        case 'POKER': {
+                        case 'CASINO': {
                             const filterOptionLookUpSelected: string = targetGroupCriterionFormControl.get('filterOptionLookUp').value;
                             if (filterOptionLookUpSelected) {
                                 const filterOptionLookUpComparisonVsValue: Map<string, string[]> = this.casinoTagsMap.get(filterOptionLookUpSelected);
@@ -639,12 +652,12 @@ export class CampaignTemplateDialogComponent implements OnInit {
         const filterOption: string = targetGroupFilterCriterionFormControl.get('filterOption').value;
         const filterOptionLookUp: string = targetGroupFilterCriterionFormControl.get('filterOptionLookUp').value;
         const filterOptionComparison: string = targetGroupFilterCriterionFormControl.get('filterOptionComparison').value;
+        const productSelected: string = this.campaignTemplateGroupCreationForm.get('product').value;
         if (filterOption && filterOptionComparison) {
             switch (filterOption) {
-                case 'Tag': {
-                    // const productSelected: string = this.campaignTemplateGroupCreationForm.get('product').value;
-                    switch ('POKER') {
-                        case 'POKER': {
+                case 'Tag': {                    
+                    switch (productSelected) {
+                        case 'SPORTS': {
                             if (filterOptionLookUp && filterOptionLookUp !== '') {
                                 return this.getFormControlTypeFromFilterOptionValues(this.sportsTagsMap.get(filterOptionLookUp).get(filterOptionComparison));
                             }
@@ -656,8 +669,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                             }
                         }
                             break;
-                        // case 'POKERßß': {
-                        case 'POKER': {
+                        case 'CASINO': {
                             if (filterOptionLookUp && filterOptionLookUp !== '') {
                                 return this.getFormControlTypeFromFilterOptionValues(this.casinoTagsMap.get(filterOptionLookUp).get(filterOptionComparison));
                             }
@@ -667,9 +679,8 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 }
                     break;
                 case 'Event': {
-                    // const productSelected: string = this.campaignTemplateGroupCreationForm.get('product').value;
-                    switch ('POKER') {
-                        case 'POKER': {
+                    switch (productSelected) {
+                        case 'SPORTS': {
                             if (filterOptionLookUp && filterOptionLookUp !== '') {
                                 switch (this.sportsEventsMap.get(filterOptionLookUp).get(filterOptionComparison)) {
                                     case 'number of days': return 'daysCounter';
@@ -689,7 +700,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                             }
                         }
                             break;
-                        case 'POKER': {
+                        case 'CASINO': {
                             if (filterOptionLookUp && filterOptionLookUp !== '') {
                                 switch (this.casinoEventsMap.get(filterOptionLookUp).get(filterOptionComparison)) {
                                     case 'number of days': return 'daysCounter';
@@ -734,16 +745,15 @@ export class CampaignTemplateDialogComponent implements OnInit {
         const filterOptionComparisonSelected: string = targetGroupCriterionFormControl.get('filterOptionComparison').value;
         
         const filterOptionValueSelected: string[] = targetGroupCriterionFormControl.get('filterOptionValue').value;
-        // const productSelected: string = this.campaignTemplateGroupCreationForm.get('product').value;
-        // let productSelected: string = this.campaignTemplateGroupCreationForm.get('product').value;
-        const productSelected:string = 'POKER';
+        const productSelected: string = this.campaignTemplateGroupCreationForm.get('product').value;
         const optionValues: string[] = [];
 
         if (filterOptionSelected && filterOptionSelected !== '' &&
             filterOptionComparisonSelected && filterOptionComparisonSelected !== '') {
-                // if(filterOptionSelected == 'Country' && filterOptionValueSelected.length > 0) {
-                //     for(var i=0; i< filterOptionValueSelected.length; i++)
+                // if(filterOptionSelected === 'Country' && filterOptionValueSelected.length > 0) {
+                //     for(let i=0; i< filterOptionValueSelected.length; i++) {
                 //         optionValues.push(filterOptionValueSelected[i]);
+                //     }
                 //     return optionValues;
                 // }
             switch (filterOptionSelected) {
@@ -760,7 +770,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                     return optionValues;
                 case 'Event': {
                     switch (productSelected) {
-                        case 'POKER': {
+                        case 'SPORTS': {
                             if (filterOptionLookUpSelected) {
                                 optionValues.push(this.sportsEventsMap.get(filterOptionLookUpSelected).get(filterOptionComparisonSelected));
                             }
@@ -772,7 +782,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                             }
                         }
                             break;
-                        case 'POKER': {
+                        case 'CASINO': {
                             if (filterOptionLookUpSelected) {
                                 optionValues.push(this.casinoEventsMap.get(filterOptionLookUpSelected).get(filterOptionComparisonSelected));
                             }
@@ -784,7 +794,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                     break;
                 case 'Tag': {
                     switch (productSelected) {
-                        case 'POKER': {
+                        case 'SPORTS': {
                             if (filterOptionLookUpSelected) {
                                 return this.sportsTagsMap.get(filterOptionLookUpSelected).get(filterOptionComparisonSelected);
                             }
@@ -796,7 +806,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                             }
                         }
                             break;
-                        case 'POKER': {
+                        case 'CASINO': {
                             if (filterOptionLookUpSelected) {
                                 return this.casinoTagsMap.get(filterOptionLookUpSelected).get(filterOptionComparisonSelected);
                             }

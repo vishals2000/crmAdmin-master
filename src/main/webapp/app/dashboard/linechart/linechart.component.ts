@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { JhiLanguageService } from 'ng-jhipster';
 import { Message } from 'primeng/components/common/api';
+import { AppsService } from '../../entities/apps/apps.service';
+import { Apps } from '../../entities/apps/apps.model';
+import { ResponseWrapper } from '../../shared';
 
 @Component({
     selector: 'jhi-linechart',
@@ -13,8 +16,10 @@ export class LinechartComponent implements OnInit {
     msgs: Message[];
     chartHeading: string;
     myClass = [];
+    apps: Apps[];
+    appNames : string[];
 
-    constructor() {
+    constructor(private appsService: AppsService) {
         this.chartHeading = 'Messages';
         this.addClass('active');
         this.removeClass('active');
@@ -38,6 +43,9 @@ export class LinechartComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.appsService.query().subscribe( (res: ResponseWrapper) => {            
+            this.apps = res.json;
+        });        
     }
 
     addClass(clas) {

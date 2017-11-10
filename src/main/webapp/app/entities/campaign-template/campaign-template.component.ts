@@ -105,9 +105,13 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         this.registerChangeInCampaignTemplates();
         this.subscription = this.route.params.subscribe((params) => {
             this.groupId = params['id'];
-            this.groupName = params['name'];
+            this.groupName = params['name'];           
+         
+            this.campaignTemplateService.getFeProduct(this.groupId, 'feProduct').subscribe((response) => {                            
+                const values: string[] = [this.groupId, response['fe'], response['product']]
+                this.campaignTemplateService.changeMessage(values);
+            });
             this.load1(this.groupId);
-            this.campaignTemplateService.changeMessage(this.groupId);
         });
     }
 

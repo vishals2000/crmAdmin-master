@@ -13,7 +13,7 @@
                    [(ngModel)]="apps.id" readonly />
         </div>
         <div class="form-group">
-            <label class="form-control-label" for="field_frontEnd">Front End</label>
+            <label class="form-control-label" for="field_frontEnd">Label</Label></label>
             <input type="text" class="form-control" name="frontEnd" id="field_frontEnd" [(ngModel)]="apps.frontEnd" required/>
             <div [hidden]="!(editForm.controls.frontEnd?.dirty && editForm.controls.frontEnd?.invalid)">
                 <small class="form-text text-danger"
@@ -63,11 +63,11 @@
                 </small>
             </div>
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label class="form-control-label" for="field_jurisdiction">Jurisdiction</label>
             <input type="text" class="form-control" name="jurisdiction" id="field_jurisdiction"
                 [(ngModel)]="apps.jurisdiction"  />
-        </div>
+        </div> -->
         <div class="form-group">
             <label class="form-control-label" for="field_description">Description</label>
             <input type="text" class="form-control" name="description" id="field_description"

@@ -12,8 +12,8 @@ export class CampaignTemplateService {
 
     private resourceUrl = 'api/campaign-templates';
 
-    private messageSource = new BehaviorSubject<string>('default messgae');
-    cuttentMesage = this.messageSource.asObservable();
+    private messageSource = new BehaviorSubject<string[]>([]);
+    currentMesage = this.messageSource.asObservable();
     constructor(private http: Http, private dateUtils: JhiDateUtils) { }
 
     create(campaignTemplate: CampaignTemplate): Observable<CampaignTemplate> {
@@ -25,7 +25,7 @@ export class CampaignTemplateService {
         });
     }
 
-    changeMessage(message: string) {
+    changeMessage(message: string[]) {
         this.messageSource.next(message);
     }
 
@@ -43,6 +43,12 @@ export class CampaignTemplateService {
             const jsonResponse = res.json();
             this.convertItemFromServer(jsonResponse);
             return jsonResponse;
+        });
+    }
+
+    getFeProduct(id: string, name: string) : Observable<Response> {
+        return this.http.get(`${this.resourceUrl}/${name}/${id}`).map((res: Response) => {
+            return res.json();
         });
     }
 

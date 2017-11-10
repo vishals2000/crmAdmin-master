@@ -6,14 +6,10 @@
             <span>Insights</span>
         </h2> 
     </div>            
-    <div class="float-right">
-        
-            <select class="custom-selectbox rounded">
-              <option>Here is the first option</option>
-              <option>The second option</option>
-              <option>The third option</option>
-            </select>
-        
+    <div class="float-right">        
+            <select class="custom-selectbox rounded">              
+              <option *ngFor="let app of apps" [value]="app.name">{{app.name}}</option>
+            </select>        
     </div>
 </div>   
         
