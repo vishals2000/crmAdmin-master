@@ -17,7 +17,7 @@ export class LinechartComponent implements OnInit {
     chartHeading: string;
     myClass = [];
     apps: Apps[];
-    appNames : string[];
+    appNames: string[];
 
     constructor(private appsService: AppsService) {
         this.chartHeading = 'Messages';
@@ -43,29 +43,29 @@ export class LinechartComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.appsService.query().subscribe( (res: ResponseWrapper) => {            
+        this.appsService.query().subscribe((res: ResponseWrapper) => {
             this.apps = res.json;
-        });        
+        });
     }
 
     addClass(clas) {
         this.myClass.push(clas);
-      }
+    }
 
-      removeClass(clas) {
+    removeClass(clas) {
         const i = this.myClass.indexOf(clas);
-        if (i > -1)  {
+        if (i > -1) {
             this.myClass.splice(i, 1);
         }
-      }
+    }
 
-      checkClass() {
+    checkClass() {
         if (this.myClass.indexOf('red') === -1) {
-           alert('false');
+            alert('false');
         } else {
-           alert('true');
+            alert('true');
         }
-      }
+    }
 
     getMessages() {
         this.chartHeading = 'Messages';
@@ -150,6 +150,6 @@ export class LinechartComponent implements OnInit {
 
     selectData(event) {
         this.msgs = [];
-        this.msgs.push({severity: 'info', summary: 'Data Selected', 'detail': this.data.datasets[event.element._datasetIndex].data[event.element._index]});
+        this.msgs.push({ severity: 'info', summary: 'Data Selected', 'detail': this.data.datasets[event.element._datasetIndex].data[event.element._index] });
     }
 }

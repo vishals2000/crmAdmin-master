@@ -105,9 +105,9 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         this.registerChangeInCampaignTemplates();
         this.subscription = this.route.params.subscribe((params) => {
             this.groupId = params['id'];
-            this.groupName = params['name'];           
-         
-            this.campaignTemplateService.getFeProduct(this.groupId, 'feProduct').subscribe((response) => {                            
+            this.groupName = params['name'];
+
+            this.campaignTemplateService.getFeProduct(this.groupId, 'feProduct').subscribe((response) => {
                 const values: string[] = [this.groupId, response['fe'], response['product']]
                 this.campaignTemplateService.changeMessage(values);
             });
@@ -119,8 +119,8 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         this.campaignTemplateService.findCampGroups(id, 'group').subscribe((data) => {
             this.campaignTemplates = data;
         },
-        (err) => {
-               // alert(err);
+            (err) => {
+                // alert(err);
                 console.log(err);
                 // this.campaignTemplates = [{
                 //     'id': '59f47d8513b80ad7286ec255',
@@ -153,8 +153,8 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         return item.id;
     }
     registerChangeInCampaignTemplates() {
-        this.eventSubscriber = this.eventManager.subscribe('campaignTemplateListModification', (response) => 
-        this.load1(this.groupId));
+        this.eventSubscriber = this.eventManager.subscribe('campaignTemplateListModification', (response) =>
+            this.load1(this.groupId));
     }
 
     sort() {

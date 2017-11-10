@@ -8,8 +8,8 @@ import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
 import {
-CampaignTemplate, CampaignTemplateFilterCriterion, RecurrenceType, FilterOption, CampaignTargetGroupSizeRequest,
-TargetGroupFilterCriterionSizeRequest
+    CampaignTemplate, CampaignTemplateFilterCriterion, RecurrenceType, FilterOption, CampaignTargetGroupSizeRequest,
+    TargetGroupFilterCriterionSizeRequest
 } from './campaign-template.model';
 import { CampaignTemplatePopupService } from './campaign-template-popup.service';
 import { CampaignTemplateService } from './campaign-template.service';
@@ -65,12 +65,12 @@ export class CampaignTemplateDialogComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.isSaving = false;               
+        this.isSaving = false;
         this.campaignTemplateService.currentMesage.subscribe((message) => {
             this.campaignTemplate.campaignGroupId = message[0];
             this.campaignTemplate.frontEnd = message[1];
             this.campaignTemplate.product = message[2];
-        });        
+        });
         this.createForm();
         this.prepareData();
         this.populateCountries();
@@ -95,7 +95,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.isSaving = true;
 
         this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + (this.time.hour < 10 ? '0' + this.time.hour : this.time.hour) + ':' +
-        (this.time.minute < 10 ? '0' + this.time.minute : this.time.minute);
+            (this.time.minute < 10 ? '0' + this.time.minute : this.time.minute);
 
         if (this.campaignTemplateGroupCreationForm.value.id !== null) {
 
@@ -112,18 +112,18 @@ export class CampaignTemplateDialogComponent implements OnInit {
 
         // deep copy of form model lairs
         const targetGroupFilterCriteriaDeepCopy: CampaignTemplateFilterCriterion[] = formModel.targetGroupFilterCriteria.map(
-          (targetGroupFilterCriterion: CampaignTemplateFilterCriterion) => Object.assign({}, targetGroupFilterCriterion)
+            (targetGroupFilterCriterion: CampaignTemplateFilterCriterion) => Object.assign({}, targetGroupFilterCriterion)
         );
 
         // return new `TargetGroupCriteria` object containing a combination of original targetGroupCriteria value(s)
         // and deep copies of changed form model values
         const saveTargetGroupCriteria: CampaignTemplate = {
-          id: this.campaignTemplate.id,
-          name: formModel.name as string,
-          frontEnd: formModel.frontEnd as string,
-          product: formModel.product as string,
-          // targetGroupFilterCriteria: formModel.targetGroupFilterCriteria // <-- bad!
-          targetGroupFilterCriteria: targetGroupFilterCriteriaDeepCopy
+            id: this.campaignTemplate.id,
+            name: formModel.name as string,
+            frontEnd: formModel.frontEnd as string,
+            product: formModel.product as string,
+            // targetGroupFilterCriteria: formModel.targetGroupFilterCriteria // <-- bad!
+            targetGroupFilterCriteria: targetGroupFilterCriteriaDeepCopy
         };
         return saveTargetGroupCriteria;
     }
@@ -133,7 +133,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     }
 
     createForm() {
-        if(!this.campaignTemplate) {
+        if (!this.campaignTemplate) {
             this.campaignTemplate = new CampaignTemplate();
         }
         this.campaignTemplateGroupCreationForm = this.fb.group({
@@ -161,31 +161,31 @@ export class CampaignTemplateDialogComponent implements OnInit {
             time: '',
             languageSelected: (!this.campaignTemplate.languageSelected) ? '' : this.campaignTemplate.languageSelected,
         });
-    // (<FormControl>this.campaignTemplateGroupCreationForm.controls['recurrenceType']).setValue('NONE');
+        // (<FormControl>this.campaignTemplateGroupCreationForm.controls['recurrenceType']).setValue('NONE');
     }
     get targetGroupFilterCriteria(): FormArray {
         return this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
     };
 
     prepareData() {
-        if(this.campaignTemplate.targetGroupFilterCriteria) {
+        if (this.campaignTemplate.targetGroupFilterCriteria) {
             // const targetGroupFilterCriteriaDeepCopy: CampaignTemplateFilterCriterion[] = this.campaignTemplate.targetGroupFilterCriteria.map(
             //     (c: CampaignTemplateFilterCriterion) => Object.assign({}, c)
             // );
-            
+
             // public filterOption: string,
             // public filterOptionLookUp: string,
             // public filterOptionComparison: string,
             // public filterOptionValue: string[]
-            // this.targetGroupFilterCriteria.push(this.fb.group(new CampaignTemplateFilterCriterion(i.filterOption, 
-                // i.filterOptionLookUp, i.filterOptionComparison,i.filterOptionValue)));
+            // this.targetGroupFilterCriteria.push(this.fb.group(new CampaignTemplateFilterCriterion(i.filterOption,
+            // i.filterOptionLookUp, i.filterOptionComparison,i.filterOptionValue)));
 
-            for (let i of this.campaignTemplate.targetGroupFilterCriteria) {
+            for (const i of this.campaignTemplate.targetGroupFilterCriteria) {
                 // this.targetGroupFilterCriteria.push(this.fb.group(i));
-                this.targetGroupFilterCriteria.push(this.fb.group(new CampaignTemplateFilterCriterion(i.filterOption, 
-                    i.filterOptionLookUp, i.filterOptionComparison,i.filterOptionValue)));
+                this.targetGroupFilterCriteria.push(this.fb.group(new CampaignTemplateFilterCriterion(i.filterOption,
+                    i.filterOptionLookUp, i.filterOptionComparison, i.filterOptionValue)));
             }
-        }    
+        }
     }
     populateLanguagesList() {
         this.languagesList = LANGUAGES;
@@ -655,7 +655,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         const productSelected: string = this.campaignTemplateGroupCreationForm.get('product').value;
         if (filterOption && filterOptionComparison) {
             switch (filterOption) {
-                case 'Tag': {                    
+                case 'Tag': {
                     switch (productSelected) {
                         case 'SPORTS': {
                             if (filterOptionLookUp && filterOptionLookUp !== '') {
@@ -737,25 +737,25 @@ export class CampaignTemplateDialogComponent implements OnInit {
     }
 
     getFilterOptionValueValues(index) {
-        
+
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
         const targetGroupCriterionFormControl: AbstractControl = targetGroupFilters.at(index);
         const filterOptionSelected: string = targetGroupCriterionFormControl.get('filterOption').value;
         const filterOptionLookUpSelected: string = targetGroupCriterionFormControl.get('filterOptionLookUp').value;
         const filterOptionComparisonSelected: string = targetGroupCriterionFormControl.get('filterOptionComparison').value;
-        
+
         const filterOptionValueSelected: string[] = targetGroupCriterionFormControl.get('filterOptionValue').value;
         const productSelected: string = this.campaignTemplateGroupCreationForm.get('product').value;
         const optionValues: string[] = [];
 
         if (filterOptionSelected && filterOptionSelected !== '' &&
             filterOptionComparisonSelected && filterOptionComparisonSelected !== '') {
-                // if(filterOptionSelected === 'Country' && filterOptionValueSelected.length > 0) {
-                //     for(let i=0; i< filterOptionValueSelected.length; i++) {
-                //         optionValues.push(filterOptionValueSelected[i]);
-                //     }
-                //     return optionValues;
-                // }
+            // if(filterOptionSelected === 'Country' && filterOptionValueSelected.length > 0) {
+            //     for(let i=0; i< filterOptionValueSelected.length; i++) {
+            //         optionValues.push(filterOptionValueSelected[i]);
+            //     }
+            //     return optionValues;
+            // }
             switch (filterOptionSelected) {
                 case 'App':
                 case 'Country':
@@ -763,7 +763,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 case 'Language':
                 case 'Last Open Date':
                 case 'OS':
-                case 'Timezone':                    
+                case 'Timezone':
                     this.filtersMap.get(filterOptionSelected).get(filterOptionComparisonSelected).forEach((value: string) => {
                         optionValues.push(value);
                     });

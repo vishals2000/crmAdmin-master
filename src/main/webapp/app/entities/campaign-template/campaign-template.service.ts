@@ -46,7 +46,7 @@ export class CampaignTemplateService {
         });
     }
 
-    getFeProduct(id: string, name: string) : Observable<Response> {
+    getFeProduct(id: string, name: string): Observable<Response> {
         return this.http.get(`${this.resourceUrl}/${name}/${id}`).map((res: Response) => {
             return res.json();
         });

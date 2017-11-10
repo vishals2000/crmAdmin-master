@@ -43,7 +43,7 @@ export class CampaignTemplate implements BaseEntity {
         public campaignDescription?: string,
         public startDate?: any,
         public recurrenceType?: RecurrenceType,
-        public recurrenceEndDate?:any,
+        public recurrenceEndDate?: any,
         public scheduledTime?: string,
         public inPlayerTimezone?: boolean,
         public campaignGroupId?: string,
