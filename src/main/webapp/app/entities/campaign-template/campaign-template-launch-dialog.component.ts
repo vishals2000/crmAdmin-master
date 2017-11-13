@@ -14,7 +14,7 @@ import { ResponseWrapper } from '../../shared';
     selector: 'jhi-campaign-template-launch-dialog',
     templateUrl: './campaign-template-launch-dialog.component.html'
 })
-export class CampaignTemplateLaunchDialogComponent {
+export class CampaignTemplateLaunchDialogComponent implements OnInit {
 
     campaignTemplate: CampaignTemplate;
 
@@ -27,7 +27,7 @@ export class CampaignTemplateLaunchDialogComponent {
     ) {
     }
 
-    ngOnInit() {        
+    ngOnInit() {
         this.campaignTemplateService.currentMesage.subscribe((message) => {
             this.campaignTemplate.campaignGroupId = message[0];
             this.campaignTemplate.frontEnd = message[1];
@@ -47,7 +47,7 @@ export class CampaignTemplateLaunchDialogComponent {
         ).subscribe(
             (res: ResponseWrapper) => this.onPushNotificationCampaignTemplate(res.json, res.headers),
             (res: ResponseWrapper) => this.onError(res.json)
-        );
+            );
     }
 
     private onError(error) {
@@ -60,9 +60,9 @@ export class CampaignTemplateLaunchDialogComponent {
         console.log(data);
 
         const req = this.http.post('http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/pushNotificationCampaign',
-        JSON.stringify(data), {
-            headers: new HttpHeaders().set('Content-Type', 'application/json'),
-          })
+            JSON.stringify(data), {
+                headers: new HttpHeaders().set('Content-Type', 'application/json'),
+            })
         req.subscribe();
         this.activeModal.dismiss(true);
     }
@@ -79,7 +79,7 @@ export class CampaignTemplateLaunchPopupComponent implements OnInit, OnDestroy {
     constructor(
         private route: ActivatedRoute,
         private campaignTemplatePopupService: CampaignTemplatePopupService
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.routeSub = this.route.params.subscribe((params) => {

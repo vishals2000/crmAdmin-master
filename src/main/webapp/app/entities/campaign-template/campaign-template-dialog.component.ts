@@ -89,7 +89,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             year: now.getFullYear(),
             month: now.getMonth() + 1,
             day: now.getDate()
-          };
+        };
 
     }
 
@@ -100,9 +100,13 @@ export class CampaignTemplateDialogComponent implements OnInit {
     save() {
         this.isSaving = true;
 
-        if(this.campaignTemplateGroupCreationForm.value.time && this.campaignTemplateGroupCreationForm.value.time.hour && this.campaignTemplateGroupCreationForm.value.time.minute) {
-            this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + (this.campaignTemplateGroupCreationForm.value.time.hour < 10 ? '0' + this.campaignTemplateGroupCreationForm.value.time.hour : this.campaignTemplateGroupCreationForm.value.time.hour) + ':' +
-            (this.campaignTemplateGroupCreationForm.value.time.minute < 10 ? '0' + this.campaignTemplateGroupCreationForm.value.time.minute : this.campaignTemplateGroupCreationForm.value.time.minute);
+        if (this.campaignTemplateGroupCreationForm.value.time && this.campaignTemplateGroupCreationForm.value.time.hour &&
+            this.campaignTemplateGroupCreationForm.value.time.minute) {
+                this.campaignTemplateGroupCreationForm.value.scheduledTime = '' +
+                (this.campaignTemplateGroupCreationForm.value.time.hour < 10 ? '0' +
+                this.campaignTemplateGroupCreationForm.value.time.hour : this.campaignTemplateGroupCreationForm.value.time.hour) + ':' +
+                (this.campaignTemplateGroupCreationForm.value.time.minute < 10 ? '0' +
+                this.campaignTemplateGroupCreationForm.value.time.minute : this.campaignTemplateGroupCreationForm.value.time.minute);
         } else {
             this.campaignTemplateGroupCreationForm.value.scheduledTime = '';
         }
@@ -163,7 +167,9 @@ export class CampaignTemplateDialogComponent implements OnInit {
             languageComparision: (!this.campaignTemplate.languageComparision) ? '' : this.campaignTemplate.languageComparision,
             // targetGroupFilterCriteria: (!this.campaignTemplate.targetGroupFilterCriteria) ? this.fb.array([]) : this.prepareData(),
             targetGroupFilterCriteria: this.fb.array([]),
-            time: (!this.campaignTemplate.scheduledTime) ? new SimpleTime(11,0) : new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0,2)),Number(this.campaignTemplate.scheduledTime.substr(3,2))),
+            time: (!this.campaignTemplate.scheduledTime) ? new SimpleTime(11, 0) :
+                new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0, 2)),
+                Number(this.campaignTemplate.scheduledTime.substr(3, 2))),
             languageSelected: (!this.campaignTemplate.languageSelected) ? '' : this.campaignTemplate.languageSelected,
         });
         // (<FormControl>this.campaignTemplateGroupCreationForm.controls['recurrenceType']).setValue('NONE');
@@ -173,15 +179,15 @@ export class CampaignTemplateDialogComponent implements OnInit {
     };
 
     prepareData() {
-            // const targetGroupFilterCriteriaDeepCopy: CampaignTemplateFilterCriterion[] = this.campaignTemplate.targetGroupFilterCriteria.map(
-            //     (c: CampaignTemplateFilterCriterion) => Object.assign({}, c)
-            // );
-            // public filterOption: string,
-            // public filterOptionLookUp: string,
-            // public filterOptionComparison: string,
-            // public filterOptionValue: string[]
-            // this.targetGroupFilterCriteria.push(this.fb.group(new CampaignTemplateFilterCriterion(i.filterOption,
-            // i.filterOptionLookUp, i.filterOptionComparison,i.filterOptionValue)));
+        // const targetGroupFilterCriteriaDeepCopy: CampaignTemplateFilterCriterion[] = this.campaignTemplate.targetGroupFilterCriteria.map(
+        //     (c: CampaignTemplateFilterCriterion) => Object.assign({}, c)
+        // );
+        // public filterOption: string,
+        // public filterOptionLookUp: string,
+        // public filterOptionComparison: string,
+        // public filterOptionValue: string[]
+        // this.targetGroupFilterCriteria.push(this.fb.group(new CampaignTemplateFilterCriterion(i.filterOption,
+        // i.filterOptionLookUp, i.filterOptionComparison,i.filterOptionValue)));
         if (this.campaignTemplate.targetGroupFilterCriteria) {
             // for (const i of this.campaignTemplate.targetGroupFilterCriteria) {
             //     // this.targetGroupFilterCriteria.push(this.fb.group(i));
@@ -207,7 +213,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 }
             }
             for (const i of campaignTemplateFilterCriteria) {
-                this.targetGroupFilterCriteria.push(this.fb.group(i));                
+                this.targetGroupFilterCriteria.push(this.fb.group(i));
             }
             // this.campaignTemplate.targetGroupFilterCriteria = campaignTemplateFilterCriteria;
         }
