@@ -57,11 +57,11 @@
                 <td>{{campaignTemplate.languageComparision}}</td> -->
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
-                        <button type="submit" alt="Insights" title="Insights" 
+                        <!-- <button type="submit" alt="Insights" title="Insights" 
                             [routerLink]="['/linechart/template', campaignTemplate.id]"
                             class="btn btn-info btn-sm">
                         <span class="fa fa-area-chart"></span>
-                        </button>
+                        </button> -->
                         <button type="submit" alt="View" title="View" 
                                 [routerLink]="['/campaign-template', campaignTemplate.id ]"
                                 class="btn btn-info btn-sm">
@@ -75,11 +75,12 @@
                             <span class="fa fa-pencil"></span>
                            <!-- <span class="hidden-md-down">Edit</span>-->
                         </button>
-                        <button type="submit" alt="Test" title="Test"  
+                        <!-- <button type="submit" alt="Test" title="Test"  
                         class="btn btn-info btn-sm">
                             <span class="fa fa-sticky-note"></span>
-                        </button>
+                        </button> -->
                         <button type="submit" alt="Launch" title="Launch"  
+                            [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/launch'} }]"
                             class="btn btn-info btn-sm">
                             <span class="fa fa-rocket"></span>
                         </button>                        
