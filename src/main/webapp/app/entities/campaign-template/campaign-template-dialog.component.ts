@@ -101,15 +101,14 @@ export class CampaignTemplateDialogComponent implements OnInit {
     save() {
         this.isSaving = true;
 
-        if (this.campaignTemplateGroupCreationForm.value.time && this.campaignTemplateGroupCreationForm.value.time.hour &&
-            this.campaignTemplateGroupCreationForm.value.time.minute) {
+        if (this.campaignTemplateGroupCreationForm.value.time) {
                 this.campaignTemplateGroupCreationForm.value.scheduledTime = '' +
                 (this.campaignTemplateGroupCreationForm.value.time.hour < 10 ? '0' +
                 this.campaignTemplateGroupCreationForm.value.time.hour : this.campaignTemplateGroupCreationForm.value.time.hour) + ':' +
                 (this.campaignTemplateGroupCreationForm.value.time.minute < 10 ? '0' +
                 this.campaignTemplateGroupCreationForm.value.time.minute : this.campaignTemplateGroupCreationForm.value.time.minute);
         } else {
-            this.campaignTemplateGroupCreationForm.value.scheduledTime = '';
+            this.campaignTemplateGroupCreationForm.value.scheduledTime = '11.00';
         }
         if (this.campaignTemplateGroupCreationForm.value.id !== null) {
             this.subscribeToSaveResponse(
