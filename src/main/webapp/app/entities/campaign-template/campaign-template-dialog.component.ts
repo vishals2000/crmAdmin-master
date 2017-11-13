@@ -154,7 +154,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             languageComparision: (!this.campaignTemplate.languageComparision) ? '' : this.campaignTemplate.languageComparision,
             // targetGroupFilterCriteria: (!this.campaignTemplate.targetGroupFilterCriteria) ? this.fb.array([]) : this.prepareData(),
             targetGroupFilterCriteria: this.fb.array([]),
-            time: (!this.campaignTemplate.scheduledTime) ? '' : new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0,2)),Number(this.campaignTemplate.scheduledTime.substr(3,2))),
+            time: (!this.campaignTemplate.scheduledTime) ? new SimpleTime(11,0) : new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0,2)),Number(this.campaignTemplate.scheduledTime.substr(3,2))),
             languageSelected: (!this.campaignTemplate.languageSelected) ? '' : this.campaignTemplate.languageSelected,
         });
         // (<FormControl>this.campaignTemplateGroupCreationForm.controls['recurrenceType']).setValue('NONE');
@@ -197,7 +197,6 @@ export class CampaignTemplateDialogComponent implements OnInit {
                         optionValues));
                 }
             }
-
             for (const i of campaignTemplateFilterCriteria) {
                 this.targetGroupFilterCriteria.push(this.fb.group(i));                
             }
