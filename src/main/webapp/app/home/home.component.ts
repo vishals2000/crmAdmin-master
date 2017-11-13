@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, Renderer, ElementRef, ViewEncapsulation } from '@angular/core';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 import { Account, LoginModalService, Principal } from '../shared';
 import { Router } from '@angular/router';
@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     credentials: any;
 
     constructor(
+        public activeModal: NgbActiveModal,
         private principal: Principal,
         private loginModalService: LoginModalService,
         private eventManager: JhiEventManager,
