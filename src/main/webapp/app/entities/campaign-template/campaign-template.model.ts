@@ -35,7 +35,7 @@ export class CampaignTemplate implements BaseEntity {
     frontEnd = '';
     product = '';
     name = '';
-    targetGroupFilterCriteria: CampaignTemplateFilterCriterion[];
+    // targetGroupFilterCriteria: CampaignTemplateFilterCriterion[];
 
     constructor(
         public id?: string,
@@ -47,6 +47,7 @@ export class CampaignTemplate implements BaseEntity {
         public scheduledTime?: string,
         public inPlayerTimezone?: boolean,
         public campaignGroupId?: string,
+        public targetGroupFilterCriteria?: CampaignTemplateFilterCriterion[],
         // public campaignTemplateFilterCriteria?: CampaignTemplateFilterCriterion[],
         // public filterOption?: FilterOption,
         // public filterOptionComparison?: FilterOptionComparison,
@@ -59,6 +60,7 @@ export class CampaignTemplate implements BaseEntity {
         public languageSelected?: string,
     ) {
         this.inPlayerTimezone = false;
+        this.targetGroupFilterCriteria = [];
         // this.campaignTemplateFilterCriteria = [];
     }
 }
