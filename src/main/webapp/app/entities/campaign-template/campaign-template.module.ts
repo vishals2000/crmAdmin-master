@@ -17,6 +17,11 @@ import {
     CampaignTemplateResolvePagingParams,
 } from './';
 
+import {
+    CampaignTemplateLaunchPopupComponent,
+    CampaignTemplateLaunchDialogComponent
+} from './campaign-template-launch-dialog.component'
+
 const ENTITY_STATES = [
     ...campaignTemplateRoute,
     ...campaignTemplatePopupRoute,
@@ -35,6 +40,8 @@ const ENTITY_STATES = [
         CampaignTemplateDeleteDialogComponent,
         CampaignTemplatePopupComponent,
         CampaignTemplateDeletePopupComponent,
+        CampaignTemplateLaunchPopupComponent,
+        CampaignTemplateLaunchDialogComponent
     ],
     entryComponents: [
         CampaignTemplateComponent,
@@ -42,6 +49,8 @@ const ENTITY_STATES = [
         CampaignTemplatePopupComponent,
         CampaignTemplateDeleteDialogComponent,
         CampaignTemplateDeletePopupComponent,
+        CampaignTemplateLaunchPopupComponent,
+        CampaignTemplateLaunchDialogComponent
     ],
     providers: [
         CampaignTemplateService,

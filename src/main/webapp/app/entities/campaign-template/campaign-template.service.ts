@@ -67,7 +67,7 @@ export class CampaignTemplateService {
 
     getPushNotificationCampaignTemplate(req?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(req);
-        return this.http.get('api/campaign-templates-push-notification' + `/${req.campaignTemplateId}`, options)
+        return this.http.get('api/campaign-templates' + `/${req.campaignTemplateId}`, options)
             .map((res: Response) => this.convertResponse(res));
     }
 

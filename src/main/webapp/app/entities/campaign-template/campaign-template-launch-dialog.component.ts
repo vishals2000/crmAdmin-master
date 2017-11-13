@@ -27,6 +27,14 @@ export class CampaignTemplateLaunchDialogComponent {
     ) {
     }
 
+    ngOnInit() {        
+        this.campaignTemplateService.currentMesage.subscribe((message) => {
+            this.campaignTemplate.campaignGroupId = message[0];
+            this.campaignTemplate.frontEnd = message[1];
+            this.campaignTemplate.product = message[2];
+        });
+    }
+
     clear() {
         this.activeModal.dismiss('cancel');
     }
@@ -47,7 +55,10 @@ export class CampaignTemplateLaunchDialogComponent {
     }
 
     private onPushNotificationCampaignTemplate(data, headers) {
+        data['frontEnd'] = this.campaignTemplate.frontEnd;
+        data['product'] = this.campaignTemplate.product;
         console.log(data);
+
         const req = this.http.post('http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/pushNotificationCampaign',
         JSON.stringify(data), {
             headers: new HttpHeaders().set('Content-Type', 'application/json'),
