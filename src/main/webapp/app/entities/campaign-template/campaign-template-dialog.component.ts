@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
-import { FormBuilder, FormGroup, FormArray, FormControl, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, FormControl, AbstractControl, Validators } from '@angular/forms';
 import { ResponseWrapper, LANGUAGES, TIME_ZONES } from '../../shared';
 import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -62,6 +62,9 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.appVersionMap = new Map<string, string[]>();
         this.countries = [];
         this.targetGroupSize = 0;
+        this.campaignTemplateGroupCreationForm = this.fb.group({
+            targetGroupFilterCriteria: this.fb.array([])
+        });
     }
 
     ngOnInit() {
@@ -78,13 +81,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.populateEventsMaps();
         this.populateTagsMaps();
         this.populateFiltersMap();
-        this.populateLanguagesList();
-
-        if (this.campaignTemplate && this.campaignTemplate.scheduledTime && this.campaignTemplate.scheduledTime.substr(0, 2) && this.campaignTemplate.scheduledTime.substr(3, 2)) {
-            this.time = new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0, 2)), Number(this.campaignTemplate.scheduledTime.substr(3, 2)));
-        } else {
-            this.time = new SimpleTime(11, 0);
-        }
+        this.populateLanguagesList();        
     }
 
     clear() {
@@ -94,11 +91,13 @@ export class CampaignTemplateDialogComponent implements OnInit {
     save() {
         this.isSaving = true;
 
-        this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + (this.time.hour < 10 ? '0' + this.time.hour : this.time.hour) + ':' +
-            (this.time.minute < 10 ? '0' + this.time.minute : this.time.minute);
-
+        if(this.campaignTemplateGroupCreationForm.value.time && this.campaignTemplateGroupCreationForm.value.time.hour && this.campaignTemplateGroupCreationForm.value.time.minute) {
+            this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + (this.campaignTemplateGroupCreationForm.value.time.hour < 10 ? '0' + this.campaignTemplateGroupCreationForm.value.time.hour : this.campaignTemplateGroupCreationForm.value.time.hour) + ':' +
+            (this.campaignTemplateGroupCreationForm.value.time.minute < 10 ? '0' + this.campaignTemplateGroupCreationForm.value.time.minute : this.campaignTemplateGroupCreationForm.value.time.minute);
+        } else {
+            this.campaignTemplateGroupCreationForm.value.scheduledTime = '';
+        }
         if (this.campaignTemplateGroupCreationForm.value.id !== null) {
-
             this.subscribeToSaveResponse(
                 this.campaignTemplateService.update(this.campaignTemplateGroupCreationForm.value));
         } else {
@@ -148,9 +147,6 @@ export class CampaignTemplateDialogComponent implements OnInit {
             scheduledTime: (!this.campaignTemplate.scheduledTime) ? '' : this.campaignTemplate.scheduledTime,
             inPlayerTimezone: (!this.campaignTemplate.inPlayerTimezone) ? false : this.campaignTemplate.inPlayerTimezone,
             campaignGroupId: (!this.campaignTemplate.campaignGroupId) ? '' : this.campaignTemplate.campaignGroupId,
-            // filterOption: 0,
-            // filterOptionComparison: 0,
-            // filterOptionValue: '',
             contentName: (!this.campaignTemplate.contentName) ? '' : this.campaignTemplate.contentName,
             contentTitle: (!this.campaignTemplate.contentTitle) ? '' : this.campaignTemplate.contentTitle,
             contentBody: (!this.campaignTemplate.contentBody) ? '' : this.campaignTemplate.contentBody,
@@ -158,7 +154,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             languageComparision: (!this.campaignTemplate.languageComparision) ? '' : this.campaignTemplate.languageComparision,
             // targetGroupFilterCriteria: (!this.campaignTemplate.targetGroupFilterCriteria) ? this.fb.array([]) : this.prepareData(),
             targetGroupFilterCriteria: this.fb.array([]),
-            time: '',
+            time: (!this.campaignTemplate.scheduledTime) ? '' : new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0,2)),Number(this.campaignTemplate.scheduledTime.substr(3,2))),
             languageSelected: (!this.campaignTemplate.languageSelected) ? '' : this.campaignTemplate.languageSelected,
         });
         // (<FormControl>this.campaignTemplateGroupCreationForm.controls['recurrenceType']).setValue('NONE');
@@ -168,23 +164,44 @@ export class CampaignTemplateDialogComponent implements OnInit {
     };
 
     prepareData() {
-        if (this.campaignTemplate.targetGroupFilterCriteria) {
             // const targetGroupFilterCriteriaDeepCopy: CampaignTemplateFilterCriterion[] = this.campaignTemplate.targetGroupFilterCriteria.map(
             //     (c: CampaignTemplateFilterCriterion) => Object.assign({}, c)
             // );
-
             // public filterOption: string,
             // public filterOptionLookUp: string,
             // public filterOptionComparison: string,
             // public filterOptionValue: string[]
             // this.targetGroupFilterCriteria.push(this.fb.group(new CampaignTemplateFilterCriterion(i.filterOption,
             // i.filterOptionLookUp, i.filterOptionComparison,i.filterOptionValue)));
-
-            for (const i of this.campaignTemplate.targetGroupFilterCriteria) {
-                // this.targetGroupFilterCriteria.push(this.fb.group(i));
-                this.targetGroupFilterCriteria.push(this.fb.group(new CampaignTemplateFilterCriterion(i.filterOption,
-                    i.filterOptionLookUp, i.filterOptionComparison, i.filterOptionValue)));
+        if (this.campaignTemplate.targetGroupFilterCriteria) {
+            // for (const i of this.campaignTemplate.targetGroupFilterCriteria) {
+            //     // this.targetGroupFilterCriteria.push(this.fb.group(i));
+            //     this.targetGroupFilterCriteria.push(this.fb.group(new CampaignTemplateFilterCriterion(i.filterOption,
+            //         i.filterOptionLookUp, i.filterOptionComparison, i.filterOptionValue)));
+            // }
+            const campaignTemplateFilterCriteria: CampaignTemplateFilterCriterion[] = [];
+            for (const campaignTemplateFilterCriterion of this.campaignTemplate.targetGroupFilterCriteria) {
+                if (Array.isArray(campaignTemplateFilterCriterion.filterOptionValue)) {
+                    campaignTemplateFilterCriteria.push(new CampaignTemplateFilterCriterion(
+                        campaignTemplateFilterCriterion.filterOption,
+                        campaignTemplateFilterCriterion.filterOptionLookUp,
+                        campaignTemplateFilterCriterion.filterOptionComparison,
+                        campaignTemplateFilterCriterion.filterOptionValue));
+                } else {
+                    const optionValues: string[] = [];
+                    optionValues.push(campaignTemplateFilterCriterion.filterOptionValue);
+                    campaignTemplateFilterCriteria.push(new CampaignTemplateFilterCriterion(
+                        campaignTemplateFilterCriterion.filterOption,
+                        campaignTemplateFilterCriterion.filterOptionLookUp,
+                        campaignTemplateFilterCriterion.filterOptionComparison,
+                        optionValues));
+                }
             }
+
+            for (const i of campaignTemplateFilterCriteria) {
+                this.targetGroupFilterCriteria.push(this.fb.group(i));                
+            }
+            // this.campaignTemplate.targetGroupFilterCriteria = campaignTemplateFilterCriteria;
         }
     }
     populateLanguagesList() {
@@ -215,7 +232,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             this.campaignTemplateGroupCreationForm.get('frontEnd').value,
             this.campaignTemplateGroupCreationForm.get('product').value,
             targetGroupFilterCriteria);
-        const req = this.http.post('http://trdev-player-metrics-collector-api-container.ivycomptech.co.in/api/rest/mcsgateway/v1/getTargetGroupSize', body, {
+        const req = this.http.post('http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/getTargetGroupSize', body, {
             headers: new HttpHeaders().set('Content-Type', 'application/json'),
         })
         req.subscribe(
