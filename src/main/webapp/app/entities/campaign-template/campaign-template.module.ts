@@ -22,6 +22,11 @@ import {
     CampaignTemplateLaunchDialogComponent
 } from './campaign-template-launch-dialog.component'
 
+import {
+    CampaignTemplateTestPopupComponent,
+    CampaignTemplateTestDialogComponent
+} from './campaign-template-test-dialog.component'
+
 const ENTITY_STATES = [
     ...campaignTemplateRoute,
     ...campaignTemplatePopupRoute,
@@ -41,7 +46,9 @@ const ENTITY_STATES = [
         CampaignTemplatePopupComponent,
         CampaignTemplateDeletePopupComponent,
         CampaignTemplateLaunchPopupComponent,
-        CampaignTemplateLaunchDialogComponent
+        CampaignTemplateLaunchDialogComponent,
+        CampaignTemplateTestPopupComponent,
+        CampaignTemplateTestDialogComponent
     ],
     entryComponents: [
         CampaignTemplateComponent,
@@ -50,7 +57,9 @@ const ENTITY_STATES = [
         CampaignTemplateDeleteDialogComponent,
         CampaignTemplateDeletePopupComponent,
         CampaignTemplateLaunchPopupComponent,
-        CampaignTemplateLaunchDialogComponent
+        CampaignTemplateLaunchDialogComponent,
+        CampaignTemplateTestPopupComponent,
+        CampaignTemplateTestDialogComponent
     ],
     providers: [
         CampaignTemplateService,

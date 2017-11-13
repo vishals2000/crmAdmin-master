@@ -9,13 +9,13 @@ import { CampaignTemplatePopupService } from './campaign-template-popup.service'
 import { CampaignTemplateService } from './campaign-template.service';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
 import { ResponseWrapper } from '../../shared';
-import { LAUNCH_URL } from '../../app.constants';
+import { TEST_URL } from '../../app.constants';
 
 @Component({
     selector: 'jhi-campaign-template-test-dialog',
     templateUrl: './campaign-template-test-dialog.component.html'
 })
-export class CampaignTemplateLaunchDialogComponent implements OnInit {
+export class CampaignTemplateTestDialogComponent implements OnInit {
 
     campaignTemplate: CampaignTemplate;
 
@@ -40,7 +40,7 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmLaunch(id: string) {
+    confirmTest(id: string) {
         this.campaignTemplateService.getPushNotificationCampaignTemplate(
             {
                 campaignTemplateId: id
@@ -60,7 +60,7 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
         data['product'] = this.campaignTemplate.product;
         console.log(data);
 
-        const req = this.http.post(LAUNCH_URL,
+        const req = this.http.post(TEST_URL,
             JSON.stringify(data), {
                 headers: new HttpHeaders().set('Content-Type', 'application/json'),
             })
@@ -70,10 +70,10 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
 }
 
 @Component({
-    selector: 'jhi-campaign-template-launch-popup',
+    selector: 'jhi-campaign-template-test-popup',
     template: ''
 })
-export class CampaignTemplateLaunchPopupComponent implements OnInit, OnDestroy {
+export class CampaignTemplateTestPopupComponent implements OnInit, OnDestroy {
 
     routeSub: any;
 
@@ -85,7 +85,7 @@ export class CampaignTemplateLaunchPopupComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.routeSub = this.route.params.subscribe((params) => {
             this.campaignTemplatePopupService
-                .open(CampaignTemplateLaunchDialogComponent as Component, params['id']);
+                .open(CampaignTemplateTestDialogComponent as Component, params['id']);
         });
     }
 
