@@ -9,6 +9,7 @@ import { CampaignTemplatePopupService } from './campaign-template-popup.service'
 import { CampaignTemplateService } from './campaign-template.service';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
 import { ResponseWrapper } from '../../shared';
+import { LAUNCH_URL } from '../../app.constants';
 
 @Component({
     selector: 'jhi-campaign-template-launch-dialog',
@@ -59,7 +60,7 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
         data['product'] = this.campaignTemplate.product;
         console.log(data);
 
-        const req = this.http.post('http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/pushNotificationCampaign',
+        const req = this.http.post(LAUNCH_URL,
             JSON.stringify(data), {
                 headers: new HttpHeaders().set('Content-Type', 'application/json'),
             })
