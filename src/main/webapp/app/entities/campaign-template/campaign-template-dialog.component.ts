@@ -106,9 +106,9 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 (this.campaignTemplateGroupCreationForm.value.time.hour < 10 ? '0' +
                 this.campaignTemplateGroupCreationForm.value.time.hour : this.campaignTemplateGroupCreationForm.value.time.hour) + ':' +
                 (this.campaignTemplateGroupCreationForm.value.time.minute < 10 ? '0' +
-                this.campaignTemplateGroupCreationForm.value.time.minute : this.campaignTemplateGroupCreationForm.value.time.minute);
+                this.campaignTemplateGroupCreationForm.value.time.minute : this.campaignTemplateGroupCreationForm.value.time.minute) + ':00';
         } else {
-            this.campaignTemplateGroupCreationForm.value.scheduledTime = '11.00';
+            this.campaignTemplateGroupCreationForm.value.scheduledTime = '11:00:00';
         }
         if (this.campaignTemplateGroupCreationForm.value.id !== null) {
             this.subscribeToSaveResponse(
