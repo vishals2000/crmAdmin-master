@@ -57,25 +57,33 @@
                 <td>{{campaignTemplate.languageComparision}}</td> -->
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
-                        <button type="submit"
+                        <button type="submit" alt="Test" title="Test"  
+                            class="btn btn-info btn-sm">
+                        <span class="fa fa-sticky-note"></span>
+                        </button> 
+                        <button type="submit" alt="Launch" title="Launch"  
+                        class="btn btn-info btn-sm">
+                        <span class="fa fa-rocket"></span>
+                        </button>                          
+                        <button type="submit" alt="View Chart" title="View Chart" 
                             [routerLink]="['/linechart/template', campaignTemplate.id]"
                             class="btn btn-info btn-sm">
                         <span class="fa fa-area-chart"></span>
                         </button>
-                        <button type="submit"
+                        <button type="submit" alt="View" title="View" 
                                 [routerLink]="['/campaign-template', campaignTemplate.id ]"
                                 class="btn btn-info btn-sm">
                             <span class="fa fa-eye"></span>
                            <!-- <span class="hidden-md-down">View</span>-->
                         </button>
-                        <button type="submit"
+                        <button type="submit" alt="Edit" title="Edit" 
                                 [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/edit'} }]"
                                 replaceUrl="true"
                                 class="btn btn-primary btn-sm">
                             <span class="fa fa-pencil"></span>
                            <!-- <span class="hidden-md-down">Edit</span>-->
                         </button>
-                        <button type="submit"
+                        <button type="submit" alt="Delete" title="Delete" 
                                 [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/delete'} }]"
                                 replaceUrl="true"
                                 class="btn btn-danger btn-sm">
