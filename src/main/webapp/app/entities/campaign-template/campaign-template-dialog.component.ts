@@ -14,6 +14,7 @@ import {
 import { CampaignTemplatePopupService } from './campaign-template-popup.service';
 import { CampaignTemplateService } from './campaign-template.service';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
+import { NgbModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'jhi-campaign-template-dialog',
@@ -32,7 +33,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     sportsEventsMap: Map<string, Map<string, string>>;
     pokerEventsMap: Map<string, Map<string, string>>;
     casinoEventsMap: Map<string, Map<string, string>>;
-
+    minDate: NgbDateStruct;
     sportsTagsMap: Map<string, Map<string, string[]>>;
     pokerTagsMap: Map<string, Map<string, string[]>>;
     casinoTagsMap: Map<string, Map<string, string[]>>;
@@ -81,7 +82,15 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.populateEventsMaps();
         this.populateTagsMaps();
         this.populateFiltersMap();
-        this.populateLanguagesList();        
+        this.populateLanguagesList();
+
+        const now = new Date();
+        this.minDate = {
+            year: now.getFullYear(),
+            month: now.getMonth() + 1,
+            day: now.getDate()
+          };
+
     }
 
     clear() {
