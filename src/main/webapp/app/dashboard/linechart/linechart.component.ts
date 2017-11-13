@@ -4,6 +4,7 @@ import { Message } from 'primeng/components/common/api';
 import { AppsService } from '../../entities/apps/apps.service';
 import { Apps } from '../../entities/apps/apps.model';
 import { ResponseWrapper } from '../../shared';
+import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'jhi-linechart',
@@ -18,11 +19,12 @@ export class LinechartComponent implements OnInit {
     myClass = [];
     apps: Apps[];
     appNames: string[];
+    public activeModal: NgbActiveModal;
 
-    constructor(private appsService: AppsService) {
+    constructor(
+        private appsService: AppsService,
+    ) {
         this.chartHeading = 'Messages';
-        this.addClass('active');
-        this.removeClass('active');
         this.data = {
             labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
             datasets: [
@@ -46,25 +48,6 @@ export class LinechartComponent implements OnInit {
         this.appsService.query().subscribe((res: ResponseWrapper) => {
             this.apps = res.json;
         });
-    }
-
-    addClass(clas) {
-        this.myClass.push(clas);
-    }
-
-    removeClass(clas) {
-        const i = this.myClass.indexOf(clas);
-        if (i > -1) {
-            this.myClass.splice(i, 1);
-        }
-    }
-
-    checkClass() {
-        if (this.myClass.indexOf('red') === -1) {
-            alert('false');
-        } else {
-            alert('true');
-        }
     }
 
     getMessages() {
