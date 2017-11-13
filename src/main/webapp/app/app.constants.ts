@@ -9,3 +9,4 @@ export const VERSION = _VERSION;
 export const DEBUG_INFO_ENABLED = _DEBUG_INFO_ENABLED;
 export const REFRESH_URL = 'http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/getTargetGroupSize';
 export const LAUNCH_URL = 'http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/pushNotificationCampaign';
+export const TEST_URL = 'http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/sendPushNotificationForScreenName';
