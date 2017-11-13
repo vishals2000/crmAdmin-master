@@ -2,7 +2,6 @@ package com.gvc.crmadmin.domain;
 
 import com.gvc.crmadmin.domain.enumeration.FilterOption;
 import com.gvc.crmadmin.domain.enumeration.FilterOptionComparison;
-import com.gvc.crmadmin.domain.enumeration.LanguageComparision;
 import com.gvc.crmadmin.domain.enumeration.RecurrenceType;
 import com.gvc.crmadmin.service.util.Utils;
 import org.springframework.data.annotation.Id;
@@ -73,9 +72,6 @@ public class CampaignTemplate implements Serializable {
 
     @Field("meta_data")
     private String metaData;
-
-    @Field("language_comparision")
-    private LanguageComparision languageComparision;
 
     @Field("languageSelected")
     private String languageSelected;
@@ -295,18 +291,6 @@ public class CampaignTemplate implements Serializable {
         this.metaData = metaData;
     }
 
-    public LanguageComparision getLanguageComparision() {
-        return languageComparision;
-    }
-
-    public CampaignTemplate languageComparision(LanguageComparision languageComparision) {
-        this.languageComparision = languageComparision;
-        return this;
-    }
-
-    public void setLanguageComparision(LanguageComparision languageComparision) {
-        this.languageComparision = languageComparision;
-    }
     // jhipster-needle-entity-add-getters-setters - Jhipster will add getters and setters here, do not remove
 
     @Override
@@ -348,7 +332,6 @@ public class CampaignTemplate implements Serializable {
             ", contentTitle='" + getContentTitle() + "'" +
             ", contentBody='" + getContentBody() + "'" +
             ", metaData='" + getMetaData() + "'" +
-            ", languageComparision='" + getLanguageComparision() + "'" +
             "}";
     }
 
