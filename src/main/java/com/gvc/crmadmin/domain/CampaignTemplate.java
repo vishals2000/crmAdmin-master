@@ -76,6 +76,15 @@ public class CampaignTemplate implements Serializable {
     @Field("languageSelected")
     private String languageSelected;
 
+    @Field("status")
+    private String status;
+
+    @Field("alreadyLaunched")
+    private boolean alreadyLaunched;
+
+    @Field("launchEnabled")
+    private boolean launchEnabled;
+
     @Field("targetGroupFilterCriteria")
     private TargetGroupCriteria.TargetGroupFilterCriterion[] targetGroupFilterCriteria;
 
@@ -353,5 +362,29 @@ public class CampaignTemplate implements Serializable {
 
     public void setTargetGroupFilterCriteria(TargetGroupCriteria.TargetGroupFilterCriterion[] targetGroupFilterCriteria) {
         this.targetGroupFilterCriteria = targetGroupFilterCriteria;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public boolean isLaunchEnabled() {
+        return launchEnabled;
+    }
+
+    public void setLaunchEnabled(boolean launchEnabled) {
+        this.launchEnabled = launchEnabled;
+    }
+
+    public boolean isAlreadyLaunched() {
+        return alreadyLaunched;
+    }
+
+    public void setAlreadyLaunched(boolean alreadyLaunched) {
+        this.alreadyLaunched = alreadyLaunched;
     }
 }

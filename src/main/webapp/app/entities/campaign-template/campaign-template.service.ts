@@ -100,6 +100,7 @@ export class CampaignTemplateService {
         campaignTemplateCopy.name = campaignTemplate.name;
         campaignTemplateCopy.campaignGroupId = campaignTemplate.campaignGroupId;
         campaignTemplateCopy.campaignName = campaignTemplate.campaignName;
+        campaignTemplateCopy.status = campaignTemplate.status;
         campaignTemplateCopy.campaignDescription = campaignTemplate.campaignDescription;
         campaignTemplateCopy.startDate = this.dateUtils.convertLocalDateToServer(campaignTemplate.startDate);
         campaignTemplateCopy.recurrenceType = campaignTemplate.recurrenceType;
