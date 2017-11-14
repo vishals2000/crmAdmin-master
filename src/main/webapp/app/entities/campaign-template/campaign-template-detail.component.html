@@ -3,7 +3,9 @@
     <h2><span>Campaign Template</span> {{campaignTemplate.id}}</h2>
     <hr>
     <jhi-alert-error></jhi-alert-error>
-    <dl class="row-md jh-entity-details">
+    <div class="row">
+    <div class="col-lg-6 col-sm-6 col-xs-12">
+         <dl class="row-md jh-entity-details">
         <dt><span>Campaign Name</span></dt>
         <dd>
             <span>{{campaignTemplate.campaignName}}</span>
@@ -72,7 +74,16 @@
             <span>{{campaignTemplate.languageSelected}}</span>
         </dd>
     </dl>
-
+    </div>
+    <div class="col-lg-6 col-sm-6 col-xs-12">
+        <h2>
+            <span>PieChart</span>
+        </h2>
+        <div class="content-section implementation">
+            <p-chart type="pie" [data]="data"></p-chart>
+        </div>
+    </div>
+</div>
     <button type="submit"
             (click)="previousState()"
             class="btn btn-info">
