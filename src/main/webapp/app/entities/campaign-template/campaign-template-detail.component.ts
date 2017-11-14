@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
-import { JhiEventManager } from 'ng-jhipster';
+import { JhiEventManager, JhiLanguageService } from 'ng-jhipster';
 
 import { CampaignTemplate } from './campaign-template.model';
 import { CampaignTemplateService } from './campaign-template.service';
@@ -15,12 +15,29 @@ export class CampaignTemplateDetailComponent implements OnInit, OnDestroy {
     campaignTemplate: CampaignTemplate;
     private subscription: Subscription;
     private eventSubscriber: Subscription;
-
+    data: any;
+    
     constructor(
         private eventManager: JhiEventManager,
         private campaignTemplateService: CampaignTemplateService,
         private route: ActivatedRoute
     ) {
+        this.data = {
+            labels: ['A', 'B', 'C'],
+            datasets: [{
+                data: [300, 50, 100],
+                backgroundColor: [
+                    '#FF6384',
+                    '#36A2EB',
+                    '#FFCE56'
+                ],
+                hoverBackgroundColor: [
+                    '#FF6384',
+                    '#36A2EB',
+                    '#FFCE56'
+                ]
+            }]
+        };
     }
 
     ngOnInit() {

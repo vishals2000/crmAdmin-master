@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { CrmAdminSharedModule } from '../../shared';
+import { ChartModule } from 'primeng/primeng';
 import {
     CampaignTemplateService,
     CampaignTemplatePopupService,
@@ -35,6 +36,7 @@ const ENTITY_STATES = [
 @NgModule({
     imports: [
         CrmAdminSharedModule,
+        ChartModule,
         RouterModule.forRoot(ENTITY_STATES, { useHash: true }),
         ReactiveFormsModule
     ],
