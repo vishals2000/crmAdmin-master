@@ -51,7 +51,7 @@ export class LinechartComponent implements OnInit {
     }
     
     getData(id: string) {
-        alert(id);
+        alert(id);        
     }
 
     getMessages() {

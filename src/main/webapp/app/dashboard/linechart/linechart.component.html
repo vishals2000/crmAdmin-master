@@ -7,10 +7,10 @@
         </h2> 
     </div>            
     <div class="float-right">        
-            <select class="custom-selectbox rounded">              
-              <option *ngFor="let app of apps" [value]="app.name">{{app.name}}</option>
-            </select> 
-            <button class="btn btn-primary float-right marginL15" (click)="getData();"> 
+            <select class="custom-selectbox rounded" [(ngModel)]="selectedAppId">
+              <option *ngFor="let app of apps" [ngValue]="app.id">{{app.name}}</option>
+            </select>        
+            <button class="btn btn-primary float-right marginL15" (click)="getData(selectedAppId);"> 
                     <span>Go</span> 
             </button>       
     </div>
@@ -60,7 +60,7 @@
                         <div class="col-md-6">
                             <h3>{{chartHeading}}</h3>
                         </div>
-                        <!-- <div class="col-md-6">
+                        <div class="col-md-6">
     
                             <div class="pull-right">
                                 <div class="insight-calendar-box">
@@ -82,7 +82,7 @@
                             </div>
     
                         </div>
-                    </div> -->
+                    </div>
                     <div class="col-md-12 col-sm-12 col-xs-12">
                                 <p-growl [value]="msgs"></p-growl>
                                 <p-chart type="line" [data]="data" (onDataSelect)="selectData($event)"></p-chart>                        
