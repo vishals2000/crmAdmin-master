@@ -1,18 +1,23 @@
-<form name="launchForm" (ngSubmit)="confirmLaunch(campaignTemplate.id)">
+<form name="launchForm" role="form" novalidate (ngSubmit)="confirmTest(campaignTemplate.id)" #editForm="ngForm">
     <div class="modal-header">
-        <h4 class="modal-title">Confirm launch operation</h4>
+        <h4 class="modal-title">Confirm test operation</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">&times;</button>
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
-        <p>Are you sure you want to launch this Campaign Template?</p>
+        <p>Please enter the User Name and click on "Test" to send a campaign message</p>
+        <div class="form-group">
+                <label for="userName">User Name</label>
+                <input type="text" class="form-control" id="userName" name="userName"
+                       [(ngModel)]="userName" required />
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
             <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
         </button>
         <button type="submit" class="btn btn-primary">
-            &nbsp;<span>Launch</span>
+            &nbsp;<span>Test</span>
         </button>
     </div>
 </form>

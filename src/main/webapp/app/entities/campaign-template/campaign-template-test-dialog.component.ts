@@ -18,6 +18,7 @@ import { TEST_URL } from '../../app.constants';
 export class CampaignTemplateTestDialogComponent implements OnInit {
 
     campaignTemplate: CampaignTemplate;
+    userName: string;
 
     constructor(
         private campaignTemplateService: CampaignTemplateService,
@@ -46,7 +47,7 @@ export class CampaignTemplateTestDialogComponent implements OnInit {
                 campaignTemplateId: id
             }
         ).subscribe(
-            (res: ResponseWrapper) => this.onPushNotificationCampaignTemplate(res.json, res.headers),
+            (res: ResponseWrapper) => this.onPushNotificationTestTemplate(res.json, res.headers),
             (res: ResponseWrapper) => this.onError(res.json)
             );
     }
@@ -55,9 +56,11 @@ export class CampaignTemplateTestDialogComponent implements OnInit {
         this.alertService.error(error.message, null, null);
     }
 
-    private onPushNotificationCampaignTemplate(data, headers) {
+    private onPushNotificationTestTemplate(data, headers) {
         data['frontEnd'] = this.campaignTemplate.frontEnd;
         data['product'] = this.campaignTemplate.product;
+        data['screenName'] = this.userName;
+        data['sendToAllDevices'] = true;
         console.log(data);
 
         const req = this.http.post(TEST_URL,
