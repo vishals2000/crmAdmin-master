@@ -64,8 +64,18 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
             JSON.stringify(data), {
                 headers: new HttpHeaders().set('Content-Type', 'application/json'),
             })
-        req.subscribe();
+        req.subscribe(
+            (res: ResponseWrapper) => this.onPushNotificationLaunchSuccess(res, res),
+            (res: ResponseWrapper) => this.onError(res.json)
+        );
         this.activeModal.dismiss(true);
+    }
+    private onPushNotificationLaunchSuccess(response, headers) {
+        if(response.result) {            
+            this.alertService.success(response.message);
+        }else {
+            this.alertService.error(response.message);
+        }
     }
 }
 

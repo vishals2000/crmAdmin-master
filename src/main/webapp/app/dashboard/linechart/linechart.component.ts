@@ -49,6 +49,10 @@ export class LinechartComponent implements OnInit {
             this.apps = res.json;
         });
     }
+    
+    getData(id: string) {
+        alert(id);
+    }
 
     getMessages() {
         this.chartHeading = 'Messages';

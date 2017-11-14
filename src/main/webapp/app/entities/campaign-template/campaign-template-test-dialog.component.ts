@@ -19,6 +19,7 @@ export class CampaignTemplateTestDialogComponent implements OnInit {
 
     campaignTemplate: CampaignTemplate;
     userName: string;
+    isSaving: boolean;
 
     constructor(
         private campaignTemplateService: CampaignTemplateService,
@@ -35,6 +36,7 @@ export class CampaignTemplateTestDialogComponent implements OnInit {
             this.campaignTemplate.frontEnd = message[1];
             this.campaignTemplate.product = message[2];
         });
+        this.isSaving = false;
     }
 
     clear() {
@@ -42,6 +44,7 @@ export class CampaignTemplateTestDialogComponent implements OnInit {
     }
 
     confirmTest(id: string) {
+        this.isSaving = true;
         this.campaignTemplateService.getPushNotificationCampaignTemplate(
             {
                 campaignTemplateId: id
@@ -63,12 +66,23 @@ export class CampaignTemplateTestDialogComponent implements OnInit {
         data['sendToAllDevices'] = true;
         console.log(data);
 
-        const req = this.http.post(TEST_URL,
-            JSON.stringify(data), {
+        const req = this.http.post(TEST_URL, JSON.stringify(data), {
                 headers: new HttpHeaders().set('Content-Type', 'application/json'),
             })
-        req.subscribe();
+        req.subscribe(
+            (res: ResponseWrapper) => this.onPushNotificationTestSuccess(res, res),
+            (res: ResponseWrapper) => this.onError(res.json)
+        );
         this.activeModal.dismiss(true);
+        this.isSaving = false;        
+    }
+
+    private onPushNotificationTestSuccess(response, headers) {
+        if(response.result) {            
+            this.alertService.success(response.message);
+        }else {
+            this.alertService.error(response.message);
+        }
     }
 }
 

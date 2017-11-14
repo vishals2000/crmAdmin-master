@@ -10,7 +10,7 @@
             <select class="custom-selectbox rounded">              
               <option *ngFor="let app of apps" [value]="app.name">{{app.name}}</option>
             </select> 
-            <button class="btn btn-primary float-right marginL15"> 
+            <button class="btn btn-primary float-right marginL15" (click)="getData();"> 
                     <span>Go</span> 
             </button>       
     </div>
