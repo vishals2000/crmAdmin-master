@@ -40,6 +40,7 @@ export class CampaignTemplate implements BaseEntity {
     constructor(
         public id?: string,
         public campaignName?: string,
+        public status?: string,
         public campaignDescription?: string,
         public startDate?: any,
         public recurrenceType?: RecurrenceType,
