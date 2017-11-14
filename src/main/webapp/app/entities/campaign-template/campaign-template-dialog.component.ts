@@ -259,7 +259,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     private onTargetGroupSizeRequestSuccess(data, headers) {
         // console.log(data);
         if (data) {
-            this.targetGroupSize = data;
+            this.targetGroupSize = data.targetGroupSize;
         } else {
             this.targetGroupSize = 0;
         }
