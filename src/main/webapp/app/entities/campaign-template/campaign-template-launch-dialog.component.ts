@@ -70,12 +70,28 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
         );
         this.activeModal.dismiss(true);
     }
+
     private onPushNotificationLaunchSuccess(response, headers) {
         if(response.result) {            
             this.alertService.success(response.message);
         }else {
             this.alertService.error(response.message);
         }
+
+        this.campaignTemplateService.updateLaunchStatus(
+            {
+                campaignTemplateId: this.campaignTemplate.id,
+                status : response.result,
+                method : 'updateLaunchStatus'
+            }
+        ).subscribe(
+            (res: ResponseWrapper) => { 
+                alert(res);
+                this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' }); 
+            },
+            (res: ResponseWrapper) => this.onError(res.json)
+            );
+
     }
 }
 
