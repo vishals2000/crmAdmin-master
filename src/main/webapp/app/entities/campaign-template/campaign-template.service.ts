@@ -73,7 +73,7 @@ export class CampaignTemplateService {
 
     updateLaunchStatus(req?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(req);
-        return this.http.get(`${this.resourceUrl}/${req.method}/${req.campaignTemplateId}/${req.status}`, options)
+        return this.http.put(`${this.resourceUrl}/${req.method}/${req.campaignTemplateId}/${req.status}`, options)
             .map((res: Response) => this.convertResponse(res));
     }
 

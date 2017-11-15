@@ -5,6 +5,10 @@ import { AppsService } from '../../entities/apps/apps.service';
 import { Apps } from '../../entities/apps/apps.model';
 import { ResponseWrapper } from '../../shared';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
+import { INSIGHTS_URL } from '../../app.constants';
+import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { NgbModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'jhi-linechart',
@@ -17,12 +21,25 @@ export class LinechartComponent implements OnInit {
     msgs: Message[];
     chartHeading: string;
     myClass = [];
+    startDate : any;
+    endDate : any;
+    startDateDp: any;
+    endDateDp: any;
+    minDate: NgbDateStruct;
     apps: Apps[];
-    appNames: string[];
+    selectedApp : Apps;
+    insightsData: any;
+    messages: Number;
+    dailyUniqueUsers: Number;
+    totalUsers: Number;
+    sessions: Number;
+
     public activeModal: NgbActiveModal;
 
     constructor(
         private appsService: AppsService,
+        private http: HttpClient,
+        private alertService: JhiAlertService,
     ) {
         this.chartHeading = 'Messages';
         this.data = {
@@ -48,32 +65,57 @@ export class LinechartComponent implements OnInit {
         this.appsService.query().subscribe((res: ResponseWrapper) => {
             this.apps = res.json;
         });
+
+        const now = new Date();
+        this.minDate = {
+            year: now.getFullYear(),
+            month: now.getMonth() + 1,
+            day: now.getDate()
+        };
     }
-    
-    getData(id: string) {
-        alert(id);        
+
+    getData(app: Apps) {
+        // alert(app.id + ' ' + app.product + ' ' + app.frontEnd);        
+     if(app) {
+        const data = {
+            'appId': app.id,
+            'frontEnd': app.frontEnd,
+            'product': app.product,
+            'startDate': '2017-11-13',
+            'endDate': '2017-11-25'
+        }
+
+        const req = this.http.post(INSIGHTS_URL,
+            JSON.stringify(data), {
+                headers: new HttpHeaders().set('Content-Type', 'application/json'),
+            })
+        req.subscribe(
+            (res: ResponseWrapper) => this.onInsightsSuccess(res, res),
+            (res: ResponseWrapper) => this.onError(res.json)
+        );
+    } else {
+        console.log(app);
+        this.alertService.error('Please select app from drop down list');
+    }
+    }
+
+    private onError(error) {
+        this.alertService.error(error.message, null, null);
+    }
+
+    private onInsightsSuccess(response, headers) {
+        this.insightsData = response;
+        this.messages = response.messages;
+        this.sessions = response.sessions;
+        this.dailyUniqueUsers = response.dailyUniqueUsers;
+        this.totalUsers = response.totalUsers;
     }
 
     getMessages() {
         this.chartHeading = 'Messages';
-        this.data = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-                {
-                    label: 'First Dataset',
-                    data: [22, 55, 88, 88, 66, 55, 44],
-                    fill: false,
-                    borderColor: '#4bc0c0'
-                },
-                {
-                    label: 'Second Dataset',
-                    data: [28, 48, 40, 19, 86, 27, 90],
-                    fill: false,
-                    borderColor: '#565656'
-                }
-            ]
-        };
+        this.data = this.insightsData.dateVsMessageInfo;
     }
+
     getTotalUsers() {
         this.chartHeading = 'Total Users';
         this.data = {
