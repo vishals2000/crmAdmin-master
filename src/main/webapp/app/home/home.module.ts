@@ -1,6 +1,5 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
 import { CrmAdminSharedModule } from '../shared';
 
 import { HOME_ROUTE, HomeComponent } from './';

@@ -70,4 +70,4 @@ const ENTITY_STATES = [
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class CrmAdminCampaignTemplateModule {}
+export class CrmAdminCampaignTemplateModule { }

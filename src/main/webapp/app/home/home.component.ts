@@ -1,5 +1,4 @@
 import { Component, OnInit, AfterViewInit, Renderer, ElementRef, ViewEncapsulation } from '@angular/core';
-import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 import { Account, LoginModalService, Principal } from '../shared';
 import { Router } from '@angular/router';
@@ -17,7 +16,6 @@ import { StateStorageService } from '../shared/auth/state-storage.service';
 export class HomeComponent implements OnInit, AfterViewInit {
 
     account: Account;
-    modalRef: NgbModalRef;
     authenticationError: boolean;
     password: string;
     rememberMe: boolean;
@@ -25,7 +23,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     credentials: any;
 
     constructor(
-        public activeModal: NgbActiveModal,
         private principal: Principal,
         private loginModalService: LoginModalService,
         private eventManager: JhiEventManager,

@@ -16,7 +16,6 @@ export class CampaignTemplateDetailComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
     private eventSubscriber: Subscription;
     data: any;
-    
     constructor(
         private eventManager: JhiEventManager,
         private campaignTemplateService: CampaignTemplateService,

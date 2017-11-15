@@ -121,9 +121,6 @@ const DASHBOARD_STATES = [
         ChartModule,
         RouterModule.forRoot(DASHBOARD_STATES, { useHash: true })
     ],
-    declarations: [
-        PiechartComponent
-    ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class CrmAdminPiechartModule {}
+export class CrmAdminPiechartModule { }
