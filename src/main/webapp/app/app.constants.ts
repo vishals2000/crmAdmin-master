@@ -11,3 +11,4 @@ export const REFRESH_URL = 'http://trdev-campaign-api-container.ivycomptech.co.i
 export const LAUNCH_URL = 'http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/pushNotificationCampaign';
 export const TEST_URL = 'http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/sendPushNotificationForScreenName';
 export const INSIGHTS_URL = 'http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/getAppInsights';
+export const CANCEL_URL = 'http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/cancelPushNotificationCampaign';

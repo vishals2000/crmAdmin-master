@@ -24,6 +24,11 @@ import {
 } from './campaign-template-launch-dialog.component'
 
 import {
+    CampaignTemplateCancelPopupComponent,
+    CampaignTemplateCancelDialogComponent
+} from './campaign-template-cancel-dialog.component'
+
+import {
     CampaignTemplateTestPopupComponent,
     CampaignTemplateTestDialogComponent
 } from './campaign-template-test-dialog.component'
@@ -50,7 +55,9 @@ const ENTITY_STATES = [
         CampaignTemplateLaunchPopupComponent,
         CampaignTemplateLaunchDialogComponent,
         CampaignTemplateTestPopupComponent,
-        CampaignTemplateTestDialogComponent
+        CampaignTemplateTestDialogComponent,
+        CampaignTemplateCancelPopupComponent,
+        CampaignTemplateCancelDialogComponent
     ],
     entryComponents: [
         CampaignTemplateComponent,
@@ -61,7 +68,9 @@ const ENTITY_STATES = [
         CampaignTemplateLaunchPopupComponent,
         CampaignTemplateLaunchDialogComponent,
         CampaignTemplateTestPopupComponent,
-        CampaignTemplateTestDialogComponent
+        CampaignTemplateTestDialogComponent,
+        CampaignTemplateCancelPopupComponent,
+        CampaignTemplateCancelDialogComponent
     ],
     providers: [
         CampaignTemplateService,

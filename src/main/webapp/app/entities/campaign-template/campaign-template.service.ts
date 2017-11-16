@@ -77,6 +77,12 @@ export class CampaignTemplateService {
             .map((res: Response) => this.convertResponse(res));
     }
 
+    updateCancelStatus(req?: any): Observable<ResponseWrapper> {
+        const options = createRequestOption(req);
+        return this.http.put(`${this.resourceUrl}/${req.method}/${req.campaignTemplateId}/${req.status}`, options)
+            .map((res: Response) => this.convertResponse(res));
+    }
+
     delete(id: string): Observable<Response> {
         return this.http.delete(`${this.resourceUrl}/${id}`);
     }

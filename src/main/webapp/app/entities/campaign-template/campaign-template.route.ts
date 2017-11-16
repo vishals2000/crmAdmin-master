@@ -111,5 +111,15 @@ export const campaignTemplatePopupRoute: Routes = [
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
+    },
+    {
+        path: 'campaign-template/:id/cancel',
+        component: CampaignTemplateTestPopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'CampaignTemplates'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     }
 ];
