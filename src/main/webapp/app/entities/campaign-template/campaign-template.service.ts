@@ -38,6 +38,14 @@ export class CampaignTemplateService {
         });
     }
 
+    getTargetGroupSize(body: any) : Observable<ResponseWrapper>{
+        const copy = this.convert(body);
+        return this.http.post(this.resourceUrl + '/getTargetGroupSize', copy).map((res: Response) => {
+            const jsonResponse = res.json();            
+            return jsonResponse;
+        });
+    }
+
     find(id: string): Observable<CampaignTemplate> {
         return this.http.get(`${this.resourceUrl}/${id}`).map((res: Response) => {
             const jsonResponse = res.json();

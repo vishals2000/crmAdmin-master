@@ -243,17 +243,21 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 optionValues));
             formLengthIterator = formLengthIterator + 1;
         }
+
         const body = new CampaignTargetGroupSizeRequest(
             this.campaignTemplateGroupCreationForm.get('frontEnd').value,
             this.campaignTemplateGroupCreationForm.get('product').value,
             targetGroupFilterCriteria);
-        const req = this.http.post(REFRESH_URL, body, {
-            headers: new HttpHeaders().set('Content-Type', 'application/json'),
-        })
-        req.subscribe(
+
+        this.campaignTemplateService.getTargetGroupSize(body).subscribe(
             (res: ResponseWrapper) => this.onTargetGroupSizeRequestSuccess(res, res),
             (res: ResponseWrapper) => this.onError(res.json)
         );
+
+        // const req = this.http.post(REFRESH_URL, body, {
+        //     headers: new HttpHeaders().set('Content-Type', 'application/json'),
+        // })
+        
     }
 
     private onTargetGroupSizeRequestSuccess(data, headers) {
