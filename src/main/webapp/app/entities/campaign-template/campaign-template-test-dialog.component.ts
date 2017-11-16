@@ -66,13 +66,19 @@ export class CampaignTemplateTestDialogComponent implements OnInit {
         data['sendToAllDevices'] = true;
         console.log(data);
 
-        const req = this.http.post(TEST_URL, JSON.stringify(data), {
-            headers: new HttpHeaders().set('Content-Type', 'application/json'),
-        })
-        req.subscribe(
+        this.campaignTemplateService.sendPushNotificationForScreenName(data).subscribe(
             (res: ResponseWrapper) => this.onPushNotificationTestSuccess(res, res),
             (res: ResponseWrapper) => this.onError(res.json)
         );
+
+        // const req = this.http.post(TEST_URL, JSON.stringify(data), {
+        //     headers: new HttpHeaders().set('Content-Type', 'application/json'),
+        // })
+        // req.subscribe(
+        //     (res: ResponseWrapper) => this.onPushNotificationTestSuccess(res, res),
+        //     (res: ResponseWrapper) => this.onError(res.json)
+        // );
+
         this.activeModal.dismiss(true);
         this.isSaving = false;
     }

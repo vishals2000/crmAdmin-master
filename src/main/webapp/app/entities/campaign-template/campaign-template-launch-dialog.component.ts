@@ -60,14 +60,19 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
         data['product'] = this.campaignTemplate.product;
         console.log(data);
 
-        const req = this.http.post(LAUNCH_URL,
-            JSON.stringify(data), {
-                headers: new HttpHeaders().set('Content-Type', 'application/json'),
-            })
-        req.subscribe(
+        this.campaignTemplateService.pushNotificationCampaign(data).subscribe(
             (res: ResponseWrapper) => this.onPushNotificationLaunchSuccess(res, res),
             (res: ResponseWrapper) => this.onError(res.json)
-        );
+        );;
+        
+        // const req = this.http.post(LAUNCH_URL,
+        //     JSON.stringify(data), {
+        //         headers: new HttpHeaders().set('Content-Type', 'application/json'),
+        //     })
+        // req.subscribe(
+        //     (res: ResponseWrapper) => this.onPushNotificationLaunchSuccess(res, res),
+        //     (res: ResponseWrapper) => this.onError(res.json)
+        // );
         this.activeModal.dismiss(true);
     }
 

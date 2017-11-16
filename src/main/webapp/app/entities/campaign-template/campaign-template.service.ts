@@ -38,11 +38,24 @@ export class CampaignTemplateService {
         });
     }
 
-    getTargetGroupSize(body: any) : Observable<ResponseWrapper>{
+    getTargetGroupSize(body: any): Observable<ResponseWrapper>{
         const copy = this.convert(body);
         return this.http.post(this.resourceUrl + '/getTargetGroupSize', copy).map((res: Response) => {
-            const jsonResponse = res.json();            
-            return jsonResponse;
+             return res.json();
+        });
+    }
+
+    pushNotificationCampaign(body: any): Observable<ResponseWrapper>{
+        const copy = this.convert(body);
+        return this.http.post(this.resourceUrl + '/pushNotificationCampaign', copy).map((res: Response) => {
+            return res.json();
+        });
+    }
+
+    sendPushNotificationForScreenName(body: any): Observable<ResponseWrapper>{
+        const copy = this.convert(body);
+        return this.http.post(this.resourceUrl + '/sendPushNotificationForScreenName', copy).map((res: Response) => {
+            return res.json();
         });
     }
 
