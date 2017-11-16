@@ -3,8 +3,7 @@ package com.gvc.crmadmin.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.gvc.crmadmin.config.Constants;
 import com.gvc.crmadmin.domain.*;
-import com.gvc.crmadmin.domain.campaignMgmtApi.PushNotificationCampaignTargetGroupSizeRequest;
-import com.gvc.crmadmin.domain.campaignMgmtApi.PushNotificationCampaignTargetGroupSizeResponse;
+import com.gvc.crmadmin.domain.campaignMgmtApi.*;
 import com.gvc.crmadmin.service.AppsService;
 import com.gvc.crmadmin.service.CampaignGroupService;
 import com.gvc.crmadmin.service.CampaignTemplateService;
@@ -120,6 +119,30 @@ public class CampaignTemplateResource {
 
         System.out.println(pushNotificationCampaignTargetGroupSizeResponse);
         return ResponseUtil.wrapOrNotFound(Optional.of(pushNotificationCampaignTargetGroupSizeResponse));
+    }
+
+    @PostMapping("/campaign-templates/sendPushNotificationForScreenName")
+    @Timed
+    public ResponseEntity<PushNotificationForScreenNameResponse> getPushNotificationTargetGroupSize(@Valid @RequestBody SendPushNotificationForScreenNameRequest sendPushNotificationForScreenNameRequest) throws URISyntaxException, UnsupportedEncodingException {
+        log.debug("REST request to get sendPushNotificationForScreenName", sendPushNotificationForScreenNameRequest);
+
+        RestTemplate restTemplate = new RestTemplate();
+        PushNotificationForScreenNameResponse pushNotificationForScreenNameResponse = restTemplate.postForObject(Constants.TEST_URL, sendPushNotificationForScreenNameRequest, PushNotificationForScreenNameResponse.class);
+
+        System.out.println(pushNotificationForScreenNameResponse);
+        return ResponseUtil.wrapOrNotFound(Optional.of(pushNotificationForScreenNameResponse));
+    }
+
+    @PostMapping("/campaign-templates/pushNotificationCampaign")
+    @Timed
+    public ResponseEntity<PushNotificationCampaignProcessingResponse> getPushNotificationTargetGroupSize(@Valid @RequestBody PushNotificationCampaignTemplate pushNotificationCampaignTemplate) throws URISyntaxException, UnsupportedEncodingException {
+        log.debug("REST request to launch pushNotificationCampaign", pushNotificationCampaignTemplate);
+
+        RestTemplate restTemplate = new RestTemplate();
+        PushNotificationCampaignProcessingResponse pushNotificationCampaignProcessingResponse = restTemplate.postForObject(Constants.LAUNCH_URL, pushNotificationCampaignTemplate, PushNotificationCampaignProcessingResponse.class);
+
+        System.out.println(pushNotificationCampaignProcessingResponse);
+        return ResponseUtil.wrapOrNotFound(Optional.of(pushNotificationCampaignProcessingResponse));
     }
 
     @PutMapping("/campaign-templates/updateLaunchStatus/{campaignTemplateId}/{launchSuccessful}")
