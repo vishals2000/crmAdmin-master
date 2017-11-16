@@ -1,10 +1,7 @@
 package com.gvc.crmadmin.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.gvc.crmadmin.domain.Apps;
-import com.gvc.crmadmin.domain.CampaignGroup;
-import com.gvc.crmadmin.domain.CampaignTemplate;
-import com.gvc.crmadmin.domain.FrontendProduct;
+import com.gvc.crmadmin.domain.*;
 import com.gvc.crmadmin.service.AppsService;
 import com.gvc.crmadmin.service.CampaignGroupService;
 import com.gvc.crmadmin.service.CampaignTemplateService;
@@ -17,6 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +48,9 @@ public class CampaignTemplateResource {
     private CampaignGroupService campaignGroupService;
     @Autowired
     private AppsService appsService;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     public CampaignTemplateResource(CampaignTemplateService campaignTemplateService) {
         this.campaignTemplateService = campaignTemplateService;
@@ -103,6 +107,34 @@ public class CampaignTemplateResource {
             .body(result);
     }
 
+    @PutMapping("/campaign-templates/updateLaunchStatus/{campaignTemplateId}/{launchSuccessful}")
+    @Timed
+    public ResponseEntity<CampaignLaunchUpdateStatus> updateCampaignTemplate(@PathVariable String campaignTemplateId, @PathVariable boolean launchSuccessful) throws URISyntaxException, UnsupportedEncodingException {
+        log.debug("REST request to update CampaignTemplate : " + campaignTemplateId + " with status " + launchSuccessful);
+        if (campaignTemplateId == null) {
+            CampaignLaunchUpdateStatus campaignLaunchUpdateStatus = new CampaignLaunchUpdateStatus(false, "Empty campaign template Id");
+            return ResponseUtil.wrapOrNotFound(Optional.of(campaignLaunchUpdateStatus));
+        }
+        CampaignTemplate campaignTemplate = campaignTemplateService.findOne(campaignTemplateId);
+        if(campaignTemplate == null) {
+            CampaignLaunchUpdateStatus campaignLaunchUpdateStatus = new CampaignLaunchUpdateStatus(false, "Invalid campaign template Id");
+            return ResponseUtil.wrapOrNotFound(Optional.of(campaignLaunchUpdateStatus));
+        }
+        if(!campaignTemplate.isAlreadyLaunched()) {
+            updateCampaignTemplateLaunchSuccessful(campaignTemplateId, launchSuccessful);
+        }
+        return ResponseUtil.wrapOrNotFound(Optional.of(new CampaignLaunchUpdateStatus(true, "Successfully updated status")));
+    }
+
+    private void updateCampaignTemplateLaunchSuccessful(String campaignTemplateId, boolean launchSuccessful){
+        Criteria criteria = Criteria.where("_id").is(campaignTemplateId);
+        final Query query = new Query();
+        query.addCriteria(criteria);
+        final Update update = new Update();
+        update.set("alreadyLaunched", launchSuccessful);
+        mongoTemplate.upsert(query, update, CampaignTemplate.class);
+    }
+
     /**
      * GET  /campaign-templates : get all the campaignTemplates.
      *
@@ -134,9 +166,14 @@ public class CampaignTemplateResource {
 
     @GetMapping("/campaign-templates/group/{campaignGroupId}")
     @Timed
-    public ResponseEntity<List<CampaignTemplate>> getAllCampaignGroups(@ApiParam Pageable pageable, @PathVariable String campaignGroupId) {
+    public ResponseEntity<List<CampaignTemplate>> getAllCampaignsForCampaignGroup(@ApiParam Pageable pageable, @PathVariable String campaignGroupId) {
         log.debug("REST request to get a page of CampaignGroups with projectId");
         Page<CampaignTemplate> page = campaignTemplateService.findByCampaignGroupId(pageable, campaignGroupId);
+        for(CampaignTemplate campaignTemplate : page.getContent()){
+            if(campaignTemplate.isLaunchEnabled()) {
+
+            }
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/campaign-group");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
