@@ -21,13 +21,13 @@ export class LinechartComponent implements OnInit {
     msgs: Message[];
     chartHeading: string;
     myClass = [];
-    startDate : any;
-    endDate : any;
+    startDate: any;
+    endDate: any;
     startDateDp: any;
     endDateDp: any;
     minDate: NgbDateStruct;
     apps: Apps[];
-    selectedApp : Apps;
+    selectedApp: Apps;
     insightsData: any;
     messages: Number;
     dailyUniqueUsers: Number;
@@ -75,28 +75,27 @@ export class LinechartComponent implements OnInit {
     }
 
     getData(app: Apps) {
-        // alert(app.id + ' ' + app.product + ' ' + app.frontEnd);        
-     if(app) {
-        const data = {
-            'appId': app.id,
-            'frontEnd': app.frontEnd,
-            'product': app.product,
-            'startDate': '2017-11-13',
-            'endDate': '2017-11-25'
-        }
+        if (app) {
+            const data = {
+                'appId': app.id,
+                'frontEnd': app.frontEnd,
+                'product': app.product,
+                'startDate': '2017-11-13',
+                'endDate': '2017-11-25'
+            }
 
-        const req = this.http.post(INSIGHTS_URL,
-            JSON.stringify(data), {
-                headers: new HttpHeaders().set('Content-Type', 'application/json'),
-            })
-        req.subscribe(
-            (res: ResponseWrapper) => this.onInsightsSuccess(res, res),
-            (res: ResponseWrapper) => this.onError(res.json)
-        );
-    } else {
-        console.log(app);
-        this.alertService.error('Please select app from drop down list');
-    }
+            const req = this.http.post(INSIGHTS_URL,
+                JSON.stringify(data), {
+                    headers: new HttpHeaders().set('Content-Type', 'application/json'),
+                })
+            req.subscribe(
+                (res: ResponseWrapper) => this.onInsightsSuccess(res, res),
+                (res: ResponseWrapper) => this.onError(res.json)
+            );
+        } else {
+            console.log(app);
+            this.alertService.error('Please select app from drop down list');
+        }
     }
 
     private onError(error) {

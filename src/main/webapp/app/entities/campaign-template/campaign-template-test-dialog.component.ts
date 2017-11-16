@@ -67,20 +67,20 @@ export class CampaignTemplateTestDialogComponent implements OnInit {
         console.log(data);
 
         const req = this.http.post(TEST_URL, JSON.stringify(data), {
-                headers: new HttpHeaders().set('Content-Type', 'application/json'),
-            })
+            headers: new HttpHeaders().set('Content-Type', 'application/json'),
+        })
         req.subscribe(
             (res: ResponseWrapper) => this.onPushNotificationTestSuccess(res, res),
             (res: ResponseWrapper) => this.onError(res.json)
         );
         this.activeModal.dismiss(true);
-        this.isSaving = false;        
+        this.isSaving = false;
     }
 
     private onPushNotificationTestSuccess(response, headers) {
-        if(response.result) {            
+        if (response.result) {
             this.alertService.success(response.message);
-        }else {
+        } else {
             this.alertService.error(response.message);
         }
     }
