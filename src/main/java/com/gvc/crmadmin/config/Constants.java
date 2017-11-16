@@ -11,6 +11,12 @@ public final class Constants {
     public static final String SYSTEM_ACCOUNT = "system";
     public static final String ANONYMOUS_USER = "anonymoususer";
 
+    public static final String REFRESH_URL = "http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/getTargetGroupSize";
+    public static final String LAUNCH_URL = "http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/pushNotificationCampaign";
+    public static final String TEST_URL = "http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/sendPushNotificationForScreenName";
+    public static final String INSIGHTS_URL = "http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/getAppInsights";
+    public static final String CANCEL_URL = "http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/cancelPushNotificationCampaign";
+
     private Constants() {
     }
 }

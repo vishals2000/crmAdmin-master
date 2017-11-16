@@ -1,7 +1,10 @@
 package com.gvc.crmadmin.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.gvc.crmadmin.config.Constants;
 import com.gvc.crmadmin.domain.*;
+import com.gvc.crmadmin.domain.campaignMgmtApi.PushNotificationCampaignTargetGroupSizeRequest;
+import com.gvc.crmadmin.domain.campaignMgmtApi.PushNotificationCampaignTargetGroupSizeResponse;
 import com.gvc.crmadmin.service.AppsService;
 import com.gvc.crmadmin.service.CampaignGroupService;
 import com.gvc.crmadmin.service.CampaignTemplateService;
@@ -22,6 +25,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
@@ -48,7 +52,6 @@ public class CampaignTemplateResource {
     private CampaignGroupService campaignGroupService;
     @Autowired
     private AppsService appsService;
-
     @Autowired
     private MongoTemplate mongoTemplate;
 
@@ -103,8 +106,20 @@ public class CampaignTemplateResource {
         }
         CampaignTemplate result = campaignTemplateService.save(campaignTemplate);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, campaignTemplate.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, campaignTemplate.getId()))
             .body(result);
+    }
+
+    @PostMapping("/campaign-templates/getTargetGroupSize")
+    @Timed
+    public ResponseEntity<PushNotificationCampaignTargetGroupSizeResponse> getPushNotificationTargetGroupSize(@Valid @RequestBody PushNotificationCampaignTargetGroupSizeRequest pushNotificationCampaignTargetGroupSizeRequest) throws URISyntaxException, UnsupportedEncodingException {
+        log.debug("REST request to get getPushNotificationTargetGroupSize", pushNotificationCampaignTargetGroupSizeRequest);
+
+        RestTemplate restTemplate = new RestTemplate();
+        PushNotificationCampaignTargetGroupSizeResponse pushNotificationCampaignTargetGroupSizeResponse = restTemplate.postForObject(Constants.REFRESH_URL, pushNotificationCampaignTargetGroupSizeRequest, PushNotificationCampaignTargetGroupSizeResponse.class);
+
+        System.out.println(pushNotificationCampaignTargetGroupSizeResponse);
+        return ResponseUtil.wrapOrNotFound(Optional.of(pushNotificationCampaignTargetGroupSizeResponse));
     }
 
     @PutMapping("/campaign-templates/updateLaunchStatus/{campaignTemplateId}/{launchSuccessful}")
