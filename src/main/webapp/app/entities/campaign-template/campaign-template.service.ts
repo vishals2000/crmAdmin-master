@@ -46,15 +46,15 @@ export class CampaignTemplateService {
     }
 
     pushNotificationCampaign(body: any): Observable<ResponseWrapper>{
-        const copy = this.convert(body);
-        return this.http.post(this.resourceUrl + '/pushNotificationCampaign', copy).map((res: Response) => {
+        // const copy = this.convert(body);
+        return this.http.post(this.resourceUrl + '/pushNotificationCampaign', body).map((res: Response) => {
             return res.json();
         });
     }
 
     sendPushNotificationForScreenName(body: any): Observable<ResponseWrapper>{
-        const copy = this.convert(body);
-        return this.http.post(this.resourceUrl + '/sendPushNotificationForScreenName', copy).map((res: Response) => {
+        // const copy = this.convert(body);
+        return this.http.post(this.resourceUrl + '/sendPushNotificationForScreenName', body).map((res: Response) => {
             return res.json();
         });
     }
