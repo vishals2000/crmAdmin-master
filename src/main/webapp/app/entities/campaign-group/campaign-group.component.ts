@@ -55,6 +55,7 @@ currentAccount: any;
 
     loadAll() {
         this.campaignGroupService.query({
+            appId: this.projectId,
             page: this.page - 1,
             size: this.itemsPerPage,
             sort: this.sort()}).subscribe(
@@ -69,7 +70,7 @@ currentAccount: any;
         }
     }
     transition() {
-        this.router.navigate(['/campaign-group'], {queryParams:
+        this.router.navigate(['/campaign-group/project/' + this.projectId + '/' + this.projectName], {queryParams:
             {
                 page: this.page,
                 size: this.itemsPerPage,
@@ -96,38 +97,39 @@ currentAccount: any;
         this.subscription = this.route.params.subscribe((params) => {
             this.projectId = params['id'];
             this.projectName = params['name'];
-            this.load1(this.projectId);
+            this.loadAll();
+            // this.load1(this.projectId);
             this.campaignGroupService.changeGroupId(this.projectId);
         });
     }
-    load1(id) {
-        this.campaignGroupService.findProjects(id, 'project').subscribe((data) => {
-             this.campaignGroups = data;
-       },
-       (err) => {
-           alert('error');
-           this.campaignGroups = [{
-                       'id' : '59f47d8513b80ad7286ec255',
-                       'name' : 'Partypoker App',
-                       'description' : 'This is Partypoker application'
-                     },
-                     {
-                        'id' : '59f47d8513b80ad7286ec255',
-                        'name' : 'Partypoker App',
-                        'description' : 'This is Partypoker application'
-                      },
-                      {
-                        'id' : '59f47d8513b80ad7286ec255',
-                        'name' : 'Partypoker App',
-                        'description' : 'This is Partypoker application'
-                      },
-                      {
-                        'id' : '59f47d8513b80ad7286ec255',
-                        'name' : 'Partypoker App',
-                        'description' : 'This is Partypoker application'
-                      }]
-            });
-   }
+//     load1(id) {        
+//         this.campaignGroupService.findProjects(id, 'project', ).subscribe((data) => {
+//              this.campaignGroups = data;
+//        },
+//        (err) => {
+//            alert('error');
+//            this.campaignGroups = [{
+//                        'id' : '59f47d8513b80ad7286ec255',
+//                        'name' : 'Partypoker App',
+//                        'description' : 'This is Partypoker application'
+//                      },
+//                      {
+//                         'id' : '59f47d8513b80ad7286ec255',
+//                         'name' : 'Partypoker App',
+//                         'description' : 'This is Partypoker application'
+//                       },
+//                       {
+//                         'id' : '59f47d8513b80ad7286ec255',
+//                         'name' : 'Partypoker App',
+//                         'description' : 'This is Partypoker application'
+//                       },
+//                       {
+//                         'id' : '59f47d8513b80ad7286ec255',
+//                         'name' : 'Partypoker App',
+//                         'description' : 'This is Partypoker application'
+//                       }]
+//             });
+//    }
 
     ngOnDestroy() {
         this.eventManager.destroy(this.eventSubscriber);
@@ -138,7 +140,9 @@ currentAccount: any;
     }
     registerChangeInCampaignGroups() {
         this.eventSubscriber = this.eventManager.subscribe('campaignGroupListModification', (response) =>
-        this.load1(this.projectId));
+        //   this.load1(this.projectId)
+            this.loadAll()
+        );
     }
 
     sort() {

@@ -62,6 +62,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
 
     loadAll() {
         this.campaignTemplateService.query({
+            campGroupId : this.groupId,
             page: this.page - 1,
             size: this.itemsPerPage,
             sort: this.sort()
@@ -77,7 +78,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         }
     }
     transition() {
-        this.router.navigate(['/campaign-template'], {
+        this.router.navigate(['/campaign-template/group/' + this.groupId + '/' + this.groupName], {
             queryParams:
             {
                 page: this.page,
@@ -106,44 +107,49 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         this.subscription = this.route.params.subscribe((params) => {
             this.groupId = params['id'];
             this.groupName = params['name'];
-
+            this.loadAll();
             this.campaignTemplateService.getFeProduct(this.groupId, 'feProduct').subscribe((response) => {
                 const values: string[] = [this.groupId, response['fe'], response['product']]
                 this.campaignTemplateService.changeMessage(values);
             });
-            this.load1(this.groupId);
+           // this.load1(this.groupId);
         });
     }
 
-    load1(id) {
-        this.campaignTemplateService.findCampGroups(id, 'group').subscribe((data) => {
-            this.campaignTemplates = data;
-        },
-            (err) => {
-                // alert(err);
-                console.log(err);
-                // this.campaignTemplates = [{
-                //     'id': '59f47d8513b80ad7286ec255',
-                //     'campaignName': 'Partypoker App',
-                //     'campaignDescription': 'This is Partypoker application'
-                // },
-                // {
-                //     'id': '59f47d8513b80ad7286ec255',
-                //     'campaignName': 'Partypoker App',
-                //     'campaignDescription': 'This is Partypoker application'
-                // },
-                // {
-                //     'id': '59f47d8513b80ad7286ec255',
-                //     'campaignName': 'Partypoker App',
-                //     'campaignDescription': 'This is Partypoker application'
-                // },
-                // {
-                //     'id': '59f47d8513b80ad7286ec255',
-                //     'campaignName': 'Partypoker App',
-                //     'campaignDescription': 'This is Partypoker application'
-                // }]
-            });
-    }
+    // load1(id) {
+    //     this.campaignTemplateService.findCampGroups(id, 'group').subscribe((data) => {
+            
+    //         // for (let i of data) {
+    //         //     i.launchEnabled = true;
+    //         // }
+    //         this.campaignTemplates = data;
+            
+    //     },
+    //         (err) => {
+    //             // alert(err);
+    //             console.log(err);
+    //             // this.campaignTemplates = [{
+    //             //     'id': '59f47d8513b80ad7286ec255',
+    //             //     'campaignName': 'Partypoker App',
+    //             //     'campaignDescription': 'This is Partypoker application'
+    //             // },
+    //             // {
+    //             //     'id': '59f47d8513b80ad7286ec255',
+    //             //     'campaignName': 'Partypoker App',
+    //             //     'campaignDescription': 'This is Partypoker application'
+    //             // },
+    //             // {
+    //             //     'id': '59f47d8513b80ad7286ec255',
+    //             //     'campaignName': 'Partypoker App',
+    //             //     'campaignDescription': 'This is Partypoker application'
+    //             // },
+    //             // {
+    //             //     'id': '59f47d8513b80ad7286ec255',
+    //             //     'campaignName': 'Partypoker App',
+    //             //     'campaignDescription': 'This is Partypoker application'
+    //             // }]
+    //         });
+    // }
 
     ngOnDestroy() {
         this.eventManager.destroy(this.eventSubscriber);
@@ -154,7 +160,8 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     }
     registerChangeInCampaignTemplates() {
         this.eventSubscriber = this.eventManager.subscribe('campaignTemplateListModification', (response) =>
-            this.load1(this.groupId));
+           // this.load1(this.groupId));
+           this.loadAll());
     }
 
     sort() {
