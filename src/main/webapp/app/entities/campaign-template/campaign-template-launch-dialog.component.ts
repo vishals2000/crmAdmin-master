@@ -9,7 +9,6 @@ import { CampaignTemplatePopupService } from './campaign-template-popup.service'
 import { CampaignTemplateService } from './campaign-template.service';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
 import { ResponseWrapper } from '../../shared';
-import { LAUNCH_URL } from '../../app.constants';
 
 @Component({
     selector: 'jhi-campaign-template-launch-dialog',
@@ -63,16 +62,7 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
         this.campaignTemplateService.pushNotificationCampaign(data).subscribe(
             (res: ResponseWrapper) => this.onPushNotificationLaunchSuccess(res, res),
             (res: ResponseWrapper) => this.onError(res.json)
-        );;
-        
-        // const req = this.http.post(LAUNCH_URL,
-        //     JSON.stringify(data), {
-        //         headers: new HttpHeaders().set('Content-Type', 'application/json'),
-        //     })
-        // req.subscribe(
-        //     (res: ResponseWrapper) => this.onPushNotificationLaunchSuccess(res, res),
-        //     (res: ResponseWrapper) => this.onError(res.json)
-        // );
+        );
         this.activeModal.dismiss(true);
     }
 

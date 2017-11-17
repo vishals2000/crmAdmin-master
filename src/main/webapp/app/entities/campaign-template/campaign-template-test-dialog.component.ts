@@ -9,7 +9,6 @@ import { CampaignTemplatePopupService } from './campaign-template-popup.service'
 import { CampaignTemplateService } from './campaign-template.service';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
 import { ResponseWrapper } from '../../shared';
-import { TEST_URL } from '../../app.constants';
 
 @Component({
     selector: 'jhi-campaign-template-test-dialog',

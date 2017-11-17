@@ -62,7 +62,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
 
     loadAll() {
         this.campaignTemplateService.query({
-            campGroupId : this.groupId,
+            campGroupId: this.groupId,
             page: this.page - 1,
             size: this.itemsPerPage,
             sort: this.sort()
@@ -112,18 +112,17 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
                 const values: string[] = [this.groupId, response['fe'], response['product']]
                 this.campaignTemplateService.changeMessage(values);
             });
-           // this.load1(this.groupId);
         });
     }
 
     // load1(id) {
     //     this.campaignTemplateService.findCampGroups(id, 'group').subscribe((data) => {
-            
+
     //         // for (let i of data) {
     //         //     i.launchEnabled = true;
     //         // }
     //         this.campaignTemplates = data;
-            
+
     //     },
     //         (err) => {
     //             // alert(err);
@@ -160,8 +159,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     }
     registerChangeInCampaignTemplates() {
         this.eventSubscriber = this.eventManager.subscribe('campaignTemplateListModification', (response) =>
-           // this.load1(this.groupId));
-           this.loadAll());
+            this.loadAll());
     }
 
     sort() {

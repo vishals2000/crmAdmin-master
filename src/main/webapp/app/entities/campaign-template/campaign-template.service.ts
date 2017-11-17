@@ -5,7 +5,7 @@ import { JhiDateUtils } from 'ng-jhipster';
 
 import { CampaignTemplate, CampaignTemplateFilterCriterion } from './campaign-template.model';
 import { ResponseWrapper, createRequestOption } from '../../shared';
-import { BehaviorSubject} from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class CampaignTemplateService {
@@ -38,22 +38,19 @@ export class CampaignTemplateService {
         });
     }
 
-    getTargetGroupSize(body: any): Observable<ResponseWrapper>{
-        const copy = this.convert(body);
-        return this.http.post(this.resourceUrl + '/getTargetGroupSize', copy).map((res: Response) => {
-             return res.json();
+    getTargetGroupSize(body: any): Observable<ResponseWrapper> {
+        return this.http.post(this.resourceUrl + '/getTargetGroupSize', body).map((res: Response) => {
+            return res.json();
         });
     }
 
-    pushNotificationCampaign(body: any): Observable<ResponseWrapper>{
-        // const copy = this.convert(body);
+    pushNotificationCampaign(body: any): Observable<ResponseWrapper> {
         return this.http.post(this.resourceUrl + '/pushNotificationCampaign', body).map((res: Response) => {
             return res.json();
         });
     }
 
-    sendPushNotificationForScreenName(body: any): Observable<ResponseWrapper>{
-        // const copy = this.convert(body);
+    sendPushNotificationForScreenName(body: any): Observable<ResponseWrapper> {
         return this.http.post(this.resourceUrl + '/sendPushNotificationForScreenName', body).map((res: Response) => {
             return res.json();
         });
@@ -77,12 +74,12 @@ export class CampaignTemplateService {
         return this.http.get(`${this.resourceUrl}/${group}/${id}`).map((res: Response) => {
             return res.json();
         }
-    );
+        );
     }
 
     query(req?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(req);
-        return this.http.get(this.resourceUrl+'/group/'+req.campGroupId, options)
+        return this.http.get(this.resourceUrl + '/group/' + req.campGroupId, options)
             .map((res: Response) => this.convertResponse(res));
     }
 

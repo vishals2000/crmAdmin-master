@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 import { FormBuilder, FormGroup, FormArray, FormControl, AbstractControl, Validators } from '@angular/forms';
 import { ResponseWrapper, LANGUAGES, TIME_ZONES } from '../../shared';
-import { REFRESH_URL } from '../../app.constants';
 import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
@@ -253,11 +252,6 @@ export class CampaignTemplateDialogComponent implements OnInit {
             (res: ResponseWrapper) => this.onTargetGroupSizeRequestSuccess(res, res),
             (res: ResponseWrapper) => this.onError(res.json)
         );
-
-        // const req = this.http.post(REFRESH_URL, body, {
-        //     headers: new HttpHeaders().set('Content-Type', 'application/json'),
-        // })
-        
     }
 
     private onTargetGroupSizeRequestSuccess(data, headers) {

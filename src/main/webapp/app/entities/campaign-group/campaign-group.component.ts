@@ -98,11 +98,10 @@ currentAccount: any;
             this.projectId = params['id'];
             this.projectName = params['name'];
             this.loadAll();
-            // this.load1(this.projectId);
             this.campaignGroupService.changeGroupId(this.projectId);
         });
     }
-//     load1(id) {        
+//     load1(id) {
 //         this.campaignGroupService.findProjects(id, 'project', ).subscribe((data) => {
 //              this.campaignGroups = data;
 //        },
@@ -140,7 +139,6 @@ currentAccount: any;
     }
     registerChangeInCampaignGroups() {
         this.eventSubscriber = this.eventManager.subscribe('campaignGroupListModification', (response) =>
-        //   this.load1(this.projectId)
             this.loadAll()
         );
     }
