@@ -1,7 +1,7 @@
 <div>
     <h2>
         <span>Apps</span>
-        <button class="btn btn-primary float-right jh-create-entity create-apps" [routerLink]="['/', { outlets: { popup: ['apps-new'] } }]">
+        <button *jhiHasAnyAuthority="'ROLE_ADMIN'" class="btn btn-primary float-right jh-create-entity create-apps" [routerLink]="['/', { outlets: { popup: ['apps-new'] } }]">
             <span class="fa fa-plus"></span>
             <span >
             Create new Apps
