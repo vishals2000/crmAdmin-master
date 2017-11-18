@@ -40,7 +40,7 @@
             <tbody>
             <tr *ngFor="let campaignTemplate of campaignTemplates ;trackBy: trackId">
                 <!-- <td><a [routerLink]="['../campaign-template', campaignTemplate.id ]">{{campaignTemplate.id}}</a></td> -->
-                <td>{{campaignTemplate.campaignName}}</td>
+                <td><a [routerLink]="['/campaign-template', campaignTemplate.id ]">{{campaignTemplate.campaignName}}</a></td>
                 <td><span class="badge badge-info">{{campaignTemplate.status}}</span></td>
                 <td>{{campaignTemplate.campaignDescription}}</td>
                 <td>{{campaignTemplate.startDate | date:'mediumDate'}}</td>
@@ -64,12 +64,11 @@
                             class="btn btn-info btn-sm">
                         <span class="fa fa-area-chart"></span>
                         </button> -->
-                        <button type="submit" alt="View" title="View" 
+                        <!-- <button type="submit" alt="View" title="View" 
                                 [routerLink]="['/campaign-template', campaignTemplate.id ]"
                                 class="btn btn-info btn-sm">
                             <span class="fa fa-eye"></span>
-                           <!-- <span class="hidden-md-down">View</span>-->
-                        </button>
+                        </button> -->
                         <button type="submit" alt="Edit" title="Edit" 
                                 [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/edit'} }]"
                                 replaceUrl="true"
