@@ -3,12 +3,18 @@ import { ActivatedRoute } from '@angular/router';
 
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { FormBuilder, FormGroup, FormArray, FormControl, AbstractControl, Validators } from '@angular/forms';
 
 import { CampaignTemplate } from './campaign-template.model';
 import { CampaignTemplatePopupService } from './campaign-template-popup.service';
 import { CampaignTemplateService } from './campaign-template.service';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
 import { ResponseWrapper } from '../../shared';
+
+import {
+    CampaignTemplateFilterCriterion, RecurrenceType, FilterOption, CampaignTargetGroupSizeRequest,
+    TargetGroupFilterCriterionSizeRequest
+} from './campaign-template.model';
 
 @Component({
     selector: 'jhi-campaign-template-launch-dialog',
@@ -17,6 +23,7 @@ import { ResponseWrapper } from '../../shared';
 export class CampaignTemplateLaunchDialogComponent implements OnInit {
 
     campaignTemplate: CampaignTemplate;
+    targetGroupSize: Number;
 
     constructor(
         private campaignTemplateService: CampaignTemplateService,
@@ -33,6 +40,50 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
             this.campaignTemplate.frontEnd = message[1];
             this.campaignTemplate.product = message[2];
         });
+        // console.log(this.campaignTemplate.targetGroupFilterCriteria);
+        this.getTargetGroupSize();
+    }
+
+    getTargetGroupSize() {
+        // const targetGroupFilters = this.campaignTemplate.targetGroupFilterCriteria as FormArray;
+        // let formLengthIterator = 0;
+        // const targetGroupFilterCriteria: TargetGroupFilterCriterionSizeRequest[] = [];
+        // while (formLengthIterator < targetGroupFilters.length) {
+        //     const targetGroupFilter = targetGroupFilters.at(formLengthIterator);
+        //     const optionValues: string[] = [];
+        //     if (Array.isArray(targetGroupFilter.get('filterOptionValue').value)) {
+        //         for (const optionValue of targetGroupFilter.get('filterOptionValue').value) {
+        //             optionValues.push(optionValue);
+        //         }
+        //     } else {
+        //         optionValues.push(targetGroupFilter.get('filterOptionValue').value);
+        //     }
+        //     targetGroupFilterCriteria.push(new TargetGroupFilterCriterionSizeRequest(targetGroupFilter.get('filterOption').value,
+        //         targetGroupFilter.get('filterOptionLookUp').value,
+        //         targetGroupFilter.get('filterOptionComparison').value,
+        //         optionValues));
+        //     formLengthIterator = formLengthIterator + 1;
+        // }
+
+        const body = new CampaignTargetGroupSizeRequest(
+            this.campaignTemplate.frontEnd,
+            this.campaignTemplate.product,
+            this.campaignTemplate.targetGroupFilterCriteria);
+
+        this.campaignTemplateService.getTargetGroupSize(body).subscribe(
+            (res: ResponseWrapper) => this.onTargetGroupSizeRequestSuccess(res, res),
+            (res: ResponseWrapper) => this.onError(res.json)
+        );
+    }
+
+    private onTargetGroupSizeRequestSuccess(data, headers) {
+        console.log(data);
+        if (data) {
+            this.targetGroupSize = data.targetGroupSize;
+            alert(this.targetGroupSize);
+        } else {
+            this.targetGroupSize = 0;
+        }
     }
 
     clear() {
