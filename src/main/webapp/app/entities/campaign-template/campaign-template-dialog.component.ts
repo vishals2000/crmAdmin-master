@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Response } from '@angular/http';
 import { FormBuilder, FormGroup, FormArray, FormControl, AbstractControl, Validators } from '@angular/forms';
 import { ResponseWrapper, LANGUAGES, TIME_ZONES } from '../../shared';
 import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import {Location} from '@angular/common';
 
 import {
     CampaignTemplate, CampaignTemplateFilterCriterion, RecurrenceType, FilterOption, CampaignTargetGroupSizeRequest,
@@ -42,7 +43,9 @@ export class CampaignTemplateDialogComponent implements OnInit {
     languagesList: string[];
     targetGroupSize: number;
     time: SimpleTime;
+    ctrl: any;
     operatingSystems: string[] = ['amazon', 'kindle', 'android'];
+    isLaunch: boolean;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -50,7 +53,10 @@ export class CampaignTemplateDialogComponent implements OnInit {
         private campaignTemplateService: CampaignTemplateService,
         private eventManager: JhiEventManager,
         private fb: FormBuilder,
-        private http: HttpClient
+        private http: HttpClient,
+        private router: Router,
+        private location: Location,
+
     ) {
         this.filtersMap = new Map<string, Map<string, string[]>>();
         this.sportsEventsMap = new Map<string, Map<string, string>>();
@@ -66,6 +72,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.campaignTemplateGroupCreationForm = this.fb.group({
             targetGroupFilterCriteria: this.fb.array([])
         });
+        this.isLaunch = false;
     }
 
     ngOnInit() {
@@ -90,6 +97,22 @@ export class CampaignTemplateDialogComponent implements OnInit {
             month: now.getMonth() + 1,
             day: now.getDate()
         };
+        // this.ctrl = new FormControl('', (control: FormControl) => {
+        //     const value = control.value;
+
+        //     if (!value) {
+        //         return null;
+        //     }
+
+        //     if (value.hour < 12) {
+        //         return { tooEarly: true };
+        //     }
+        //     if (value.hour > 13) {
+        //         return { tooLate: true };
+        //     }
+
+        //     return null;
+        //   });
 
     }
 
@@ -106,6 +129,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 this.campaignTemplateGroupCreationForm.value.time.hour : this.campaignTemplateGroupCreationForm.value.time.hour) + ':' +
                 (this.campaignTemplateGroupCreationForm.value.time.minute < 10 ? '0' +
                 this.campaignTemplateGroupCreationForm.value.time.minute : this.campaignTemplateGroupCreationForm.value.time.minute) + ':00';
+
         } else {
             this.campaignTemplateGroupCreationForm.value.scheduledTime = '11:00:00';
         }
@@ -971,7 +995,35 @@ export class CampaignTemplateDialogComponent implements OnInit {
     private onSaveSuccess(result: CampaignTemplate) {
         this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' });
         this.isSaving = false;
+    //    this.router.navigateByUrl(location.href + '(' + 'popup:' + 'campaign-template/' + result.id + '/launch' + ')');
+    //    location.href = location.href + '(' + 'popup:' + 'campaign-template/' + result.id + '/launch' + ')';
+        // this.router.navigate(['/campaign-template/group/' + this.groupId + '/' + this.groupName], {
+        //     queryParams:
+        //     {
+        //         page: this.page,
+        //         size: this.itemsPerPage,
+        //         sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+        //     }
+        // });
+
         this.activeModal.dismiss(result);
+
+        if (this.isLaunch) {
+        setTimeout(() => {
+            const pageLocation: string = decodeURI(encodeURI (location.href) + '(' + 'popup:' + 'campaign-template/' + result.id + '/launch' + ')');
+            // alert(pageLocation);
+            location.href = pageLocation;
+            this.isLaunch = false;
+       }, 100);
+
+    }
+        // this.router.navigate([location.href + '(' + 'popup:' + 'campaign-template/' + result.id + '/launch' + ')']);
+
+    }
+
+    launch() {
+        this.isLaunch = true;
+        this.save();
     }
 
     private onSaveError(error) {
@@ -1020,11 +1072,27 @@ export class CampaignTemplatePopupComponent implements OnInit, OnDestroy {
 }
 
 @Component({
-    selector: 'jhi-ngbd-timepicker-basic',
-    template: `<ngb-timepicker [(ngModel)]="time"></ngb-timepicker>`
+    selector: 'jhi-ngbd-timepicker-validation',
+    template: './campaign-template-dialog.component.html'
 })
-export class NgbdTimepickerBasicComponent {
+export class NgbdTimepickerValidationComponent {
     time = { hour: 13, minute: 30 };
+    ctrl = new FormControl('', (control: FormControl) => {
+        const value = control.value;
+
+        if (!value) {
+            return null;
+        }
+
+        if (value.hour < 12) {
+            return { tooEarly: true };
+        }
+        if (value.hour > 13) {
+            return { tooLate: true };
+        }
+
+        return null;
+    });
 }
 
 export class SimpleTime {
