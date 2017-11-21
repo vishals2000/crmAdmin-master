@@ -80,7 +80,7 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
         console.log(data);
         if (data) {
             this.targetGroupSize = data.targetGroupSize;
-            alert(this.targetGroupSize);
+            // alert(this.targetGroupSize);
         } else {
             this.targetGroupSize = 0;
         }
