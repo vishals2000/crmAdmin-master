@@ -237,7 +237,18 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 }
             }
             for (const i of campaignTemplateFilterCriteria) {
-                this.targetGroupFilterCriteria.push(this.fb.group(i));
+                if(Array.isArray(i.filterOptionValue)){
+                    const formBuilderGroup = this.fb.group({
+                        filterOption: i.filterOption,
+                        filterOptionComparison: i.filterOptionComparison,
+                        filterOptionLookUp: i.filterOptionLookUp,
+                        filterOptionValue: [i.filterOptionValue]
+                    });
+                    this.targetGroupFilterCriteria.push(formBuilderGroup);
+                }
+                else{
+                    this.targetGroupFilterCriteria.push(this.fb.group(i));
+                }
             }
             // this.campaignTemplate.targetGroupFilterCriteria = campaignTemplateFilterCriteria;
         }
