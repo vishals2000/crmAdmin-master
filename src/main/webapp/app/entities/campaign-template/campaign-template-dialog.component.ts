@@ -171,6 +171,12 @@ export class CampaignTemplateDialogComponent implements OnInit {
         if (!this.campaignTemplate) {
             this.campaignTemplate = new CampaignTemplate();
         }
+        const now = new Date();
+        var todayDt = {
+            year: now.getFullYear(),
+            month: now.getMonth() + 1,
+            day: now.getDate() + 1
+        };        
         this.campaignTemplateGroupCreationForm = this.fb.group({
             id: (!this.campaignTemplate.id) ? null : this.campaignTemplate.id,
             frontEnd: (!this.campaignTemplate.frontEnd) ? '' : this.campaignTemplate.frontEnd,
@@ -178,9 +184,9 @@ export class CampaignTemplateDialogComponent implements OnInit {
             campaignName: (!this.campaignTemplate.campaignName) ? '' : this.campaignTemplate.campaignName,
             status: (!this.campaignTemplate.status) ? 'Draft' : this.campaignTemplate.status,
             campaignDescription: (!this.campaignTemplate.campaignDescription) ? '' : this.campaignTemplate.campaignDescription,
-            startDate: (!this.campaignTemplate.startDate) ? '' : this.campaignTemplate.startDate,
-            recurrenceType: (!this.campaignTemplate.recurrenceType) ? '' : this.campaignTemplate.recurrenceType,
-            recurrenceEndDate: (!this.campaignTemplate.recurrenceEndDate) ? '' : this.campaignTemplate.recurrenceEndDate,
+            startDate: (!this.campaignTemplate.startDate) ? todayDt : this.campaignTemplate.startDate,
+            recurrenceType: (!this.campaignTemplate.recurrenceType) ? 'NONE' : this.campaignTemplate.recurrenceType,
+            recurrenceEndDate: (!this.campaignTemplate.recurrenceEndDate) ? todayDt : this.campaignTemplate.recurrenceEndDate,
             scheduledTime: (!this.campaignTemplate.scheduledTime) ? '' : this.campaignTemplate.scheduledTime,
             inPlayerTimezone: (!this.campaignTemplate.inPlayerTimezone) ? false : this.campaignTemplate.inPlayerTimezone,
             campaignGroupId: (!this.campaignTemplate.campaignGroupId) ? '' : this.campaignTemplate.campaignGroupId,
@@ -193,7 +199,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             targetGroupFilterCriteria: this.fb.array([]),
             time: (!this.campaignTemplate.scheduledTime) ? new SimpleTime(11, 0) :
                 new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0, 2)),
-                    Number(this.campaignTemplate.scheduledTime.substr(3, 2))),
+                Number(this.campaignTemplate.scheduledTime.substr(3, 2))),
             languageSelected: (!this.campaignTemplate.languageSelected) ? '' : this.campaignTemplate.languageSelected,
         });
         // (<FormControl>this.campaignTemplateGroupCreationForm.controls['recurrenceType']).setValue('NONE');
@@ -272,6 +278,12 @@ export class CampaignTemplateDialogComponent implements OnInit {
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
         const targetGroupFilterCriterionFormControl: AbstractControl = targetGroupFilters.at(index);
         targetGroupFilterCriterionFormControl.get('filterOptionLookUp').setValue('');
+        targetGroupFilterCriterionFormControl.get('filterOptionComparison').setValue('');
+        targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue('');
+    }
+    onFilterOptionLookupChange(index) {
+        const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
+        const targetGroupFilterCriterionFormControl: AbstractControl = targetGroupFilters.at(index);
         targetGroupFilterCriterionFormControl.get('filterOptionComparison').setValue('');
         targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue('');
     }
@@ -647,11 +659,13 @@ export class CampaignTemplateDialogComponent implements OnInit {
                         }
                             break;
                         case 'POKER': {
+                            // debugger;
                             const filterOptionLookUpSelected: string = targetGroupCriterionFormControl.get('filterOptionLookUp').value;
                             if (filterOptionLookUpSelected) {
                                 const filterOptionLookUpComparisonVsValue: Map<string, string[]> = this.pokerTagsMap.get(filterOptionLookUpSelected);
                                 filterOptionLookUpComparisonVsValue.forEach((value: string[], key: string) => {
                                     filterOptionComparisonValues.push(key);
+                                    console.log(filterOptionComparisonValues);
                                 });
                             }
                         }
@@ -687,6 +701,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         if (filterOption && filterOptionComparison) {
             switch (filterOption) {
                 case 'Tag': {
+                   // targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue('');
                     switch (productSelected) {
                         case 'SPORTS': {
                             if (filterOptionLookUp && filterOptionLookUp !== '') {
@@ -852,7 +867,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         return optionValues;
     }
     getFormControlTypeFromFilterOptionValues(formOptionValues: string[]) {
-        if (formOptionValues.length === 1) {
+        if (formOptionValues && formOptionValues.length === 1) {
             if (formOptionValues[0] === 'number of days') {
                 return 'daysCounter';
             } else if (formOptionValues[0] === 'date') {

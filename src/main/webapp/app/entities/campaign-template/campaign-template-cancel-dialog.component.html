@@ -1,18 +1,19 @@
 <form name="launchForm" (ngSubmit)="confirmCancel(campaignTemplate.id)">
     <div class="modal-header">
-        <h4 class="modal-title">Confirm launch operation</h4>
+        <h4 class="modal-title">Confirm cancellation of campaign template</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">&times;</button>
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
-        <p>Are you sure you want to launch this Campaign Template?</p>
+        <p>Application - {{campaignTemplate.id}}</p>        
+        <p>Are you sure you want to cancel this Campaign Template?</p>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
-            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+            <span class="fa fa-ban"></span>&nbsp;<span>No</span>
         </button>
         <button type="submit" class="btn btn-primary">
-            &nbsp;<span>Launch</span>
+            &nbsp;<span>Yes</span>
         </button>
     </div>
 </form>
