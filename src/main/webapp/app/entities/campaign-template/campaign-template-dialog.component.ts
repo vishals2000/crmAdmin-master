@@ -6,7 +6,7 @@ import { ResponseWrapper, LANGUAGES, TIME_ZONES } from '../../shared';
 import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
-import {Location} from '@angular/common';
+import { Location } from '@angular/common';
 
 import {
     CampaignTemplate, CampaignTemplateFilterCriterion, RecurrenceType, FilterOption, CampaignTargetGroupSizeRequest,
@@ -44,7 +44,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     targetGroupSize: number;
     time: SimpleTime;
     ctrl: any;
-    operatingSystems: string[] = ['amazon', 'kindle', 'android'];
+    operatingSystems: string[] = ['amazon', 'kindle', 'android', 'ios'];
     isLaunch: boolean;
 
     constructor(
@@ -124,11 +124,11 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.isSaving = true;
 
         if (this.campaignTemplateGroupCreationForm.value.time) {
-                this.campaignTemplateGroupCreationForm.value.scheduledTime = '' +
+            this.campaignTemplateGroupCreationForm.value.scheduledTime = '' +
                 (this.campaignTemplateGroupCreationForm.value.time.hour < 10 ? '0' +
-                this.campaignTemplateGroupCreationForm.value.time.hour : this.campaignTemplateGroupCreationForm.value.time.hour) + ':' +
+                    this.campaignTemplateGroupCreationForm.value.time.hour : this.campaignTemplateGroupCreationForm.value.time.hour) + ':' +
                 (this.campaignTemplateGroupCreationForm.value.time.minute < 10 ? '0' +
-                this.campaignTemplateGroupCreationForm.value.time.minute : this.campaignTemplateGroupCreationForm.value.time.minute) + ':00';
+                    this.campaignTemplateGroupCreationForm.value.time.minute : this.campaignTemplateGroupCreationForm.value.time.minute) + ':00';
 
         } else {
             this.campaignTemplateGroupCreationForm.value.scheduledTime = '11:00:00';
@@ -193,7 +193,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             targetGroupFilterCriteria: this.fb.array([]),
             time: (!this.campaignTemplate.scheduledTime) ? new SimpleTime(11, 0) :
                 new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0, 2)),
-                Number(this.campaignTemplate.scheduledTime.substr(3, 2))),
+                    Number(this.campaignTemplate.scheduledTime.substr(3, 2))),
             languageSelected: (!this.campaignTemplate.languageSelected) ? '' : this.campaignTemplate.languageSelected,
         });
         // (<FormControl>this.campaignTemplateGroupCreationForm.controls['recurrenceType']).setValue('NONE');
@@ -203,41 +203,9 @@ export class CampaignTemplateDialogComponent implements OnInit {
     };
 
     prepareData() {
-        // const targetGroupFilterCriteriaDeepCopy: CampaignTemplateFilterCriterion[] = this.campaignTemplate.targetGroupFilterCriteria.map(
-        //     (c: CampaignTemplateFilterCriterion) => Object.assign({}, c)
-        // );
-        // public filterOption: string,
-        // public filterOptionLookUp: string,
-        // public filterOptionComparison: string,
-        // public filterOptionValue: string[]
-        // this.targetGroupFilterCriteria.push(this.fb.group(new CampaignTemplateFilterCriterion(i.filterOption,
-        // i.filterOptionLookUp, i.filterOptionComparison,i.filterOptionValue)));
         if (this.campaignTemplate.targetGroupFilterCriteria) {
-            // for (const i of this.campaignTemplate.targetGroupFilterCriteria) {
-            //     // this.targetGroupFilterCriteria.push(this.fb.group(i));
-            //     this.targetGroupFilterCriteria.push(this.fb.group(new CampaignTemplateFilterCriterion(i.filterOption,
-            //         i.filterOptionLookUp, i.filterOptionComparison, i.filterOptionValue)));
-            // }
-            const campaignTemplateFilterCriteria: CampaignTemplateFilterCriterion[] = [];
-            for (const campaignTemplateFilterCriterion of this.campaignTemplate.targetGroupFilterCriteria) {
-                if (Array.isArray(campaignTemplateFilterCriterion.filterOptionValue)) {
-                    campaignTemplateFilterCriteria.push(new CampaignTemplateFilterCriterion(
-                        campaignTemplateFilterCriterion.filterOption,
-                        campaignTemplateFilterCriterion.filterOptionLookUp,
-                        campaignTemplateFilterCriterion.filterOptionComparison,
-                        campaignTemplateFilterCriterion.filterOptionValue));
-                } else {
-                    const optionValues: string[] = [];
-                    optionValues.push(campaignTemplateFilterCriterion.filterOptionValue);
-                    campaignTemplateFilterCriteria.push(new CampaignTemplateFilterCriterion(
-                        campaignTemplateFilterCriterion.filterOption,
-                        campaignTemplateFilterCriterion.filterOptionLookUp,
-                        campaignTemplateFilterCriterion.filterOptionComparison,
-                        optionValues));
-                }
-            }
-            for (const i of campaignTemplateFilterCriteria) {
-                if(Array.isArray(i.filterOptionValue)){
+            for (const i of this.campaignTemplate.targetGroupFilterCriteria) {
+                if (Array.isArray(i.filterOptionValue)) {
                     const formBuilderGroup = this.fb.group({
                         filterOption: i.filterOption,
                         filterOptionComparison: i.filterOptionComparison,
@@ -245,12 +213,10 @@ export class CampaignTemplateDialogComponent implements OnInit {
                         filterOptionValue: [i.filterOptionValue]
                     });
                     this.targetGroupFilterCriteria.push(formBuilderGroup);
-                }
-                else{
+                } else {
                     this.targetGroupFilterCriteria.push(this.fb.group(i));
                 }
             }
-            // this.campaignTemplate.targetGroupFilterCriteria = campaignTemplateFilterCriteria;
         }
     }
     populateLanguagesList() {
@@ -987,30 +953,30 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.filtersMap.set('OS', filterOptionLookUpComparisonVsValue);
     }
     populateCountries() {
-        this.countries = ['Afghanistan','Aland Islands','Albania','Algeria','American Samoa','Andorra','Angola','Anguilla','Antarctica',
-        'Antigua and Barbuda','Argentina','Armenia','Aruba','Australia','Austria','Azerbaijan','Bahamas','Bahrain','Bangladesh','Barbados','Belarus',
-        'Belgium','Belize','Benin','Bermuda','Bhutan','Bolivia','Bosnia and Herzegovina','Botswana','Bouvet Island','Brazil','British Virgin Islands',
-        'British Indian Ocean Territory','Brunei Darussalam','Bulgaria','Burkina Faso','Burundi','Cambodia','Cameroon','Canada','Cape Verde','Cayman Islands',
-        'Central African Republic','Chad','Chile','China','Hong Kong, SAR China','Macao, SAR China','Christmas Island','Cocos (Keeling) Islands','Colombia',
-        'Comoros','Congo (Brazzaville)','Congo, (Kinshasa)','Cook Islands','Costa Rica','Côte d\'Ivoire','Croatia','Cuba','Cyprus','Czech Republic',
-        'Denmark','Djibouti','Dominica','Dominican Republic','Ecuador','Egypt','El Salvador','Equatorial Guinea','Eritrea','Estonia','Ethiopia',
-        'Falkland Islands (Malvinas)','Faroe Islands','Fiji','Finland','France','French Guiana','French Polynesia','French Southern Territories','Gabon',
-        'Gambia','Georgia','Germany','Ghana','Gibraltar','Greece','Greenland','Grenada','Guadeloupe','Guam','Guatemala','Guernsey','Guinea','Guinea-Bissau',
-        'Guyana','Haiti','Heard and Mcdonald Islands','Holy See (Vatican City State)','Honduras','Hungary','Iceland','India','Indonesia','Iran, Islamic Republic of',
-        'Iraq','Ireland','Isle of Man','Israel','Italy','Jamaica','Japan','Jersey','Jordan','Kazakhstan','Kenya','Kiribati','Korea (North)',
-        'Korea (South)','Kuwait','Kyrgyzstan','Lao PDR','Latvia','Lebanon','Lesotho','Liberia','Libya','Liechtenstein','Lithuania','Luxembourg',
-        'Macedonia, Republic of','Madagascar','Malawi','Malaysia','Maldives','Mali','Malta','Marshall Islands','Martinique','Mauritania','Mauritius','Mayotte',
-        'Mexico','Micronesia, Federated States of','Moldova','Monaco','Mongolia','Montenegro','Montserrat','Morocco','Mozambique','Myanmar','Namibia','Nauru',
-        'Nepal','Netherlands','Netherlands Antilles','New Caledonia','New Zealand','Nicaragua','Niger','Nigeria','Niue','Norfolk Island','Northern Mariana Islands',
-        'Norway','Oman','Pakistan','Palau','Palestinian Territory','Panama','Papua New Guinea','Paraguay','Peru','Philippines','Pitcairn','Poland','Portugal',
-        'Puerto Rico','Qatar','Réunion','Romania','Russian Federation','Rwanda','Saint-Barthélemy','Saint Helena','Saint Kitts and Nevis','Saint Lucia',
-        'Saint-Martin (French part)','Saint Pierre and Miquelon','Saint Vincent and Grenadines','Samoa','San Marino','Sao Tome and Principe','Saudi Arabia',
-        'Senegal','Serbia','Seychelles','Sierra Leone','Singapore','Slovakia','Slovenia','Solomon Islands','Somalia','South Africa',
-        'South Georgia and the South Sandwich Islands','South Sudan','Spain','Sri Lanka','Sudan','Suriname','Svalbard and Jan Mayen Islands','Swaziland',
-        'Sweden','Switzerland','Syrian Arab Republic (Syria)','Taiwan, Republic of China','Tajikistan','Tanzania, United Republic of','Thailand','Timor-Leste',
-        'Togo','Tokelau','Tonga','Trinidad and Tobago','Tunisia','Turkey','Turkmenistan','Turks and Caicos Islands','Tuvalu','Uganda','Ukraine','United Arab Emirates',
-        'United Kingdom','United States of America','US Minor Outlying Islands','Uruguay','Uzbekistan','Vanuatu','Venezuela (Bolivarian Republic)','Viet Nam',
-        'Virgin Islands, US','Wallis and Futuna Islands','Western Sahara','Yemen','Zambia','Zimbabwe'];
+        this.countries = ['Afghanistan', 'Aland Islands', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola', 'Anguilla', 'Antarctica',
+            'Antigua and Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus',
+            'Belgium', 'Belize', 'Benin', 'Bermuda', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Bouvet Island', 'Brazil', 'British Virgin Islands',
+            'British Indian Ocean Territory', 'Brunei Darussalam', 'Bulgaria', 'Burkina Faso', 'Burundi', 'Cambodia', 'Cameroon', 'Canada', 'Cape Verde', 'Cayman Islands',
+            'Central African Republic', 'Chad', 'Chile', 'China', 'Hong Kong, SAR China', 'Macao, SAR China', 'Christmas Island', 'Cocos (Keeling) Islands', 'Colombia',
+            'Comoros', 'Congo (Brazzaville)', 'Congo, (Kinshasa)', 'Cook Islands', 'Costa Rica', 'Côte d\'Ivoire', 'Croatia', 'Cuba', 'Cyprus', 'Czech Republic',
+            'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic', 'Ecuador', 'Egypt', 'El Salvador', 'Equatorial Guinea', 'Eritrea', 'Estonia', 'Ethiopia',
+            'Falkland Islands (Malvinas)', 'Faroe Islands', 'Fiji', 'Finland', 'France', 'French Guiana', 'French Polynesia', 'French Southern Territories', 'Gabon',
+            'Gambia', 'Georgia', 'Germany', 'Ghana', 'Gibraltar', 'Greece', 'Greenland', 'Grenada', 'Guadeloupe', 'Guam', 'Guatemala', 'Guernsey', 'Guinea', 'Guinea-Bissau',
+            'Guyana', 'Haiti', 'Heard and Mcdonald Islands', 'Holy See (Vatican City State)', 'Honduras', 'Hungary', 'Iceland', 'India', 'Indonesia', 'Iran, Islamic Republic of',
+            'Iraq', 'Ireland', 'Isle of Man', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jersey', 'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati', 'Korea (North)',
+            'Korea (South)', 'Kuwait', 'Kyrgyzstan', 'Lao PDR', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg',
+            'Macedonia, Republic of', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Marshall Islands', 'Martinique', 'Mauritania', 'Mauritius', 'Mayotte',
+            'Mexico', 'Micronesia, Federated States of', 'Moldova', 'Monaco', 'Mongolia', 'Montenegro', 'Montserrat', 'Morocco', 'Mozambique', 'Myanmar', 'Namibia', 'Nauru',
+            'Nepal', 'Netherlands', 'Netherlands Antilles', 'New Caledonia', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'Niue', 'Norfolk Island', 'Northern Mariana Islands',
+            'Norway', 'Oman', 'Pakistan', 'Palau', 'Palestinian Territory', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Pitcairn', 'Poland', 'Portugal',
+            'Puerto Rico', 'Qatar', 'Réunion', 'Romania', 'Russian Federation', 'Rwanda', 'Saint-Barthélemy', 'Saint Helena', 'Saint Kitts and Nevis', 'Saint Lucia',
+            'Saint-Martin (French part)', 'Saint Pierre and Miquelon', 'Saint Vincent and Grenadines', 'Samoa', 'San Marino', 'Sao Tome and Principe', 'Saudi Arabia',
+            'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore', 'Slovakia', 'Slovenia', 'Solomon Islands', 'Somalia', 'South Africa',
+            'South Georgia and the South Sandwich Islands', 'South Sudan', 'Spain', 'Sri Lanka', 'Sudan', 'Suriname', 'Svalbard and Jan Mayen Islands', 'Swaziland',
+            'Sweden', 'Switzerland', 'Syrian Arab Republic (Syria)', 'Taiwan, Republic of China', 'Tajikistan', 'Tanzania, United Republic of', 'Thailand', 'Timor-Leste',
+            'Togo', 'Tokelau', 'Tonga', 'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Turks and Caicos Islands', 'Tuvalu', 'Uganda', 'Ukraine',
+            'United Arab Emirates', 'United Kingdom', 'United States of America', 'US Minor Outlying Islands', 'Uruguay', 'Uzbekistan', 'Vanuatu',
+            'Venezuela (Bolivarian Republic)', 'Viet Nam', 'Virgin Islands, US', 'Wallis and Futuna Islands', 'Western Sahara', 'Yemen', 'Zambia', 'Zimbabwe'];
     }
 
     private subscribeToSaveResponse(result: Observable<CampaignTemplate>) {
@@ -1021,8 +987,8 @@ export class CampaignTemplateDialogComponent implements OnInit {
     private onSaveSuccess(result: CampaignTemplate) {
         this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' });
         this.isSaving = false;
-    //    this.router.navigateByUrl(location.href + '(' + 'popup:' + 'campaign-template/' + result.id + '/launch' + ')');
-    //    location.href = location.href + '(' + 'popup:' + 'campaign-template/' + result.id + '/launch' + ')';
+        //    this.router.navigateByUrl(location.href + '(' + 'popup:' + 'campaign-template/' + result.id + '/launch' + ')');
+        //    location.href = location.href + '(' + 'popup:' + 'campaign-template/' + result.id + '/launch' + ')';
         // this.router.navigate(['/campaign-template/group/' + this.groupId + '/' + this.groupName], {
         //     queryParams:
         //     {
@@ -1035,14 +1001,14 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.activeModal.dismiss(result);
 
         if (this.isLaunch) {
-        setTimeout(() => {
-            const pageLocation: string = decodeURI(encodeURI (location.href) + '(' + 'popup:' + 'campaign-template/' + result.id + '/launch' + ')');
-            // alert(pageLocation);
-            location.href = pageLocation;
-            this.isLaunch = false;
-       }, 100);
+            setTimeout(() => {
+                const pageLocation: string = decodeURI(encodeURI(location.href) + '(' + 'popup:' + 'campaign-template/' + result.id + '/launch' + ')');
+                // alert(pageLocation);
+                location.href = pageLocation;
+                this.isLaunch = false;
+            }, 100);
 
-    }
+        }
         // this.router.navigate([location.href + '(' + 'popup:' + 'campaign-template/' + result.id + '/launch' + ')']);
 
     }
