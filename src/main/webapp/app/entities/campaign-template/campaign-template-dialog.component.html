@@ -82,12 +82,9 @@
                 <label class="form-control-label" for="field_scheduledTime">Scheduled Time (in UTC)</label>
                 <!-- <ngb-timepicker formControlName="time" [ngModelOptions]="{standalone: true}"></ngb-timepicker>                 -->
                 <ngb-timepicker formControlName="time" [ngModelOptions]="{standalone: true}"></ngb-timepicker>
-                <!-- <div *ngIf="ctrl.valid" class="small form-text text-success">Great choice</div>
-                <div class="small form-text text-danger" *ngIf="!ctrl.valid">
-                  <div *ngIf="ctrl.errors['required']">Select some time during lunchtime</div>
-                  <div *ngIf="ctrl.errors['tooLate']">Oh no, it's way too late</div>
-                  <div *ngIf="ctrl.errors['tooEarly']">It's a bit too early</div>
-                </div> -->
+                <div *ngIf="campaignTemplateGroupCreationForm && campaignTemplateGroupCreationForm.controls && campaignTemplateGroupCreationForm.controls.time && campaignTemplateGroupCreationForm.controls.time.errors">
+                    <div *ngIf=" campaignTemplateGroupCreationForm.controls.time.errors['invalid']">invalid</div>
+                </div>
         </div>
                 
         <div class="form-group">            

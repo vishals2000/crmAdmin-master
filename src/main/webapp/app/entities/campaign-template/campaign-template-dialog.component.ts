@@ -46,6 +46,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     ctrl: any;
     operatingSystems: string[] = ['amazon', 'kindle', 'android', 'ios'];
     isLaunch: boolean;
+    currentDate: Date = new Date();
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -131,7 +132,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                     this.campaignTemplateGroupCreationForm.value.time.minute : this.campaignTemplateGroupCreationForm.value.time.minute) + ':00';
 
         } else {
-            this.campaignTemplateGroupCreationForm.value.scheduledTime = '11:00:00';
+            this.campaignTemplateGroupCreationForm.value.scheduledTime = ''+this.currentDate.getHours()+':'+this.currentDate.getMinutes()+':00';
         }
         if (this.campaignTemplateGroupCreationForm.value.id !== null) {
             this.subscribeToSaveResponse(
@@ -191,9 +192,20 @@ export class CampaignTemplateDialogComponent implements OnInit {
             languageComparision: (!this.campaignTemplate.languageComparision) ? '' : this.campaignTemplate.languageComparision,
             // targetGroupFilterCriteria: (!this.campaignTemplate.targetGroupFilterCriteria) ? this.fb.array([]) : this.prepareData(),
             targetGroupFilterCriteria: this.fb.array([]),
-            time: (!this.campaignTemplate.scheduledTime) ? new SimpleTime(11, 0) :
+            time: this.fb.control((!this.campaignTemplate.scheduledTime) ? new SimpleTime(this.currentDate.getHours(), this.currentDate.getMinutes()) :
                 new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0, 2)),
-                    Number(this.campaignTemplate.scheduledTime.substr(3, 2))),
+                    Number(this.campaignTemplate.scheduledTime.substr(3, 2))), (control: FormControl) => {
+                        const value = control.value;
+                        const totalCurrentDayMinutes = this.currentDate.getHours() * 60 + this.currentDate.getMinutes();
+                        const minutes = this.currentDate.getMinutes();
+                        if (!value) {
+                            return null;
+                        }
+                        if(((value.hour * 60)+ value.minute) < totalCurrentDayMinutes ){
+                            return {invalid: true};
+                        }
+                        return null;
+                      }),
             languageSelected: (!this.campaignTemplate.languageSelected) ? '' : this.campaignTemplate.languageSelected,
         });
         // (<FormControl>this.campaignTemplateGroupCreationForm.controls['recurrenceType']).setValue('NONE');
