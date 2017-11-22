@@ -309,6 +309,12 @@ export class CampaignTemplateDialogComponent implements OnInit {
         targetGroupFilterCriterionFormControl.get('filterOptionComparison').setValue('');
         targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue('');
     }
+    onFilterOptionLookupChange(index) {
+        const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
+        const targetGroupFilterCriterionFormControl: AbstractControl = targetGroupFilters.at(index);
+        targetGroupFilterCriterionFormControl.get('filterOptionComparison').setValue('');
+        targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue('');
+    }
     populateFilterOptions() {
         this.filterOptions = ['App', 'App Version', 'Country', 'Event', 'Install Date', 'Language', 'Last Open Date', 'OS', 'Segment', 'Tag', 'Timezone'];
         this.filterOptions.sort();
@@ -681,11 +687,13 @@ export class CampaignTemplateDialogComponent implements OnInit {
                         }
                             break;
                         case 'POKER': {
+                            // debugger;
                             const filterOptionLookUpSelected: string = targetGroupCriterionFormControl.get('filterOptionLookUp').value;
                             if (filterOptionLookUpSelected) {
                                 const filterOptionLookUpComparisonVsValue: Map<string, string[]> = this.pokerTagsMap.get(filterOptionLookUpSelected);
                                 filterOptionLookUpComparisonVsValue.forEach((value: string[], key: string) => {
                                     filterOptionComparisonValues.push(key);
+                                    console.log(filterOptionComparisonValues);
                                 });
                             }
                         }
@@ -721,6 +729,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         if (filterOption && filterOptionComparison) {
             switch (filterOption) {
                 case 'Tag': {
+                   // targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue('');
                     switch (productSelected) {
                         case 'SPORTS': {
                             if (filterOptionLookUp && filterOptionLookUp !== '') {
@@ -886,7 +895,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         return optionValues;
     }
     getFormControlTypeFromFilterOptionValues(formOptionValues: string[]) {
-        if (formOptionValues.length === 1) {
+        if (formOptionValues && formOptionValues.length === 1) {
             if (formOptionValues[0] === 'number of days') {
                 return 'daysCounter';
             } else if (formOptionValues[0] === 'date') {

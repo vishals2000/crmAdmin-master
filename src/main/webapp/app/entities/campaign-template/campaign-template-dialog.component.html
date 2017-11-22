@@ -115,7 +115,7 @@
             <div class="form-group" [hidden]="isOptionLookUpHidden(i)">
                 <label class="center-block">FilterOptionLookUp:</label>
                 <!-- <input class="form-control" formControlName="filterOptionLookUp" required> -->
-                <select class="form-control" formControlName="filterOptionLookUp">
+                <select class="form-control" formControlName="filterOptionLookUp" (change)="onFilterOptionLookupChange(i)">
                                     <option *ngFor="let filterOptionLookUp of getFilterOptionLookUpValues(i)" [value]="filterOptionLookUp">{{filterOptionLookUp}}</option>
                                 </select>
             </div>
