@@ -9,7 +9,6 @@ import { CampaignTemplatePopupService } from './campaign-template-popup.service'
 import { CampaignTemplateService } from './campaign-template.service';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
 import { ResponseWrapper } from '../../shared';
-import { CANCEL_URL } from '../../app.constants';
 
 @Component({
     selector: 'jhi-campaign-template-cancel-dialog',
@@ -18,7 +17,6 @@ import { CANCEL_URL } from '../../app.constants';
 export class CampaignTemplateCancelDialogComponent implements OnInit {
 
     campaignTemplate: CampaignTemplate;
-
     constructor(
         private campaignTemplateService: CampaignTemplateService,
         public activeModal: NgbActiveModal,
@@ -60,11 +58,7 @@ export class CampaignTemplateCancelDialogComponent implements OnInit {
         data['product'] = this.campaignTemplate.product;
         console.log(data);
 
-        const req = this.http.post(CANCEL_URL,
-            JSON.stringify(data), {
-                headers: new HttpHeaders().set('Content-Type', 'application/json'),
-            })
-        req.subscribe(
+        this.campaignTemplateService.cancelPushNotification(data).subscribe(
             (res: ResponseWrapper) => this.onPushNotificationCancelSuccess(res, res),
             (res: ResponseWrapper) => this.onError(res.json)
         );
@@ -91,9 +85,7 @@ export class CampaignTemplateCancelDialogComponent implements OnInit {
             },
             (res: ResponseWrapper) => this.onError(res.json)
             );
-
     }
-
 }
 
 @Component({

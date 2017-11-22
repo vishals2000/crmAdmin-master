@@ -10,6 +10,8 @@ import { CampaignTemplatePopupComponent } from './campaign-template-dialog.compo
 import { CampaignTemplateDeletePopupComponent } from './campaign-template-delete-dialog.component';
 import { CampaignTemplateLaunchPopupComponent } from './campaign-template-launch-dialog.component';
 import { CampaignTemplateTestPopupComponent } from './campaign-template-test-dialog.component';
+import { CampaignTemplateCancelPopupComponent } from './campaign-template-cancel-dialog.component';
+
 
 @Injectable()
 export class CampaignTemplateResolvePagingParams implements Resolve<any> {
@@ -114,7 +116,7 @@ export const campaignTemplatePopupRoute: Routes = [
     },
     {
         path: 'campaign-template/:id/cancel',
-        component: CampaignTemplateTestPopupComponent,
+        component: CampaignTemplateCancelPopupComponent,
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'CampaignTemplates'

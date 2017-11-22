@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { FormBuilder, FormGroup, FormArray, FormControl, AbstractControl, Validators } from '@angular/forms';
@@ -40,31 +41,10 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
             this.campaignTemplate.frontEnd = message[1];
             this.campaignTemplate.product = message[2];
         });
-        // console.log(this.campaignTemplate.targetGroupFilterCriteria);
         this.getTargetGroupSize();
     }
 
     getTargetGroupSize() {
-        // const targetGroupFilters = this.campaignTemplate.targetGroupFilterCriteria as FormArray;
-        // let formLengthIterator = 0;
-        // const targetGroupFilterCriteria: TargetGroupFilterCriterionSizeRequest[] = [];
-        // while (formLengthIterator < targetGroupFilters.length) {
-        //     const targetGroupFilter = targetGroupFilters.at(formLengthIterator);
-        //     const optionValues: string[] = [];
-        //     if (Array.isArray(targetGroupFilter.get('filterOptionValue').value)) {
-        //         for (const optionValue of targetGroupFilter.get('filterOptionValue').value) {
-        //             optionValues.push(optionValue);
-        //         }
-        //     } else {
-        //         optionValues.push(targetGroupFilter.get('filterOptionValue').value);
-        //     }
-        //     targetGroupFilterCriteria.push(new TargetGroupFilterCriterionSizeRequest(targetGroupFilter.get('filterOption').value,
-        //         targetGroupFilter.get('filterOptionLookUp').value,
-        //         targetGroupFilter.get('filterOptionComparison').value,
-        //         optionValues));
-        //     formLengthIterator = formLengthIterator + 1;
-        // }
-
         const body = new CampaignTargetGroupSizeRequest(
             this.campaignTemplate.frontEnd,
             this.campaignTemplate.product,
@@ -80,7 +60,6 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
         console.log(data);
         if (data) {
             this.targetGroupSize = data.targetGroupSize;
-            // alert(this.targetGroupSize);
         } else {
             this.targetGroupSize = 0;
         }

@@ -11,7 +11,6 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export class CampaignTemplateService {
 
     private resourceUrl = 'api/campaign-templates';
-
     private messageSource = new BehaviorSubject<string[]>([]);
     currentMesage = this.messageSource.asObservable();
     constructor(private http: Http, private dateUtils: JhiDateUtils) { }
@@ -46,6 +45,12 @@ export class CampaignTemplateService {
 
     pushNotificationCampaign(body: any): Observable<ResponseWrapper> {
         return this.http.post(this.resourceUrl + '/pushNotificationCampaign', body).map((res: Response) => {
+            return res.json();
+        });
+    }
+
+    cancelPushNotification(body: any): Observable<ResponseWrapper> {
+        return this.http.post(this.resourceUrl + '/cancelPushNotificationCampaign', body).map((res: Response) => {
             return res.json();
         });
     }

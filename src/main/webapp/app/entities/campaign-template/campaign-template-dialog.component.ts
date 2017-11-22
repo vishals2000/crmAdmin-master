@@ -172,6 +172,12 @@ export class CampaignTemplateDialogComponent implements OnInit {
         if (!this.campaignTemplate) {
             this.campaignTemplate = new CampaignTemplate();
         }
+        const now = new Date();
+        const todayDt = {
+            year: now.getFullYear(),
+            month: now.getMonth() + 1,
+            day: now.getDate() + 1
+        };  
         this.campaignTemplateGroupCreationForm = this.fb.group({
             id: (!this.campaignTemplate.id) ? null : this.campaignTemplate.id,
             frontEnd: (!this.campaignTemplate.frontEnd) ? '' : this.campaignTemplate.frontEnd,
@@ -179,9 +185,9 @@ export class CampaignTemplateDialogComponent implements OnInit {
             campaignName: (!this.campaignTemplate.campaignName) ? '' : this.campaignTemplate.campaignName,
             status: (!this.campaignTemplate.status) ? 'Draft' : this.campaignTemplate.status,
             campaignDescription: (!this.campaignTemplate.campaignDescription) ? '' : this.campaignTemplate.campaignDescription,
-            startDate: (!this.campaignTemplate.startDate) ? '' : this.campaignTemplate.startDate,
-            recurrenceType: (!this.campaignTemplate.recurrenceType) ? '' : this.campaignTemplate.recurrenceType,
-            recurrenceEndDate: (!this.campaignTemplate.recurrenceEndDate) ? '' : this.campaignTemplate.recurrenceEndDate,
+            startDate: (!this.campaignTemplate.startDate) ? todayDt : this.campaignTemplate.startDate,
+            recurrenceType: (!this.campaignTemplate.recurrenceType) ? 'NONE' : this.campaignTemplate.recurrenceType,
+            recurrenceEndDate: (!this.campaignTemplate.recurrenceEndDate) ? todayDt : this.campaignTemplate.recurrenceEndDate,
             scheduledTime: (!this.campaignTemplate.scheduledTime) ? '' : this.campaignTemplate.scheduledTime,
             inPlayerTimezone: (!this.campaignTemplate.inPlayerTimezone) ? false : this.campaignTemplate.inPlayerTimezone,
             campaignGroupId: (!this.campaignTemplate.campaignGroupId) ? '' : this.campaignTemplate.campaignGroupId,

@@ -7,8 +7,18 @@
         <jhi-alert-error></jhi-alert-error>
         <p>Application - {{campaignTemplate.id}}</p>
         <p>Targert Group Size - {{targetGroupSize}}</p>
-        <p>Are you sure you want to launch this Campaign Template?</p>
+        <p>Filter Critiria: <span *ngIf="!campaignTemplate.targetGroupFilterCriteria.length">-- No criteria selected --</span>  </p>
+        
+        <ul *ngIf="campaignTemplate.targetGroupFilterCriteria">
+            <li *ngFor="let i of campaignTemplate.targetGroupFilterCriteria"> 
+              {{ i.filterOption }}   {{ i.filterOptionComparison }} {{ i.filterOptionLookUp }} {{ i.filterOptionValue }}
+            </li>
+        </ul>
+        <!-- <p *ngIf="!campaignTemplate.targetGroupFilterCriteria.length">**You will not be able to launch the campaign unless atleast one filter criteria is selected.</p> -->
+        <p>Content body: {{campaignTemplate.contentBody}}</p>
+        <p *ngIf="campaignTemplate.targetGroupFilterCriteria.length">Are you sure you want to launch this Campaign Template?</p>
     </div>
+    
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
             <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
