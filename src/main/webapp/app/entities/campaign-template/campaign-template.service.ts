@@ -50,6 +50,12 @@ export class CampaignTemplateService {
         });
     }
 
+    cancelPushNotification(body: any): Observable<ResponseWrapper> {
+        return this.http.post(this.resourceUrl + '/cancelPushNotificationCampaign', body).map((res: Response) => {
+            return res.json();
+        });
+    }
+
     sendPushNotificationForScreenName(body: any): Observable<ResponseWrapper> {
         return this.http.post(this.resourceUrl + '/sendPushNotificationForScreenName', body).map((res: Response) => {
             return res.json();
