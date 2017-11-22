@@ -45,7 +45,7 @@ public class SendPushNotificationForScreenNameRequest implements Serializable {
     @JsonProperty("fcmIds")
     private List<String> fcmIds;
 
-    @JsonProperty("campaignId")
+    @JsonProperty("id")
     private String campaignId;
 
     public String getContentTitle() {
