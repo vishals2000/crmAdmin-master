@@ -13,7 +13,7 @@ import { CrmAdminEntityModule } from './entities/entity.module';
 import { customHttpProvider } from './blocks/interceptor/http.provider';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
-import { NgbdTimepickerBasicComponent } from './entities/campaign-template/campaign-template-dialog.component'
+import { NgbdTimepickerValidationComponent } from './entities/campaign-template/campaign-template-dialog.component'
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -52,7 +52,7 @@ import {
         ErrorComponent,
         PageRibbonComponent,
         FooterComponent,
-        NgbdTimepickerBasicComponent
+        NgbdTimepickerValidationComponent
     ],
     providers: [
         ProfileService,
