@@ -172,11 +172,11 @@ export class CampaignTemplateDialogComponent implements OnInit {
             this.campaignTemplate = new CampaignTemplate();
         }
         const now = new Date();
-        var todayDt = {
+        const todayDt = {
             year: now.getFullYear(),
             month: now.getMonth() + 1,
             day: now.getDate() + 1
-        };        
+        };  
         this.campaignTemplateGroupCreationForm = this.fb.group({
             id: (!this.campaignTemplate.id) ? null : this.campaignTemplate.id,
             frontEnd: (!this.campaignTemplate.frontEnd) ? '' : this.campaignTemplate.frontEnd,
