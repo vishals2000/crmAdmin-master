@@ -17,7 +17,6 @@ import { ResponseWrapper } from '../../shared';
 export class CampaignTemplateCancelDialogComponent implements OnInit {
 
     campaignTemplate: CampaignTemplate;
-
     constructor(
         private campaignTemplateService: CampaignTemplateService,
         public activeModal: NgbActiveModal,

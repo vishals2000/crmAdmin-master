@@ -18,6 +18,7 @@
         <p>Content body: {{campaignTemplate.contentBody}}</p>
         <p *ngIf="campaignTemplate.targetGroupFilterCriteria.length">Are you sure you want to launch this Campaign Template?</p>
     </div>
+    
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
             <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>

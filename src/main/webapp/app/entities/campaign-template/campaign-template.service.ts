@@ -11,7 +11,6 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export class CampaignTemplateService {
 
     private resourceUrl = 'api/campaign-templates';
-
     private messageSource = new BehaviorSubject<string[]>([]);
     currentMesage = this.messageSource.asObservable();
     constructor(private http: Http, private dateUtils: JhiDateUtils) { }
