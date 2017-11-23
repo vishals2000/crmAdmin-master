@@ -129,7 +129,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
             this.loadAll());
     }
     filterItems(){
-        this.campaignTemplates = this.campaignTemplates.filter(item => item.campaignDescription.toLowerCase().indexOf(this.searchValue) > -1 );
+        this.campaignTemplates = this.campaignTemplates.filter(item => item.campaignName.toLowerCase().indexOf(this.searchValue) > -1 );
     }
 
     sort() {
