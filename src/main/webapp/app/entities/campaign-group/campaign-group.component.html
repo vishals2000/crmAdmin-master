@@ -8,6 +8,9 @@
             </span>
         </button>
     </h2>
+    <div style="overflow:hidden;">
+        <input class="form-control" placeholder="Search" [(ngModel)]="searchValue" (ngModelChange)="filterItems()" style="max-width:500px;float:right;"/>
+    </div>
     <jhi-alert></jhi-alert>
     <div class="row">
     </div>

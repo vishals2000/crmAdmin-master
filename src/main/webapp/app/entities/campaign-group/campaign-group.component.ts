@@ -16,6 +16,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
 
 currentAccount: any;
     campaignGroups: CampaignGroup[];
+    initialCampainGroups: CampaignGroup[]; 
     error: any;
     success: any;
     eventSubscriber: Subscription;
@@ -31,7 +32,7 @@ currentAccount: any;
     reverse: any;
     projectId: string;
     projectName: string;
-
+    searchValue:string;
     constructor(
         private campaignGroupService: CampaignGroupService,
         private parseLinks: JhiParseLinks,
@@ -142,7 +143,14 @@ currentAccount: any;
             this.loadAll()
         );
     }
-
+    filterItems(){
+        if(this.searchValue && this.searchValue !== ''){
+            this.campaignGroups = this.initialCampainGroups.filter(item => item.name.toLowerCase().indexOf(this.searchValue) > -1 );
+        }
+        else{
+            this.campaignGroups = this.initialCampainGroups;
+        }
+    }
     sort() {
         const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
         if (this.predicate !== 'id') {
@@ -157,6 +165,7 @@ currentAccount: any;
         this.queryCount = this.totalItems;
         // this.page = pagingParams.page;
         this.campaignGroups = data;
+        this.initialCampainGroups = data;
     }
     private onError(error) {
         this.alertService.error(error.message, null, null);

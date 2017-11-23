@@ -1,6 +1,6 @@
 <div>
     <h2>
-        <span>Apps</span>
+        <span>Apps</span>      
         <button *jhiHasAnyAuthority="'ROLE_ADMIN'" class="btn btn-primary float-right jh-create-entity create-apps" [routerLink]="['/', { outlets: { popup: ['apps-new'] } }]">
             <span class="fa fa-plus"></span>
             <span >
@@ -8,6 +8,9 @@
             </span>
         </button>
     </h2>
+    <div style="overflow:hidden;">
+        <input class="form-control" placeholder="Search" [(ngModel)]="searchValue" (ngModelChange)="filterItems()" style="max-width:500px;float:right;"/>
+        </div>
     <jhi-alert></jhi-alert>
     <div class="row">
     </div>

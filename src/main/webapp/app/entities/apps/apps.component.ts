@@ -15,7 +15,8 @@ import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 export class AppsComponent implements OnInit, OnDestroy {
 
 currentAccount: any;
-    apps: Apps[];
+    apps: Apps[]; 
+    initialApps: Apps[];
     error: any;
     success: any;
     eventSubscriber: Subscription;
@@ -28,7 +29,7 @@ currentAccount: any;
     predicate: any;
     previousPage: any;
     reverse: any;
-
+    searchValue:string;
     constructor(
         private appsService: AppsService,
         private parseLinks: JhiParseLinks,
@@ -94,7 +95,14 @@ currentAccount: any;
     ngOnDestroy() {
         this.eventManager.destroy(this.eventSubscriber);
     }
-
+    filterItems(){
+        if(this.searchValue && this.searchValue !== ''){
+            this.apps = this.initialApps.filter(item => item.name.toLowerCase().indexOf(this.searchValue) > -1 );
+        }
+        else{
+            this.apps = this.initialApps;
+        }
+    }
     trackId(index: number, item: Apps) {
         return item.id;
     }
@@ -116,6 +124,7 @@ currentAccount: any;
         this.queryCount = this.totalItems;
         // this.page = pagingParams.page;
         this.apps = data;
+        this.initialApps = data;
     }
     private onError(error) {
         this.alertService.error(error.message, null, null);
