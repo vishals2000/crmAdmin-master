@@ -1,6 +1,7 @@
 <div>
     <h2>
         <span>Campaign Templates in "{{groupName}}" </span>
+        <input class="form-control" placeholder="Search" [(ngModel)]="searchValue" (ngModelChange)="filterItems()" />
         <button class="btn btn-primary float-right jh-create-entity create-campaign-template" [routerLink]="['/', { outlets: { popup: ['campaign-template-new'] } }]">
             <span class="fa fa-plus"></span>
             <span >
@@ -38,6 +39,7 @@
             </tr>
             </thead>
             <tbody>
+                    <!-- *ngFor="let item of items | search:'id,text':query" -->
             <tr *ngFor="let campaignTemplate of campaignTemplates ;trackBy: trackId">
                 <!-- <td><a [routerLink]="['../campaign-template', campaignTemplate.id ]">{{campaignTemplate.id}}</a></td> -->
                 <td><a [routerLink]="['/campaign-template', campaignTemplate.id ]">{{campaignTemplate.campaignName}}</a></td>

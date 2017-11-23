@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Pipe,PipeTransform } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { JhiEventManager, JhiParseLinks, JhiPaginationUtil, JhiAlertService } from 'ng-jhipster';
@@ -13,10 +13,12 @@ import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http'
     selector: 'jhi-campaign-template',
     templateUrl: './campaign-template.component.html'
 })
+
 export class CampaignTemplateComponent implements OnInit, OnDestroy {
 
     currentAccount: any;
     campaignTemplates: CampaignTemplate[];
+    initialCampaignTemplates: CampaignTemplate[];
     error: any;
     success: any;
     eventSubscriber: Subscription;
@@ -34,6 +36,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     results: string[];
     groupId: string;
     groupName: string;
+    searchValue: string;
     constructor(
         private campaignTemplateService: CampaignTemplateService,
         private parseLinks: JhiParseLinks,
@@ -115,41 +118,6 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         });
     }
 
-    // load1(id) {
-    //     this.campaignTemplateService.findCampGroups(id, 'group').subscribe((data) => {
-
-    //         // for (let i of data) {
-    //         //     i.launchEnabled = true;
-    //         // }
-    //         this.campaignTemplates = data;
-
-    //     },
-    //         (err) => {
-    //             // alert(err);
-    //             console.log(err);
-    //             // this.campaignTemplates = [{
-    //             //     'id': '59f47d8513b80ad7286ec255',
-    //             //     'campaignName': 'Partypoker App',
-    //             //     'campaignDescription': 'This is Partypoker application'
-    //             // },
-    //             // {
-    //             //     'id': '59f47d8513b80ad7286ec255',
-    //             //     'campaignName': 'Partypoker App',
-    //             //     'campaignDescription': 'This is Partypoker application'
-    //             // },
-    //             // {
-    //             //     'id': '59f47d8513b80ad7286ec255',
-    //             //     'campaignName': 'Partypoker App',
-    //             //     'campaignDescription': 'This is Partypoker application'
-    //             // },
-    //             // {
-    //             //     'id': '59f47d8513b80ad7286ec255',
-    //             //     'campaignName': 'Partypoker App',
-    //             //     'campaignDescription': 'This is Partypoker application'
-    //             // }]
-    //         });
-    // }
-
     ngOnDestroy() {
         this.eventManager.destroy(this.eventSubscriber);
     }
@@ -160,6 +128,14 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     registerChangeInCampaignTemplates() {
         this.eventSubscriber = this.eventManager.subscribe('campaignTemplateListModification', (response) =>
             this.loadAll());
+    }
+    filterItems(){
+        if(this.searchValue && this.searchValue !== ''){
+            this.campaignTemplates = this.initialCampaignTemplates.filter(item => item.campaignName.toLowerCase().indexOf(this.searchValue) > -1 );
+        }
+        else{
+            this.campaignTemplates = this.initialCampaignTemplates;
+        }
     }
 
     sort() {
@@ -176,6 +152,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         this.queryCount = this.totalItems;
         // this.page = pagingParams.page;
         this.campaignTemplates = data;
+        this.initialCampaignTemplates = data;
     }
     private onError(error) {
         this.alertService.error(error.message, null, null);

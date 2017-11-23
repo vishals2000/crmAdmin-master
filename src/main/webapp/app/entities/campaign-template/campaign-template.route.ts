@@ -12,7 +12,6 @@ import { CampaignTemplateLaunchPopupComponent } from './campaign-template-launch
 import { CampaignTemplateTestPopupComponent } from './campaign-template-test-dialog.component';
 import { CampaignTemplateCancelPopupComponent } from './campaign-template-cancel-dialog.component';
 
-
 @Injectable()
 export class CampaignTemplateResolvePagingParams implements Resolve<any> {
 
