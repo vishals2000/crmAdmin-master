@@ -46,7 +46,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     time: SimpleTime;
     ctrl: any;
     operatingSystems: string[] = ['amazon', 'kindle', 'android', 'ios'];
-    optimoveInstances: string[] = ['gvcspain_OPTIMOVE', 'gvcspain_OPTIMOVE', 'gvcspain_OPTIMOVE', 'gvcspain_OPTIMOVE'];
+    optimoveInstances: string[] = ['gvcspain_OPTIMOVE1', 'gvcspain_OPTIMOVE2', 'gvcspain_OPTIMOVE3', 'gvcspain_OPTIMOVE4'];
     isLaunch: boolean;
     currentDate: Date = new Date();
 
@@ -88,6 +88,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         });
         this.campaignTemplateService.getOptimoveInstances().subscribe((data) => {
             alert(data);
+            this.campaignTemplate.optimoveInstances = data['optimoveInstances'];
         })
         this.createForm();
         this.prepareData();
@@ -192,7 +193,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             status: (!this.campaignTemplate.status) ? 'Draft' : this.campaignTemplate.status,
             campaignDescription: (!this.campaignTemplate.campaignDescription) ? '' : this.campaignTemplate.campaignDescription,
             startDate: (!this.campaignTemplate.startDate) ? todayDt : this.campaignTemplate.startDate,
-            sendImmediately: false,
+            sendImmediately: (!this.campaignTemplate.sendImmediately) ? false : this.campaignTemplate.sendImmediately,
             recurrenceType: (!this.campaignTemplate.recurrenceType) ? 'NONE' : this.campaignTemplate.recurrenceType,
             recurrenceEndDate: (!this.campaignTemplate.recurrenceEndDate) ? todayDt : this.campaignTemplate.recurrenceEndDate,
             scheduledTime: (!this.campaignTemplate.scheduledTime) ? '' : this.campaignTemplate.scheduledTime,
@@ -202,8 +203,6 @@ export class CampaignTemplateDialogComponent implements OnInit {
             contentTitle: (!this.campaignTemplate.contentTitle) ? '' : this.campaignTemplate.contentTitle,
             contentBody: (!this.campaignTemplate.contentBody) ? '' : this.campaignTemplate.contentBody,
             metaData: (!this.campaignTemplate.metaData) ? '' : this.campaignTemplate.metaData,
-            languageComparision: (!this.campaignTemplate.languageComparision) ? '' : this.campaignTemplate.languageComparision,
-            // targetGroupFilterCriteria: (!this.campaignTemplate.targetGroupFilterCriteria) ? this.fb.array([]) : this.prepareData(),
             targetGroupFilterCriteria: this.fb.array([]),
             time: this.fb.control((!this.campaignTemplate.scheduledTime) ? new SimpleTime(this.currentDate.getHours(), this.currentDate.getMinutes()) :
                 new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0, 2)),
@@ -220,6 +219,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                         return null;
                     }),
             languageSelected: (!this.campaignTemplate.languageSelected) ? '' : this.campaignTemplate.languageSelected,
+            optimoveInstances: (!this.campaignTemplate.optimoveInstances) ? '' : this.campaignTemplate.optimoveInstances,
         });
         // (<FormControl>this.campaignTemplateGroupCreationForm.controls['recurrenceType']).setValue('NONE');
     }
@@ -272,6 +272,22 @@ export class CampaignTemplateDialogComponent implements OnInit {
             this.campaignTemplateGroupCreationForm.controls['recurrenceEndDate'].setValue(todayDt2);
         }
     }
+    pushOptimoveInstances() {
+        const body = {
+            'channelType': 'PUSHCHAT',
+            'templateName': 'TEST_TEMPLATE',
+            'templateId': 1001,
+            'externalInstances': this.campaignTemplateGroupCreationForm.controls['optimoveInstances'].value
+        }
+
+        this.campaignTemplateService.pushOptimoveInstances(body).subscribe(
+            (res: ResponseWrapper) => {
+                alert(res);
+            },
+            (res: ResponseWrapper) => this.onError(res.json)
+        );
+    }
+
     getTargetGroupSize() {
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
         let formLengthIterator = 0;

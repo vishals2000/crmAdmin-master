@@ -106,13 +106,12 @@
             <select class="form-control" name="optimoveInstances" formControlName="optimoveInstances" id="optimoveInstances" multiple>
                 <option *ngFor="let optimoveInstance of optimoveInstances" [value]="optimoveInstance">{{optimoveInstance}}</option>         
             </select>
-        </div>
-
-        <div align="right">
-            Target Group Size {{targetGroupSize}} <button (click)="getTargetGroupSize()" type="button">Refresh</button>
-        </div>
-
+        </div>      
+    </br> </br>
 <div formArrayName="targetGroupFilterCriteria" class="well well-lg">
+    <div align="right">
+        Target Group Size {{targetGroupSize}} <button (click)="getTargetGroupSize()" type="button">Refresh</button>
+    </div>
 
     <div *ngFor="let targetGroupFilterCriterion of targetGroupFilterCriteria.controls; let i=index" [formGroupName]="i">
         <!-- The repeated address template -->

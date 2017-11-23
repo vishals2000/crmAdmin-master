@@ -81,6 +81,12 @@ export class CampaignTemplateService {
         });
     }
 
+    pushOptimoveInstances(copy: any): Observable<Response> {
+        return this.http.post(this.resourceUrl + '/addChanneltemplate', copy).map((res: Response) => {
+            return res.json();
+        });
+    }
+
     findCampGroups(id: string, group: string): Observable<CampaignTemplate[]> {
         return this.http.get(`${this.resourceUrl}/${group}/${id}`).map((res: Response) => {
             return res.json();
@@ -152,8 +158,9 @@ export class CampaignTemplateService {
         campaignTemplateCopy.contentTitle = campaignTemplate.contentTitle;
         campaignTemplateCopy.contentBody = campaignTemplate.contentBody;
         campaignTemplateCopy.metaData = campaignTemplate.metaData;
-        campaignTemplateCopy.languageComparision = campaignTemplate.languageComparision;
         campaignTemplateCopy.languageSelected = campaignTemplate.languageSelected;
+        campaignTemplateCopy.sendImmediately = campaignTemplate.sendImmediately;
+        campaignTemplateCopy.optimoveInstances = campaignTemplate.optimoveInstances;
 
         const campaignTemplateFilterCriteria: CampaignTemplateFilterCriterion[] = [];
         for (const campaignTemplateFilterCriterion of campaignTemplate.targetGroupFilterCriteria) {
