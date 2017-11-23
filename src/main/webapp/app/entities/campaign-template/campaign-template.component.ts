@@ -18,6 +18,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
 
     currentAccount: any;
     campaignTemplates: CampaignTemplate[];
+    initialCampaignTemplates: CampaignTemplate[];
     error: any;
     success: any;
     eventSubscriber: Subscription;
@@ -129,7 +130,12 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
             this.loadAll());
     }
     filterItems(){
-        this.campaignTemplates = this.campaignTemplates.filter(item => item.campaignName.toLowerCase().indexOf(this.searchValue) > -1 );
+        if(this.searchValue && this.searchValue !== ''){
+            this.campaignTemplates = this.initialCampaignTemplates.filter(item => item.campaignName.toLowerCase().indexOf(this.searchValue) > -1 );
+        }
+        else{
+            this.campaignTemplates = this.initialCampaignTemplates;
+        }
     }
 
     sort() {
@@ -146,6 +152,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         this.queryCount = this.totalItems;
         // this.page = pagingParams.page;
         this.campaignTemplates = data;
+        this.initialCampaignTemplates = data;
     }
     private onError(error) {
         this.alertService.error(error.message, null, null);
