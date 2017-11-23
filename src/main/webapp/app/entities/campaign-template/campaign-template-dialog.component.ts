@@ -172,7 +172,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     }
 
     addCampaignTemplateContentCriterion() {
-        this.targetGroupContentCriteria.push(this.fb.group(new CampaignTemplateContentCriterion('', '', '', [])));
+        this.targetGroupContentCriteria.push(this.fb.group(new CampaignTemplateContentCriterion('', '', '', '')));
     }
 
     createForm() {
@@ -251,17 +251,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         }
         if (this.campaignTemplate.targetGroupContentCriteria) {
             for (const i of this.campaignTemplate.targetGroupContentCriteria) {
-                if (Array.isArray(i.languageSelected)) {
-                    const formBuilderGroup = this.fb.group({
-                        contentName: i.contentName,
-                        contentTitle: i.contentTitle,
-                        contentBody: i.contentBody,
-                        languageSelected: [i.languageSelected]
-                    });
-                    this.targetGroupContentCriteria.push(formBuilderGroup);
-                } else {
-                    this.targetGroupContentCriteria.push(this.fb.group(i));
-                }
+                this.targetGroupContentCriteria.push(this.fb.group(i));
             }
         }
         else{
@@ -269,7 +259,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 contentName: '',
                 contentTitle: '',
                 contentBody: '',
-                languageSelected: []
+                languageSelected: ''
             }));
         }      
     }

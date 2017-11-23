@@ -3,7 +3,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { JhiDateUtils } from 'ng-jhipster';
 
-import { CampaignTemplate, CampaignTemplateFilterCriterion } from './campaign-template.model';
+import { CampaignTemplate, CampaignTemplateFilterCriterion, CampaignTemplateContentCriterion } from './campaign-template.model';
 import { ResponseWrapper, createRequestOption } from '../../shared';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -159,8 +159,8 @@ export class CampaignTemplateService {
         campaignTemplateCopy.contentBody = campaignTemplate.contentBody;
         campaignTemplateCopy.metaData = campaignTemplate.metaData;
         campaignTemplateCopy.languageSelected = campaignTemplate.languageSelected;
-        campaignTemplateCopy.sendImmediately = campaignTemplate.sendImmediately;
-        campaignTemplateCopy.optimoveInstances = campaignTemplate.optimoveInstances;
+        //campaignTemplateCopy.sendImmediately = campaignTemplate.sendImmediately;
+       // campaignTemplateCopy.optimoveInstances = campaignTemplate.optimoveInstances;
 
         const campaignTemplateFilterCriteria: CampaignTemplateFilterCriterion[] = [];
         for (const campaignTemplateFilterCriterion of campaignTemplate.targetGroupFilterCriteria) {
@@ -181,6 +181,17 @@ export class CampaignTemplateService {
             }
         }
         campaignTemplateCopy.targetGroupFilterCriteria = campaignTemplateFilterCriteria;
+
+        const campaignTemplateContentCriteria: CampaignTemplateContentCriterion[] = [];
+        for (const campaignTemplateContentCriterion of campaignTemplate.targetGroupContentCriteria) {
+                campaignTemplateContentCriteria.push(new CampaignTemplateContentCriterion(
+                    campaignTemplateContentCriterion.contentName,
+                    campaignTemplateContentCriterion.contentTitle,
+                    campaignTemplateContentCriterion.contentBody,
+                    campaignTemplateContentCriterion.languageSelected));
+        }
+        campaignTemplateCopy.targetGroupContentCriteria = campaignTemplateContentCriteria;
+
         return campaignTemplateCopy;
     }
 }

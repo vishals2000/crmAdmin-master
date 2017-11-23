@@ -99,7 +99,7 @@ export class CampaignTemplateContentCriterion {
         public contentName: string,
         public contentTitle: string,
         public contentBody: string,
-        public languageSelected: string[],
+        public languageSelected: string,
     ) {
     }
 }
