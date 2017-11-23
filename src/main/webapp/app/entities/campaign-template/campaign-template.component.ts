@@ -83,11 +83,11 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     transition() {
         this.router.navigate(['/campaign-template/group/' + this.groupId + '/' + this.groupName], {
             queryParams:
-            {
-                page: this.page,
-                size: this.itemsPerPage,
-                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-            }
+                {
+                    page: this.page,
+                    size: this.itemsPerPage,
+                    sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+                }
         });
         this.loadAll();
     }
@@ -129,11 +129,10 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         this.eventSubscriber = this.eventManager.subscribe('campaignTemplateListModification', (response) =>
             this.loadAll());
     }
-    filterItems(){
-        if(this.searchValue && this.searchValue !== ''){
-            this.campaignTemplates = this.initialCampaignTemplates.filter(item => item.campaignName.toLowerCase().indexOf(this.searchValue) > -1 );
-        }
-        else{
+    filterItems() {
+        if (this.searchValue && this.searchValue !== '') {
+            this.campaignTemplates = this.initialCampaignTemplates.filter((item) => item.campaignName.toLowerCase().indexOf(this.searchValue) > -1);
+        } else {
             this.campaignTemplates = this.initialCampaignTemplates;
         }
     }

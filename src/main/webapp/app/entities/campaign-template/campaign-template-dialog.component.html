@@ -96,6 +96,19 @@
             <label for="field_inPlayerTimezone">In Player Timezone</label>&nbsp;&nbsp;
             <input type="checkbox" name="inPlayerTimezone" id="field_inPlayerTimezone" formControlName="inPlayerTimezone" />
         </div>
+    <div *ngIf="campaignTemplateGroupCreationForm.controls.id.value">
+        <div align="right" >
+            Push Message from optimove Instances <button (click)="pushOptimoveInstances()" type="button">Push</button>
+        </div>
+
+        <div class="form-group">
+            <label class="form-control-label" for="field_optimoveInstances">Optimove Instances</label>            
+            <select class="form-control" name="optimoveInstances" formControlName="optimoveInstances" id="optimoveInstances" multiple>
+                <option *ngFor="let optimoveInstance of optimoveInstances" [value]="optimoveInstance">{{optimoveInstance}}</option>         
+            </select>
+        </div>      
+        </br>
+    </div>
 
         <div align="right">
             Target Group Size {{targetGroupSize}} <button (click)="getTargetGroupSize()" type="button">Refresh</button>
@@ -192,11 +205,8 @@
             </div>
                 <!-- End of the repeated address template -->
                 <br>
-            </div>
-            <br>
+            </div>     
             <button (click)="addCampaignTemplateContentCriterion()" type="button">Add Content Criterion</button>
-
-
 
 
         <div class="form-group" class="well well-lg">

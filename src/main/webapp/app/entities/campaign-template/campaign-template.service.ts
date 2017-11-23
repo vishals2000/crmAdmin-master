@@ -159,8 +159,8 @@ export class CampaignTemplateService {
         campaignTemplateCopy.contentBody = campaignTemplate.contentBody;
         campaignTemplateCopy.metaData = campaignTemplate.metaData;
         campaignTemplateCopy.languageSelected = campaignTemplate.languageSelected;
-        //campaignTemplateCopy.sendImmediately = campaignTemplate.sendImmediately;
-       // campaignTemplateCopy.optimoveInstances = campaignTemplate.optimoveInstances;
+        campaignTemplateCopy.sendImmediately = campaignTemplate.sendImmediately;
+        campaignTemplateCopy.optimoveInstances = campaignTemplate.optimoveInstances;
 
         const campaignTemplateFilterCriteria: CampaignTemplateFilterCriterion[] = [];
         for (const campaignTemplateFilterCriterion of campaignTemplate.targetGroupFilterCriteria) {

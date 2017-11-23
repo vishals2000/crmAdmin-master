@@ -14,8 +14,8 @@ import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 })
 export class AppsComponent implements OnInit, OnDestroy {
 
-currentAccount: any;
-    apps: Apps[]; 
+    currentAccount: any;
+    apps: Apps[];
     initialApps: Apps[];
     error: any;
     success: any;
@@ -29,7 +29,7 @@ currentAccount: any;
     predicate: any;
     previousPage: any;
     reverse: any;
-    searchValue:string;
+    searchValue: string;
     constructor(
         private appsService: AppsService,
         private parseLinks: JhiParseLinks,
@@ -54,10 +54,11 @@ currentAccount: any;
         this.appsService.query({
             page: this.page - 1,
             size: this.itemsPerPage,
-            sort: this.sort()}).subscribe(
+            sort: this.sort()
+        }).subscribe(
             (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
             (res: ResponseWrapper) => this.onError(res.json)
-        );
+            );
     }
     loadPage(page: number) {
         if (page !== this.previousPage) {
@@ -66,12 +67,13 @@ currentAccount: any;
         }
     }
     transition() {
-        this.router.navigate(['/apps'], {queryParams:
-            {
-                page: this.page,
-                size: this.itemsPerPage,
-                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-            }
+        this.router.navigate(['/apps'], {
+            queryParams:
+                {
+                    page: this.page,
+                    size: this.itemsPerPage,
+                    sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+                }
         });
         this.loadAll();
     }
@@ -95,11 +97,10 @@ currentAccount: any;
     ngOnDestroy() {
         this.eventManager.destroy(this.eventSubscriber);
     }
-    filterItems(){
-        if(this.searchValue && this.searchValue !== ''){
-            this.apps = this.initialApps.filter(item => item.name.toLowerCase().indexOf(this.searchValue) > -1 );
-        }
-        else{
+    filterItems() {
+        if (this.searchValue && this.searchValue !== '') {
+            this.apps = this.initialApps.filter((item) => item.name.toLowerCase().indexOf(this.searchValue) > -1);
+        } else {
             this.apps = this.initialApps;
         }
     }

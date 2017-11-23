@@ -58,7 +58,6 @@ export class CampaignTemplate implements BaseEntity {
         public campaignGroupId?: string,
         public targetGroupFilterCriteria?: CampaignTemplateFilterCriterion[],
         public targetGroupContentCriteria?: CampaignTemplateContentCriterion[],
-        
         // public campaignTemplateFilterCriteria?: CampaignTemplateFilterCriterion[],
         // public filterOption?: FilterOption,
         // public filterOptionComparison?: FilterOptionComparison,
@@ -67,10 +66,12 @@ export class CampaignTemplate implements BaseEntity {
         public contentTitle?: string,
         public contentBody?: string,
         public metaData?: string,
-        public languageComparision?: LanguageComparision,
         public languageSelected?: string,
+        public sendImmediately?: boolean,
+        public optimoveInstances?: string[],
     ) {
         this.inPlayerTimezone = false;
+        this.sendImmediately = false;
         this.targetGroupFilterCriteria = [];
         // this.campaignTemplateFilterCriteria = [];
     }

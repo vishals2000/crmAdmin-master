@@ -14,9 +14,9 @@ import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 })
 export class CampaignGroupComponent implements OnInit, OnDestroy {
 
-currentAccount: any;
+    currentAccount: any;
     campaignGroups: CampaignGroup[];
-    initialCampainGroups: CampaignGroup[]; 
+    initialCampainGroups: CampaignGroup[];
     error: any;
     success: any;
     eventSubscriber: Subscription;
@@ -32,7 +32,7 @@ currentAccount: any;
     reverse: any;
     projectId: string;
     projectName: string;
-    searchValue:string;
+    searchValue: string;
     constructor(
         private campaignGroupService: CampaignGroupService,
         private parseLinks: JhiParseLinks,
@@ -59,10 +59,11 @@ currentAccount: any;
             appId: this.projectId,
             page: this.page - 1,
             size: this.itemsPerPage,
-            sort: this.sort()}).subscribe(
+            sort: this.sort()
+        }).subscribe(
             (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
             (res: ResponseWrapper) => this.onError(res.json)
-        );
+            );
     }
     loadPage(page: number) {
         if (page !== this.previousPage) {
@@ -71,12 +72,13 @@ currentAccount: any;
         }
     }
     transition() {
-        this.router.navigate(['/campaign-group/project/' + this.projectId + '/' + this.projectName], {queryParams:
-            {
-                page: this.page,
-                size: this.itemsPerPage,
-                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-            }
+        this.router.navigate(['/campaign-group/project/' + this.projectId + '/' + this.projectName], {
+            queryParams:
+                {
+                    page: this.page,
+                    size: this.itemsPerPage,
+                    sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+                }
         });
         this.loadAll();
     }
@@ -102,34 +104,34 @@ currentAccount: any;
             this.campaignGroupService.changeGroupId(this.projectId);
         });
     }
-//     load1(id) {
-//         this.campaignGroupService.findProjects(id, 'project', ).subscribe((data) => {
-//              this.campaignGroups = data;
-//        },
-//        (err) => {
-//            alert('error');
-//            this.campaignGroups = [{
-//                        'id' : '59f47d8513b80ad7286ec255',
-//                        'name' : 'Partypoker App',
-//                        'description' : 'This is Partypoker application'
-//                      },
-//                      {
-//                         'id' : '59f47d8513b80ad7286ec255',
-//                         'name' : 'Partypoker App',
-//                         'description' : 'This is Partypoker application'
-//                       },
-//                       {
-//                         'id' : '59f47d8513b80ad7286ec255',
-//                         'name' : 'Partypoker App',
-//                         'description' : 'This is Partypoker application'
-//                       },
-//                       {
-//                         'id' : '59f47d8513b80ad7286ec255',
-//                         'name' : 'Partypoker App',
-//                         'description' : 'This is Partypoker application'
-//                       }]
-//             });
-//    }
+    //     load1(id) {
+    //         this.campaignGroupService.findProjects(id, 'project', ).subscribe((data) => {
+    //              this.campaignGroups = data;
+    //        },
+    //        (err) => {
+    //            alert('error');
+    //            this.campaignGroups = [{
+    //                        'id' : '59f47d8513b80ad7286ec255',
+    //                        'name' : 'Partypoker App',
+    //                        'description' : 'This is Partypoker application'
+    //                      },
+    //                      {
+    //                         'id' : '59f47d8513b80ad7286ec255',
+    //                         'name' : 'Partypoker App',
+    //                         'description' : 'This is Partypoker application'
+    //                       },
+    //                       {
+    //                         'id' : '59f47d8513b80ad7286ec255',
+    //                         'name' : 'Partypoker App',
+    //                         'description' : 'This is Partypoker application'
+    //                       },
+    //                       {
+    //                         'id' : '59f47d8513b80ad7286ec255',
+    //                         'name' : 'Partypoker App',
+    //                         'description' : 'This is Partypoker application'
+    //                       }]
+    //             });
+    //    }
 
     ngOnDestroy() {
         this.eventManager.destroy(this.eventSubscriber);
@@ -143,11 +145,10 @@ currentAccount: any;
             this.loadAll()
         );
     }
-    filterItems(){
-        if(this.searchValue && this.searchValue !== ''){
-            this.campaignGroups = this.initialCampainGroups.filter(item => item.name.toLowerCase().indexOf(this.searchValue) > -1 );
-        }
-        else{
+    filterItems() {
+        if (this.searchValue && this.searchValue !== '') {
+            this.campaignGroups = this.initialCampainGroups.filter((item) => item.name.toLowerCase().indexOf(this.searchValue) > -1);
+        } else {
             this.campaignGroups = this.initialCampainGroups;
         }
     }
