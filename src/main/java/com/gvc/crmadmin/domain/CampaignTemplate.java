@@ -4,6 +4,8 @@ import com.gvc.crmadmin.domain.enumeration.FilterOption;
 import com.gvc.crmadmin.domain.enumeration.FilterOptionComparison;
 import com.gvc.crmadmin.domain.enumeration.RecurrenceType;
 import com.gvc.crmadmin.service.util.Utils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -61,20 +63,11 @@ public class CampaignTemplate implements Serializable {
     @Field("filter_option_value")
     private String filterOptionValue;
 
-    @Field("content_name")
-    private String contentName;
-
-    @Field("content_title")
-    private String contentTitle;
-
-    @Field("content_body")
-    private String contentBody;
+    @Field("targetGroupContentCriteria")
+    private MessageTemplate[] targetGroupContentCriteria;
 
     @Field("meta_data")
     private String metaData;
-
-    @Field("languageSelected")
-    private String languageSelected;
 
     @Field("status")
     private String status;
@@ -82,8 +75,26 @@ public class CampaignTemplate implements Serializable {
     @Field("alreadyLaunched")
     private boolean alreadyLaunched;
 
+    @Field("alreadyCancelled")
+    private boolean alreadyCancelled;
+
+    @Field("alreadyDeleted")
+    private boolean alreadyDeleted;
+
     @Field("launchEnabled")
     private boolean launchEnabled;
+
+    @Field("editEnabled")
+    private boolean editEnabled;
+
+    @Field("cancelEnabled")
+    private boolean cancelEnabled;
+
+    @Field("deleteEnabled")
+    private boolean deleteEnabled;
+
+    @Field("sendImmediately")
+    private boolean sendImmediately;
 
     @Field("targetGroupFilterCriteria")
     private TargetGroupCriteria.TargetGroupFilterCriterion[] targetGroupFilterCriteria;
@@ -248,45 +259,6 @@ public class CampaignTemplate implements Serializable {
         this.filterOptionValue = filterOptionValue;
     }
 
-    public String getContentName() {
-        return contentName;
-    }
-
-    public CampaignTemplate contentName(String contentName) {
-        this.contentName = contentName;
-        return this;
-    }
-
-    public void setContentName(String contentName) {
-        this.contentName = contentName;
-    }
-
-    public String getContentTitle() {
-        return contentTitle;
-    }
-
-    public CampaignTemplate contentTitle(String contentTitle) {
-        this.contentTitle = contentTitle;
-        return this;
-    }
-
-    public void setContentTitle(String contentTitle) {
-        this.contentTitle = contentTitle;
-    }
-
-    public String getContentBody() {
-        return contentBody;
-    }
-
-    public CampaignTemplate contentBody(String contentBody) {
-        this.contentBody = contentBody;
-        return this;
-    }
-
-    public void setContentBody(String contentBody) {
-        this.contentBody = contentBody;
-    }
-
     public String getMetaData() {
         return metaData;
     }
@@ -322,38 +294,8 @@ public class CampaignTemplate implements Serializable {
         return Objects.hashCode(getId());
     }
 
-    @Override
-    public String toString() {
-        return "CampaignTemplate{" +
-            "id=" + getId() +
-            ", campaignName='" + getCampaignName() + "'" +
-            ", campaignDescription='" + getCampaignDescription() + "'" +
-            ", startDate='" + getStartDate() + "'" +
-            ", recurrenceType='" + getRecurrenceType() + "'" +
-            ", recurrenceEndDate='" + getRecurrenceEndDate() + "'" +
-            ", scheduledTime='" + getScheduledTime() + "'" +
-            ", inPlayerTimezone='" + isInPlayerTimezone() + "'" +
-            ", campaignGroupId='" + getCampaignGroupId() + "'" +
-            ", filterOption='" + getFilterOption() + "'" +
-            ", filterOptionComparison='" + getFilterOptionComparison() + "'" +
-            ", filterOptionValue='" + getFilterOptionValue() + "'" +
-            ", contentName='" + getContentName() + "'" +
-            ", contentTitle='" + getContentTitle() + "'" +
-            ", contentBody='" + getContentBody() + "'" +
-            ", metaData='" + getMetaData() + "'" +
-            "}";
-    }
-
     public Boolean getInPlayerTimezone() {
         return inPlayerTimezone;
-    }
-
-    public String getLanguageSelected() {
-        return languageSelected;
-    }
-
-    public void setLanguageSelected(String languageSelected) {
-        this.languageSelected = languageSelected;
     }
 
     public TargetGroupCriteria.TargetGroupFilterCriterion[] getTargetGroupFilterCriteria() {
@@ -386,5 +328,66 @@ public class CampaignTemplate implements Serializable {
 
     public void setAlreadyLaunched(boolean alreadyLaunched) {
         this.alreadyLaunched = alreadyLaunched;
+    }
+
+    public boolean isEditEnabled() {
+        return editEnabled;
+    }
+
+    public void setEditEnabled(boolean editEnabled) {
+        this.editEnabled = editEnabled;
+    }
+
+    public boolean isCancelEnabled() {
+        return cancelEnabled;
+    }
+
+    public void setCancelEnabled(boolean cancelEnabled) {
+        this.cancelEnabled = cancelEnabled;
+    }
+
+    public boolean isDeleteEnabled() {
+        return deleteEnabled;
+    }
+
+    public void setDeleteEnabled(boolean deleteEnabled) {
+        this.deleteEnabled = deleteEnabled;
+    }
+
+    public boolean isAlreadyCancelled() {
+        return alreadyCancelled;
+    }
+
+    public void setAlreadyCancelled(boolean alreadyCancelled) {
+        this.alreadyCancelled = alreadyCancelled;
+    }
+
+    public boolean isAlreadyDeleted() {
+        return alreadyDeleted;
+    }
+
+    public void setAlreadyDeleted(boolean alreadyDeleted) {
+        this.alreadyDeleted = alreadyDeleted;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+
+    public boolean isSendImmediately() {
+        return sendImmediately;
+    }
+
+    public void setSendImmediately(boolean sendImmediately) {
+        this.sendImmediately = sendImmediately;
+    }
+
+    public MessageTemplate[] getTargetGroupContentCriteria() {
+        return targetGroupContentCriteria;
+    }
+
+    public void setTargetGroupContentCriteria(MessageTemplate[] targetGroupContentCriteria) {
+        this.targetGroupContentCriteria = targetGroupContentCriteria;
     }
 }

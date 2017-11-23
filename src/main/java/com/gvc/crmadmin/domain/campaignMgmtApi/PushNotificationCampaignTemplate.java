@@ -2,6 +2,7 @@ package com.gvc.crmadmin.domain.campaignMgmtApi;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gvc.crmadmin.domain.MessageTemplate;
 import com.gvc.crmadmin.domain.enumeration.Product;
 import com.gvc.crmadmin.domain.fcm.RecurrenceDetail;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -33,6 +34,9 @@ public class PushNotificationCampaignTemplate implements Serializable {
 
     @JsonProperty("targetGroupFilterCriteria")
     private List<TargetGroupFilterCriterion> targetGroupFilterCriterionList;
+
+    @JsonProperty("targetGroupContentCriteria")
+    private List<MessageTemplate> targetGroupContentCriteria;
 
     @JsonProperty("contentName")
     private String contentName;
@@ -69,6 +73,9 @@ public class PushNotificationCampaignTemplate implements Serializable {
 
     @JsonProperty("scheduledTime")
     private String scheduledTime;
+
+    @JsonProperty("campaignTemplateId")
+    private String campaignTemplateId;
 
     public String getFrontEnd() {
         return frontEnd;
@@ -196,5 +203,21 @@ public class PushNotificationCampaignTemplate implements Serializable {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+
+    public String getCampaignTemplateId() {
+        return campaignTemplateId;
+    }
+
+    public void setCampaignTemplateId(String campaignTemplateId) {
+        this.campaignTemplateId = campaignTemplateId;
+    }
+
+    public List<MessageTemplate> getTargetGroupContentCriteria() {
+        return targetGroupContentCriteria;
+    }
+
+    public void setTargetGroupContentCriteria(List<MessageTemplate> targetGroupContentCriteria) {
+        this.targetGroupContentCriteria = targetGroupContentCriteria;
     }
 }
