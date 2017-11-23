@@ -25,6 +25,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
 
     campaignTemplate: CampaignTemplate;
     isSaving: boolean;
+    showSendImmDiv: boolean;
     startDateDp: any;
     recurrenceEndDateDp: any;
     campaignTemplateGroupCreationForm: FormGroup;
@@ -45,6 +46,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     time: SimpleTime;
     ctrl: any;
     operatingSystems: string[] = ['amazon', 'kindle', 'android', 'ios'];
+    optimoveInstances: string[] = ['gvcspain_OPTIMOVE', 'gvcspain_OPTIMOVE', 'gvcspain_OPTIMOVE', 'gvcspain_OPTIMOVE'];
     isLaunch: boolean;
     currentDate: Date = new Date();
 
@@ -78,11 +80,15 @@ export class CampaignTemplateDialogComponent implements OnInit {
 
     ngOnInit() {
         this.isSaving = false;
+        this.showSendImmDiv = true;
         this.campaignTemplateService.currentMesage.subscribe((message) => {
             this.campaignTemplate.campaignGroupId = message[0];
             this.campaignTemplate.frontEnd = message[1];
             this.campaignTemplate.product = message[2];
         });
+        this.campaignTemplateService.getOptimoveInstances().subscribe((data) => {
+            alert(data);
+        })
         this.createForm();
         this.prepareData();
         this.populateCountries();
@@ -132,7 +138,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                     this.campaignTemplateGroupCreationForm.value.time.minute : this.campaignTemplateGroupCreationForm.value.time.minute) + ':00';
 
         } else {
-            this.campaignTemplateGroupCreationForm.value.scheduledTime = ''+this.currentDate.getHours()+':'+this.currentDate.getMinutes()+':00';
+            this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + this.currentDate.getHours() + ':' + this.currentDate.getMinutes() + ':00';
         }
         if (this.campaignTemplateGroupCreationForm.value.id !== null) {
             this.subscribeToSaveResponse(
@@ -177,7 +183,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             year: now.getFullYear(),
             month: now.getMonth() + 1,
             day: now.getDate() + 1
-        };  
+        };
         this.campaignTemplateGroupCreationForm = this.fb.group({
             id: (!this.campaignTemplate.id) ? null : this.campaignTemplate.id,
             frontEnd: (!this.campaignTemplate.frontEnd) ? '' : this.campaignTemplate.frontEnd,
@@ -186,6 +192,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             status: (!this.campaignTemplate.status) ? 'Draft' : this.campaignTemplate.status,
             campaignDescription: (!this.campaignTemplate.campaignDescription) ? '' : this.campaignTemplate.campaignDescription,
             startDate: (!this.campaignTemplate.startDate) ? todayDt : this.campaignTemplate.startDate,
+            sendImmediately: false,
             recurrenceType: (!this.campaignTemplate.recurrenceType) ? 'NONE' : this.campaignTemplate.recurrenceType,
             recurrenceEndDate: (!this.campaignTemplate.recurrenceEndDate) ? todayDt : this.campaignTemplate.recurrenceEndDate,
             scheduledTime: (!this.campaignTemplate.scheduledTime) ? '' : this.campaignTemplate.scheduledTime,
@@ -207,11 +214,11 @@ export class CampaignTemplateDialogComponent implements OnInit {
                         if (!value) {
                             return null;
                         }
-                        if(((value.hour * 60)+ value.minute) < totalCurrentDayMinutes ){
-                            return {invalid: true};
+                        if (((value.hour * 60) + value.minute) < totalCurrentDayMinutes) {
+                            return { invalid: true };
                         }
                         return null;
-                      }),
+                    }),
             languageSelected: (!this.campaignTemplate.languageSelected) ? '' : this.campaignTemplate.languageSelected,
         });
         // (<FormControl>this.campaignTemplateGroupCreationForm.controls['recurrenceType']).setValue('NONE');
@@ -240,7 +247,31 @@ export class CampaignTemplateDialogComponent implements OnInit {
     populateLanguagesList() {
         this.languagesList = LANGUAGES;
     }
-
+    sendImmediatelyCheck() {
+        const now = new Date();
+        const todayDt1 = {
+            year: now.getFullYear(),
+            month: now.getMonth() + 1,
+            day: now.getDate()
+        };
+        const todayDt2 = {
+            year: now.getFullYear(),
+            month: now.getMonth() + 1,
+            day: now.getDate() + 1
+        };
+        const isSendImmedChecked = this.campaignTemplateGroupCreationForm.controls['sendImmediately'].value;
+        if (isSendImmedChecked) {
+            this.showSendImmDiv = false;
+            this.campaignTemplateGroupCreationForm.controls['startDate'].setValue(todayDt1);
+            this.campaignTemplateGroupCreationForm.controls['recurrenceType'].setValue('NONE');
+            this.campaignTemplateGroupCreationForm.controls['recurrenceEndDate'].setValue(todayDt1);
+        } else {
+            this.showSendImmDiv = true;
+            this.campaignTemplateGroupCreationForm.controls['startDate'].setValue(todayDt2);
+            this.campaignTemplateGroupCreationForm.controls['recurrenceType'].setValue('NONE');
+            this.campaignTemplateGroupCreationForm.controls['recurrenceEndDate'].setValue(todayDt2);
+        }
+    }
     getTargetGroupSize() {
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
         let formLengthIterator = 0;
@@ -420,6 +451,15 @@ export class CampaignTemplateDialogComponent implements OnInit {
         filterOptionLookUpComparisonVsValue.set('is', ['leagueName']);
         filterOptionLookUpComparisonVsValue.set('is not', ['leagueName']);
         this.sportsTagsMap.set('lastBetOnPremierLeague', filterOptionLookUpComparisonVsValue);
+
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue.set('before', ['date']);
+        filterOptionLookUpComparisonVsValue.set('after', ['date']);
+        filterOptionLookUpComparisonVsValue.set('was', ['date']);
+        filterOptionLookUpComparisonVsValue.set('exists', ['true', 'false']);
+        filterOptionLookUpComparisonVsValue.set('doesNotexists', ['true', 'false']);
+        this.sportsTagsMap.set('lastRegistrationDate', filterOptionLookUpComparisonVsValue);
+
     }
 
     populateCasinoTagsMap() {
@@ -454,6 +494,15 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.casinoTagsMap.set('lastStakeRoulette_real', filterOptionLookUpComparisonVsValue);
         this.casinoTagsMap.set('lastStakeSlots_real', filterOptionLookUpComparisonVsValue);
         this.casinoTagsMap.set('lastStakeSlots_play', filterOptionLookUpComparisonVsValue);
+
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue.set('before', ['date']);
+        filterOptionLookUpComparisonVsValue.set('after', ['date']);
+        filterOptionLookUpComparisonVsValue.set('was', ['date']);
+        filterOptionLookUpComparisonVsValue.set('exists', ['true', 'false']);
+        filterOptionLookUpComparisonVsValue.set('doesNotexists', ['true', 'false']);
+        this.casinoTagsMap.set('lastRegistrationDate', filterOptionLookUpComparisonVsValue);
+
     }
 
     populatePokerTagsMap() {
@@ -472,6 +521,15 @@ export class CampaignTemplateDialogComponent implements OnInit {
         filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
         filterOptionLookUpComparisonVsValue.set('is', ['true', 'false']);
         this.pokerTagsMap.set('hasLoggedIn', filterOptionLookUpComparisonVsValue);
+
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue.set('before', ['date']);
+        filterOptionLookUpComparisonVsValue.set('after', ['date']);
+        filterOptionLookUpComparisonVsValue.set('was', ['date']);
+        filterOptionLookUpComparisonVsValue.set('exists', ['true', 'false']);
+        filterOptionLookUpComparisonVsValue.set('doesNotexists', ['true', 'false']);
+        this.pokerTagsMap.set('lastRegistrationDate', filterOptionLookUpComparisonVsValue);
+
     }
     isOptionLookUpHidden(index) {
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
@@ -713,7 +771,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         if (filterOption && filterOptionComparison) {
             switch (filterOption) {
                 case 'Tag': {
-                   // targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue('');
+                    // targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue('');
                     switch (productSelected) {
                         case 'SPORTS': {
                             if (filterOptionLookUp && filterOptionLookUp !== '') {

@@ -75,6 +75,12 @@ export class CampaignTemplateService {
         });
     }
 
+    getOptimoveInstances(): Observable<Response> {
+        return this.http.get(this.resourceUrl + '/getOptimoveInstances').map((res: Response) => {
+            return res.json();
+        });
+    }
+
     findCampGroups(id: string, group: string): Observable<CampaignTemplate[]> {
         return this.http.get(`${this.resourceUrl}/${group}/${id}`).map((res: Response) => {
             return res.json();
