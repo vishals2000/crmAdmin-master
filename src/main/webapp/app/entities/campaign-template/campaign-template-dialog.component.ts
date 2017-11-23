@@ -447,6 +447,15 @@ export class CampaignTemplateDialogComponent implements OnInit {
         filterOptionLookUpComparisonVsValue.set('is', ['leagueName']);
         filterOptionLookUpComparisonVsValue.set('is not', ['leagueName']);
         this.sportsTagsMap.set('lastBetOnPremierLeague', filterOptionLookUpComparisonVsValue);
+
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue.set('before', ['date']);
+        filterOptionLookUpComparisonVsValue.set('after', ['date']);
+        filterOptionLookUpComparisonVsValue.set('was', ['date']);
+        filterOptionLookUpComparisonVsValue.set('exists', ['true', 'false']);
+        filterOptionLookUpComparisonVsValue.set('doesNotexists', ['true', 'false']);
+        this.sportsTagsMap.set('lastRegistrationDate', filterOptionLookUpComparisonVsValue);
+
     }
 
     populateCasinoTagsMap() {
@@ -481,6 +490,15 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.casinoTagsMap.set('lastStakeRoulette_real', filterOptionLookUpComparisonVsValue);
         this.casinoTagsMap.set('lastStakeSlots_real', filterOptionLookUpComparisonVsValue);
         this.casinoTagsMap.set('lastStakeSlots_play', filterOptionLookUpComparisonVsValue);
+
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue.set('before', ['date']);
+        filterOptionLookUpComparisonVsValue.set('after', ['date']);
+        filterOptionLookUpComparisonVsValue.set('was', ['date']);
+        filterOptionLookUpComparisonVsValue.set('exists', ['true', 'false']);
+        filterOptionLookUpComparisonVsValue.set('doesNotexists', ['true', 'false']);
+        this.casinoTagsMap.set('lastRegistrationDate', filterOptionLookUpComparisonVsValue);
+
     }
 
     populatePokerTagsMap() {
@@ -499,6 +517,15 @@ export class CampaignTemplateDialogComponent implements OnInit {
         filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
         filterOptionLookUpComparisonVsValue.set('is', ['true', 'false']);
         this.pokerTagsMap.set('hasLoggedIn', filterOptionLookUpComparisonVsValue);
+
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue.set('before', ['date']);
+        filterOptionLookUpComparisonVsValue.set('after', ['date']);
+        filterOptionLookUpComparisonVsValue.set('was', ['date']);
+        filterOptionLookUpComparisonVsValue.set('exists', ['true', 'false']);
+        filterOptionLookUpComparisonVsValue.set('doesNotexists', ['true', 'false']);
+        this.pokerTagsMap.set('lastRegistrationDate', filterOptionLookUpComparisonVsValue);
+
     }
     isOptionLookUpHidden(index) {
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
