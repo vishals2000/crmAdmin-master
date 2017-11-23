@@ -57,6 +57,8 @@ export class CampaignTemplate implements BaseEntity {
         public inPlayerTimezone?: boolean,
         public campaignGroupId?: string,
         public targetGroupFilterCriteria?: CampaignTemplateFilterCriterion[],
+        public targetGroupContentCriteria?: CampaignTemplateContentCriterion[],
+        
         // public campaignTemplateFilterCriteria?: CampaignTemplateFilterCriterion[],
         // public filterOption?: FilterOption,
         // public filterOptionComparison?: FilterOptionComparison,
@@ -92,6 +94,15 @@ export class CampaignTemplateFilterCriterion {
     }
 }
 
+export class CampaignTemplateContentCriterion {
+    constructor(
+        public contentName: string,
+        public contentTitle: string,
+        public contentBody: string,
+        public languageSelected: string[],
+    ) {
+    }
+}
 export class CampaignTargetGroupSizeRequest {
     constructor(
         public frontEnd: string,

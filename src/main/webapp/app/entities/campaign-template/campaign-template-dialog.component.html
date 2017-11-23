@@ -159,37 +159,55 @@
 
 </div>
 
-        <div class="form-group">
-            <label class="form-control-label" for="field_contentName">Content Name</label>
-            <input type="text" class="form-control" name="contentName" id="field_contentName"
-            formControlName="contentName" required />
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" for="field_contentTitle">Content Title</label>
-            <input type="text" class="form-control" name="contentTitle" id="field_contentTitle"
-                formControlName="contentTitle" required />
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" for="field_contentBody">Content Body</label>
-            <input type="text" class="form-control" name="contentBody" id="field_contentBody"
-            formControlName="contentBody" required />
-        </div>
-        <div class="form-group">
+<div formArrayName="targetGroupContentCriteria" class="well well-lg">
+        <div *ngFor="let targetGroupFilterCriterion of targetGroupContentCriteria.controls; let i=index" [formGroupName]="i">
+                <!-- The repeated address template -->
+                <h4>TargetGroupContentCriterion #{{i + 1}}</h4>
+                <div style="margin-left: 1em;">
+                    <div class="form-group">
+                            <label class="form-control-label" for="field_contentName">Content Name</label>
+                            <input type="text" class="form-control" name="contentName" id="field_contentName"
+                            formControlName="contentName" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label" for="field_contentTitle">Content Title</label>
+                            <input type="text" class="form-control" name="contentTitle" id="field_contentTitle"
+                                formControlName="contentTitle" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label" for="field_contentBody">Content Body</label>
+                            <input type="text" class="form-control" name="contentBody" id="field_contentBody"
+                            formControlName="contentBody" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label" for="field_languageComparision">Language</label>
+                            <select class="form-control" name="languageSelected" formControlName="languageSelected" id="languageSelected" >
+                                <option *ngFor="let language of languagesList" [value]="language">{{language}}</option>         
+                            </select>
+                        </div>
+                </div>
+                <div align="right" *ngIf="i != 0" >
+                    <button (click)="removeTargetGroupContentCriterion(i)" type="button">Remove Content Criterion</button>
+                </div> 
+            </div>
+                <!-- End of the repeated address template -->
+                <br>
+            </div>
+            <br>
+            <button (click)="addCampaignTemplateContentCriterion()" type="button">Add Content Criterion</button>
+
+
+
+
+        <div class="form-group" class="well well-lg">
             <label class="form-control-label" for="field_metaData">Deep Link</label>
             <input type="text" class="form-control" name="metaData" id="field_metaData"
             formControlName="metaData"  />
         </div>
-        <div class="form-group">
-            <label class="form-control-label" for="field_languageComparision">Language</label>
-            <!-- <select class="form-control" name="languageComparision" formControlName="languageComparision" id="field_languageComparision" >
-                <option value="is">is</option>
-                <option value="isnot">is not</option>
-            </select> -->
-            <select class="form-control" name="languageSelected" formControlName="languageSelected" id="languageSelected" >
-                <option *ngFor="let language of languagesList" [value]="language">{{language}}</option>         
-            </select>
-        </div>
     </div>
+</div>
+
+
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">
             <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>

@@ -9,7 +9,7 @@ import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { Location } from '@angular/common';
 
 import {
-    CampaignTemplate, CampaignTemplateFilterCriterion, RecurrenceType, FilterOption, CampaignTargetGroupSizeRequest,
+    CampaignTemplate, CampaignTemplateFilterCriterion, CampaignTemplateContentCriterion, RecurrenceType, FilterOption, CampaignTargetGroupSizeRequest,
     TargetGroupFilterCriterionSizeRequest
 } from './campaign-template.model';
 import { CampaignTemplatePopupService } from './campaign-template-popup.service';
@@ -72,7 +72,8 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.countries = [];
         this.targetGroupSize = 0;
         this.campaignTemplateGroupCreationForm = this.fb.group({
-            targetGroupFilterCriteria: this.fb.array([])
+            targetGroupFilterCriteria: this.fb.array([]),
+            targetGroupContentCriteria: this.fb.array([])
         });
         this.isLaunch = false;
     }
@@ -116,7 +117,6 @@ export class CampaignTemplateDialogComponent implements OnInit {
 
         //     return null;
         //   });
-
     }
 
     clear() {
@@ -137,6 +137,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             this.campaignTemplateGroupCreationForm.value.scheduledTime = ''+this.currentDate.getHours()+':'+this.currentDate.getMinutes()+':00';
         }
         if (this.campaignTemplateGroupCreationForm.value.id !== null) {
+            debugger;
             this.subscribeToSaveResponse(
                 this.campaignTemplateService.update(this.campaignTemplateGroupCreationForm.value));
         } else {
@@ -170,6 +171,10 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.targetGroupFilterCriteria.push(this.fb.group(new CampaignTemplateFilterCriterion('', '', '', [])));
     }
 
+    addCampaignTemplateContentCriterion() {
+        this.targetGroupContentCriteria.push(this.fb.group(new CampaignTemplateContentCriterion('', '', '', [])));
+    }
+
     createForm() {
         if (!this.campaignTemplate) {
             this.campaignTemplate = new CampaignTemplate();
@@ -201,6 +206,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             languageComparision: (!this.campaignTemplate.languageComparision) ? '' : this.campaignTemplate.languageComparision,
             // targetGroupFilterCriteria: (!this.campaignTemplate.targetGroupFilterCriteria) ? this.fb.array([]) : this.prepareData(),
             targetGroupFilterCriteria: this.fb.array([]),
+            targetGroupContentCriteria: this.fb.array([]),
             time: this.fb.control((!this.campaignTemplate.scheduledTime) ? new SimpleTime(this.currentDate.getHours(), this.currentDate.getMinutes()) :
                 new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0, 2)),
                     Number(this.campaignTemplate.scheduledTime.substr(3, 2))), (control: FormControl) => {
@@ -223,6 +229,10 @@ export class CampaignTemplateDialogComponent implements OnInit {
         return this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
     };
 
+    get targetGroupContentCriteria(): FormArray {
+        return this.campaignTemplateGroupCreationForm.get('targetGroupContentCriteria') as FormArray;
+    };
+
     prepareData() {
         if (this.campaignTemplate.targetGroupFilterCriteria) {
             for (const i of this.campaignTemplate.targetGroupFilterCriteria) {
@@ -239,6 +249,29 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 }
             }
         }
+        if (this.campaignTemplate.targetGroupContentCriteria) {
+            for (const i of this.campaignTemplate.targetGroupContentCriteria) {
+                if (Array.isArray(i.languageSelected)) {
+                    const formBuilderGroup = this.fb.group({
+                        contentName: i.contentName,
+                        contentTitle: i.contentTitle,
+                        contentBody: i.contentBody,
+                        languageSelected: [i.languageSelected]
+                    });
+                    this.targetGroupContentCriteria.push(formBuilderGroup);
+                } else {
+                    this.targetGroupContentCriteria.push(this.fb.group(i));
+                }
+            }
+        }
+        else{
+            this.targetGroupContentCriteria.push(this.fb.group({
+                contentName: '',
+                contentTitle: '',
+                contentBody: '',
+                languageSelected: []
+            }));
+        }      
     }
     populateLanguagesList() {
         this.languagesList = LANGUAGES;
@@ -311,6 +344,10 @@ export class CampaignTemplateDialogComponent implements OnInit {
 
     removeTargetGroupFilterCriterion(i) {
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
+        targetGroupFilters.removeAt(i);
+    }
+    removeTargetGroupContentCriterion(i) {
+        const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupContentCriteria') as FormArray;
         targetGroupFilters.removeAt(i);
     }
     onFilterOptionChange(index) {
@@ -698,7 +735,6 @@ export class CampaignTemplateDialogComponent implements OnInit {
                         }
                             break;
                         case 'POKER': {
-                            // debugger;
                             const filterOptionLookUpSelected: string = targetGroupCriterionFormControl.get('filterOptionLookUp').value;
                             if (filterOptionLookUpSelected) {
                                 const filterOptionLookUpComparisonVsValue: Map<string, string[]> = this.pokerTagsMap.get(filterOptionLookUpSelected);
