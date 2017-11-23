@@ -25,6 +25,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
 
     campaignTemplate: CampaignTemplate;
     isSaving: boolean;
+    showSendImmDiv: boolean;
     startDateDp: any;
     recurrenceEndDateDp: any;
     campaignTemplateGroupCreationForm: FormGroup;
@@ -78,6 +79,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
 
     ngOnInit() {
         this.isSaving = false;
+        this.showSendImmDiv = true;
         this.campaignTemplateService.currentMesage.subscribe((message) => {
             this.campaignTemplate.campaignGroupId = message[0];
             this.campaignTemplate.frontEnd = message[1];
@@ -177,7 +179,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             year: now.getFullYear(),
             month: now.getMonth() + 1,
             day: now.getDate() + 1
-        };  
+        };
         this.campaignTemplateGroupCreationForm = this.fb.group({
             id: (!this.campaignTemplate.id) ? null : this.campaignTemplate.id,
             frontEnd: (!this.campaignTemplate.frontEnd) ? '' : this.campaignTemplate.frontEnd,
@@ -186,6 +188,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             status: (!this.campaignTemplate.status) ? 'Draft' : this.campaignTemplate.status,
             campaignDescription: (!this.campaignTemplate.campaignDescription) ? '' : this.campaignTemplate.campaignDescription,
             startDate: (!this.campaignTemplate.startDate) ? todayDt : this.campaignTemplate.startDate,
+            sendImmediately: false,
             recurrenceType: (!this.campaignTemplate.recurrenceType) ? 'NONE' : this.campaignTemplate.recurrenceType,
             recurrenceEndDate: (!this.campaignTemplate.recurrenceEndDate) ? todayDt : this.campaignTemplate.recurrenceEndDate,
             scheduledTime: (!this.campaignTemplate.scheduledTime) ? '' : this.campaignTemplate.scheduledTime,
@@ -240,7 +243,31 @@ export class CampaignTemplateDialogComponent implements OnInit {
     populateLanguagesList() {
         this.languagesList = LANGUAGES;
     }
-
+    sendImmediatelyCheck(){
+        const now = new Date();
+        const todayDt1 = {
+            year: now.getFullYear(),
+            month: now.getMonth() + 1,
+            day: now.getDate()
+        };
+        const todayDt2 = {
+            year: now.getFullYear(),
+            month: now.getMonth() + 1,
+            day: now.getDate() +1
+        };
+        const isSendImmedChecked = this.campaignTemplateGroupCreationForm.controls['sendImmediately'].value;
+        if( isSendImmedChecked ){
+            this.showSendImmDiv = false;
+            this.campaignTemplateGroupCreationForm.controls['startDate'].setValue(todayDt1);
+            this.campaignTemplateGroupCreationForm.controls['recurrenceType'].setValue("NONE");
+            this.campaignTemplateGroupCreationForm.controls['recurrenceEndDate'].setValue(todayDt1);
+        }else{
+            this.showSendImmDiv = true;
+            this.campaignTemplateGroupCreationForm.controls['startDate'].setValue(todayDt2);
+            this.campaignTemplateGroupCreationForm.controls['recurrenceType'].setValue("NONE");
+            this.campaignTemplateGroupCreationForm.controls['recurrenceEndDate'].setValue(todayDt2);
+        }
+    }
     getTargetGroupSize() {
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
         let formLengthIterator = 0;
