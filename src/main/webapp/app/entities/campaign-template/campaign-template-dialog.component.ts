@@ -46,6 +46,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     time: SimpleTime;
     ctrl: any;
     operatingSystems: string[] = ['amazon', 'kindle', 'android', 'ios'];
+    optimoveInstances: string[] = ['gvcspain_OPTIMOVE', 'gvcspain_OPTIMOVE', 'gvcspain_OPTIMOVE', 'gvcspain_OPTIMOVE'];
     isLaunch: boolean;
     currentDate: Date = new Date();
 
@@ -85,6 +86,9 @@ export class CampaignTemplateDialogComponent implements OnInit {
             this.campaignTemplate.frontEnd = message[1];
             this.campaignTemplate.product = message[2];
         });
+        this.campaignTemplateService.getOptimoveInstances().subscribe((data) => {
+            alert(data);
+        })
         this.createForm();
         this.prepareData();
         this.populateCountries();
@@ -134,7 +138,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                     this.campaignTemplateGroupCreationForm.value.time.minute : this.campaignTemplateGroupCreationForm.value.time.minute) + ':00';
 
         } else {
-            this.campaignTemplateGroupCreationForm.value.scheduledTime = ''+this.currentDate.getHours()+':'+this.currentDate.getMinutes()+':00';
+            this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + this.currentDate.getHours() + ':' + this.currentDate.getMinutes() + ':00';
         }
         if (this.campaignTemplateGroupCreationForm.value.id !== null) {
             this.subscribeToSaveResponse(
@@ -210,11 +214,11 @@ export class CampaignTemplateDialogComponent implements OnInit {
                         if (!value) {
                             return null;
                         }
-                        if(((value.hour * 60)+ value.minute) < totalCurrentDayMinutes ){
-                            return {invalid: true};
+                        if (((value.hour * 60) + value.minute) < totalCurrentDayMinutes) {
+                            return { invalid: true };
                         }
                         return null;
-                      }),
+                    }),
             languageSelected: (!this.campaignTemplate.languageSelected) ? '' : this.campaignTemplate.languageSelected,
         });
         // (<FormControl>this.campaignTemplateGroupCreationForm.controls['recurrenceType']).setValue('NONE');
@@ -243,7 +247,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     populateLanguagesList() {
         this.languagesList = LANGUAGES;
     }
-    sendImmediatelyCheck(){
+    sendImmediatelyCheck() {
         const now = new Date();
         const todayDt1 = {
             year: now.getFullYear(),
@@ -253,18 +257,18 @@ export class CampaignTemplateDialogComponent implements OnInit {
         const todayDt2 = {
             year: now.getFullYear(),
             month: now.getMonth() + 1,
-            day: now.getDate() +1
+            day: now.getDate() + 1
         };
         const isSendImmedChecked = this.campaignTemplateGroupCreationForm.controls['sendImmediately'].value;
-        if( isSendImmedChecked ){
+        if (isSendImmedChecked) {
             this.showSendImmDiv = false;
             this.campaignTemplateGroupCreationForm.controls['startDate'].setValue(todayDt1);
-            this.campaignTemplateGroupCreationForm.controls['recurrenceType'].setValue("NONE");
+            this.campaignTemplateGroupCreationForm.controls['recurrenceType'].setValue('NONE');
             this.campaignTemplateGroupCreationForm.controls['recurrenceEndDate'].setValue(todayDt1);
-        }else{
+        } else {
             this.showSendImmDiv = true;
             this.campaignTemplateGroupCreationForm.controls['startDate'].setValue(todayDt2);
-            this.campaignTemplateGroupCreationForm.controls['recurrenceType'].setValue("NONE");
+            this.campaignTemplateGroupCreationForm.controls['recurrenceType'].setValue('NONE');
             this.campaignTemplateGroupCreationForm.controls['recurrenceEndDate'].setValue(todayDt2);
         }
     }
@@ -740,7 +744,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         if (filterOption && filterOptionComparison) {
             switch (filterOption) {
                 case 'Tag': {
-                   // targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue('');
+                    // targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue('');
                     switch (productSelected) {
                         case 'SPORTS': {
                             if (filterOptionLookUp && filterOptionLookUp !== '') {
