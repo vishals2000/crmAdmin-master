@@ -43,7 +43,6 @@ export class CampaignTemplateDialogComponent implements OnInit {
     time: SimpleTime;
     ctrl: any;
     operatingSystems: string[] = ['amazon', 'kindle', 'android', 'ios'];
-    optimoveInstances: string[] = ['gvcspain_OPTIMOVE1', 'gvcspain_OPTIMOVE2', 'gvcspain_OPTIMOVE3', 'gvcspain_OPTIMOVE4'];
     isLaunch: boolean;
     currentDate: Date = new Date();
 
@@ -77,16 +76,16 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.isLaunch = false;
     }
 
-    ngOnInit() {
+    ngOnInit() {        
         this.isSaving = false;
         this.showSendImmDiv = true;
+        this.campaignTemplateService.getOptimoveInstances().subscribe((data) => {
+            this.campaignTemplate.optimoveInstances = data['message'];
+        });
         this.campaignTemplateService.currentMesage.subscribe((message) => {
             this.campaignTemplate.campaignGroupId = message[0];
             this.campaignTemplate.frontEnd = message[1];
             this.campaignTemplate.product = message[2];
-        });
-        this.campaignTemplateService.getOptimoveInstances().subscribe((data) => {
-            this.campaignTemplate.optimoveInstances = data['optimoveInstances'];
         });
         this.createForm();
         this.prepareData();
@@ -222,6 +221,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                     }),
             languageSelected: (!this.campaignTemplate.languageSelected) ? '' : this.campaignTemplate.languageSelected,
             optimoveInstances: (!this.campaignTemplate.optimoveInstances) ? '' : this.campaignTemplate.optimoveInstances,
+            pushToOptimoveInstances: (!this.campaignTemplate.pushToOptimoveInstances) ? false : this.campaignTemplate.pushToOptimoveInstances,
         });
         // (<FormControl>this.campaignTemplateGroupCreationForm.controls['recurrenceType']).setValue('NONE');
     }
@@ -291,23 +291,23 @@ export class CampaignTemplateDialogComponent implements OnInit {
         }
     }
 
-    pushOptimoveInstances() {
-        if (this.campaignTemplate.id) {
-            const body = {
-                'templateId': this.campaignTemplate.id,
-                'optimoveInstances': this.campaignTemplateGroupCreationForm.controls['optimoveInstances'].value
-            }
+    // pushOptimoveInstances() {
+    //     if (this.campaignTemplate.id) {
+    //         const body = {
+    //             'templateId': this.campaignTemplate.id,
+    //             'optimoveInstances': this.campaignTemplateGroupCreationForm.controls['optimoveInstances'].value
+    //         }
 
-            this.campaignTemplateService.pushOptimoveInstances(body).subscribe(
-                (res: ResponseWrapper) => {
-                    alert(res);
-                },
-                (res: ResponseWrapper) => this.onError(res.json)
-            );
-        } else {
-            console.log('templateId is null..');
-        }
-    }
+    //         this.campaignTemplateService.pushOptimoveInstances(body).subscribe(
+    //             (res: ResponseWrapper) => {
+    //                 alert(res);
+    //             },
+    //             (res: ResponseWrapper) => this.onError(res.json)
+    //         );
+    //     } else {
+    //         console.log('templateId is null..');
+    //     }
+    // }
 
     getTargetGroupSize() {
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
