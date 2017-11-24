@@ -44,6 +44,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     ctrl: any;
     operatingSystems: string[] = ['amazon', 'kindle', 'android', 'ios'];
     isLaunch: boolean;
+    timerValidation: boolean = false;
     currentDate: Date = new Date();
 
     constructor(
@@ -137,6 +138,10 @@ export class CampaignTemplateDialogComponent implements OnInit {
         } else {
             this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + this.currentDate.getHours() + ':' + this.currentDate.getMinutes() + ':00';
         }
+        if(this.campaignTemplate.sendImmediately){
+            this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + this.currentDate.getUTCHours() + ':' + this.currentDate.getUTCMinutes() + ':00';
+        }
+
         if (this.campaignTemplateGroupCreationForm.value.id !== null) {
             this.subscribeToSaveResponse(
                 this.campaignTemplateService.update(this.campaignTemplateGroupCreationForm.value));
@@ -144,6 +149,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             this.subscribeToSaveResponse(
                 this.campaignTemplateService.create(this.campaignTemplateGroupCreationForm.value));
         }
+
     }
 
     prepareSaveTargetGroupCriteria(): CampaignTemplate {
@@ -205,24 +211,31 @@ export class CampaignTemplateDialogComponent implements OnInit {
             metaData: (!this.campaignTemplate.metaData) ? '' : this.campaignTemplate.metaData,
             targetGroupFilterCriteria: this.fb.array([]),
             targetGroupContentCriteria: this.fb.array([]),
-            time: this.fb.control((!this.campaignTemplate.scheduledTime) ? new SimpleTime(this.currentDate.getHours(), this.currentDate.getMinutes()) :
-                new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0, 2)),
-                    Number(this.campaignTemplate.scheduledTime.substr(3, 2))), (control: FormControl) => {
-                        const value = control.value;
-                        const totalCurrentDayMinutes = this.currentDate.getHours() * 60 + this.currentDate.getMinutes();
-                        const minutes = this.currentDate.getMinutes();
-                        if (!value) {
-                            return null;
-                        }
-                        if (((value.hour * 60) + value.minute) < totalCurrentDayMinutes) {
-                            return { invalid: true };
-                        }
-                        return null;
-                    }),
+            // time: this.fb.control((!this.campaignTemplate.scheduledTime) ? new SimpleTime(this.currentDate.getUTCHours(), this.currentDate.getUTCMinutes()) :
+            //     new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0, 2)),
+            //         Number(this.campaignTemplate.scheduledTime.substr(3, 2))), (control: FormControl) => {
+            //             if(this.timerValidation){
+            //                 return null;
+            //             }
+            //             else{
+            //                 const value = control.value;
+            //                 const totalCurrentDayMinutes = this.currentDate.getUTCHours() * 60 + this.currentDate.getUTCMinutes();
+            //                 const minutes = this.currentDate.getUTCMinutes();
+            //                 if (!value) {
+            //                     return null;
+            //                 }
+            //                 if (((value.hour * 60) + value.minute) < totalCurrentDayMinutes) {
+            //                     return { invalid: true };
+            //                 }
+            //                 return null;
+            //             }
+            //         }),
             languageSelected: (!this.campaignTemplate.languageSelected) ? '' : this.campaignTemplate.languageSelected,
             optimoveInstances: (!this.campaignTemplate.optimoveInstances) ? '' : this.campaignTemplate.optimoveInstances,
             pushToOptimoveInstances: (!this.campaignTemplate.pushToOptimoveInstances) ? false : this.campaignTemplate.pushToOptimoveInstances,
         });
+
+        this.addTimeControl();
         // (<FormControl>this.campaignTemplateGroupCreationForm.controls['recurrenceType']).setValue('NONE');
     }
     get targetGroupFilterCriteria(): FormArray {
@@ -232,7 +245,31 @@ export class CampaignTemplateDialogComponent implements OnInit {
     get targetGroupContentCriteria(): FormArray {
         return this.campaignTemplateGroupCreationForm.get('targetGroupContentCriteria') as FormArray;
     };
-
+    addTimeControl(){
+        this.campaignTemplateGroupCreationForm.addControl('time',new FormControl(
+            (!this.timerValidation) ? new SimpleTime(this.currentDate.getUTCHours(), this.currentDate.getUTCMinutes()) :
+            new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0, 2)),
+                Number(this.campaignTemplate.scheduledTime.substr(3, 2))),
+        (control:FormControl)=>{
+            debugger;
+            if(this.timerValidation){
+                return null;
+            }
+                const value = control.value;
+                const totalCurrentDayMinutes = this.currentDate.getUTCHours() * 60 + this.currentDate.getUTCMinutes();
+                const minutes = this.currentDate.getUTCMinutes();
+                if (!value) {
+                    return null;
+                }
+                if (((value.hour * 60) + value.minute) < totalCurrentDayMinutes) {
+                    return { invalid: true };
+                }
+                return null;
+        }));
+    }
+    removeTimeControl(){
+        this.campaignTemplateGroupCreationForm.removeControl('time');
+    }
     prepareData() {
         if (this.campaignTemplate.targetGroupFilterCriteria) {
             for (const i of this.campaignTemplate.targetGroupFilterCriteria) {
@@ -277,18 +314,20 @@ export class CampaignTemplateDialogComponent implements OnInit {
             month: now.getMonth() + 1,
             day: now.getDate() + 1
         };
-        const isSendImmedChecked = this.campaignTemplateGroupCreationForm.controls['sendImmediately'].value;
-        if (isSendImmedChecked) {
-            this.showSendImmDiv = false;
+        this.timerValidation = this.campaignTemplateGroupCreationForm.controls['sendImmediately'].value;
+        if (this.timerValidation) {
+            this.removeTimeControl();
             this.campaignTemplateGroupCreationForm.controls['startDate'].setValue(todayDt1);
             this.campaignTemplateGroupCreationForm.controls['recurrenceType'].setValue('NONE');
             this.campaignTemplateGroupCreationForm.controls['recurrenceEndDate'].setValue(todayDt1);
         } else {
+            this.addTimeControl();
             this.showSendImmDiv = true;
             this.campaignTemplateGroupCreationForm.controls['startDate'].setValue(todayDt2);
             this.campaignTemplateGroupCreationForm.controls['recurrenceType'].setValue('NONE');
             this.campaignTemplateGroupCreationForm.controls['recurrenceEndDate'].setValue(todayDt2);
         }
+        debugger;
     }
 
     // pushOptimoveInstances() {
