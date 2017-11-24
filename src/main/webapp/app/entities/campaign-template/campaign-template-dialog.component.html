@@ -33,7 +33,9 @@
             <label for="frequent_date">Send immediately</label>&nbsp;&nbsp;
             <input type="checkbox" name="inPlayerTimezone" id="frequent_date" formControlName="sendImmediately" (change)="sendImmediatelyCheck()"/>
         </div>
-        <div class="form-group" *ngIf="showSendImmDiv">
+        
+        <div *ngIf="showSendImmDiv" [hidden]="this.campaignTemplateGroupCreationForm.value.sendImmediately">
+        <div class="form-group">
             <label class="form-control-label" for="field_startDate">Start Date</label>
             <div class="input-group">
                 <input id="field_startDate" type="text" class="form-control" name="startDate" ngbDatepicker [minDate]="minDate"  #startDateDp="ngbDatepicker" formControlName="startDate"
@@ -50,7 +52,7 @@
             </div>
         </div>
 
-         <div class="form-group" *ngIf="showSendImmDiv">
+         <div class="form-group">
             <label class="form-control-label" for="field_recurrenceType">Recurrence Type</label>
             <select class="form-control" name="recurrenceType" formControlName="recurrenceType" id="field_recurrenceType"  required>
                 <option value="NONE">NONE</option>
@@ -65,7 +67,7 @@
             </div> 
         </div>
 
-        <div class="form-group" *ngIf="showSendImmDiv">
+        <div class="form-group">
             <label class="form-control-label" for="field_recurrenceEndDate">Recurrence End Date</label>
             <div class="input-group">
                 <input id="field_recurrenceEndDate" type="text" class="form-control" name="recurrenceEndDate" ngbDatepicker [minDate]="minDate" #recurrenceEndDateDp="ngbDatepicker" formControlName="recurrenceEndDate"
@@ -83,7 +85,7 @@
             </div>
         </div>
 
-        <div class="form-group" *ngIf="showSendImmDiv">
+        <div class="form-group">
                 <label class="form-control-label" for="field_scheduledTime">Scheduled Time (in UTC)</label>
                 <!-- <ngb-timepicker formControlName="time" [ngModelOptions]="{standalone: true}"></ngb-timepicker>                 -->
                 <ngb-timepicker formControlName="time" [ngModelOptions]="{standalone: true}"></ngb-timepicker>
@@ -92,10 +94,12 @@
                 </div>
         </div>
                 
-        <div class="form-group" *ngIf="showSendImmDiv">            
+        <div class="form-group">            
             <label for="field_inPlayerTimezone">In Player Timezone</label>&nbsp;&nbsp;
             <input type="checkbox" name="inPlayerTimezone" id="field_inPlayerTimezone" formControlName="inPlayerTimezone" />
         </div>
+    </div>
+
     <div *ngIf="campaignTemplateGroupCreationForm.controls.id.value">
         <div align="right" >
             Push Message from optimove Instances <button (click)="pushOptimoveInstances()" type="button">Push</button>
@@ -177,6 +181,9 @@
                 <!-- The repeated address template -->
                 <h4>TargetGroupContentCriterion #{{i + 1}}</h4>
                 <div style="margin-left: 1em;">
+                    <!-- <div align="right">
+                        Target Group Size {{targetContentGroupSize}} <button (click)="getTargetContentGroupSize(i)" type="button">Refresh</button>
+                    </div>                     -->
                     <div class="form-group">
                             <label class="form-control-label" for="field_contentName">Content Name</label>
                             <input type="text" class="form-control" name="contentName" id="field_contentName"
