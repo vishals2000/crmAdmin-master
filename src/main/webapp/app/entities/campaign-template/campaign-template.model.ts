@@ -69,6 +69,7 @@ export class CampaignTemplate implements BaseEntity {
         public languageSelected?: string,
         public sendImmediately?: boolean,
         public optimoveInstances?: string[],
+        public pushToOptimoveInstances?: boolean,
     ) {
         this.inPlayerTimezone = false;
         this.sendImmediately = false;
