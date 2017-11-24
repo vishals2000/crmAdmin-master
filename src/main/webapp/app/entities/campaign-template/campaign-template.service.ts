@@ -43,6 +43,12 @@ export class CampaignTemplateService {
         });
     }
 
+    getTargetContentGroupSize(body: any): Observable<ResponseWrapper> {
+        return this.http.post(this.resourceUrl + '/getTargetContentGroupSize', body).map((res: Response) => {
+            return res.json();
+        });
+    }
+
     pushNotificationCampaign(body: any): Observable<ResponseWrapper> {
         return this.http.post(this.resourceUrl + '/pushNotificationCampaign', body).map((res: Response) => {
             return res.json();

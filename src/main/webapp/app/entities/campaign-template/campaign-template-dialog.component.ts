@@ -7,11 +7,7 @@ import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { Location } from '@angular/common';
-
-import {
-    CampaignTemplate, CampaignTemplateFilterCriterion, CampaignTemplateContentCriterion, RecurrenceType, FilterOption, CampaignTargetGroupSizeRequest,
-    TargetGroupFilterCriterionSizeRequest
-} from './campaign-template.model';
+import {CampaignTemplate, CampaignTemplateFilterCriterion, CampaignTemplateContentCriterion, RecurrenceType, FilterOption, CampaignTargetGroupSizeRequest, TargetGroupFilterCriterionSizeRequest } from './campaign-template.model';
 import { CampaignTemplatePopupService } from './campaign-template-popup.service';
 import { CampaignTemplateService } from './campaign-template.service';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
@@ -43,6 +39,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     countries: string[];
     languagesList: string[];
     targetGroupSize: number;
+    targetContentGroupSize: number;
     time: SimpleTime;
     ctrl: any;
     operatingSystems: string[] = ['amazon', 'kindle', 'android', 'ios'];
@@ -72,6 +69,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.appVersionMap = new Map<string, string[]>();
         this.countries = [];
         this.targetGroupSize = 0;
+        this.targetContentGroupSize = 0;
         this.campaignTemplateGroupCreationForm = this.fb.group({
             targetGroupFilterCriteria: this.fb.array([]),
             targetGroupContentCriteria: this.fb.array([])
@@ -343,6 +341,28 @@ export class CampaignTemplateDialogComponent implements OnInit {
         );
     }
 
+    getTargetContentGroupSize(i){
+       // console.log(this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria[i].languageSelected);
+        const body = {
+            'frontEnd': this.campaignTemplateGroupCreationForm.get('frontEnd').value,
+            'product': this.campaignTemplateGroupCreationForm.get('product').value,
+            'language': this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria[i].languageSelected
+        }
+        this.campaignTemplateService.getTargetContentGroupSize(body).subscribe(
+            (res: ResponseWrapper) => this.onTargetGroupContentSizeRequestSuccess(res, res),
+            (res: ResponseWrapper) => this.onError(res.json)
+        );
+
+    }
+
+    private onTargetGroupContentSizeRequestSuccess(data, headers) {
+        // console.log(data);
+        if (data) {
+            this.targetContentGroupSize = data.targetContentGroupSize;
+        } else {
+            this.targetContentGroupSize = 0;
+        }
+    }
     private onTargetGroupSizeRequestSuccess(data, headers) {
         // console.log(data);
         if (data) {
