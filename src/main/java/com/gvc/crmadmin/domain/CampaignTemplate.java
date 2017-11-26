@@ -96,6 +96,9 @@ public class CampaignTemplate implements Serializable {
     @Field("sendImmediately")
     private boolean sendImmediately;
 
+    @Field("pushToOptimoveInstances")
+    private boolean pushToOptimoveInstances;
+
     @Field("targetGroupFilterCriteria")
     private TargetGroupCriteria.TargetGroupFilterCriterion[] targetGroupFilterCriteria;
 
@@ -389,5 +392,13 @@ public class CampaignTemplate implements Serializable {
 
     public void setTargetGroupContentCriteria(MessageTemplate[] targetGroupContentCriteria) {
         this.targetGroupContentCriteria = targetGroupContentCriteria;
+    }
+
+    public boolean isPushToOptimoveInstances() {
+        return pushToOptimoveInstances;
+    }
+
+    public void setPushToOptimoveInstances(boolean pushToOptimoveInstances) {
+        this.pushToOptimoveInstances = pushToOptimoveInstances;
     }
 }

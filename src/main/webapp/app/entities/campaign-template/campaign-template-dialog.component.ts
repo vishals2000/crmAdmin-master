@@ -42,7 +42,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     targetContentGroupSize: number;
     time: SimpleTime;
     ctrl: any;
-    operatingSystems: string[] = ['amazon', 'kindle', 'android', 'ios'];
+    operatingSystems: string[] = ['android', 'ios'];
     isLaunch: boolean;
     timerValidation: boolean = false;
     currentDate: Date = new Date();
@@ -251,7 +251,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0, 2)),
                 Number(this.campaignTemplate.scheduledTime.substr(3, 2))),
         (control:FormControl)=>{
-            debugger;
+            // debugger;
             if(this.timerValidation){
                 return null;
             }
@@ -327,7 +327,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             this.campaignTemplateGroupCreationForm.controls['recurrenceType'].setValue('NONE');
             this.campaignTemplateGroupCreationForm.controls['recurrenceEndDate'].setValue(todayDt2);
         }
-        debugger;
+        // debugger;
     }
 
     // pushOptimoveInstances() {

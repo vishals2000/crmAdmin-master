@@ -133,12 +133,14 @@ public class CampaignTemplateResource {
         RestTemplate restTemplate = new RestTemplate();
         PushNotificationForScreenNameResponse pushNotificationForScreenNameResponse = restTemplate.postForObject(Constants.TEST_URL, sendPushNotificationForScreenNameRequest, PushNotificationForScreenNameResponse.class);
 
-        System.out.println(pushNotificationForScreenNameResponse);
+        log.debug("pushNotificationForScreenNameResponse " + pushNotificationForScreenNameResponse + " for " + sendPushNotificationForScreenNameRequest);
         return ResponseUtil.wrapOrNotFound(Optional.of(pushNotificationForScreenNameResponse));
     }
 
+    /** This is used to get all the optimove instances to enable pushing a template to one or more Optimove instances*/
     @GetMapping("/campaign-templates/getOptimoveInstances")
     @Timed
+    @SuppressWarnings("unchecked")
     public ResponseEntity<OptimoveInstances> getOptimoveInstances() throws URISyntaxException, UnsupportedEncodingException {
         log.debug("REST request to getOptimoveInstances");
 
@@ -147,10 +149,50 @@ public class CampaignTemplateResource {
 
         OptimoveInstances optimoveInstances = new OptimoveInstances();
         optimoveInstances.setOptimoveInstanceNames(optimoveInstanceNames);
-        System.out.println(optimoveInstances);
+        log.debug("optimoveInstances " + optimoveInstances);
         return ResponseUtil.wrapOrNotFound(Optional.of(optimoveInstances));
     }
 
+
+    /**
+     * This is used to cancel a push notification campaign
+     * @param pushNotificationCampaignTemplate
+     * @return
+     * @throws URISyntaxException
+     * @throws UnsupportedEncodingException
+     */
+    @PostMapping("/campaign-templates/cancelPushNotificationCampaign")
+    @Timed
+    public ResponseEntity<PushNotificationCampaignCancellationResponse> cancelPushNotificationCampaign(@Valid @RequestBody PushNotificationCampaignTemplate pushNotificationCampaignTemplate) throws URISyntaxException, UnsupportedEncodingException {
+        log.info("REST request to cancel pushNotificationCampaign", pushNotificationCampaignTemplate);
+        return cancelPushNotificationCampaignHelper(pushNotificationCampaignTemplate);
+    }
+
+    private ResponseEntity<PushNotificationCampaignCancellationResponse> cancelPushNotificationCampaignHelper(PushNotificationCampaignTemplate pushNotificationCampaignTemplate) {
+        if(pushNotificationCampaignTemplate!= null && StringUtils.hasText(pushNotificationCampaignTemplate.getCampaignTemplateId())) {
+            CampaignTemplate campaignTemplate = campaignTemplateService.findOne(pushNotificationCampaignTemplate.getCampaignTemplateId());
+            if(campaignTemplate != null) {
+                if(!campaignTemplate.isAlreadyCancelled()) {
+                    RestTemplate restTemplate = new RestTemplate();
+                    PushNotificationCampaignCancellationResponse pushNotificationCampaignCancellationResponse = restTemplate.postForObject(Constants.CANCEL_URL, pushNotificationCampaignTemplate, PushNotificationCampaignCancellationResponse.class);
+                    if (pushNotificationCampaignCancellationResponse.isResult()) {
+                        updateCampaignCancellationStatus(pushNotificationCampaignTemplate.getCampaignTemplateId(), pushNotificationCampaignCancellationResponse.isResult());
+                    }
+                    return ResponseUtil.wrapOrNotFound(Optional.of(pushNotificationCampaignCancellationResponse));
+                } else {
+                    return ResponseUtil.wrapOrNotFound(Optional.of(new PushNotificationCampaignCancellationResponse("Campaign already cancelled", true)));
+                }
+            } else {
+                return ResponseUtil.wrapOrNotFound(Optional.of(new PushNotificationCampaignCancellationResponse("Invalid campaign template Id", false)));
+            }
+        } else {
+            return ResponseUtil.wrapOrNotFound(Optional.of(new PushNotificationCampaignCancellationResponse("Technical error. Cannot cancel the campaign.",false)));
+        }
+    }
+
+    /**
+     * This is used to launch a push notification campaign
+     */
     @PostMapping("/campaign-templates/pushNotificationCampaign")
     @Timed
     public ResponseEntity<PushNotificationCampaignProcessingResponse> launchPushNotificationCampaign(@Valid @RequestBody PushNotificationCampaignTemplate pushNotificationCampaignTemplate) throws URISyntaxException, UnsupportedEncodingException {
@@ -171,11 +213,14 @@ public class CampaignTemplateResource {
 
         RestTemplate restTemplate = new RestTemplate();
         PushNotificationCampaignProcessingResponse pushNotificationCampaignProcessingResponse = restTemplate.postForObject(Constants.LAUNCH_URL, pushNotificationCampaignTemplate, PushNotificationCampaignProcessingResponse.class);
-
-        System.out.println(pushNotificationCampaignProcessingResponse);
+        if(pushNotificationCampaignProcessingResponse.isResult()) {
+            updateCampaignTemplateLaunchSuccessful(pushNotificationCampaignTemplate.getCampaignTemplateId(), pushNotificationCampaignProcessingResponse.isResult());
+        }
+        log.debug("pushNotificationCampaignProcessingResponse " + pushNotificationCampaignProcessingResponse + " for " + pushNotificationCampaignTemplate);
         return ResponseUtil.wrapOrNotFound(Optional.of(pushNotificationCampaignProcessingResponse));
     }
 
+    /*
     @PutMapping("/campaign-templates/updateLaunchStatus/{campaignTemplateId}/{launchSuccessful}")
     @Timed
     public ResponseEntity<CampaignLaunchUpdateStatus> updateCampaignTemplate(@PathVariable String campaignTemplateId, @PathVariable boolean launchSuccessful) throws URISyntaxException, UnsupportedEncodingException {
@@ -195,14 +240,7 @@ public class CampaignTemplateResource {
         return ResponseUtil.wrapOrNotFound(Optional.of(new CampaignLaunchUpdateStatus(true, "Successfully updated status")));
     }
 
-    private void updateCampaignTemplateLaunchSuccessful(String campaignTemplateId, boolean launchSuccessful){
-        Criteria criteria = Criteria.where("_id").is(campaignTemplateId);
-        final Query query = new Query();
-        query.addCriteria(criteria);
-        final Update update = new Update();
-        update.set("alreadyLaunched", launchSuccessful);
-        mongoTemplate.upsert(query, update, CampaignTemplate.class);
-    }
+    */
 
     /**
      * GET  /campaign-templates : get all the campaignTemplates.
@@ -233,6 +271,9 @@ public class CampaignTemplateResource {
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(campaignTemplate));
     }
 
+    /**
+     * This is used to get all campaign templates for a campaign group
+     * */
     @GetMapping("/campaign-templates/group/{campaignGroupId}")
     @Timed
     public ResponseEntity<List<CampaignTemplate>> getAllCampaignsForCampaignGroup(@ApiParam Pageable pageable, @PathVariable String campaignGroupId) {
@@ -253,10 +294,30 @@ public class CampaignTemplateResource {
             tempCampaignTemplate.setCancelEnabled(campaignTemplate.isCancelEnabled());
             tempCampaignTemplate.setDeleteEnabled(campaignTemplate.isDeleteEnabled());
 
+            /*
+            *   Current Time	            alreadyDeleted	        alreadyCancelled	    alreadyLaunched	    STATUS	    launchEnabled	editEnabled	    cancelEnabled	deleteEnabled
+            *   ==================================================================================================================================================================================
+            *   < StartTime	                    FALSE	                FALSE	            FALSE	            DRAFT	        TRUE	        TRUE	        FALSE	        TRUE
+            *   > StartTime and < EndTime	    FALSE	                FALSE	            FALSE	            DRAFT	        FALSE	        TRUE	        FALSE	        TRUE
+            *   > EndTime	                    FALSE	                FALSE	            FALSE	            DRAFT	        FALSE	        TRUE	        FALSE	        TRUE
+            *
+            *   < StartTime	                    FALSE	                FALSE	            TRUE	            PENDING	        FALSE	        FALSE	        TRUE	        TRUE
+            *   > StartTime and < EndTime	    FALSE	                FALSE	            TRUE	            LIVE	        FALSE	        FALSE	        TRUE	        TRUE
+            *   > EndTime	                    FALSE	                FALSE	            TRUE	            COMPLETED	    FALSE	        FALSE	        FALSE	        FALSE
+            *
+            *   < StartTime	                    FALSE	                TRUE	            TRUE	            CANCELLED	    FALSE	        FALSE
+            *   > StartTime and < EndTime	    FALSE	                TRUE	            TRUE	            CANCELLED	    FALSE	        FALSE
+            *   > EndTime	                    FALSE	                TRUE	            TRUE	            CANCELLED	    FALSE	        FALSE	        FALSE	        FALSE
+            *
+            *   < StartTime	                    TRUE		                                TRUE	            DELETED	        FALSE	        FALSE	        TRUE	        TRUE
+            *   > StartTime and < EndTime	    TRUE		                                TRUE	            DELETED	        FALSE	        FALSE	        TRUE	        TRUE
+            *   > EndTime	                    TRUE		                                TRUE	            DELETED	        FALSE	        FALSE	        FALSE	        FALSE
+            * */
+
             if(currentDateTime.isBefore(startTime)) {
                 // before the startTime of the campaign
                 if(campaignTemplate.isAlreadyDeleted()) {
-                    campaignTemplate.setStatus(Constants.CampaignTemplateStatus.DELETED.getStatus()); // the campaign was launched and then deleted. IF the campaign is not launched, then delete the campaign
+                    campaignTemplate.setStatus(Constants.CampaignTemplateStatus.DELETED.getStatus()); // the campaign was launched and then deleted. If the campaign is not launched, then delete the campaign
                     campaignTemplate.setLaunchEnabled(false);
                     campaignTemplate.setEditEnabled(false);
                     campaignTemplate.setCancelEnabled(false);
@@ -326,7 +387,7 @@ public class CampaignTemplateResource {
                     campaignTemplate.setLaunchEnabled(false);
                     campaignTemplate.setEditEnabled(false);
                     campaignTemplate.setCancelEnabled(false);
-                    campaignTemplate.setDeleteEnabled(true);
+                    campaignTemplate.setDeleteEnabled(false);
                 } else {
                     campaignTemplate.setStatus(Constants.CampaignTemplateStatus.DRAFT.getStatus()); // the campaign was not launched
                     campaignTemplate.setLaunchEnabled(false);
@@ -344,6 +405,9 @@ public class CampaignTemplateResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+    /**
+     * Save Campaign Template with the correct statuses to enable the UI to enable/disable the buttons based on the campaign status
+     * */
     private static boolean saveCampaignTemplate(CampaignTemplate campaignTemplate, CampaignTemplate tempCampaignTemplate) {
         return !campaignTemplate.getStatus().equals(tempCampaignTemplate.getStatus()) ||
             campaignTemplate.isLaunchEnabled() != tempCampaignTemplate.isLaunchEnabled() ||
@@ -376,12 +440,8 @@ public class CampaignTemplateResource {
         return ResponseUtil.wrapOrNotFound(Optional.of(frontendProduct));
     }
 
-    /**
-     * DELETE  /campaign-templates/:id : delete the "id" campaignTemplate.
-     *
-     * @param id the id of the campaignTemplate to delete
-     * @return the ResponseEntity with status 200 (OK)
-     */
+    /*
+    *
     @DeleteMapping("/campaign-templates/{id}")
     @Timed
     public ResponseEntity<Void> deleteCampaignTemplate(@PathVariable String id) {
@@ -389,8 +449,75 @@ public class CampaignTemplateResource {
         campaignTemplateService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
     }
+    * */
+
+    /**
+     * Deletes a push Notification campaign template
+     * @param pushNotificationCampaignTemplate to be deleted
+     * @return Void
+     */
+    @PostMapping("/campaign-templates/deletePushNotificationCampaign")
+    @Timed
+    public ResponseEntity<Void> deleteCampaignTemplate(@Valid @RequestBody PushNotificationCampaignTemplate pushNotificationCampaignTemplate) {
+        log.debug("REST request to delete CampaignTemplate : {}", pushNotificationCampaignTemplate);
+
+        if(pushNotificationCampaignTemplate != null && StringUtils.hasText(pushNotificationCampaignTemplate.getCampaignTemplateId())) {
+            CampaignTemplate campaignTemplate = campaignTemplateService.findOne(pushNotificationCampaignTemplate.getCampaignTemplateId());
+            if (campaignTemplate == null || campaignTemplate.isAlreadyDeleted()) {
+                return ResponseEntity.ok().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, pushNotificationCampaignTemplate.getCampaignName(),"Campaign already deleted")).build();
+            } else if (campaignTemplate.isAlreadyLaunched()) {
+                if(!campaignTemplate.isAlreadyCancelled()) {
+                    log.info("Cancelling campaign " + pushNotificationCampaignTemplate);
+                    PushNotificationCampaignCancellationResponse pushNotificationCampaignCancellationResponse = cancelPushNotificationCampaignHelper(pushNotificationCampaignTemplate).getBody();
+                    if(pushNotificationCampaignCancellationResponse.isResult()) {
+                        updateCampaignDeletionStatus(campaignTemplate.getId(), pushNotificationCampaignCancellationResponse.isResult());
+                        return ResponseEntity.ok().headers(HeaderUtil.createAlert(campaignTemplate.getCampaignName() + " cancelled and deleted", campaignTemplate.getId())).build();
+                    } else {
+                        return ResponseEntity.ok().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, campaignTemplate.getId(),campaignTemplate.getCampaignName() +" could not be cancelled. Not deleting the campaign")).build();
+                    }
+                } else {
+                    log.info("Campaign " + pushNotificationCampaignTemplate.getCampaignTemplateId() + " already cancelled. Proceeding with deletion");
+                    updateCampaignDeletionStatus(campaignTemplate.getId(), true);
+                    return ResponseEntity.ok().headers(HeaderUtil.createAlert(campaignTemplate.getCampaignName() + " deleted", campaignTemplate.getId())).build();
+                }
+            } else {
+                //Campaign is not launched at all. Can be deleted directly
+                campaignTemplateService.delete(campaignTemplate.getId());
+                return ResponseEntity.ok().headers(HeaderUtil.createAlert(campaignTemplate.getCampaignName() +" successfully deleted", campaignTemplate.getId())).build();
+            }
+        } else {
+            return ResponseEntity.ok().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, null,"Invalid campaign")).build();
+        }
+    }
 
     private static DateTime getDateTimeFromString(DateTimeFormatter dateTimeFormatter, String scheduleTime) {
         return dateTimeFormatter.parseDateTime(scheduleTime);
+    }
+
+    private void updateCampaignDeletionStatus(String campaignTemplateId, boolean deleteSuccessful){
+        Criteria criteria = Criteria.where("_id").is(campaignTemplateId);
+        final Query query = new Query();
+        query.addCriteria(criteria);
+        final Update update = new Update();
+        update.set("alreadyDeleted", deleteSuccessful);
+        mongoTemplate.upsert(query, update, CampaignTemplate.class);
+    }
+
+    private void updateCampaignCancellationStatus(String campaignTemplateId, boolean cancelSuccessful){
+        Criteria criteria = Criteria.where("_id").is(campaignTemplateId);
+        final Query query = new Query();
+        query.addCriteria(criteria);
+        final Update update = new Update();
+        update.set("alreadyCancelled", cancelSuccessful);
+        mongoTemplate.upsert(query, update, CampaignTemplate.class);
+    }
+
+    private void updateCampaignTemplateLaunchSuccessful(String campaignTemplateId, boolean launchSuccessful){
+        Criteria criteria = Criteria.where("_id").is(campaignTemplateId);
+        final Query query = new Query();
+        query.addCriteria(criteria);
+        final Update update = new Update();
+        update.set("alreadyLaunched", launchSuccessful);
+        mongoTemplate.upsert(query, update, CampaignTemplate.class);
     }
 }

@@ -74,7 +74,7 @@ public class PushNotificationCampaignTemplate implements Serializable {
     @JsonProperty("scheduledTime")
     private String scheduledTime;
 
-    @JsonProperty("campaignTemplateId")
+    @JsonProperty("id")
     private String campaignTemplateId;
 
     public String getFrontEnd() {

@@ -71,7 +71,8 @@ export class CampaignTemplateCancelDialogComponent implements OnInit {
         }else {
             this.alertService.error(response.message);
         }
-
+        
+        /*
         this.campaignTemplateService.updateCancelStatus (
             {
                 campaignTemplateId: this.campaignTemplate.id,
@@ -85,6 +86,7 @@ export class CampaignTemplateCancelDialogComponent implements OnInit {
             },
             (res: ResponseWrapper) => this.onError(res.json)
             );
+            */
     }
 }
 

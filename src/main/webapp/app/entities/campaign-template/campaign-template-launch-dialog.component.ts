@@ -102,6 +102,7 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
             this.alertService.error(response.message);
         }
 
+        /*
         this.campaignTemplateService.updateLaunchStatus(
             {
                 campaignTemplateId: this.campaignTemplate.id,
@@ -114,6 +115,7 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
             },
             (res: ResponseWrapper) => this.onError(res.json)
             );
+        */
 
     }
 }
