@@ -58,7 +58,7 @@ export class AppsComponent implements OnInit, OnDestroy {
             size: this.itemsPerPage,
             sort: this.sort()
         }).subscribe(
-            (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
+            (res: ResponseWrapper) => this.onSuccess(res.json, res.headers, false),
             (res: ResponseWrapper) => this.onError(res.json)
             );
     }
@@ -99,9 +99,13 @@ export class AppsComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this.eventManager.destroy(this.eventSubscriber);
     }
-    filterItems() {
-        if (this.searchValue && this.searchValue !== '') {
-            this.apps = this.initialApps.filter((item) => item.name.toLowerCase().indexOf(this.searchValue) > -1);
+    filterItems($event) {
+        if (this.searchValue && this.searchValue !== '' && $event && $event.keyCode === 13) {
+            //this.apps = this.initialApps.filter((item) => item.name.toLowerCase().indexOf(this.searchValue) > -1);
+            this.appsService.search(this.searchValue).subscribe(
+                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers, true),
+                (res: ResponseWrapper) => this.onError(res.json)
+                );
         } else {
             this.apps = this.initialApps;
         }
@@ -121,13 +125,15 @@ export class AppsComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    private onSuccess(data, headers) {
+    private onSuccess(data, headers, bIsFromSearch) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
         this.queryCount = this.totalItems;
         // this.page = pagingParams.page;
         this.apps = data;
-        this.initialApps = data;
+        if(!bIsFromSearch){
+            this.initialApps = data;
+        }
         this.breadCrumbService.getBreadCrumbs().subscribe(val=>{
             this.breadCrumbService.updateBreadCrumbs(val, {name : 'Apps', selVal : 'Apps', router : '#/apps', brdCrmbId : '1', appsData:data});
         });

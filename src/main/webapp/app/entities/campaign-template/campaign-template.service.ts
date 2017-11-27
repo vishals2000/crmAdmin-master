@@ -106,6 +106,12 @@ export class CampaignTemplateService {
             .map((res: Response) => this.convertResponse(res));
     }
 
+    search(req?: any): Observable<ResponseWrapper> {
+        const options = createRequestOption(req);
+        return this.http.get(this.resourceUrl + '/group/' + req.campGroupId + '/search/' + req.searchVal)
+            .map((res: Response) => this.convertResponse(res));
+    }
+
     getPushNotificationCampaignTemplate(req?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(req);
         return this.http.get(`${this.resourceUrl}/${req.campaignTemplateId}`, options)

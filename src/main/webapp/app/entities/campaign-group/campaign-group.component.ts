@@ -63,7 +63,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
             size: this.itemsPerPage,
             sort: this.sort()
         }).subscribe(
-            (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
+            (res: ResponseWrapper) => this.onSuccess(res.json, res.headers, false),
             (res: ResponseWrapper) => this.onError(res.json)
             );
     }
@@ -147,9 +147,13 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
             this.loadAll()
         );
     }
-    filterItems() {
-        if (this.searchValue && this.searchValue !== '') {
-            this.campaignGroups = this.initialCampainGroups.filter((item) => item.name.toLowerCase().indexOf(this.searchValue) > -1);
+    filterItems($event) {
+        if (this.searchValue && this.searchValue !== '' && $event && $event.keyCode === 13) {
+            //this.campaignGroups = this.initialCampainGroups.filter((item) => item.name.toLowerCase().indexOf(this.searchValue) > -1);
+            this.campaignGroupService.search({appId: this.projectId, searchVal : this.searchValue}).subscribe(
+                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers, true),
+                (res: ResponseWrapper) => this.onError(res.json)
+                );
         } else {
             this.campaignGroups = this.initialCampainGroups;
         }
@@ -162,13 +166,15 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    private onSuccess(data, headers) {
+    private onSuccess(data, headers, bIsFromSearch) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
         this.queryCount = this.totalItems;
         // this.page = pagingParams.page;
         this.campaignGroups = data;
-        this.initialCampainGroups = data;
+        if(!bIsFromSearch){
+            this.initialCampainGroups = data;
+        }
         this.breadCrumbService.getBreadCrumbs().subscribe(val=>{
             this.breadCrumbService.updateBreadCrumbs(val, {name : 'Campaigns', appsData: data, key: this.projectName, router : '#/campaign-group/project/' + this.projectId  + "/" + this.projectName, brdCrmbId : '2'});
          });

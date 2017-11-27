@@ -51,6 +51,11 @@ export class CampaignGroupService {
             .map((res: Response) => this.convertResponse(res));
     }
 
+    search(req?: any): Observable<ResponseWrapper> {
+        return this.http.get(this.resourceUrl + '/project/' + req.appId + '/search/' + req.searchVal)
+            .map((res: Response) => this.convertResponse(res));
+    }
+
     delete(id: string): Observable<Response> {
         return this.http.delete(`${this.resourceUrl}/${id}`);
     }

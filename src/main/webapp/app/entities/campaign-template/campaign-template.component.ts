@@ -24,6 +24,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
 
     routeData: any;
+    initialCampainTemp: CampaignTemplate[];
     links: any;
     totalItems: any;
     queryCount: any;
@@ -35,6 +36,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     results: string[];
     groupId: string;
     groupName: string;
+    searchValue: string;
     constructor(
         private campaignTemplateService: CampaignTemplateService,
         private parseLinks: JhiParseLinks,
@@ -69,7 +71,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
             size: this.itemsPerPage,
             sort: this.sort()
         }).subscribe(
-            (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
+            (res: ResponseWrapper) => this.onSuccess(res.json, res.headers, false),
             (res: ResponseWrapper) => this.onError(res.json)
             );
     }
@@ -172,12 +174,27 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    private onSuccess(data, headers) {
+    filterItems($event) {
+        if (this.searchValue && this.searchValue !== '' && $event && $event.keyCode === 13) {
+            //this.campaignGroups = this.initialCampainGroups.filter((item) => item.name.toLowerCase().indexOf(this.searchValue) > -1);
+            this.campaignTemplateService.search({campGroupId: this.groupId, searchVal : this.searchValue}).subscribe(
+                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers, true),
+                (res: ResponseWrapper) => this.onError(res.json)
+                );
+        } else {
+            this.campaignTemplates = this.initialCampainTemp;
+        }
+    }
+
+    private onSuccess(data, headers, bIsFromSearch) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
         this.queryCount = this.totalItems;
         // this.page = pagingParams.page;
         this.campaignTemplates = data;
+        if(!bIsFromSearch){
+            this.initialCampainTemp = data;
+        }
         this.breadCrumbService.getBreadCrumbs().subscribe(val=>{
             this.breadCrumbService.updateBreadCrumbs(val, {name : 'Messages',  key :this.groupName, router : '#/campaign-template/group/' + this.groupId  + "/" + this.groupName, brdCrmbId : '3'});
         });
