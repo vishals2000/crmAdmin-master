@@ -9,7 +9,12 @@ Main page styles
     background: url("../../content/images/hipster.png") no-repeat center top;
     background-size: contain;
 }
-
+.selFilLanguage span::after {
+    content: ', ';
+}
+.selFilLanguage span:last-child::after {
+    content: '';
+}
 /* wait autoprefixer update to allow simple generation of high pixel density media query */
 @media
 only screen and (-webkit-min-device-pixel-ratio: 2),

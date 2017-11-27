@@ -146,6 +146,9 @@
                                     <!-- <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option> -->
                                     <option *ngFor="let filterOption of getFilterOptionValueValues(i)" [value]="filterOption">{{filterOption}}</option>
                                 </select>
+                                <div class="selFilLanguage" *ngSwitchCase="'multiSelectDropdown'">
+                                    <span *ngFor="let filterOption of getSelectedFilterOptionValueValues(i)">{{filterOption}}</span>
+                                </div>
                                 <!-- <select class="form-control" formControlName="filterOptionValue">
                             <option *ngFor="let filterOption of getFilterOptionValueValues(i)" [value]="filterOption">{{filterOption}}</option>
                             </select> -->

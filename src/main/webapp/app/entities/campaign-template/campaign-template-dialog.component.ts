@@ -432,6 +432,11 @@ export class CampaignTemplateDialogComponent implements OnInit {
         targetGroupFilterCriterionFormControl.get('filterOptionComparison').setValue('');
         targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue('');
     }
+    getSelectedFilterOptionValueValues(index) {
+        const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
+        const targetGroupFilterCriterionFormControl: AbstractControl = targetGroupFilters.at(index);
+        return targetGroupFilterCriterionFormControl.get('filterOptionValue').value;
+    }
     populateFilterOptions() {
         this.filterOptions = ['App', 'App Version', 'Country', 'Event', 'Install Date', 'Language', 'Last Open Date', 'OS', 'Segment', 'Tag', 'Timezone'];
         this.filterOptions.sort();
