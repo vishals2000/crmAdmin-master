@@ -90,3 +90,72 @@ Logo styles
     background-size: contain;
     width: 100%;
 }
+
+/*breadcrumb css start*/
+.ol-breadcrumb {
+   color: #212121;
+   font-size: 1.2vw;
+   background-color: #F8F8F8;
+   min-height: 55px;
+   padding: 0 0 0 25px;
+   overflow: hidden;
+}
+.flex {
+   -webkit-box-flex: 1;
+   -webkit-flex: 1;
+   flex: 1;
+   box-sizing: border-box;
+}
+.ol-breadcrumb .crumbs {
+   min-height: 55px;
+   padding: 0 0 0 20px;
+   list-style-type: none;
+   position: relative;
+}
+.layout-row {
+   -webkit-box-orient: horizontal;
+   -webkit-box-direction: normal;
+   -webkit-flex-direction: row;
+   flex-direction: row;
+}
+.layout-align-center-center, .layout-align-end-center, .layout-align-space-around-center, .layout-align-space-between-center, .layout-align-start-center {
+   -webkit-box-align: center;
+   -webkit-align-items: center;
+   align-items: center;
+   -webkit-align-content: center;
+   align-content: center;
+   max-width: 100%;
+}
+.layout, .layout-column, .layout-row {
+   box-sizing: border-box;
+   display: -webkit-box;
+   display: -webkit-flex;
+   display: flex;
+}
+.ol-breadcrumb .crumbs {
+   min-height: 55px;
+   padding: 0 0 0 20px;
+   list-style-type: none;
+   position: relative;
+}
+
+
+.ol-breadcrumbarrow span {
+    display: block;
+    font-size: 32px;
+    line-height: 32px;
+    padding: 0;
+    margin-top: -3px;
+    padding-bottom: 3px;
+    color: #D0D0D0;
+    font-weight: bold;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.ol-breadcrumbarrow{
+    padding: 0 5px;
+}
+.ol-breadcrumbSelect, .ol-breadcrumbSelect:focus{
+    border: none;
+    background: none;
+}

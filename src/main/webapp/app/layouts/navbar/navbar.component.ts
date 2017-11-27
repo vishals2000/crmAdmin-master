@@ -1,10 +1,14 @@
+import { Injectable } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from 'rxjs/Rx';
 
 import { ProfileService } from '../profiles/profile.service';
 import { Principal, LoginModalService, LoginService } from '../../shared';
+
+import { BreadCrumbService } from './navbar.service';
 
 import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
 
@@ -16,6 +20,7 @@ import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
         'navbar.css'
     ]
 })
+@Injectable()
 export class NavbarComponent implements OnInit {
 
     inProduction: boolean;
@@ -24,13 +29,15 @@ export class NavbarComponent implements OnInit {
     swaggerEnabled: boolean;
     modalRef: NgbModalRef;
     version: string;
+    crumbsArray : any[]
 
     constructor(
         private loginService: LoginService,
         private principal: Principal,
         private loginModalService: LoginModalService,
         private profileService: ProfileService,
-        private router: Router
+        private router: Router,
+        private breadCrumbService :BreadCrumbService
     ) {
         this.version = VERSION ? 'v' + VERSION : '';
         this.isNavbarCollapsed = true;
@@ -40,6 +47,10 @@ export class NavbarComponent implements OnInit {
         this.profileService.getProfileInfo().subscribe((profileInfo) => {
             this.inProduction = profileInfo.inProduction;
             this.swaggerEnabled = profileInfo.swaggerEnabled;
+        });
+        this.breadCrumbService.breadcrumbs.subscribe((carray) => {
+            this.crumbsArray = carray;
+            console.log(this.crumbsArray);
         });
     }
 
@@ -67,5 +78,10 @@ export class NavbarComponent implements OnInit {
 
     getImageUrl() {
         return this.isAuthenticated() ? this.principal.getImageUrl() : null;
+    }
+
+    gotToCampnPage($event){
+        console.log($event);
+        alert(1);
     }
 }

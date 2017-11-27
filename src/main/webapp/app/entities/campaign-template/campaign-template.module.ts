@@ -32,7 +32,7 @@ import {
     CampaignTemplateTestPopupComponent,
     CampaignTemplateTestDialogComponent
 } from './campaign-template-test-dialog.component'
-
+import { BreadCrumbService } from '../../layouts/navbar/navbar.service';
 const ENTITY_STATES = [
     ...campaignTemplateRoute,
     ...campaignTemplatePopupRoute,
@@ -76,6 +76,7 @@ const ENTITY_STATES = [
         CampaignTemplateService,
         CampaignTemplatePopupService,
         CampaignTemplateResolvePagingParams,
+        BreadCrumbService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

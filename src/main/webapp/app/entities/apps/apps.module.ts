@@ -15,6 +15,7 @@ import {
     appsPopupRoute,
     AppsResolvePagingParams,
 } from './';
+import { BreadCrumbService } from '../../layouts/navbar/navbar.service';
 
 const ENTITY_STATES = [
     ...appsRoute,
@@ -45,6 +46,7 @@ const ENTITY_STATES = [
         AppsService,
         AppsPopupService,
         AppsResolvePagingParams,
+        BreadCrumbService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

@@ -16,6 +16,8 @@ import {
     CampaignGroupResolvePagingParams,
 } from './';
 
+import { BreadCrumbService } from '../../layouts/navbar/navbar.service';
+
 const ENTITY_STATES = [
     ...campaignGroupRoute,
     ...campaignGroupPopupRoute,
@@ -45,6 +47,7 @@ const ENTITY_STATES = [
         CampaignGroupService,
         CampaignGroupPopupService,
         CampaignGroupResolvePagingParams,
+        BreadCrumbService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

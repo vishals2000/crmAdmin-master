@@ -5,6 +5,7 @@ import { JhiEventManager, JhiParseLinks, JhiPaginationUtil, JhiAlertService } fr
 
 import { Apps } from './apps.model';
 import { AppsService } from './apps.service';
+import { BreadCrumbService } from '../../layouts/navbar/navbar.service';
 import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
@@ -39,7 +40,8 @@ export class AppsComponent implements OnInit, OnDestroy {
         private router: Router,
         private eventManager: JhiEventManager,
         private paginationUtil: JhiPaginationUtil,
-        private paginationConfig: PaginationConfig
+        private paginationConfig: PaginationConfig,
+        public breadCrumbService : BreadCrumbService
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.routeData = this.activatedRoute.data.subscribe((data) => {
@@ -126,6 +128,9 @@ export class AppsComponent implements OnInit, OnDestroy {
         // this.page = pagingParams.page;
         this.apps = data;
         this.initialApps = data;
+        this.breadCrumbService.getBreadCrumbs().subscribe(val=>{
+            this.breadCrumbService.updateBreadCrumbs(val, {name : 'Apps', selVal : 'Apps', router : '#/apps', brdCrmbId : '1', appsData:data});
+        });
     }
     private onError(error) {
         this.alertService.error(error.message, null, null);

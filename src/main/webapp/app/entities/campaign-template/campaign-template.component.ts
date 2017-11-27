@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Pipe, PipeTransform } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { JhiEventManager, JhiParseLinks, JhiPaginationUtil, JhiAlertService } from 'ng-jhipster';
@@ -8,17 +8,16 @@ import { CampaignTemplateService } from './campaign-template.service';
 import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
+import { BreadCrumbService } from '../../layouts/navbar/navbar.service';
 
 @Component({
     selector: 'jhi-campaign-template',
     templateUrl: './campaign-template.component.html'
 })
-
 export class CampaignTemplateComponent implements OnInit, OnDestroy {
 
     currentAccount: any;
     campaignTemplates: CampaignTemplate[];
-    initialCampaignTemplates: CampaignTemplate[];
     error: any;
     success: any;
     eventSubscriber: Subscription;
@@ -36,7 +35,6 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     results: string[];
     groupId: string;
     groupName: string;
-    searchValue: string;
     constructor(
         private campaignTemplateService: CampaignTemplateService,
         private parseLinks: JhiParseLinks,
@@ -49,7 +47,8 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         private eventManager: JhiEventManager,
         private paginationUtil: JhiPaginationUtil,
         private paginationConfig: PaginationConfig,
-        private http: HttpClient
+        private http: HttpClient,
+        public breadCrumbService : BreadCrumbService
 
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
@@ -83,11 +82,11 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     transition() {
         this.router.navigate(['/campaign-template/group/' + this.groupId + '/' + this.groupName], {
             queryParams:
-                {
-                    page: this.page,
-                    size: this.itemsPerPage,
-                    sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-                }
+            {
+                page: this.page,
+                size: this.itemsPerPage,
+                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+            }
         });
         this.loadAll();
     }
@@ -112,11 +111,46 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
             this.groupName = params['name'];
             this.loadAll();
             this.campaignTemplateService.getFeProduct(this.groupId, 'feProduct').subscribe((response) => {
-                const values: string[] = [this.groupId, response['fe'], response['product']]
+                const values: string[] = [this.groupId, response['fe'], response['product']];
                 this.campaignTemplateService.changeMessage(values);
             });
         });
     }
+
+    // load1(id) {
+    //     this.campaignTemplateService.findCampGroups(id, 'group').subscribe((data) => {
+
+    //         // for (let i of data) {
+    //         //     i.launchEnabled = true;
+    //         // }
+    //         this.campaignTemplates = data;
+
+    //     },
+    //         (err) => {
+    //             // alert(err);
+    //             console.log(err);
+    //             // this.campaignTemplates = [{
+    //             //     'id': '59f47d8513b80ad7286ec255',
+    //             //     'campaignName': 'Partypoker App',
+    //             //     'campaignDescription': 'This is Partypoker application'
+    //             // },
+    //             // {
+    //             //     'id': '59f47d8513b80ad7286ec255',
+    //             //     'campaignName': 'Partypoker App',
+    //             //     'campaignDescription': 'This is Partypoker application'
+    //             // },
+    //             // {
+    //             //     'id': '59f47d8513b80ad7286ec255',
+    //             //     'campaignName': 'Partypoker App',
+    //             //     'campaignDescription': 'This is Partypoker application'
+    //             // },
+    //             // {
+    //             //     'id': '59f47d8513b80ad7286ec255',
+    //             //     'campaignName': 'Partypoker App',
+    //             //     'campaignDescription': 'This is Partypoker application'
+    //             // }]
+    //         });
+    // }
 
     ngOnDestroy() {
         this.eventManager.destroy(this.eventSubscriber);
@@ -128,13 +162,6 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     registerChangeInCampaignTemplates() {
         this.eventSubscriber = this.eventManager.subscribe('campaignTemplateListModification', (response) =>
             this.loadAll());
-    }
-    filterItems() {
-        if (this.searchValue && this.searchValue !== '') {
-            this.campaignTemplates = this.initialCampaignTemplates.filter((item) => item.campaignName.toLowerCase().indexOf(this.searchValue) > -1);
-        } else {
-            this.campaignTemplates = this.initialCampaignTemplates;
-        }
     }
 
     sort() {
@@ -151,7 +178,9 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         this.queryCount = this.totalItems;
         // this.page = pagingParams.page;
         this.campaignTemplates = data;
-        this.initialCampaignTemplates = data;
+        this.breadCrumbService.getBreadCrumbs().subscribe(val=>{
+            this.breadCrumbService.updateBreadCrumbs(val, {name : 'Messages',  key :this.groupName, router : '#/campaign-template/group/' + this.groupId  + "/" + this.groupName, brdCrmbId : '3'});
+        });
     }
     private onError(error) {
         this.alertService.error(error.message, null, null);

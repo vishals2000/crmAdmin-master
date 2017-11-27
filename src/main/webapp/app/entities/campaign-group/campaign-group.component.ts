@@ -7,6 +7,7 @@ import { CampaignGroup } from './campaign-group.model';
 import { CampaignGroupService } from './campaign-group.service';
 import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
+import { BreadCrumbService } from '../../layouts/navbar/navbar.service';
 
 @Component({
     selector: 'jhi-campaign-group',
@@ -43,7 +44,8 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
         private router: Router,
         private eventManager: JhiEventManager,
         private paginationUtil: JhiPaginationUtil,
-        private paginationConfig: PaginationConfig
+        private paginationConfig: PaginationConfig,
+        public breadCrumbService : BreadCrumbService
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.routeData = this.activatedRoute.data.subscribe((data) => {
@@ -167,6 +169,9 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
         // this.page = pagingParams.page;
         this.campaignGroups = data;
         this.initialCampainGroups = data;
+        this.breadCrumbService.getBreadCrumbs().subscribe(val=>{
+            this.breadCrumbService.updateBreadCrumbs(val, {name : 'Campaigns', appsData: data, key: this.projectName, router : '#/campaign-group/project/' + this.projectId  + "/" + this.projectName, brdCrmbId : '2'});
+         });
     }
     private onError(error) {
         this.alertService.error(error.message, null, null);

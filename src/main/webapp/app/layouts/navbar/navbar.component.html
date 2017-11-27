@@ -243,3 +243,22 @@
         </ul>
     </div>
 </nav>
+<div class="ol-breadcrumb flex" *ngIf="crumbsArray && crumbsArray.length">
+    <div class="crumbs layout-row">
+    <div *ngFor="let crumb of crumbsArray;" >
+        <div class="layout-align-center-center layout-row">
+                <!-- div *ngIf="crumb.list && crumb.list.length">
+                        <select class="ol-breadcrumbSelect" [(ngModel)]="crumb.selVal" ng-change="gotToCampnPage($event.target.value)">
+                                <option *ngFor="let crumb1 of crumb.list"  [ngValue]="crumb1.id/crumb1.name">{{crumb1.name}}</option>
+                        </select>
+                </div -->
+                <div layout="" layout-align="center center" class="crumb layout-align-center-center layout-row" ng-switch-default="">
+                    <a class="truncated" href="{{crumb.router}}" >{{crumb.selVal}}&nbsp;</a> <!--ng-if="!$last || crumb.displayName === 'Messages'" -->
+                </div>
+                <div layout="" layout-align="center center" class="ol-breadcrumbarrow"  ng-show="!$last">
+                        <span aria-hidden="true">»</span><!-- ng-show="!$last" -->
+                </div>
+        </div>
+    </div>
+    </div>
+</div>
