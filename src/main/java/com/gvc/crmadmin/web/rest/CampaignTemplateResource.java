@@ -470,8 +470,19 @@ public class CampaignTemplateResource {
                     log.info("Cancelling campaign " + pushNotificationCampaignTemplate);
                     PushNotificationCampaignCancellationResponse pushNotificationCampaignCancellationResponse = cancelPushNotificationCampaignHelper(pushNotificationCampaignTemplate).getBody();
                     if(pushNotificationCampaignCancellationResponse.isResult()) {
-                        updateCampaignDeletionStatus(campaignTemplate.getId(), pushNotificationCampaignCancellationResponse.isResult());
-                        return ResponseEntity.ok().headers(HeaderUtil.createAlert(campaignTemplate.getCampaignName() + " cancelled and deleted", campaignTemplate.getId())).build();
+
+                        final DateTime currentDateTime = new DateTime(DateTimeZone.UTC);
+                        final DateTime startTime = getCampaignStartTime(campaignTemplate);
+                        final DateTime endTime = getCampaignEndTime(campaignTemplate);
+                        //After the campaign is successfully cancelled, then, if the status in PENDING, delete the campaign from the system. If the status is LIVE, then change the status to DELETED.
+
+                        if(currentDateTime.isBefore(startTime)) {
+                            campaignTemplateService.delete(campaignTemplate.getId());
+                            return ResponseEntity.ok().headers(HeaderUtil.createAlert(campaignTemplate.getCampaignName() +" successfully deleted", campaignTemplate.getId())).build();
+                        } else {
+                            updateCampaignDeletionStatus(campaignTemplate.getId(), pushNotificationCampaignCancellationResponse.isResult());
+                            return ResponseEntity.ok().headers(HeaderUtil.createAlert(campaignTemplate.getCampaignName() + " cancelled and deleted", campaignTemplate.getId())).build();
+                        }
                     } else {
                         return ResponseEntity.ok().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, campaignTemplate.getId(),campaignTemplate.getCampaignName() +" could not be cancelled. Not deleting the campaign")).build();
                     }
