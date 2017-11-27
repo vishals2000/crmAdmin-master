@@ -35,6 +35,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -120,6 +121,23 @@ public class CampaignTemplateResource {
 
         RestTemplate restTemplate = new RestTemplate();
         PushNotificationCampaignTargetGroupSizeResponse pushNotificationCampaignTargetGroupSizeResponse = restTemplate.postForObject(Constants.REFRESH_URL, pushNotificationCampaignTargetGroupSizeRequest, PushNotificationCampaignTargetGroupSizeResponse.class);
+
+        System.out.println(pushNotificationCampaignTargetGroupSizeResponse);
+        return ResponseUtil.wrapOrNotFound(Optional.of(pushNotificationCampaignTargetGroupSizeResponse));
+    }
+    @PostMapping("campaign-templates/getTargetContentGroupSize")
+    @Timed
+    public ResponseEntity<PushNotificationCampaignTargetGroupContentSizeResponse> getPushNotificationTargetGroupSizeForLanguage(@Valid @RequestBody PushNotificationCampaignTargetGroupContentSizeRequest pushNotificationCampaignTargetGroupContentSizeRequest) throws URISyntaxException, UnsupportedEncodingException {
+        log.debug("REST request to get pushNotificationCampaignTargetGroupContentSizeRequest", pushNotificationCampaignTargetGroupContentSizeRequest);
+
+        PushNotificationCampaignTargetGroupSizeRequest pushNotificationCampaignTargetGroupSizeRequest = new PushNotificationCampaignTargetGroupSizeRequest();
+        pushNotificationCampaignTargetGroupSizeRequest.setFrontEnd(pushNotificationCampaignTargetGroupContentSizeRequest.getFrontEnd());
+        pushNotificationCampaignTargetGroupSizeRequest.setProduct(pushNotificationCampaignTargetGroupContentSizeRequest.getProduct());
+        pushNotificationCampaignTargetGroupSizeRequest.setTargetGroupFilterCriteria(pushNotificationCampaignTargetGroupContentSizeRequest.getTargetGroupFilterCriteria());
+        pushNotificationCampaignTargetGroupSizeRequest.setLanguages(Collections.singletonList(pushNotificationCampaignTargetGroupContentSizeRequest.getLanguage()));
+        
+        RestTemplate restTemplate = new RestTemplate();
+        PushNotificationCampaignTargetGroupContentSizeResponse pushNotificationCampaignTargetGroupSizeResponse = restTemplate.postForObject(Constants.REFRESH_URL, pushNotificationCampaignTargetGroupSizeRequest, PushNotificationCampaignTargetGroupContentSizeResponse.class);
 
         System.out.println(pushNotificationCampaignTargetGroupSizeResponse);
         return ResponseUtil.wrapOrNotFound(Optional.of(pushNotificationCampaignTargetGroupSizeResponse));

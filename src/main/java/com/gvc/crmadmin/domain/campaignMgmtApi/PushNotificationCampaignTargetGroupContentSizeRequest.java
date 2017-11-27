@@ -9,9 +9,9 @@ import java.io.Serializable;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PushNotificationCampaignTargetGroupSizeRequest implements Serializable {
+public class PushNotificationCampaignTargetGroupContentSizeRequest implements Serializable {
 
-    private static final long serialVersionUID = 3755581428441279097L;
+    private static final long serialVersionUID = 2988567362137152437L;
 
     @JsonProperty("targetGroupFilterCriteria")
     private List<TargetGroupFilterCriterion> targetGroupFilterCriteria;
@@ -22,14 +22,14 @@ public class PushNotificationCampaignTargetGroupSizeRequest implements Serializa
     @JsonProperty("frontEnd")
     private String frontEnd;
 
-    @JsonProperty("targetGroupContentCriteria")
-    private List<String> languages;
+    @JsonProperty("language")
+    private String language;
 
     public List<TargetGroupFilterCriterion> getTargetGroupFilterCriteria() {
         return targetGroupFilterCriteria;
     }
 
-    public PushNotificationCampaignTargetGroupSizeRequest setTargetGroupFilterCriteria(List<TargetGroupFilterCriterion> targetGroupFilterCriteria) {
+    public PushNotificationCampaignTargetGroupContentSizeRequest setTargetGroupFilterCriteria(List<TargetGroupFilterCriterion> targetGroupFilterCriteria) {
         this.targetGroupFilterCriteria = targetGroupFilterCriteria;
         return this;
     }
@@ -38,7 +38,7 @@ public class PushNotificationCampaignTargetGroupSizeRequest implements Serializa
         return product;
     }
 
-    public PushNotificationCampaignTargetGroupSizeRequest setProduct(String product) {
+    public PushNotificationCampaignTargetGroupContentSizeRequest setProduct(String product) {
         this.product = product;
         return this;
     }
@@ -47,7 +47,7 @@ public class PushNotificationCampaignTargetGroupSizeRequest implements Serializa
         return frontEnd;
     }
 
-    public PushNotificationCampaignTargetGroupSizeRequest setFrontEnd(String frontEnd) {
+    public PushNotificationCampaignTargetGroupContentSizeRequest setFrontEnd(String frontEnd) {
         this.frontEnd = frontEnd;
         return this;
     }
@@ -57,11 +57,11 @@ public class PushNotificationCampaignTargetGroupSizeRequest implements Serializa
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
-    public List<String> getLanguages() {
-        return languages;
+    public String getLanguage() {
+        return language;
     }
 
-    public void setLanguages(List<String> languages) {
-        this.languages = languages;
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }
