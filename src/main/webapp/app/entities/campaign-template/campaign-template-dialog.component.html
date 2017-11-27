@@ -91,11 +91,12 @@
                     </div>
                 </div>
                 <!-- <div *ngIf="campaignTemplateGroupCreationForm.controls.id.value"> -->
-                <div class="form-group">
+                <div class="form-group" *ngIf="(campaignTemplate.id && campaignTemplate.pushToOptimoveInstances ) || !campaignTemplate.id">
                     <label for="frequent_date">Push to optimoveInstances</label>&nbsp;&nbsp;
-                    <input type="checkbox" name="pushToOptimoveInstances" id="pushToOptimoveInstances" formControlName="pushToOptimoveInstances" />
+                    <input type="checkbox" name="pushToOptimoveInstances" *ngIf="campaignTemplate.id ? true : false" disabled formControlName="pushToOptimoveInstances" />
+                    <input type="checkbox" name="pushToOptimoveInstances" *ngIf="campaignTemplate.id ? false : true" id="pushToOptimoveInstances" formControlName="pushToOptimoveInstances" />
                     <select class="form-control" name="optimoveInstances" formControlName="optimoveInstances" id="optimoveInstances" multiple>
-                        <option *ngFor="let optimoveInstance of campaignTemplate.optimoveInstances" [value]="optimoveInstance">{{optimoveInstance}}</option>
+                        <option [disabled]="campaignTemplate.id ? true : false" *ngFor="let optimoveInstance of campaignTemplate.optimoveInstances" [value]="optimoveInstance">{{optimoveInstance}}</option>
                     </select>
                 </div>
                 </br>

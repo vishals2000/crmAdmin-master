@@ -18,7 +18,6 @@ export class BreadCrumbService {
     }
 
     public updateBreadCrumbs(bcArray, cuCrumbobj){
-        console.log(bcArray);
         let currentIndex;
         for(let i=0; i< bcArray.length; i++){
             if(bcArray[i].brdCrmbId === cuCrumbobj.brdCrmbId)
@@ -30,6 +29,9 @@ export class BreadCrumbService {
                     currentIndex = i;
                 }
             }
+        }
+        if(bcArray && bcArray.length === 0 && cuCrumbobj.brdCrmbId !== '1'){
+            bcArray.push( {name : 'Apps', selVal : 'Apps', router : '#/apps', brdCrmbId : '1', appsData: cuCrumbobj.data});
         }
         if(currentIndex){
             bcArray.splice(currentIndex, bcArray.length);
