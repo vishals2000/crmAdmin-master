@@ -62,11 +62,11 @@ export class CampaignTemplate implements BaseEntity {
         // public filterOption?: FilterOption,
         // public filterOptionComparison?: FilterOptionComparison,
         // public filterOptionValue?: string,
-        public contentName?: string,
+       // public contentName?: string,
         public contentTitle?: string,
         public contentBody?: string,
         public metaData?: string,
-        public languageSelected?: string,
+        public languageSelected?: any,
         public sendImmediately?: boolean,
         public optimoveInstances?: string[],
         public pushToOptimoveInstances?: boolean,
@@ -98,7 +98,7 @@ export class CampaignTemplateFilterCriterion {
 
 export class CampaignTemplateContentCriterion {
     constructor(
-        public contentName: string,
+        //public contentName: string,
         public contentTitle: string,
         public contentBody: string,
         public languageSelected: string,
@@ -109,6 +109,7 @@ export class CampaignTargetGroupSizeRequest {
     constructor(
         public frontEnd: string,
         public product: string,
+        public targetGroupContentCriteria: string[],
         public targetGroupFilterCriteria?: TargetGroupFilterCriterionSizeRequest[],
     ) {
     }

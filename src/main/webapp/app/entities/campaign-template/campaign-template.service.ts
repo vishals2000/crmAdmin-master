@@ -166,8 +166,8 @@ export class CampaignTemplateService {
         campaignTemplateCopy.recurrenceEndDate = this.dateUtils.convertLocalDateToServer(campaignTemplate.recurrenceEndDate);
         campaignTemplateCopy.inPlayerTimezone = campaignTemplate.inPlayerTimezone;
         campaignTemplateCopy.scheduledTime = campaignTemplate.scheduledTime;
-        campaignTemplateCopy.contentName = campaignTemplate.contentName;
-        campaignTemplateCopy.contentTitle = campaignTemplate.contentTitle;
+       // campaignTemplateCopy.contentName = campaignTemplate.contentName;
+       campaignTemplateCopy.contentTitle = campaignTemplate.contentTitle;
         campaignTemplateCopy.contentBody = campaignTemplate.contentBody;
         campaignTemplateCopy.metaData = campaignTemplate.metaData;
         campaignTemplateCopy.languageSelected = campaignTemplate.languageSelected;
@@ -198,8 +198,8 @@ export class CampaignTemplateService {
         const campaignTemplateContentCriteria: CampaignTemplateContentCriterion[] = [];
         for (const campaignTemplateContentCriterion of campaignTemplate.targetGroupContentCriteria) {
                 campaignTemplateContentCriteria.push(new CampaignTemplateContentCriterion(
-                    campaignTemplateContentCriterion.contentName,
-                    campaignTemplateContentCriterion.contentTitle,
+                   // campaignTemplateContentCriterion.contentName,
+                   campaignTemplateContentCriterion.contentTitle,
                     campaignTemplateContentCriterion.contentBody,
                     campaignTemplateContentCriterion.languageSelected));
         }

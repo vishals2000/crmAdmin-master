@@ -136,7 +136,13 @@ export class CampaignTemplateDialogComponent implements OnInit {
                     this.campaignTemplateGroupCreationForm.value.time.minute : this.campaignTemplateGroupCreationForm.value.time.minute) + ':00';
 
         } else {
-            this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + this.currentDate.getHours() + ':' + this.currentDate.getMinutes() + ':00';
+            const currentHourValue = this.currentDate.getUTCHours();
+            const currentMinValue = this.currentDate.getUTCMinutes();
+            this.campaignTemplateGroupCreationForm.value.scheduledTime = '' +
+            (currentHourValue < 10 ? '0' +
+            this.currentDate.getUTCHours() : this.currentDate.getUTCHours()) + ':' +
+            (currentMinValue < 10 ? '0' +
+            this.currentDate.getUTCMinutes() : this.currentDate.getUTCMinutes()) + ':00';
         }
         if(this.campaignTemplate.sendImmediately){
             this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + this.currentDate.getUTCHours() + ':' + this.currentDate.getUTCMinutes() + ':00';
@@ -178,7 +184,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     }
 
     addCampaignTemplateContentCriterion() {
-        this.targetGroupContentCriteria.push(this.fb.group(new CampaignTemplateContentCriterion('', '', '', '')));
+        this.targetGroupContentCriteria.push(this.fb.group(new CampaignTemplateContentCriterion('', '', '')));
     }
 
     createForm() {
@@ -205,8 +211,8 @@ export class CampaignTemplateDialogComponent implements OnInit {
             scheduledTime: (!this.campaignTemplate.scheduledTime) ? '' : this.campaignTemplate.scheduledTime,
             inPlayerTimezone: (!this.campaignTemplate.inPlayerTimezone) ? false : this.campaignTemplate.inPlayerTimezone,
             campaignGroupId: (!this.campaignTemplate.campaignGroupId) ? '' : this.campaignTemplate.campaignGroupId,
-            contentName: (!this.campaignTemplate.contentName) ? '' : this.campaignTemplate.contentName,
-            contentTitle: (!this.campaignTemplate.contentTitle) ? '' : this.campaignTemplate.contentTitle,
+           // contentName: (!this.campaignTemplate.contentName) ? '' : this.campaignTemplate.contentName,
+           contentTitle: (!this.campaignTemplate.contentTitle) ? '' : this.campaignTemplate.contentTitle,
             contentBody: (!this.campaignTemplate.contentBody) ? '' : this.campaignTemplate.contentBody,
             metaData: (!this.campaignTemplate.metaData) ? '' : this.campaignTemplate.metaData,
             targetGroupFilterCriteria: this.fb.array([]),
@@ -292,7 +298,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             }
         } else {
             this.targetGroupContentCriteria.push(this.fb.group({
-                contentName: '',
+                //contentName: '',
                 contentTitle: '',
                 contentBody: '',
                 languageSelected: ''
@@ -368,10 +374,15 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 optionValues));
             formLengthIterator = formLengthIterator + 1;
         }
-
+        const languagesUpdated: string[] = [];
+        let i;
+        for(i=0;i<this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria.length;i++){
+            languagesUpdated.push(this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria[i].languageSelected);
+        }
         const body = new CampaignTargetGroupSizeRequest(
             this.campaignTemplateGroupCreationForm.get('frontEnd').value,
             this.campaignTemplateGroupCreationForm.get('product').value,
+            languagesUpdated,
             targetGroupFilterCriteria);
 
         this.campaignTemplateService.getTargetGroupSize(body).subscribe(
@@ -381,18 +392,20 @@ export class CampaignTemplateDialogComponent implements OnInit {
     }
 
     getTargetContentGroupSize(i){
-       // console.log(this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria[i].languageSelected);
-        const body = {
-            'frontEnd': this.campaignTemplateGroupCreationForm.get('frontEnd').value,
-            'product': this.campaignTemplateGroupCreationForm.get('product').value,
-            'language': this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria[i].languageSelected
-        }
-        this.campaignTemplateService.getTargetContentGroupSize(body).subscribe(
-            (res: ResponseWrapper) => this.onTargetGroupContentSizeRequestSuccess(res, res),
-            (res: ResponseWrapper) => this.onError(res.json)
-        );
-
-    }
+        //  console.log(this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteriavalue);
+          console.log(this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteria);
+          const body = {
+              'frontEnd': this.campaignTemplateGroupCreationForm.get('frontEnd').value,
+              'product': this.campaignTemplateGroupCreationForm.get('product').value,
+              'language': this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria[i].languageSelected,
+              'targetGroupFilterCriteria':   this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteria
+          }
+          this.campaignTemplateService.getTargetContentGroupSize(body).subscribe(
+              (res: ResponseWrapper) => this.onTargetGroupContentSizeRequestSuccess(res, res),
+              (res: ResponseWrapper) => this.onError(res.json)
+          );
+  
+      }
 
     private onTargetGroupContentSizeRequestSuccess(data, headers) {
         // console.log(data);

@@ -47,6 +47,7 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
         const body = new CampaignTargetGroupSizeRequest(
             this.campaignTemplate.frontEnd,
             this.campaignTemplate.product,
+            this.campaignTemplate.languageSelected,
             this.campaignTemplate.targetGroupFilterCriteria);
 
         this.campaignTemplateService.getTargetGroupSize(body).subscribe(
