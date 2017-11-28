@@ -130,12 +130,20 @@ public class CampaignTemplateResource {
     public ResponseEntity<PushNotificationCampaignTargetGroupContentSizeResponse> getPushNotificationTargetGroupSizeForLanguage(@Valid @RequestBody PushNotificationCampaignTargetGroupContentSizeRequest pushNotificationCampaignTargetGroupContentSizeRequest) throws URISyntaxException, UnsupportedEncodingException {
         log.debug("REST request to get pushNotificationCampaignTargetGroupContentSizeRequest", pushNotificationCampaignTargetGroupContentSizeRequest);
 
+        if(!StringUtils.hasText(pushNotificationCampaignTargetGroupContentSizeRequest.getLanguage())){
+            log.debug("No language passed in pushNotificationCampaignTargetGroupContentSizeRequest", pushNotificationCampaignTargetGroupContentSizeRequest);
+            PushNotificationCampaignTargetGroupContentSizeResponse pushNotificationCampaignTargetGroupSizeResponse = new PushNotificationCampaignTargetGroupContentSizeResponse();
+            pushNotificationCampaignTargetGroupSizeResponse.setTargetGroupSize(0L);
+            System.out.println(pushNotificationCampaignTargetGroupSizeResponse);
+            return ResponseUtil.wrapOrNotFound(Optional.of(pushNotificationCampaignTargetGroupSizeResponse));
+        }
+
         PushNotificationCampaignTargetGroupSizeRequest pushNotificationCampaignTargetGroupSizeRequest = new PushNotificationCampaignTargetGroupSizeRequest();
         pushNotificationCampaignTargetGroupSizeRequest.setFrontEnd(pushNotificationCampaignTargetGroupContentSizeRequest.getFrontEnd());
         pushNotificationCampaignTargetGroupSizeRequest.setProduct(pushNotificationCampaignTargetGroupContentSizeRequest.getProduct());
         pushNotificationCampaignTargetGroupSizeRequest.setTargetGroupFilterCriteria(pushNotificationCampaignTargetGroupContentSizeRequest.getTargetGroupFilterCriteria());
         pushNotificationCampaignTargetGroupSizeRequest.setLanguages(Collections.singletonList(pushNotificationCampaignTargetGroupContentSizeRequest.getLanguage()));
-        
+
         RestTemplate restTemplate = new RestTemplate();
         PushNotificationCampaignTargetGroupContentSizeResponse pushNotificationCampaignTargetGroupSizeResponse = restTemplate.postForObject(Constants.REFRESH_URL, pushNotificationCampaignTargetGroupSizeRequest, PushNotificationCampaignTargetGroupContentSizeResponse.class);
 
