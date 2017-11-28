@@ -163,5 +163,6 @@ Logo styles
     color: #FFFFFF !important;
 }
 .ol-breadcrumb .crumbRow:last-child a
+{
     font-weight: bold;
 }
