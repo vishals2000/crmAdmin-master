@@ -1,0 +1,88 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myUploadSegmentsLabel">Create or edit a Upload Segments</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!uploadSegments.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="uploadSegments.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_frontEnd">Front End</label>
+            <input type="text" class="form-control" name="frontEnd" id="field_frontEnd"
+                [(ngModel)]="uploadSegments.frontEnd" required />
+            <div [hidden]="!(editForm.controls.frontEnd?.dirty && editForm.controls.frontEnd?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.frontEnd?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_product">Product</label>
+            <input type="text" class="form-control" name="product" id="field_product"
+                [(ngModel)]="uploadSegments.product" required />
+            <div [hidden]="!(editForm.controls.product?.dirty && editForm.controls.product?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.product?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_name">Name</label>
+            <input type="text" class="form-control" name="name" id="field_name"
+                [(ngModel)]="uploadSegments.name" required />
+            <div [hidden]="!(editForm.controls.name?.dirty && editForm.controls.name?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.name?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group fileUpload" *ngIf="isUploadBtn">
+            <!-- <div class="fileUpload btn btn-primary" *ngIf="isUploadBtn"> -->
+                <label class="form-control-label" for="field_name">Upload File</label>
+                <input type="file" id="btnUpload" value="Upload" (change)="fileChange($event)" class="upload" />
+        </div>
+        <!-- <div class="form-group">
+            <label class="form-control-label" for="field_type">Type</label>
+            <input type="text" class="form-control" name="type" id="field_type"
+                [(ngModel)]="uploadSegments.type"  />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_estimate">Estimate</label>
+            <input type="text" class="form-control" name="estimate" id="field_estimate"
+                [(ngModel)]="uploadSegments.estimate"  />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_lastEstimatedAt">Last Estimated At</label>
+            <input type="text" class="form-control" name="lastEstimatedAt" id="field_lastEstimatedAt"
+                [(ngModel)]="uploadSegments.lastEstimatedAt"  />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_modifiedAt">Modified At</label>
+            <input type="text" class="form-control" name="modifiedAt" id="field_modifiedAt"
+                [(ngModel)]="uploadSegments.modifiedAt"  />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_createdAt">Created At</label>
+            <input type="text" class="form-control" name="createdAt" id="field_createdAt"
+                [(ngModel)]="uploadSegments.createdAt"  />
+        </div> -->
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

@@ -20,6 +20,12 @@
                 </a>
             </li>
             <li *ngSwitchCase="true" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link" routerLink="audience-segments" (click)="collapseNavbar()">
+                        <span>Audience Segments</span>
+                    </a>
+                </li>
+            <li *ngSwitchCase="true" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        
                 <a class="nav-link" routerLink="linechart" id="dashboard-menu">
                     <span>
                         <i class="fa fa-area-chart" aria-hidden="true"></i>
