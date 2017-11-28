@@ -94,8 +94,8 @@ Logo styles
 /*breadcrumb css start*/
 .ol-breadcrumb {
    color: #212121;
-   font-size: 1.2vw;
-   background-color: #F8F8F8;
+   font-size: 1.4vw;
+   background-color: #777777;
    min-height: 55px;
    padding: 0 0 0 25px;
    overflow: hidden;
@@ -158,4 +158,10 @@ Logo styles
 .ol-breadcrumbSelect, .ol-breadcrumbSelect:focus{
     border: none;
     background: none;
+}
+.ol-breadcrumb .crumbRow a, .ol-breadcrumb .crumbRow a:hover, .ol-breadcrumb .crumbRow a:visited, .ol-breadcrumb .crumbRow a:active {
+    color: #FFFFFF !important;
+}
+.ol-breadcrumb .crumbRow:last-child a
+    font-weight: bold;
 }

@@ -126,36 +126,51 @@ export class CampaignTemplateDialogComponent implements OnInit {
     }
 
     save() {
-        this.isSaving = true;
+        let cuurentDateObj = new Date();
+        if (this.timerValidation || (!this.timerValidation && this.checkCurrentTime())){
+            this.isSaving = true;
+            const currentHourValue = cuurentDateObj.getUTCHours();
+            const currentMinValue = cuurentDateObj.getUTCMinutes();
+            if (this.campaignTemplateGroupCreationForm.value.time) {
+                this.campaignTemplateGroupCreationForm.value.scheduledTime = '' +
+                    (this.campaignTemplateGroupCreationForm.value.time.hour < 10 ? '0' +
+                        this.campaignTemplateGroupCreationForm.value.time.hour : this.campaignTemplateGroupCreationForm.value.time.hour) + ':' +
+                    (this.campaignTemplateGroupCreationForm.value.time.minute < 10 ? '0' +
+                        this.campaignTemplateGroupCreationForm.value.time.minute : this.campaignTemplateGroupCreationForm.value.time.minute) + ':00';
 
-        if (this.campaignTemplateGroupCreationForm.value.time) {
-            this.campaignTemplateGroupCreationForm.value.scheduledTime = '' +
-                (this.campaignTemplateGroupCreationForm.value.time.hour < 10 ? '0' +
-                    this.campaignTemplateGroupCreationForm.value.time.hour : this.campaignTemplateGroupCreationForm.value.time.hour) + ':' +
-                (this.campaignTemplateGroupCreationForm.value.time.minute < 10 ? '0' +
-                    this.campaignTemplateGroupCreationForm.value.time.minute : this.campaignTemplateGroupCreationForm.value.time.minute) + ':00';
+            } else {             
+                this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + (currentHourValue < 10 ? '0' + currentHourValue : currentHourValue) + ':' + (currentMinValue < 10 ? '0' + currentMinValue : currentMinValue) + ':00';
+            }
+            if (this.campaignTemplate.sendImmediately) {
+                this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + (currentHourValue < 10 ? '0' + currentHourValue : currentHourValue) + ':' + (currentMinValue < 10 ? '0' + currentMinValue : currentMinValue) + ':00';
+            }
 
+            if (this.campaignTemplateGroupCreationForm.value.id !== null) {
+                this.subscribeToSaveResponse(
+                    this.campaignTemplateService.update(this.campaignTemplateGroupCreationForm.value));
+            } else {
+                this.subscribeToSaveResponse(
+                    this.campaignTemplateService.create(this.campaignTemplateGroupCreationForm.value));
+            }
+        }
+        else {
+            this.addTimeControl();
+        }
+
+    }
+
+    checkCurrentTime() {
+        debugger;
+        let cuurentDateObj = new Date();
+        const currentTimeHourValue = cuurentDateObj.getUTCHours();
+        const currentTimeMinuteValue = cuurentDateObj.getUTCMinutes();
+        if (currentTimeHourValue != this.campaignTemplateGroupCreationForm.value.time.hour) {
+            return false;
+        } else if (currentTimeMinuteValue != this.campaignTemplateGroupCreationForm.value.time.minute) {
+            return false;
         } else {
-            const currentHourValue = this.currentDate.getUTCHours();
-            const currentMinValue = this.currentDate.getUTCMinutes();
-            this.campaignTemplateGroupCreationForm.value.scheduledTime = '' +
-                (currentHourValue < 10 ? '0' +
-                    this.currentDate.getUTCHours() : this.currentDate.getUTCHours()) + ':' +
-                (currentMinValue < 10 ? '0' +
-                    this.currentDate.getUTCMinutes() : this.currentDate.getUTCMinutes()) + ':00';
+            return true;
         }
-        if (this.campaignTemplate.sendImmediately) {
-            this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + this.currentDate.getUTCHours() + ':' + this.currentDate.getUTCMinutes() + ':00';
-        }
-
-        if (this.campaignTemplateGroupCreationForm.value.id !== null) {
-            this.subscribeToSaveResponse(
-                this.campaignTemplateService.update(this.campaignTemplateGroupCreationForm.value));
-        } else {
-            this.subscribeToSaveResponse(
-                this.campaignTemplateService.create(this.campaignTemplateGroupCreationForm.value));
-        }
-
     }
 
     prepareSaveTargetGroupCriteria(): CampaignTemplate {
@@ -252,6 +267,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         return this.campaignTemplateGroupCreationForm.get('targetGroupContentCriteria') as FormArray;
     };
     addTimeControl() {
+        let cuurentDateObj = new Date();
         this.campaignTemplateGroupCreationForm.addControl('time', new FormControl(
             (!this.timerValidation) ? new SimpleTime(this.currentDate.getUTCHours(), this.currentDate.getUTCMinutes()) :
                 new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0, 2)),
@@ -262,7 +278,8 @@ export class CampaignTemplateDialogComponent implements OnInit {
                     return null;
                 }
                 const value = control.value;
-                const totalCurrentDayMinutes = this.currentDate.getUTCHours() * 60 + this.currentDate.getUTCMinutes();
+                let cuurentDateObj = new Date();
+                const totalCurrentDayMinutes = cuurentDateObj.getUTCHours() * 60 + cuurentDateObj.getUTCMinutes();
                 const minutes = this.currentDate.getUTCMinutes();
                 if (!value) {
                     return null;
@@ -327,6 +344,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             this.campaignTemplateGroupCreationForm.controls['recurrenceType'].setValue('NONE');
             this.campaignTemplateGroupCreationForm.controls['recurrenceEndDate'].setValue(todayDt1);
         } else {
+            this.currentDate = new Date();
             this.addTimeControl();
             this.showSendImmDiv = true;
             this.campaignTemplateGroupCreationForm.controls['startDate'].setValue(todayDt2);
