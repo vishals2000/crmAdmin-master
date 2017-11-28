@@ -4,13 +4,21 @@ import { Observable } from 'rxjs/Rx';
 
 import { AudienceSegments } from './audience-segments.model';
 import { ResponseWrapper, createRequestOption } from '../../shared';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class AudienceSegmentsService {
 
     private resourceUrl = 'api/audience-segments';
 
+    private messageSource = new BehaviorSubject<string[]>([]);
+    currentAppInfo = this.messageSource.asObservable();
+
     constructor(private http: Http) { }
+
+    changeAppInfo(appInfo: string[]) {
+        this.messageSource.next(appInfo);
+    }
 
     create(audienceSegments: AudienceSegments): Observable<AudienceSegments> {
         const copy = this.convert(audienceSegments);

@@ -7,6 +7,8 @@ import { AudienceSegments } from './audience-segments.model';
 import { AudienceSegmentsService } from './audience-segments.service';
 import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
+import { AppsService } from '../../entities/apps/apps.service';
+import { Apps } from '../../entities/apps/apps.model';
 
 @Component({
     selector: 'jhi-audience-segments',
@@ -14,7 +16,7 @@ import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 })
 export class AudienceSegmentsComponent implements OnInit, OnDestroy {
 
-currentAccount: any;
+    currentAccount: any;
     audienceSegments: AudienceSegments[];
     error: any;
     success: any;
@@ -28,9 +30,12 @@ currentAccount: any;
     predicate: any;
     previousPage: any;
     reverse: any;
+    apps: Apps[];
+    showUploadDiv: boolean;
 
     constructor(
         private audienceSegmentsService: AudienceSegmentsService,
+        private appsService: AppsService,
         private parseLinks: JhiParseLinks,
         private alertService: JhiAlertService,
         private principal: Principal,
@@ -84,6 +89,10 @@ currentAccount: any;
         this.loadAll();
     }
     ngOnInit() {
+        this.showUploadDiv = false
+        this.appsService.query().subscribe((res: ResponseWrapper) => {
+            this.apps = res.json;
+        });
         this.loadAll();
         this.principal.identity().then((account) => {
             this.currentAccount = account;
@@ -100,6 +109,18 @@ currentAccount: any;
     }
     registerChangeInAudienceSegments() {
         this.eventSubscriber = this.eventManager.subscribe('audienceSegmentsListModification', (response) => this.loadAll());
+    }
+
+    getData(app: Apps) {
+        if (app) {
+            this.showUploadDiv = true;
+            const values: string[] = [app.frontEnd, app.product.toString()];
+            this.audienceSegmentsService.changeAppInfo(values);            
+            // alert(app.product.toString()  + '   --  ' + app.frontEnd);
+        } else {
+            console.log(app);
+            this.alertService.error('Please select app from drop down list');
+        }
     }
 
     sort() {

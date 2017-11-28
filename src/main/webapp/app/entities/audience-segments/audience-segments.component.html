@@ -1,18 +1,23 @@
 <div>
     <h2>
         <span>Audience Segments</span>
-        <button class="btn btn-primary float-right jh-create-entity create-audience-segments" [routerLink]="['/', { outlets: { popup: ['audience-segments-new'] } }]">
+        <button *ngIf="showUploadDiv" class="btn btn-primary float-right jh-create-entity create-audience-segments" [routerLink]="['/', { outlets: { popup: ['audience-segments-new'] } }]">
             <span class="fa fa-plus"></span>
             <span >
             Create new Audience Segments
             </span>
         </button>
-        <button class="btn btn-primary float-right jh-create-entity upload-segments" [routerLink]="['/', { outlets: { popup: ['upload-segments-new'] } }]">
+        <button *ngIf="showUploadDiv" class="btn btn-primary float-right jh-create-entity upload-segments" [routerLink]="['/', { outlets: { popup: ['upload-segments-new'] } }]">
             <span class="fa fa-plus"></span>
             <span >
             Upload Segments
             </span>
         </button>
+        <div class="float-right">        
+            <select class="custom-selectbox rounded" name="appsList" [(ngModel)]="selectedApp" (change)="getData(selectedApp);">
+              <option *ngFor="let app of apps" [ngValue]="app">{{app.name}}</option>
+            </select>
+        </div>
     </h2>
     <jhi-alert></jhi-alert>
     <div class="row">
