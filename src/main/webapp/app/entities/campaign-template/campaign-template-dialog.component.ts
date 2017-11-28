@@ -160,15 +160,13 @@ export class CampaignTemplateDialogComponent implements OnInit {
     }
 
     checkCurrentTime() {
-        debugger;
         let cuurentDateObj = new Date();
-        const currentTimeHourValue = cuurentDateObj.getUTCHours();
-        const currentTimeMinuteValue = cuurentDateObj.getUTCMinutes();
-        if (currentTimeHourValue != this.campaignTemplateGroupCreationForm.value.time.hour) {
+        const totalCurrentDayMinutes = cuurentDateObj.getUTCHours() * 60 + cuurentDateObj.getUTCMinutes();
+       
+        if (((this.campaignTemplateGroupCreationForm.value.time.hour * 60) + this.campaignTemplateGroupCreationForm.value.time.minute) < totalCurrentDayMinutes) {
             return false;
-        } else if (currentTimeMinuteValue != this.campaignTemplateGroupCreationForm.value.time.minute) {
-            return false;
-        } else {
+        }
+        else {
             return true;
         }
     }
