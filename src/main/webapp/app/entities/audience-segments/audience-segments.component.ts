@@ -32,6 +32,7 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
     reverse: any;
     apps: Apps[];
     showUploadDiv: boolean;
+    selectedApp: any;
 
     constructor(
         private audienceSegmentsService: AudienceSegmentsService,
@@ -115,7 +116,7 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
         if (app) {
             this.showUploadDiv = true;
             const values: string[] = [app.frontEnd, app.product.toString()];
-            this.audienceSegmentsService.changeAppInfo(values);            
+            this.audienceSegmentsService.changeAppInfo(values);
             // alert(app.product.toString()  + '   --  ' + app.frontEnd);
         } else {
             console.log(app);

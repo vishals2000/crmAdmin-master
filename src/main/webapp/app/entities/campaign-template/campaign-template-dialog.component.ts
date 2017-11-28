@@ -7,7 +7,8 @@ import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { Location } from '@angular/common';
-import { CampaignTemplate, CampaignTemplateFilterCriterion, CampaignTemplateContentCriterion, RecurrenceType, FilterOption, CampaignTargetGroupSizeRequest, TargetGroupFilterCriterionSizeRequest } from './campaign-template.model';
+import { CampaignTemplate, CampaignTemplateFilterCriterion, CampaignTemplateContentCriterion, RecurrenceType, FilterOption, CampaignTargetGroupSizeRequest,
+    TargetGroupFilterCriterionSizeRequest } from './campaign-template.model';
 import { CampaignTemplatePopupService } from './campaign-template-popup.service';
 import { CampaignTemplateService } from './campaign-template.service';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
@@ -80,9 +81,9 @@ export class CampaignTemplateDialogComponent implements OnInit {
     ngOnInit() {
         this.isSaving = false;
         this.showSendImmDiv = true;
-        this.campaignTemplateService.getOptimoveInstances().subscribe((data) => {
-            this.campaignTemplate.optimoveInstances = data['message'];
-        });
+        // this.campaignTemplateService.getOptimoveInstances().subscribe((data) => {
+        //     this.campaignTemplate.optimoveInstances = data['message'];
+        // });
         this.campaignTemplateService.currentMesage.subscribe((message) => {
             this.campaignTemplate.campaignGroupId = message[0];
             this.campaignTemplate.frontEnd = message[1];
