@@ -94,18 +94,18 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
         console.log(data);
 
         this.campaignTemplateService.pushNotificationCampaign(data).subscribe(
-            (res: ResponseWrapper) => this.onPushNotificationLaunchSuccess(res, res),
+            (res: ResponseWrapper) => {
+                this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' });
+                this.activeModal.dismiss(true);
+            },
             (res: ResponseWrapper) => this.onError(res.json)
         );
-        this.activeModal.dismiss(true);
+        // this.activeModal.dismiss(true);
     }
 
-    private onPushNotificationLaunchSuccess(response, headers) {
-        if (response.result) {
-            this.alertService.success(response.message);
-        } else {
-            this.alertService.error(response.message);
-        }
+    private onPushNotificationLaunchSuccess(result: any) {
+        this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' });
+        this.activeModal.dismiss(result);
 
         /*
         this.campaignTemplateService.updateLaunchStatus(
