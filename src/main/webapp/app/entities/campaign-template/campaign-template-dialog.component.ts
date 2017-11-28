@@ -409,11 +409,30 @@ export class CampaignTemplateDialogComponent implements OnInit {
     getTargetContentGroupSize(i) {
         //  console.log(this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteriavalue);
         console.log(this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteria);
+        const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
+        let formLengthIterator = 0;
+        const targetGroupFilterCriteria: TargetGroupFilterCriterionSizeRequest[] = [];
+        while (formLengthIterator < targetGroupFilters.length) {
+            const targetGroupFilter = targetGroupFilters.at(formLengthIterator);
+            const optionValues: string[] = [];
+            if (Array.isArray(targetGroupFilter.get('filterOptionValue').value)) {
+                for (const optionValue of targetGroupFilter.get('filterOptionValue').value) {
+                    optionValues.push(optionValue);
+                }
+            } else {
+                optionValues.push(targetGroupFilter.get('filterOptionValue').value);
+            }
+            targetGroupFilterCriteria.push(new TargetGroupFilterCriterionSizeRequest(targetGroupFilter.get('filterOption').value,
+                targetGroupFilter.get('filterOptionLookUp').value,
+                targetGroupFilter.get('filterOptionComparison').value,
+                optionValues));
+            formLengthIterator = formLengthIterator + 1;
+        }
         const body = {
             'frontEnd': this.campaignTemplateGroupCreationForm.get('frontEnd').value,
             'product': this.campaignTemplateGroupCreationForm.get('product').value,
             'language': this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria[i].languageSelected,
-            'targetGroupFilterCriteria': this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteria
+            'targetGroupFilterCriteria': targetGroupFilterCriteria
         }
         this.campaignTemplateService.getTargetContentGroupSize(body).subscribe(
             (res: ResponseWrapper) => this.onTargetGroupContentSizeRequestSuccess(res, res),
