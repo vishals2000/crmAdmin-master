@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Response } from '@angular/http';
+import { Http, RequestOptions, Headers, Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -11,10 +11,10 @@ import { AudienceSegmentsPopupService } from './audience-segments-popup.service'
 import { AudienceSegmentsService } from './audience-segments.service';
 
 @Component({
-    selector: 'jhi-audience-segments-dialog',
-    templateUrl: './audience-segments-dialog.component.html'
+    selector: 'jhi-upload-segments-dialog',
+    templateUrl: './upload-segments-dialog.component.html'
 })
-export class AudienceSegmentsDialogComponent implements OnInit {
+export class UploadSegmentsDialogComponent implements OnInit {
 
     audienceSegments: AudienceSegments;
     isSaving: boolean;
@@ -23,7 +23,8 @@ export class AudienceSegmentsDialogComponent implements OnInit {
         public activeModal: NgbActiveModal,
         private alertService: JhiAlertService,
         private audienceSegmentsService: AudienceSegmentsService,
-        private eventManager: JhiEventManager
+        private eventManager: JhiEventManager,
+        private http: Http
     ) {
     }
 
@@ -48,6 +49,30 @@ export class AudienceSegmentsDialogComponent implements OnInit {
             this.subscribeToSaveResponse(
                 this.audienceSegmentsService.create(this.audienceSegments));
         }
+    }
+
+    // file upload event
+    fileChange(event) {
+        // debugger;
+        let fileList: FileList = event.target.files;
+        if (fileList.length > 0) {
+            let file: File = fileList[0];
+            let formData: FormData = new FormData();
+            formData.append('uploadFile', file, file.name);
+            let headers = new Headers()
+            // headers.append('Content-Type', 'json');
+            // headers.append('Accept', 'application/json');
+            let options = new RequestOptions({ headers: headers });
+            let apiUrl1 = "/api/UploadFileApi";
+            this.http.post(apiUrl1, formData, options)
+                .map((res) => res.json())
+                .catch((error) => Observable.throw(error))
+                .subscribe(
+                (data) => console.log('success'),
+                (error) => console.log(error)
+                )
+        }
+        window.location.reload();
     }
 
     private subscribeToSaveResponse(result: Observable<AudienceSegments>) {
@@ -77,10 +102,10 @@ export class AudienceSegmentsDialogComponent implements OnInit {
 }
 
 @Component({
-    selector: 'jhi-audience-segments-popup',
+    selector: 'jhi-upload-segments-popup',
     template: ''
 })
-export class AudienceSegmentsPopupComponent implements OnInit, OnDestroy {
+export class UploadSegmentsPopupComponent implements OnInit, OnDestroy {
 
     routeSub: any;
 
@@ -93,10 +118,10 @@ export class AudienceSegmentsPopupComponent implements OnInit, OnDestroy {
         this.routeSub = this.route.params.subscribe((params) => {
             if ( params['id'] ) {
                 this.audienceSegmentsPopupService
-                    .open(AudienceSegmentsDialogComponent as Component, params['id']);
+                    .open(UploadSegmentsDialogComponent as Component, params['id']);
             } else {
                 this.audienceSegmentsPopupService
-                    .open(AudienceSegmentsDialogComponent as Component);
+                    .open(UploadSegmentsDialogComponent as Component);
             }
         });
     }

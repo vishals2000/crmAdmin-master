@@ -8,6 +8,8 @@ import { AudienceSegmentsComponent } from './audience-segments.component';
 import { AudienceSegmentsDetailComponent } from './audience-segments-detail.component';
 import { AudienceSegmentsPopupComponent } from './audience-segments-dialog.component';
 import { AudienceSegmentsDeletePopupComponent } from './audience-segments-delete-dialog.component';
+import { UploadSegmentsPopupComponent } from './upload-segments-dialog.component';
+
 
 @Injectable()
 export class AudienceSegmentsResolvePagingParams implements Resolve<any> {
@@ -55,6 +57,16 @@ export const audienceSegmentsPopupRoute: Routes = [
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'AudienceSegments'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    },
+    {
+        path: 'upload-segments-new',
+        component: UploadSegmentsPopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'UploadSegments'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'

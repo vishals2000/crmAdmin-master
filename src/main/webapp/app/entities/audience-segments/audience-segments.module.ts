@@ -13,8 +13,12 @@ import {
     AudienceSegmentsDeleteDialogComponent,
     audienceSegmentsRoute,
     audienceSegmentsPopupRoute,
-    AudienceSegmentsResolvePagingParams,
+    AudienceSegmentsResolvePagingParams,    
 } from './';
+import {
+    UploadSegmentsPopupComponent,
+    UploadSegmentsDialogComponent
+} from './upload-segments-dialog.component'
 
 const ENTITY_STATES = [
     ...audienceSegmentsRoute,
@@ -33,6 +37,8 @@ const ENTITY_STATES = [
         AudienceSegmentsDeleteDialogComponent,
         AudienceSegmentsPopupComponent,
         AudienceSegmentsDeletePopupComponent,
+        UploadSegmentsPopupComponent,
+        UploadSegmentsDialogComponent
     ],
     entryComponents: [
         AudienceSegmentsComponent,
@@ -40,6 +46,8 @@ const ENTITY_STATES = [
         AudienceSegmentsPopupComponent,
         AudienceSegmentsDeleteDialogComponent,
         AudienceSegmentsDeletePopupComponent,
+        UploadSegmentsPopupComponent,
+        UploadSegmentsDialogComponent
     ],
     providers: [
         AudienceSegmentsService,
