@@ -44,10 +44,14 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
     }
 
     getTargetGroupSize() {
+        const languagesUpdated: string[] = [];
+        for (const i of this.campaignTemplate.targetGroupContentCriteria) {
+            languagesUpdated.push(i.languageSelected);
+        }
         const body = new CampaignTargetGroupSizeRequest(
             this.campaignTemplate.frontEnd,
             this.campaignTemplate.product,
-            this.campaignTemplate.languageSelected,
+            languagesUpdated,
             this.campaignTemplate.targetGroupFilterCriteria);
 
         this.campaignTemplateService.getTargetGroupSize(body).subscribe(

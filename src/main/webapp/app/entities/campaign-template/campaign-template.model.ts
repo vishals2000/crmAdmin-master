@@ -62,7 +62,7 @@ export class CampaignTemplate implements BaseEntity {
         // public filterOption?: FilterOption,
         // public filterOptionComparison?: FilterOptionComparison,
         // public filterOptionValue?: string,
-       // public contentName?: string,
+        // public contentName?: string,
         public contentTitle?: string,
         public contentBody?: string,
         public metaData?: string,

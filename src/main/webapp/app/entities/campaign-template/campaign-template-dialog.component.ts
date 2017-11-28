@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { Location } from '@angular/common';
-import {CampaignTemplate, CampaignTemplateFilterCriterion, CampaignTemplateContentCriterion, RecurrenceType, FilterOption, CampaignTargetGroupSizeRequest, TargetGroupFilterCriterionSizeRequest } from './campaign-template.model';
+import { CampaignTemplate, CampaignTemplateFilterCriterion, CampaignTemplateContentCriterion, RecurrenceType, FilterOption, CampaignTargetGroupSizeRequest, TargetGroupFilterCriterionSizeRequest } from './campaign-template.model';
 import { CampaignTemplatePopupService } from './campaign-template-popup.service';
 import { CampaignTemplateService } from './campaign-template.service';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
@@ -77,7 +77,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.isLaunch = false;
     }
 
-    ngOnInit() {        
+    ngOnInit() {
         this.isSaving = false;
         this.showSendImmDiv = true;
         this.campaignTemplateService.getOptimoveInstances().subscribe((data) => {
@@ -139,12 +139,12 @@ export class CampaignTemplateDialogComponent implements OnInit {
             const currentHourValue = this.currentDate.getUTCHours();
             const currentMinValue = this.currentDate.getUTCMinutes();
             this.campaignTemplateGroupCreationForm.value.scheduledTime = '' +
-            (currentHourValue < 10 ? '0' +
-            this.currentDate.getUTCHours() : this.currentDate.getUTCHours()) + ':' +
-            (currentMinValue < 10 ? '0' +
-            this.currentDate.getUTCMinutes() : this.currentDate.getUTCMinutes()) + ':00';
+                (currentHourValue < 10 ? '0' +
+                    this.currentDate.getUTCHours() : this.currentDate.getUTCHours()) + ':' +
+                (currentMinValue < 10 ? '0' +
+                    this.currentDate.getUTCMinutes() : this.currentDate.getUTCMinutes()) + ':00';
         }
-        if(this.campaignTemplate.sendImmediately){
+        if (this.campaignTemplate.sendImmediately) {
             this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + this.currentDate.getUTCHours() + ':' + this.currentDate.getUTCMinutes() + ':00';
         }
 
@@ -211,8 +211,8 @@ export class CampaignTemplateDialogComponent implements OnInit {
             scheduledTime: (!this.campaignTemplate.scheduledTime) ? '' : this.campaignTemplate.scheduledTime,
             inPlayerTimezone: (!this.campaignTemplate.inPlayerTimezone) ? false : this.campaignTemplate.inPlayerTimezone,
             campaignGroupId: (!this.campaignTemplate.campaignGroupId) ? '' : this.campaignTemplate.campaignGroupId,
-           // contentName: (!this.campaignTemplate.contentName) ? '' : this.campaignTemplate.contentName,
-           contentTitle: (!this.campaignTemplate.contentTitle) ? '' : this.campaignTemplate.contentTitle,
+            // contentName: (!this.campaignTemplate.contentName) ? '' : this.campaignTemplate.contentName,
+            contentTitle: (!this.campaignTemplate.contentTitle) ? '' : this.campaignTemplate.contentTitle,
             contentBody: (!this.campaignTemplate.contentBody) ? '' : this.campaignTemplate.contentBody,
             metaData: (!this.campaignTemplate.metaData) ? '' : this.campaignTemplate.metaData,
             targetGroupFilterCriteria: this.fb.array([]),
@@ -251,16 +251,16 @@ export class CampaignTemplateDialogComponent implements OnInit {
     get targetGroupContentCriteria(): FormArray {
         return this.campaignTemplateGroupCreationForm.get('targetGroupContentCriteria') as FormArray;
     };
-    addTimeControl(){
-        this.campaignTemplateGroupCreationForm.addControl('time',new FormControl(
+    addTimeControl() {
+        this.campaignTemplateGroupCreationForm.addControl('time', new FormControl(
             (!this.timerValidation) ? new SimpleTime(this.currentDate.getUTCHours(), this.currentDate.getUTCMinutes()) :
-            new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0, 2)),
-                Number(this.campaignTemplate.scheduledTime.substr(3, 2))),
-        (control:FormControl)=>{
-            // debugger;
-            if(this.timerValidation){
-                return null;
-            }
+                new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0, 2)),
+                    Number(this.campaignTemplate.scheduledTime.substr(3, 2))),
+            (control: FormControl) => {
+                // debugger;
+                if (this.timerValidation) {
+                    return null;
+                }
                 const value = control.value;
                 const totalCurrentDayMinutes = this.currentDate.getUTCHours() * 60 + this.currentDate.getUTCMinutes();
                 const minutes = this.currentDate.getUTCMinutes();
@@ -271,9 +271,9 @@ export class CampaignTemplateDialogComponent implements OnInit {
                     return { invalid: true };
                 }
                 return null;
-        }));
+            }));
     }
-    removeTimeControl(){
+    removeTimeControl() {
         this.campaignTemplateGroupCreationForm.removeControl('time');
     }
     prepareData() {
@@ -375,9 +375,8 @@ export class CampaignTemplateDialogComponent implements OnInit {
             formLengthIterator = formLengthIterator + 1;
         }
         const languagesUpdated: string[] = [];
-        let i;
-        for(i=0;i<this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria.length;i++){
-            languagesUpdated.push(this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria[i].languageSelected);
+        for (const i of this.campaignTemplate.targetGroupContentCriteria) {
+            languagesUpdated.push(i.languageSelected);
         }
         const body = new CampaignTargetGroupSizeRequest(
             this.campaignTemplateGroupCreationForm.get('frontEnd').value,
@@ -391,21 +390,21 @@ export class CampaignTemplateDialogComponent implements OnInit {
         );
     }
 
-    getTargetContentGroupSize(i){
+    getTargetContentGroupSize(i) {
         //  console.log(this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteriavalue);
-          console.log(this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteria);
-          const body = {
-              'frontEnd': this.campaignTemplateGroupCreationForm.get('frontEnd').value,
-              'product': this.campaignTemplateGroupCreationForm.get('product').value,
-              'language': this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria[i].languageSelected,
-              'targetGroupFilterCriteria':   this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteria
-          }
-          this.campaignTemplateService.getTargetContentGroupSize(body).subscribe(
-              (res: ResponseWrapper) => this.onTargetGroupContentSizeRequestSuccess(res, res),
-              (res: ResponseWrapper) => this.onError(res.json)
-          );
-  
-      }
+        console.log(this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteria);
+        const body = {
+            'frontEnd': this.campaignTemplateGroupCreationForm.get('frontEnd').value,
+            'product': this.campaignTemplateGroupCreationForm.get('product').value,
+            'language': this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria[i].languageSelected,
+            'targetGroupFilterCriteria': this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteria
+        }
+        this.campaignTemplateService.getTargetContentGroupSize(body).subscribe(
+            (res: ResponseWrapper) => this.onTargetGroupContentSizeRequestSuccess(res, res),
+            (res: ResponseWrapper) => this.onError(res.json)
+        );
+
+    }
 
     private onTargetGroupContentSizeRequestSuccess(data, headers) {
         // console.log(data);
