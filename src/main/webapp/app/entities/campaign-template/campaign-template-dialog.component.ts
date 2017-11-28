@@ -391,8 +391,9 @@ export class CampaignTemplateDialogComponent implements OnInit {
             formLengthIterator = formLengthIterator + 1;
         }
         const languagesUpdated: string[] = [];
-        for (const i of this.campaignTemplate.targetGroupContentCriteria) {
-            languagesUpdated.push(i.languageSelected);
+        let i;
+        for (i = 0; i < this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria.length; i++) {
+            languagesUpdated.push(this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria[i].languageSelected);
         }
         const body = new CampaignTargetGroupSizeRequest(
             this.campaignTemplateGroupCreationForm.get('frontEnd').value,
