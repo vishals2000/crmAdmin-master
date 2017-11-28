@@ -60,7 +60,13 @@ export class CampaignTemplateService {
             return res.json();
         });
     }
-
+    
+        deletePushNotificationCampaign(body: any): Observable<ResponseWrapper> {
+            return this.http.post(this.resourceUrl + '/deletePushNotificationCampaign', body).map((res: Response) => {
+                return res;
+            });
+        }
+    
     sendPushNotificationForScreenName(body: any): Observable<ResponseWrapper> {
         return this.http.post(this.resourceUrl + '/sendPushNotificationForScreenName', body).map((res: Response) => {
             return res.json();
@@ -125,6 +131,12 @@ export class CampaignTemplateService {
     }
 
     updateCancelStatus(req?: any): Observable<ResponseWrapper> {
+        const options = createRequestOption(req);
+        return this.http.put(`${this.resourceUrl}/${req.method}/${req.campaignTemplateId}/${req.status}`, options)
+            .map((res: Response) => this.convertResponse(res));
+    }
+
+    updateDeleteStatus(req?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(req);
         return this.http.put(`${this.resourceUrl}/${req.method}/${req.campaignTemplateId}/${req.status}`, options)
             .map((res: Response) => this.convertResponse(res));
