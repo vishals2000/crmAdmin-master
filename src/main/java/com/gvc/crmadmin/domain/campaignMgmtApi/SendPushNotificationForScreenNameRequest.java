@@ -1,10 +1,11 @@
 package com.gvc.crmadmin.domain.campaignMgmtApi;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gvc.crmadmin.domain.MessageTemplate;
 import com.gvc.crmadmin.domain.enumeration.Product;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SendPushNotificationForScreenNameRequest implements Serializable {
 
-    private static final long serialVersionUID = 8950802590570138471L;
+    private static final long serialVersionUID = -7373027847888697579L;
 
     @JsonProperty("frontEnd")
     private String frontEnd;
@@ -30,11 +31,8 @@ public class SendPushNotificationForScreenNameRequest implements Serializable {
     @JsonProperty("screenName")
     private String screenName;
 
-    @JsonProperty("contentTitle")
-    private String contentTitle;
-
-    @JsonProperty("contentBody")
-    private String contentBody;
+    @JsonProperty("targetGroupContentCriteria")
+    private List<MessageTemplate> messageContents;
 
     @JsonProperty("metaData")
     private String metaData;
@@ -42,29 +40,8 @@ public class SendPushNotificationForScreenNameRequest implements Serializable {
     @JsonProperty("processCommonScrub")
     private boolean processCommonScrub;
 
-    @JsonProperty("fcmIds")
-    private List<String> fcmIds;
-
-    @JsonProperty("id")
+    @JsonProperty("campaignId")
     private String campaignId;
-
-    public String getContentTitle() {
-        return contentTitle;
-    }
-
-    public SendPushNotificationForScreenNameRequest setContentTitle(String contentTitle) {
-        this.contentTitle = contentTitle;
-        return this;
-    }
-
-    public String getContentBody() {
-        return contentBody;
-    }
-
-    public SendPushNotificationForScreenNameRequest setContentBody(String contentBody) {
-        this.contentBody = contentBody;
-        return this;
-    }
 
     public String getMetaData() {
         return metaData;
@@ -125,20 +102,20 @@ public class SendPushNotificationForScreenNameRequest implements Serializable {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
-    public List<String> getFcmIds() {
-        return fcmIds;
-    }
-
-    public SendPushNotificationForScreenNameRequest setFcmIds(List<String> fcmIds) {
-        this.fcmIds = fcmIds;
-        return this;
-    }
-
     public String getCampaignId() {
         return campaignId;
     }
 
     public void setCampaignId(String campaignId) {
         this.campaignId = campaignId;
+    }
+
+    public List<MessageTemplate> getMessageContents() {
+        return messageContents;
+    }
+
+    public SendPushNotificationForScreenNameRequest setMessageContents(List<MessageTemplate> messageContents) {
+        this.messageContents = messageContents;
+        return this;
     }
 }
