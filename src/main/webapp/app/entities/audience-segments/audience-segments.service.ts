@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, RequestOptions, RequestOptionsArgs, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
+import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { AudienceSegments } from './audience-segments.model';
 import { ResponseWrapper, createRequestOption } from '../../shared';
@@ -20,11 +21,17 @@ export class AudienceSegmentsService {
         this.messageSource.next(appInfo);
     }
 
-    create(audienceSegments: AudienceSegments): Observable<AudienceSegments> {
+    create(audienceSegments: AudienceSegments, formData: FormData): Observable<AudienceSegments> {
         const copy = this.convert(audienceSegments);
-        return this.http.post(this.resourceUrl, copy).map((res: Response) => {
-            return res.json();
-        });
+        const headers = new Headers();
+        // headers.append('Content-Type', undefined);
+        const options = new RequestOptions({
+            headers: headers,
+            params : copy
+         });        
+        return this.http.post(this.resourceUrl + '/upload-segment', formData, options)
+        .map(response => response.json())
+        .catch(error => Observable.throw(error));
     }
 
     update(audienceSegments: AudienceSegments): Observable<AudienceSegments> {

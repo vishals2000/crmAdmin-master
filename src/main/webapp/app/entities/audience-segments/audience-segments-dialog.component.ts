@@ -18,6 +18,7 @@ export class AudienceSegmentsDialogComponent implements OnInit {
 
     audienceSegments: AudienceSegments;
     isSaving: boolean;
+    formData: FormData;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -29,6 +30,7 @@ export class AudienceSegmentsDialogComponent implements OnInit {
 
     ngOnInit() {
         this.isSaving = false;
+        this.formData = new FormData();
         this.audienceSegmentsService.currentAppInfo.subscribe((data) => {
             this.audienceSegments.frontEnd = data[0];
             this.audienceSegments.product = data[1];
@@ -46,7 +48,7 @@ export class AudienceSegmentsDialogComponent implements OnInit {
                 this.audienceSegmentsService.update(this.audienceSegments));
         } else {
             this.subscribeToSaveResponse(
-                this.audienceSegmentsService.create(this.audienceSegments));
+                this.audienceSegmentsService.create(this.audienceSegments, this.formData));
         }
     }
 

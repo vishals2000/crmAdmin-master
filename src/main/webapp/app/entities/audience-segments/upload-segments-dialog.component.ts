@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Http, RequestOptions, Headers, Response } from '@angular/http';
+import { HttpClientModule, HttpClient, HttpRequest } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -18,6 +19,7 @@ export class UploadSegmentsDialogComponent implements OnInit {
 
     audienceSegments: AudienceSegments;
     isSaving: boolean;
+    formData: FormData;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -30,6 +32,7 @@ export class UploadSegmentsDialogComponent implements OnInit {
 
     ngOnInit() {
         this.isSaving = false;
+        this.formData = new FormData();
         this.audienceSegmentsService.currentAppInfo.subscribe((data) => {
             this.audienceSegments.frontEnd = data[0];
             this.audienceSegments.product = data[1];
@@ -47,32 +50,43 @@ export class UploadSegmentsDialogComponent implements OnInit {
                 this.audienceSegmentsService.update(this.audienceSegments));
         } else {
             this.subscribeToSaveResponse(
-                this.audienceSegmentsService.create(this.audienceSegments));
+                this.audienceSegmentsService.create(this.audienceSegments, this.formData));
         }
     }
 
     // file upload event
     fileChange(event) {
-        // debugger;
         let fileList: FileList = event.target.files;
         if (fileList.length > 0) {
-            let file: File = fileList[0];
-            let formData: FormData = new FormData();
-            formData.append('uploadFile', file, file.name);
-            let headers = new Headers()
-            // headers.append('Content-Type', 'json');
-            // headers.append('Accept', 'application/json');
-            let options = new RequestOptions({ headers: headers });
-            let apiUrl1 = "/api/UploadFileApi";
-            this.http.post(apiUrl1, formData, options)
-                .map((res) => res.json())
-                .catch((error) => Observable.throw(error))
-                .subscribe(
-                (data) => console.log('success'),
-                (error) => console.log(error)
-                )
+            let file: File = fileList[0];                      
+
+            // let formData: FormData = new FormData();
+            this.formData  = new FormData();
+            this.formData.append('file', file);
+            
+            // for (var j = 0; j < fileList.length; j++) {
+            //     formData.append("file[]", fileList[j], fileList[j].name);
+            // }
+            // var parameters = {
+            //     'front_end': this.audienceSegments.frontEnd,
+            //     'product': this.audienceSegments.product,
+            //     'name' : this.audienceSegments.name
+            // }
+
+            // let headers = new Headers();
+            // // headers.append('Content-Type', undefined);
+            // this.options = new RequestOptions({
+            //     headers: headers,
+            //     params : parameters
+            //  });
+            
+            // this.http.post('api/audience-segments/upload-segment', this.formData, this.options)
+            //          .map(response => response.json())
+            //          .catch(error => Observable.throw(error)).subscribe(
+            //                 (data) => console.log('success'),
+            //                 (error) => console.log(error)
+            //                 );            
         }
-        window.location.reload();
     }
 
     private subscribeToSaveResponse(result: Observable<AudienceSegments>) {

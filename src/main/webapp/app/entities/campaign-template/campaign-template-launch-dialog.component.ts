@@ -107,8 +107,6 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
             this.alertService.error(response.message);
         }
         this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' });
-        // this.activeModal.dismiss(true);
-
     }
 }
 

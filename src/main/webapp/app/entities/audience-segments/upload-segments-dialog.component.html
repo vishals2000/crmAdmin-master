@@ -1,4 +1,4 @@
-<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+<form name="editForm" role="form" enctype="multipart/form-data" novalidate (ngSubmit)="save()" #editForm="ngForm">
 
     <div class="modal-header">
         <h4 class="modal-title" id="myAudienceSegmentsLabel">Create or edit a Audience Segments</h4>
@@ -80,7 +80,7 @@
         </div>
         <div class="form-group fileUpload">
                 <label class="form-control-label" for="field_name">Upload File</label>
-                <input type="file" id="btnUpload" value="Upload" (change)="fileChange($event)" class="upload" />
+                <input type="file" id="file" value="Upload" (change)="fileChange($event)" class="upload" />
         </div>
 
     </div>
