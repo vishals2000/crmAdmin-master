@@ -196,3 +196,6 @@ ui bootstrap tweaks
 .overrideInvalid{
     border-left: none !important;
 }
+.btn-group.flex-btn-group-container .fa.disabled {
+    color: gray;
+}
