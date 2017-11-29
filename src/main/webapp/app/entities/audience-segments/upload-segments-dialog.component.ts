@@ -44,24 +44,29 @@ export class UploadSegmentsDialogComponent implements OnInit {
     }
 
     save() {
-        this.isSaving = true;
-        if (this.audienceSegments.id !== undefined) {
-            this.subscribeToSaveResponse(
-                this.audienceSegmentsService.update(this.audienceSegments));
+        console.log(this.formData.get('file'));
+        if (this.formData.get('file') != null) {
+            this.isSaving = true;
+            if (this.audienceSegments.id !== undefined) {
+                this.subscribeToSaveResponse(
+                    this.audienceSegmentsService.update(this.audienceSegments));
+            } else {
+                this.subscribeToSaveResponse(
+                    this.audienceSegmentsService.upload(this.audienceSegments, this.formData));
+            }
         } else {
-            this.subscribeToSaveResponse(
-                this.audienceSegmentsService.create(this.audienceSegments, this.formData));
+            alert('please select file...');
         }
     }
 
     // file upload event
     fileChange(event) {
-        let fileList: FileList = event.target.files;
+        const fileList: FileList = event.target.files;
         if (fileList.length > 0) {
-            let file: File = fileList[0];                      
+            const file: File = fileList[0];
 
             // let formData: FormData = new FormData();
-            this.formData  = new FormData();
+            this.formData = new FormData();
             this.formData.append('file', file);
             
             // for (var j = 0; j < fileList.length; j++) {
@@ -79,13 +84,13 @@ export class UploadSegmentsDialogComponent implements OnInit {
             //     headers: headers,
             //     params : parameters
             //  });
-            
+
             // this.http.post('api/audience-segments/upload-segment', this.formData, this.options)
             //          .map(response => response.json())
             //          .catch(error => Observable.throw(error)).subscribe(
             //                 (data) => console.log('success'),
             //                 (error) => console.log(error)
-            //                 );            
+            //                 );
         }
     }
 
@@ -95,7 +100,7 @@ export class UploadSegmentsDialogComponent implements OnInit {
     }
 
     private onSaveSuccess(result: AudienceSegments) {
-        this.eventManager.broadcast({ name: 'audienceSegmentsListModification', content: 'OK'});
+        this.eventManager.broadcast({ name: 'audienceSegmentsListModification', content: 'OK' });
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
@@ -126,11 +131,11 @@ export class UploadSegmentsPopupComponent implements OnInit, OnDestroy {
     constructor(
         private route: ActivatedRoute,
         private audienceSegmentsPopupService: AudienceSegmentsPopupService
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.routeSub = this.route.params.subscribe((params) => {
-            if ( params['id'] ) {
+            if (params['id']) {
                 this.audienceSegmentsPopupService
                     .open(UploadSegmentsDialogComponent as Component, params['id']);
             } else {

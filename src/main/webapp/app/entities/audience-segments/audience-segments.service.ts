@@ -21,17 +21,24 @@ export class AudienceSegmentsService {
         this.messageSource.next(appInfo);
     }
 
-    create(audienceSegments: AudienceSegments, formData: FormData): Observable<AudienceSegments> {
+    upload(audienceSegments: AudienceSegments, formData: FormData): Observable<AudienceSegments> {
         const copy = this.convert(audienceSegments);
         const headers = new Headers();
         // headers.append('Content-Type', undefined);
         const options = new RequestOptions({
             headers: headers,
             params : copy
-         });        
+         });
         return this.http.post(this.resourceUrl + '/upload-segment', formData, options)
         .map(response => response.json())
         .catch(error => Observable.throw(error));
+    }
+
+    create(audienceSegments: AudienceSegments): Observable<AudienceSegments> {
+        const copy = this.convert(audienceSegments);
+        return this.http.post(this.resourceUrl, copy).map((res: Response) => {
+            return res.json();
+        });
     }
 
     update(audienceSegments: AudienceSegments): Observable<AudienceSegments> {
