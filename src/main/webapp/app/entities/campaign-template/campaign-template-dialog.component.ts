@@ -49,6 +49,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     isLaunch: boolean;
     timerValidation: boolean = false;
     currentDate: Date = new Date();
+    isRecuEndDateVisible: boolean;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -146,6 +147,9 @@ export class CampaignTemplateDialogComponent implements OnInit {
             }
             if (this.campaignTemplate.sendImmediately) {
                 this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + (currentHourValue < 10 ? '0' + currentHourValue : currentHourValue) + ':' + (currentMinValue < 10 ? '0' + currentMinValue : currentMinValue) + ':00';
+            }
+            if (this.campaignTemplateGroupCreationForm.value.recurrenceType === 'NONE') {
+                this.campaignTemplateGroupCreationForm.value.recurrenceEndDate = this.campaignTemplateGroupCreationForm.value.startDate;
             }
 
             if (this.campaignTemplateGroupCreationForm.value.id !== null) {
@@ -353,6 +357,18 @@ export class CampaignTemplateDialogComponent implements OnInit {
             this.campaignTemplateGroupCreationForm.controls['recurrenceEndDate'].setValue(todayDt2);
         }
         // debugger;
+    }
+
+    onRecurrenceType() {
+        const recurrenceType = this.campaignTemplateGroupCreationForm.controls['recurrenceType'].value;
+        switch (recurrenceType) {
+            case 'NONE':
+                this.isRecuEndDateVisible = false;
+                break;
+            default:
+                this.isRecuEndDateVisible = true;
+                break;
+        }
     }
 
     // pushOptimoveInstances() {
@@ -589,23 +605,23 @@ export class CampaignTemplateDialogComponent implements OnInit {
     }
 
     populateSportsTagsMap() {
-        let  filterOptionLookUpComparisonVsValue:  Map<string, string[]>  =  new  Map<string, string[]>();
-        filterOptionLookUpComparisonVsValue.set('is', ['true',  'false']);
+        let filterOptionLookUpComparisonVsValue: Map<string, string[]> = new Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue.set('is', ['true', 'false']);
         this.sportsTagsMap.set('hasLoggedIn', filterOptionLookUpComparisonVsValue);
 
-        filterOptionLookUpComparisonVsValue  =  new  Map<string, string[]>();
-        filterOptionLookUpComparisonVsValue.set('is', ['true',  'false']);
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue.set('is', ['true', 'false']);
         this.sportsTagsMap.set('lastBetInPlay', filterOptionLookUpComparisonVsValue);
 
-        filterOptionLookUpComparisonVsValue  =  new  Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
         filterOptionLookUpComparisonVsValue.set('before', ['date']);
         filterOptionLookUpComparisonVsValue.set('was', ['date']);
         filterOptionLookUpComparisonVsValue.set('after', ['date']);
-        filterOptionLookUpComparisonVsValue.set('within', ['the last 2 days',  'the last 7 days',  'the last 2 weeks',  'the last month']);
+        filterOptionLookUpComparisonVsValue.set('within', ['the last 2 days', 'the last 7 days', 'the last 2 weeks', 'the last month']);
         filterOptionLookUpComparisonVsValue.set('days ago', ['number of days']);
         filterOptionLookUpComparisonVsValue.set('greater than N days ago', ['number of days']);
         filterOptionLookUpComparisonVsValue.set('less than N days ago', ['number of days']);
-        filterOptionLookUpComparisonVsValue.set('exists', ['true',  'false']);
+        filterOptionLookUpComparisonVsValue.set('exists', ['true', 'false']);
         this.sportsTagsMap.set('lastBetOnBasketBall', filterOptionLookUpComparisonVsValue);
         this.sportsTagsMap.set('lastBetOnBlackJack', filterOptionLookUpComparisonVsValue);
         this.sportsTagsMap.set('lastBetOnFootball', filterOptionLookUpComparisonVsValue);
@@ -615,25 +631,25 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.sportsTagsMap.set('lastBetOnVolleyball', filterOptionLookUpComparisonVsValue);
         this.sportsTagsMap.set('lastLoginDate', filterOptionLookUpComparisonVsValue);
 
-        filterOptionLookUpComparisonVsValue  =  new  Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
         filterOptionLookUpComparisonVsValue.set('equals', ['tagValue']);
         filterOptionLookUpComparisonVsValue.set('not equals', ['tagValue']);
         filterOptionLookUpComparisonVsValue.set('less than', ['Number']);
         filterOptionLookUpComparisonVsValue.set('greater than', ['Number']);
-        filterOptionLookUpComparisonVsValue.set('exists', ['true',  'false']);
+        filterOptionLookUpComparisonVsValue.set('exists', ['true', 'false']);
         this.sportsTagsMap.set('lastSessionCloseBalance', filterOptionLookUpComparisonVsValue);
 
-        filterOptionLookUpComparisonVsValue  =  new  Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
         filterOptionLookUpComparisonVsValue.set('is', ['leagueNameId']);
         filterOptionLookUpComparisonVsValue.set('is not', ['leagueNameId']);
         this.sportsTagsMap.set('lastBetOnLeague', filterOptionLookUpComparisonVsValue);
 
-        filterOptionLookUpComparisonVsValue  =  new  Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
         filterOptionLookUpComparisonVsValue.set('is', ['eventId']);
         filterOptionLookUpComparisonVsValue.set('is not', ['eventId']);
         this.sportsTagsMap.set('lastEventIdBacked', filterOptionLookUpComparisonVsValue);
 
-        filterOptionLookUpComparisonVsValue  =  new  Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
         filterOptionLookUpComparisonVsValue.set('is', ['leagueName']);
         filterOptionLookUpComparisonVsValue.set('is not', ['leagueName']);
         this.sportsTagsMap.set('lastBetOnPremierLeague', filterOptionLookUpComparisonVsValue);

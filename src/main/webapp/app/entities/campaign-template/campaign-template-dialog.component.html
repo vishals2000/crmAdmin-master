@@ -58,7 +58,7 @@
             </div>
             <div class="form-group">
                 <label class="form-control-label" for="field_recurrenceType">Recurrence Type</label>
-                <select class="form-control" name="recurrenceType" formControlName="recurrenceType" id="field_recurrenceType" required>
+                <select class="form-control" name="recurrenceType" formControlName="recurrenceType" id="field_recurrenceType" required  (change)="onRecurrenceType()">
                     <option value="NONE">NONE</option>
                     <option value="WEEKLY">WEEKLY</option>
                     <option value="DAILY">DAILY</option>
@@ -69,8 +69,8 @@
                     </small>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="form-control-label" for="field_recurrenceEndDate">Recurrence End Date</label>
+            <div class="form-group" *ngIf="isRecuEndDateVisible">
+                <label class="form-control-label" for="field_recurrenceEndDate">Recurrence End Date{{recurrenceType}}</label>
                 <div class="input-group">
                     <input id="field_recurrenceEndDate" type="text" class="form-control" name="recurrenceEndDate" ngbDatepicker [minDate]="minDate"
                         #recurrenceEndDateDp="ngbDatepicker" formControlName="recurrenceEndDate" required/>
