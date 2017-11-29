@@ -75,10 +75,11 @@
                             <span class="fa fa-eye"></span>
                         </button> -->
                         <button type="submit" alt="Edit" title="Edit" 
+                                [disabled]="!campaignTemplate.editEnabled"
                                 [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/edit'} }]"
                                 replaceUrl="true"
                                 class="btn btn-primary btn-sm">
-                            <span class="fa fa-pencil"></span>
+                            <span class="fa fa-pencil" [ngClass]="{'disabled':!campaignTemplate.editEnabled}"></span>
                            <!-- <span class="hidden-md-down">Edit</span>-->
                         </button>
                         <button type="submit" alt="Test" title="Test"  
@@ -87,22 +88,26 @@
                             <span class="fa fa-sticky-note"></span>
                         </button>
                         <button type="submit" alt="Launch" title="Launch"  
+                            [disabled]="!campaignTemplate.launchEnabled"
                             [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/launch'} }]"
                             class="btn btn-info btn-sm">
-                            <span class="fa fa-rocket"></span>
+                            <span class="fa fa-rocket" [ngClass]="{'disabled':!campaignTemplate.launchEnabled}"></span>
+                            <!-- <span>{{campaignTemplate.launchEnabled}}</span> -->
                         </button>                        
                         <button type="submit" alt="Cancel" title="Cancel" 
+                                [disabled]="!campaignTemplate.cancelEnabled"
                                 [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/cancel'} }]"
                                 replaceUrl="true"
                                 class="btn btn-danger btn-sm">
-                            <span class="fa fa-remove"></span>
+                            <span class="fa fa-remove" [ngClass]="{'disabled':!campaignTemplate.cancelEnabled}"></span>
                           <!--  <span class="hidden-md-down">Delete</span>-->
                         </button>
                         <button type="submit" alt="Delete" title="Delete" 
+                            [disabled]="!campaignTemplate.deleteEnabled"
                             [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/delete'} }]"
                             replaceUrl="true"
                             class="btn btn-danger btn-sm">
-                        <span class="fa fa-trash"></span>
+                        <span class="fa fa-trash" [ngClass]="{'disabled':!campaignTemplate.deleteEnabled}"></span>
                     <!--  <span class="hidden-md-down">Delete</span>-->
                     </button>
             </div>

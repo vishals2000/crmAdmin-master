@@ -58,7 +58,7 @@
             </div>
             <div class="form-group">
                 <label class="form-control-label" for="field_recurrenceType">Recurrence Type</label>
-                <select class="form-control" name="recurrenceType" formControlName="recurrenceType" id="field_recurrenceType" required>
+                <select class="form-control" name="recurrenceType" formControlName="recurrenceType" id="field_recurrenceType" required  (change)="onRecurrenceType()">
                     <option value="NONE">NONE</option>
                     <option value="WEEKLY">WEEKLY</option>
                     <option value="DAILY">DAILY</option>
@@ -69,8 +69,8 @@
                     </small>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="form-control-label" for="field_recurrenceEndDate">Recurrence End Date</label>
+            <div class="form-group" *ngIf="isRecuEndDateVisible">
+                <label class="form-control-label" for="field_recurrenceEndDate">Recurrence End Date{{recurrenceType}}</label>
                 <div class="input-group">
                     <input id="field_recurrenceEndDate" type="text" class="form-control" name="recurrenceEndDate" ngbDatepicker [minDate]="minDate"
                         #recurrenceEndDateDp="ngbDatepicker" formControlName="recurrenceEndDate" required/>
@@ -112,7 +112,7 @@
         <!-- </div> -->
         <div align="right">
             Target Group Size {{targetGroupSize}}
-            <button (click)="getTargetGroupSize()" type="button">Refresh</button>
+            <button (click)="getTargetGroupSize()" [disabled]="getTargetGroupRefreshBtnEnabled()"  type="button">Refresh</button>
         </div>
         <div formArrayName="targetGroupFilterCriteria" class="well well-lg">
             <div *ngFor="let targetGroupFilterCriterion of targetGroupFilterCriteria.controls; let i=index" [formGroupName]="i">
@@ -148,6 +148,7 @@
                         <input class="form-control" placeholder="the value of N" formControlName="filterOptionValue" optional *ngSwitchCase="'daysCounter'">
                         <input class="form-control" placeholder="version number" formControlName="filterOptionValue" optional *ngSwitchCase="'appVersionSelector'">
                         <input class="form-control" placeholder="Type to add a tag value" formControlName="filterOptionValue" optional *ngSwitchCase="'tagValue'">
+                        <input class="form-control" formControlName="filterOptionValue" min="0" type="number" optional *ngSwitchCase="'Number'">
                         <select class="form-control" formControlName="filterOptionValue" *ngSwitchCase="'dropdown'">
                             <!-- <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option> -->
                             <option *ngFor="let filterOption of getFilterOptionValueValues(i)" [value]="filterOption">{{filterOption}}</option>
@@ -181,7 +182,7 @@
                 <div style="margin-left: 1em;">
                     <div align="right">
                         Target Content Group Size {{targetContentGroupSize}}
-                        <button (click)="getTargetContentGroupSize(i)" type="button">Refresh</button>
+                        <button (click)="getTargetContentGroupSize(i)" [disabled]="getTargetContentGroupRefreshBtnEnabled(i)" type="button">Refresh</button>
                     </div>
                     <!-- <div class="form-group">
                                 <label class="form-control-label" for="field_contentName">Content Name</label>

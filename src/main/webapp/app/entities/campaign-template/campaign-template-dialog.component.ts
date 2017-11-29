@@ -49,6 +49,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     isLaunch: boolean;
     timerValidation: boolean = false;
     currentDate: Date = new Date();
+    isRecuEndDateVisible: boolean;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -146,6 +147,9 @@ export class CampaignTemplateDialogComponent implements OnInit {
             }
             if (this.campaignTemplate.sendImmediately) {
                 this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + (currentHourValue < 10 ? '0' + currentHourValue : currentHourValue) + ':' + (currentMinValue < 10 ? '0' + currentMinValue : currentMinValue) + ':00';
+            }
+            if (this.campaignTemplateGroupCreationForm.value.recurrenceType === 'NONE') {
+                this.campaignTemplateGroupCreationForm.value.recurrenceEndDate = this.campaignTemplateGroupCreationForm.value.startDate;
             }
 
             if (this.campaignTemplateGroupCreationForm.value.id !== null) {
@@ -355,6 +359,18 @@ export class CampaignTemplateDialogComponent implements OnInit {
         // debugger;
     }
 
+    onRecurrenceType() {
+        const recurrenceType = this.campaignTemplateGroupCreationForm.controls['recurrenceType'].value;
+        switch (recurrenceType) {
+            case 'NONE':
+                this.isRecuEndDateVisible = false;
+                break;
+            default:
+                this.isRecuEndDateVisible = true;
+                break;
+        }
+    }
+
     // pushOptimoveInstances() {
     //     if (this.campaignTemplate.id) {
     //         const body = {
@@ -382,10 +398,10 @@ export class CampaignTemplateDialogComponent implements OnInit {
             const optionValues: string[] = [];
             if (Array.isArray(targetGroupFilter.get('filterOptionValue').value)) {
                 for (const optionValue of targetGroupFilter.get('filterOptionValue').value) {
-                    optionValues.push(optionValue);
+                    optionValues.push((optionValue || '').toString());
                 }
             } else {
-                optionValues.push(targetGroupFilter.get('filterOptionValue').value);
+                optionValues.push((targetGroupFilter.get('filterOptionValue').value || '').toString());
             }
             targetGroupFilterCriteria.push(new TargetGroupFilterCriterionSizeRequest(targetGroupFilter.get('filterOption').value,
                 targetGroupFilter.get('filterOptionLookUp').value,
@@ -409,7 +425,32 @@ export class CampaignTemplateDialogComponent implements OnInit {
             (res: ResponseWrapper) => this.onError(res.json)
         );
     }
-
+    getTargetGroupRefreshBtnEnabled(){
+        const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
+        let formLengthIterator = 0;
+        const targetGroupFilterCriteria: TargetGroupFilterCriterionSizeRequest[] = [];
+        while (formLengthIterator < targetGroupFilters.length) {
+            const targetGroupFilter = targetGroupFilters.at(formLengthIterator);
+            const optionValues: string[] = [];
+            if (Array.isArray(targetGroupFilter.get('filterOptionValue').value)) {
+                for (const optionValue of targetGroupFilter.get('filterOptionValue').value) {
+                    optionValues.push((optionValue || '').toString());
+                }
+            } else {
+                optionValues.push((targetGroupFilter.get('filterOptionValue').value || '').toString());
+            }
+            const optValCase = this.getFormControlType(formLengthIterator);
+            const bOptValReq = optValCase !== null && optionValues.length && optionValues[0] === '' ? false : true;
+            if(!targetGroupFilter.get('filterOption').value || (!this.isOptionLookUpHidden(formLengthIterator) && !targetGroupFilter.get('filterOptionLookUp').value) || !targetGroupFilter.get('filterOptionComparison').value || !bOptValReq){
+                return true;
+            }
+            formLengthIterator = formLengthIterator + 1;
+        }
+        return false;
+    }
+    getTargetContentGroupRefreshBtnEnabled(i) {
+        return this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria[i].languageSelected ? false : true;
+    }
     getTargetContentGroupSize(i) {
         //  console.log(this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteriavalue);
         console.log(this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteria);
@@ -421,10 +462,10 @@ export class CampaignTemplateDialogComponent implements OnInit {
             const optionValues: string[] = [];
             if (Array.isArray(targetGroupFilter.get('filterOptionValue').value)) {
                 for (const optionValue of targetGroupFilter.get('filterOptionValue').value) {
-                    optionValues.push(optionValue);
+                    optionValues.push((optionValue || '').toString());
                 }
             } else {
-                optionValues.push(targetGroupFilter.get('filterOptionValue').value);
+                optionValues.push((targetGroupFilter.get('filterOptionValue').value || '').toString());
             }
             targetGroupFilterCriteria.push(new TargetGroupFilterCriterionSizeRequest(targetGroupFilter.get('filterOption').value,
                 targetGroupFilter.get('filterOptionLookUp').value,
@@ -494,7 +535,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         return targetGroupFilterCriterionFormControl.get('filterOptionValue').value;
     }
     populateFilterOptions() {
-        this.filterOptions = ['App', 'App Version', 'Country', 'Event', 'Install Date', 'Language', 'Last Open Date', 'OS', 'Segment', 'Tag', 'Timezone'];
+        this.filterOptions = ['App', 'App Version', 'Country', 'Event', 'Install Date', 'Language', 'Last Open Date', 'OS', 'Segment', 'Sessions', 'Tag', 'Timezone'];
         this.filterOptions.sort();
     }
     populateEventsMaps() {
@@ -566,23 +607,23 @@ export class CampaignTemplateDialogComponent implements OnInit {
     }
 
     populateSportsTagsMap() {
-        let filterOptionLookUpComparisonVsValue: Map<string, string[]> = new Map<string, string[]>();
-        filterOptionLookUpComparisonVsValue.set('is', ['true', 'false']);
+        let filterOptionLookUpComparisonVsValue: Map<string, string[]> = new Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue.set('is', ['true', 'false']);
         this.sportsTagsMap.set('hasLoggedIn', filterOptionLookUpComparisonVsValue);
-        
-        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
-        filterOptionLookUpComparisonVsValue.set('is', ['true', 'false']);
+
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue.set('is', ['true', 'false']);
         this.sportsTagsMap.set('lastBetInPlay', filterOptionLookUpComparisonVsValue);
-        
-        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
+
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
         filterOptionLookUpComparisonVsValue.set('before', ['date']);
         filterOptionLookUpComparisonVsValue.set('was', ['date']);
         filterOptionLookUpComparisonVsValue.set('after', ['date']);
-        filterOptionLookUpComparisonVsValue.set('within', ['the last 2 days', 'the last 7 days', 'the last 2 weeks', 'the last month']);
+        filterOptionLookUpComparisonVsValue.set('within', ['the last 2 days', 'the last 7 days', 'the last 2 weeks', 'the last month']);
         filterOptionLookUpComparisonVsValue.set('days ago', ['number of days']);
         filterOptionLookUpComparisonVsValue.set('greater than N days ago', ['number of days']);
         filterOptionLookUpComparisonVsValue.set('less than N days ago', ['number of days']);
-        filterOptionLookUpComparisonVsValue.set('exists', ['true', 'false']);
+        filterOptionLookUpComparisonVsValue.set('exists', ['true', 'false']);
         this.sportsTagsMap.set('lastBetOnBasketBall', filterOptionLookUpComparisonVsValue);
         this.sportsTagsMap.set('lastBetOnBlackJack', filterOptionLookUpComparisonVsValue);
         this.sportsTagsMap.set('lastBetOnFootball', filterOptionLookUpComparisonVsValue);
@@ -591,30 +632,30 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.sportsTagsMap.set('lastBetOnTennis', filterOptionLookUpComparisonVsValue);
         this.sportsTagsMap.set('lastBetOnVolleyball', filterOptionLookUpComparisonVsValue);
         this.sportsTagsMap.set('lastLoginDate', filterOptionLookUpComparisonVsValue);
-        
-        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
-        filterOptionLookUpComparisonVsValue.set('equals', ['sessionBalance']);
-        filterOptionLookUpComparisonVsValue.set('not equals', ['sessionBalance']);
-        filterOptionLookUpComparisonVsValue.set('less than', ['sessionBalance']);
-        filterOptionLookUpComparisonVsValue.set('greater than', ['sessionBalance']);
-        filterOptionLookUpComparisonVsValue.set('exists', ['sessionBalance']);
+
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue.set('equals', ['tagValue']);
+        filterOptionLookUpComparisonVsValue.set('not equals', ['tagValue']);
+        filterOptionLookUpComparisonVsValue.set('less than', ['Number']);
+        filterOptionLookUpComparisonVsValue.set('greater than', ['Number']);
+        filterOptionLookUpComparisonVsValue.set('exists', ['true', 'false']);
         this.sportsTagsMap.set('lastSessionCloseBalance', filterOptionLookUpComparisonVsValue);
-        
-        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
+
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
         filterOptionLookUpComparisonVsValue.set('is', ['leagueNameId']);
         filterOptionLookUpComparisonVsValue.set('is not', ['leagueNameId']);
         this.sportsTagsMap.set('lastBetOnLeague', filterOptionLookUpComparisonVsValue);
-        
-        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
+
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
         filterOptionLookUpComparisonVsValue.set('is', ['eventId']);
         filterOptionLookUpComparisonVsValue.set('is not', ['eventId']);
         this.sportsTagsMap.set('lastEventIdBacked', filterOptionLookUpComparisonVsValue);
-        
-        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
+
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
         filterOptionLookUpComparisonVsValue.set('is', ['leagueName']);
         filterOptionLookUpComparisonVsValue.set('is not', ['leagueName']);
         this.sportsTagsMap.set('lastBetOnPremierLeague', filterOptionLookUpComparisonVsValue);
-    } 
+    }
 
     populateCasinoTagsMap() {
         let filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
@@ -812,6 +853,12 @@ export class CampaignTemplateDialogComponent implements OnInit {
                     break;
                 case 'Timezone': {
                     this.filtersMap.get('Timezone').forEach((value: string[], key: string) => {
+                        filterOptionComparisonValues.push(key);
+                    });
+                }
+                    break;
+                case 'Sessions': {
+                    this.filtersMap.get('Sessions').forEach((value: string[], key: string) => {
                         filterOptionComparisonValues.push(key);
                     });
                 }
@@ -1081,6 +1128,9 @@ export class CampaignTemplateDialogComponent implements OnInit {
             else if (formOptionValues[0] === 'tagValue') {
                 return 'tagValue';
             }
+            else if (formOptionValues[0] === 'Number') {
+                return 'Number';
+            }
         } else if (formOptionValues && formOptionValues.length > 1) {
             return 'dropdown';
         }
@@ -1109,6 +1159,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.populateAppParams();
         this.populateAppVersionParams();
         this.populateTimeZoneParams();
+        this.populateSessionParams();
         this.populateLanguageParams();
         this.populateCountryParams();
         this.populateInstallDateParams();
@@ -1134,6 +1185,13 @@ export class CampaignTemplateDialogComponent implements OnInit {
         filterComparisonVsValue.set('is', TIME_ZONES);
         filterComparisonVsValue.set('is not', TIME_ZONES);
         this.filtersMap.set('Timezone', filterComparisonVsValue);
+    }
+
+    populateSessionParams() {
+        const filterComparisonVsValue: Map<string, string[]> = new Map<string, string[]>();
+        filterComparisonVsValue.set('less than', ['Number']);
+        filterComparisonVsValue.set('greater than', ['Number']);
+        this.filtersMap.set('Sessions', filterComparisonVsValue);
     }
 
     populateLanguageParams() {
