@@ -146,6 +146,18 @@ export class CampaignTemplateService {
         return this.http.delete(`${this.resourceUrl}/${id}`);
     }
 
+    getAppCapGrpIdFromTemp(id: string): Observable<Response> {
+        return this.http.get(this.resourceUrl + '/appCampaignGroupInfoWithCampaignTemplateId/' + id).map((res: Response) => {
+            return res.json();
+        });
+    }
+
+    getAppCapGrpIdFromCapGrp(id: string): Observable<Response> {
+        return this.http.get(this.resourceUrl + '/appCampaignGroupInfoWithCampaignGroupId/' + id).map((res: Response) => {
+            return res.json();
+        });
+    }
+
     private convertResponse(res: Response): ResponseWrapper {
         const jsonResponse = res.json();
         for (let i = 0; i < jsonResponse.length; i++) {

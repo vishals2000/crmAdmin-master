@@ -5,6 +5,7 @@ import { JhiEventManager, JhiLanguageService } from 'ng-jhipster';
 
 import { CampaignTemplate } from './campaign-template.model';
 import { CampaignTemplateService } from './campaign-template.service';
+import { BreadCrumbService } from '../../layouts/navbar/navbar.service';
 
 @Component({
     selector: 'jhi-campaign-template-detail',
@@ -16,10 +17,12 @@ export class CampaignTemplateDetailComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
     private eventSubscriber: Subscription;
     data: any;
+    oCampInfo : any;
     constructor(
         private eventManager: JhiEventManager,
         private campaignTemplateService: CampaignTemplateService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        public breadCrumbService : BreadCrumbService
     ) {
         this.data = {
             labels: ['A', 'B', 'C'],
@@ -49,8 +52,25 @@ export class CampaignTemplateDetailComponent implements OnInit, OnDestroy {
     load(id) {
         this.campaignTemplateService.find(id).subscribe((campaignTemplate) => {
             this.campaignTemplate = campaignTemplate;
+            this.renderBreadcrumb();
+        });
+        
+    }
+
+    renderBreadcrumb(){
+        this.breadCrumbService.getBreadCrumbs().subscribe(breadCrumbArray=>{
+            if(breadCrumbArray && breadCrumbArray.length < 2){
+                this.campaignTemplateService.getAppCapGrpIdFromTemp(this.campaignTemplate.id).subscribe((oCampTempInfo) => {
+                    this.oCampInfo = oCampTempInfo;
+                    this.breadCrumbService.updateBreadCrumbs(breadCrumbArray, {name : this.oCampInfo.campaignGroupName, router : '#/campaign-template/group/' + this.oCampInfo.campaignGroupId  + "/" + this.oCampInfo.campaignGroupName, brdCrmbId : '3', appId : this.oCampInfo.appId, appName : this.oCampInfo.appName});
+                });
+            }
+            else{
+               // this.breadCrumbService.updateBreadCrumbs(breadCrumbArray, {name : this.campaignTemplate.campaignGroupId, router : '#/campaign-template/group/' + this.campaignTemplate.campaignGroupId  + "/" + this.campaignTemplate.campaignName, brdCrmbId : '3'});
+            }
         });
     }
+
     previousState() {
         window.history.back();
     }

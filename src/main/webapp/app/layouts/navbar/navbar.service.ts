@@ -30,17 +30,18 @@ export class BreadCrumbService {
                 }
             }
         }
-        if(bcArray && bcArray.length === 0 && cuCrumbobj.brdCrmbId !== '1'){
-            bcArray.push( {name : 'Apps', selVal : 'Apps', router : '#/apps', brdCrmbId : '1', appsData: cuCrumbobj.data});
+        if(bcArray && bcArray.length === 0 ){
+            if(cuCrumbobj.brdCrmbId === '3' || cuCrumbobj.brdCrmbId === '2'){
+                bcArray.push({name : 'Apps', router : '#/apps', brdCrmbId : '1', appsData: cuCrumbobj.data});
+            }
+            if(cuCrumbobj.brdCrmbId === '3'){
+                bcArray.push({name : cuCrumbobj.appName, router : '#/campaign-group/project/' + cuCrumbobj.appId  + "/" + cuCrumbobj.appName, brdCrmbId : '2', appsData: cuCrumbobj.data});
+            }
         }
         if(currentIndex){
             bcArray.splice(currentIndex, bcArray.length);
         }
         else{
-            if(bcArray && bcArray.length){
-                cuCrumbobj.list = bcArray[bcArray.length - 1].appsData;
-                cuCrumbobj.selVal = cuCrumbobj.key;
-            }
             bcArray.push(cuCrumbobj);
         }
     }

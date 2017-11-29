@@ -258,9 +258,9 @@
                                     <option *ngFor="let crumb1 of crumb.list"  [ngValue]="crumb1.id/crumb1.name">{{crumb1.name}}</option>
                             </select>
                     </div -->
-                    <div>
+                    <div ng-if="!$last || crumb.brdCrmbId === '3'">
                         <div layout="" layout-align="center center" class="crumb layout-align-center-center layout-row" ng-switch-default="">
-                            <a class="truncated" href="{{crumb.router}}" ><span>{{crumb.selVal}}&nbsp;</span></a> <!--ng-if="!$last || crumb.displayName === 'Messages'" -->
+                            <a class="truncated" href="{{crumb.router}}" ><span>{{crumb.name}}&nbsp;</span></a> <!--ng-if="!$last || crumb.displayName === 'Messages'" -->
                         </div>
                     </div>
                     <div layout="" layout-align="center center" class="ol-breadcrumbarrow crumb divider layout-align-center-center layout-row"  ng-show="!$last">
