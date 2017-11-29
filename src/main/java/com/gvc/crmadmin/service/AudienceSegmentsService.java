@@ -1,6 +1,10 @@
 package com.gvc.crmadmin.service;
 
 import com.gvc.crmadmin.domain.AudienceSegments;
+import com.gvc.crmadmin.domain.campaignMgmtApi.StoreFileResponse;
+
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface AudienceSegmentsService {
 
-	boolean store(String id, MultipartFile file);
+	StoreFileResponse store(String id, MultipartFile file);
 	
     /**
      * Save a audienceSegments.
@@ -27,6 +31,10 @@ public interface AudienceSegmentsService {
      *  @return the list of entities
      */
     Page<AudienceSegments> findAll(Pageable pageable);
+    
+    Page<AudienceSegments> findByFrontEndAndProduct(String frontEnd, String product, Pageable pageable);
+    
+    List<AudienceSegments> findByFrontEndAndProduct(String frontEnd, String product);
 
     /**
      *  Get the "id" audienceSegments.

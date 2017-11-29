@@ -1,13 +1,18 @@
 package com.gvc.crmadmin.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.gvc.crmadmin.config.Constants;
 import com.gvc.crmadmin.domain.AudienceSegments;
 import com.gvc.crmadmin.domain.UploadSegments;
+import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentUploadResponse;
+import com.gvc.crmadmin.domain.campaignMgmtApi.StoreFileResponse;
 import com.gvc.crmadmin.service.AudienceSegmentsService;
 import com.gvc.crmadmin.web.rest.util.HeaderUtil;
 import com.gvc.crmadmin.web.rest.util.PaginationUtil;
 import io.swagger.annotations.ApiParam;
 import io.github.jhipster.web.util.ResponseUtil;
+
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -19,12 +24,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.gvc.crmadmin.config.Constants.*;
 /**
  * REST controller for managing AudienceSegments.
  */
@@ -43,16 +52,24 @@ public class AudienceSegmentsResource {
     }
 
     @PostMapping("/audience-segments/upload-segment")
-    public ResponseEntity<AudienceSegments> handleFileUpload(@RequestParam("front_end") String frontEnd, @RequestParam("product") String product, 
-    		@RequestParam("name") String name, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<AudienceSegmentUploadResponse> handleFileUpload(@RequestParam("frontEnd") String frontEnd, @RequestParam("product") String product, 
+    		@RequestParam("name") String name, @RequestParam("file") MultipartFile file) throws URISyntaxException, UnsupportedEncodingException {
 
     	System.out.println("frontEnd = " + frontEnd + " product = " + product + " name = " + name);
-    	String id = product + "_" + frontEnd + "_" + name;
+    	
+    	AudienceSegmentUploadResponse response = new AudienceSegmentUploadResponse();
+    	
+    	String id = product + "_" + frontEnd + "_" + name.trim().toLowerCase();
     	AudienceSegments existingSegment = audienceSegmentsService.findOne(id);
+    	
     	if(existingSegment != null) {//already existing
-    		return ResponseEntity.status(-1)
-    				.headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, existingSegment.getId().toString()))
-    				.body(existingSegment);
+    		return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, existingSegment.getId(), "Segment with the given name exists"))
+                    .body(response);
+    		
+    		/*response.setCode(-1);
+    		response.setMessage("Name already existing for product and fe combination");
+    		return ResponseUtil.wrapOrNotFound(Optional.of(response));*/
     	}
     	
     	AudienceSegments segments = new AudienceSegments();
@@ -62,23 +79,26 @@ public class AudienceSegmentsResource {
     	segments.setFrontEnd(frontEnd);
     	segments.setName(name);
     	segments.setType("MANUAL_UPLOAD");
-    	
+    	segments.setCreatedAt(CAMPAIGN_SCHEDULE_TIME_FORMAT.print(new DateTime()));
         
     	AudienceSegments result = audienceSegmentsService.save(segments);
-    	boolean playersUploaded = audienceSegmentsService.store(id, file);
 
-    	if(playersUploaded) {
-    		return ResponseEntity.ok()
-    				.headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
-    				.body(result);
+    	StoreFileResponse storeFileResponse = audienceSegmentsService.store(id, file);
+
+    	if(storeFileResponse.isResult()) {
+    		return ResponseEntity.created(new URI(URLEncoder.encode("/api/audience-segments/upload-segment/" + id, "UTF-8")))
+    	            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, id))
+    	            .body(response);
+//    		return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
     	}else {
-    		return ResponseEntity.status(-2)
-    				.headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
-    				.body(result);
+    		audienceSegmentsService.delete(id);
+    		
+    		response.setCode(-2);
+    		response.setMessage(storeFileResponse.getMessage());
+    		return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, name, storeFileResponse.getMessage()))
+                    .body(response);
     	}
-/*    	return ResponseEntity.ok()
-				.headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
-				.body(result);*/
     }
     
     /**
@@ -136,6 +156,42 @@ public class AudienceSegmentsResource {
         Page<AudienceSegments> page = audienceSegmentsService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/audience-segments");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
+     * GET  /audience-segments : get audienceSegments.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of audienceSegments in body
+     */
+    @GetMapping("/audience-segments/loadbyFeProduct")
+    @Timed
+    public ResponseEntity<List<AudienceSegments>> getAudienceSegments(@ApiParam Pageable pageable, @RequestParam("frontEnd") String frontEnd, @RequestParam("product") String product) {
+        log.debug("REST request to get a page of AudienceSegments for frontEnd = " + frontEnd + " and product = " + product);
+        Page<AudienceSegments> page = audienceSegmentsService.findByFrontEndAndProduct(frontEnd, product, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/audience-segments/loadbyFeProduct");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
+     * GET  /audience-segments : get audienceSegments.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of audienceSegments in body
+     */
+    @GetMapping("/audience-segments/loadbyFeProductForSegmentation")
+    @Timed
+    public ResponseEntity<List<String>> getAudienceSegmentsForSegmentation(@RequestParam("frontEnd") String frontEnd, @RequestParam("product") String product) {
+        log.debug("REST request to get complete list of AudienceSegments for frontEnd = " + frontEnd + " and product = " + product);
+        List<AudienceSegments> segments = audienceSegmentsService.findByFrontEndAndProduct(frontEnd, product);
+        
+        List<String> segmentNames = new ArrayList<>();
+        if(segments != null) {
+        	for (AudienceSegments segment : segments) {
+				segmentNames.add(segment.getName());
+			}
+        }
+        return ResponseUtil.wrapOrNotFound(Optional.of(segmentNames));
     }
 
     /**
