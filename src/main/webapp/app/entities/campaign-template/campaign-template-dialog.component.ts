@@ -425,7 +425,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             (res: ResponseWrapper) => this.onError(res.json)
         );
     }
-    /*getTargetGroupRefreshBtnEnabled(){
+    getTargetGroupRefreshBtnEnabled(){
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
         let formLengthIterator = 0;
         const targetGroupFilterCriteria: TargetGroupFilterCriterionSizeRequest[] = [];
@@ -434,18 +434,20 @@ export class CampaignTemplateDialogComponent implements OnInit {
             const optionValues: string[] = [];
             if (Array.isArray(targetGroupFilter.get('filterOptionValue').value)) {
                 for (const optionValue of targetGroupFilter.get('filterOptionValue').value) {
-                    optionValues.push(optionValue);
+                    optionValues.push((optionValue || '').toString());
                 }
             } else {
-                optionValues.push(targetGroupFilter.get('filterOptionValue').value);
+                optionValues.push((targetGroupFilter.get('filterOptionValue').value || '').toString());
             }
-            if(!targetGroupFilter.get('filterOption').value || (this.isOptionLookUpHidden(formLengthIterator) && !targetGroupFilter.get('filterOptionLookUp').value) || !targetGroupFilter.get('filterOptionComparison').value || optionValues.length === 0){
+            const optValCase = this.getFormControlType(formLengthIterator);
+            const bOptValReq = optValCase !== null && optionValues.length && optionValues[0] === '' ? false : true;
+            if(!targetGroupFilter.get('filterOption').value || (!this.isOptionLookUpHidden(formLengthIterator) && !targetGroupFilter.get('filterOptionLookUp').value) || !targetGroupFilter.get('filterOptionComparison').value || !bOptValReq){
                 return true;
             }
             formLengthIterator = formLengthIterator + 1;
         }
         return false;
-    }*/
+    }
     getTargetContentGroupRefreshBtnEnabled(i) {
         return this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria[i].languageSelected ? false : true;
     }

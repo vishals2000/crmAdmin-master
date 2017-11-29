@@ -112,7 +112,7 @@
         <!-- </div> -->
         <div align="right">
             Target Group Size {{targetGroupSize}}
-            <button (click)="getTargetGroupSize()" type="button">Refresh</button>
+            <button (click)="getTargetGroupSize()" [disabled]="getTargetGroupRefreshBtnEnabled()"  type="button">Refresh</button>
         </div>
         <div formArrayName="targetGroupFilterCriteria" class="well well-lg">
             <div *ngFor="let targetGroupFilterCriterion of targetGroupFilterCriteria.controls; let i=index" [formGroupName]="i">
