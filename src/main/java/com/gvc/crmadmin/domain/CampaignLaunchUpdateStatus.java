@@ -7,6 +7,8 @@ import java.io.Serializable;
 
 public class CampaignLaunchUpdateStatus implements Serializable {
 
+    private static final long serialVersionUID = 8905094387423342718L;
+
     private final boolean result;
     private final String message;
 
