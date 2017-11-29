@@ -164,7 +164,7 @@ public class AudienceSegmentsResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of audienceSegments in body
      */
-    @GetMapping("/audience-segments/loadbyFeProduct")
+    @PostMapping("/audience-segments/loadbyFeProduct")
     @Timed
     public ResponseEntity<List<AudienceSegments>> getAudienceSegments(@ApiParam Pageable pageable, @RequestParam("frontEnd") String frontEnd, @RequestParam("product") String product) {
         log.debug("REST request to get a page of AudienceSegments for frontEnd = " + frontEnd + " and product = " + product);
@@ -179,7 +179,7 @@ public class AudienceSegmentsResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of audienceSegments in body
      */
-    @GetMapping("/audience-segments/loadbyFeProductForSegmentation")
+    @PostMapping("/audience-segments/loadbyFeProductForSegmentation")
     @Timed
     public ResponseEntity<List<String>> getAudienceSegmentsForSegmentation(@RequestParam("frontEnd") String frontEnd, @RequestParam("product") String product) {
         log.debug("REST request to get complete list of AudienceSegments for frontEnd = " + frontEnd + " and product = " + product);
