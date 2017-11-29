@@ -2,6 +2,7 @@ package com.gvc.crmadmin.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.gvc.crmadmin.domain.AudienceSegments;
+import com.gvc.crmadmin.domain.UploadSegments;
 import com.gvc.crmadmin.service.AudienceSegmentsService;
 import com.gvc.crmadmin.web.rest.util.HeaderUtil;
 import com.gvc.crmadmin.web.rest.util.PaginationUtil;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -40,6 +42,44 @@ public class AudienceSegmentsResource {
         this.audienceSegmentsService = audienceSegmentsService;
     }
 
+    @PostMapping("/upload-segment")
+    public ResponseEntity<AudienceSegments> handleFileUpload(@RequestParam("front_end") String frontEnd, @RequestParam("product") String product, 
+    		@RequestParam("name") String name, @RequestParam("file") MultipartFile file) {
+
+    	String id = product + "_" + frontEnd + "_" + name;
+    	AudienceSegments existingSegment = audienceSegmentsService.findOne(id);
+    	if(existingSegment != null) {//already existing
+    		return ResponseEntity.status(-1)
+    				.headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, existingSegment.getId().toString()))
+    				.body(existingSegment);
+    	}
+    	
+    	AudienceSegments segments = new AudienceSegments();
+    	segments.setId(id);
+
+    	segments.setProduct(product);
+    	segments.setFrontEnd(frontEnd);
+    	segments.setName(name);
+    	segments.setType("MANUAL_UPLOAD");
+    	
+        
+    	AudienceSegments result = audienceSegmentsService.save(segments);
+    	boolean playersUploaded = audienceSegmentsService.store(id, file);
+
+    	if(playersUploaded) {
+    		return ResponseEntity.ok()
+    				.headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
+    				.body(result);
+    	}else {
+    		return ResponseEntity.status(-2)
+    				.headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
+    				.body(result);
+    	}
+/*    	return ResponseEntity.ok()
+				.headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
+				.body(result);*/
+    }
+    
     /**
      * POST  /audience-segments : Create a new audienceSegments.
      *

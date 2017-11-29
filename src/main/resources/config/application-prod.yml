@@ -23,12 +23,18 @@ spring:
         mongodb:
 #            uri: mongodb://localhost:27017
 #            database: crmAdmin
-            port: 27017
-            host: 10.166.81.37
+#            port: 27017
+#            host: 10.166.81.37
+#            database: crmAdmin
+#            authenticationDatabase: admin
+#            username: jhipster
+#            password: r00t_CRM_1@Production
+			port: 27017
+            host: 10.1.54.131
             database: crmAdmin
             authenticationDatabase: admin
             username: jhipster
-            password: r00t_CRM_1@Production
+            password: jhipster
     mail:
         host: localhost
         port: 25

@@ -26,14 +26,14 @@ spring:
         serialization.indent_output: true
     data:
         mongodb:
-            uri: mongodb://localhost:27017
-            database: crmAdmin
-#            port: 27017
-#            host: 10.1.54.131
+#            uri: mongodb://localhost:27017
 #            database: crmAdmin
-#            authenticationDatabase: admin
-#            username: jhipster
-#            password: jhipster
+            port: 27017
+            host: 10.1.54.131
+            database: crmAdmin
+            authenticationDatabase: admin
+            username: jhipster
+            password: jhipster
     mail:
         host: localhost
         port: 25

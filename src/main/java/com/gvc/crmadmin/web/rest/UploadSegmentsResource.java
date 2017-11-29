@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -40,6 +41,44 @@ public class UploadSegmentsResource {
         this.uploadSegmentsService = uploadSegmentsService;
     }
 
+    @PostMapping("/upload-segment")
+    public ResponseEntity<UploadSegments> handleFileUpload(@RequestParam("front_end") String frontEnd, @RequestParam("product") String product, 
+    		@RequestParam("name") String name, @RequestParam("file") MultipartFile file) {
+
+    	String id = product + "_" + frontEnd + "_" + name;
+    	UploadSegments existingSegment = uploadSegmentsService.findOne(id);
+    	if(existingSegment != null) {//already existing
+    		return ResponseEntity.status(-1)
+    				.headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, existingSegment.getId().toString()))
+    				.body(existingSegment);
+    	}
+    	
+    	UploadSegments uploadSegments = new UploadSegments();
+    	uploadSegments.setId(id);
+
+    	uploadSegments.setProduct(product);
+    	uploadSegments.setFrontEnd(frontEnd);
+    	uploadSegments.setName(name);
+    	uploadSegments.setType("UPLOAD");
+    	
+        
+    	UploadSegments result = uploadSegmentsService.save(uploadSegments);
+    	boolean playersUploaded = uploadSegmentsService.store(id, file);
+
+    	if(playersUploaded) {
+    		return ResponseEntity.ok()
+    				.headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
+    				.body(result);
+    	}else {
+    		return ResponseEntity.status(-2)
+    				.headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
+    				.body(result);
+    	}
+/*    	return ResponseEntity.ok()
+				.headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
+				.body(result);*/
+    }
+    
     /**
      * POST  /upload-segments : Create a new uploadSegments.
      *

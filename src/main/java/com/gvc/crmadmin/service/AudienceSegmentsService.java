@@ -3,12 +3,15 @@ package com.gvc.crmadmin.service;
 import com.gvc.crmadmin.domain.AudienceSegments;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Service Interface for managing AudienceSegments.
  */
 public interface AudienceSegmentsService {
 
+	boolean store(String id, MultipartFile file);
+	
     /**
      * Save a audienceSegments.
      *
