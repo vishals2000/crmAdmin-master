@@ -42,10 +42,11 @@ public class AudienceSegmentsResource {
         this.audienceSegmentsService = audienceSegmentsService;
     }
 
-    @PostMapping("/upload-segment")
+    @PostMapping("/audience-segments/upload-segment")
     public ResponseEntity<AudienceSegments> handleFileUpload(@RequestParam("front_end") String frontEnd, @RequestParam("product") String product, 
     		@RequestParam("name") String name, @RequestParam("file") MultipartFile file) {
 
+    	System.out.println("frontEnd = " + frontEnd + " product = " + product + " name = " + name);
     	String id = product + "_" + frontEnd + "_" + name;
     	AudienceSegments existingSegment = audienceSegmentsService.findOne(id);
     	if(existingSegment != null) {//already existing
