@@ -50,7 +50,8 @@ export class CampaignTemplateDialogComponent implements OnInit {
     timerValidation: boolean = false;
     currentDate: Date = new Date();
     isRecuEndDateVisible: boolean;
-    currentContentGrp : number;
+    currentContentGrp: number;
+    segmentNames: string[];
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -93,6 +94,17 @@ export class CampaignTemplateDialogComponent implements OnInit {
             this.campaignTemplate.frontEnd = message[1];
             this.campaignTemplate.product = message[2];
         });
+        const body = {
+            'frontEnd': this.campaignTemplate.frontEnd,
+            'product': this.campaignTemplate.product
+        }
+        this.campaignTemplateService.getSegments(body).subscribe(
+            (res: ResponseWrapper) => {
+                this.segmentNames = res['segments'];
+                this.populateSegmentParams();
+            },
+            (res: ResponseWrapper) => this.onError(res.json)
+        );
         this.createForm();
         this.prepareData();
         this.populateCountries();
@@ -131,7 +143,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     }
 
     save() {
-        let cuurentDateObj = new Date();
+        const cuurentDateObj = new Date();
         if (this.timerValidation || (!this.timerValidation && this.checkCurrentTime())) {
             this.isSaving = true;
             const currentHourValue = cuurentDateObj.getUTCHours();
@@ -160,21 +172,19 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 this.subscribeToSaveResponse(
                     this.campaignTemplateService.create(this.campaignTemplateGroupCreationForm.value));
             }
-        }
-        else {
+        } else {
             this.addTimeControl();
         }
 
     }
 
     checkCurrentTime() {
-        let cuurentDateObj = new Date();
+        const cuurentDateObj = new Date();
         const totalCurrentDayMinutes = cuurentDateObj.getUTCHours() * 60 + cuurentDateObj.getUTCMinutes();
 
         if (((this.campaignTemplateGroupCreationForm.value.time.hour * 60) + this.campaignTemplateGroupCreationForm.value.time.minute) < totalCurrentDayMinutes) {
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     }
@@ -273,7 +283,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         return this.campaignTemplateGroupCreationForm.get('targetGroupContentCriteria') as FormArray;
     };
     addTimeControl() {
-        let cuurentDateObj = new Date();
+        const cuurentDateObj = new Date();
         this.campaignTemplateGroupCreationForm.addControl('time', new FormControl(
             (!this.timerValidation) ? new SimpleTime(this.currentDate.getUTCHours(), this.currentDate.getUTCMinutes()) :
                 new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0, 2)),
@@ -284,7 +294,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                     return null;
                 }
                 const value = control.value;
-                let cuurentDateObj = new Date();
+                const cuurentDateObj = new Date();
                 const totalCurrentDayMinutes = cuurentDateObj.getUTCHours() * 60 + cuurentDateObj.getUTCMinutes();
                 const minutes = this.currentDate.getUTCMinutes();
                 if (!value) {
@@ -426,7 +436,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             (res: ResponseWrapper) => this.onError(res.json)
         );
     }
-    getTargetGroupRefreshBtnEnabled(){
+    getTargetGroupRefreshBtnEnabled() {
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
         let formLengthIterator = 0;
         const targetGroupFilterCriteria: TargetGroupFilterCriterionSizeRequest[] = [];
@@ -442,7 +452,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             }
             const optValCase = this.getFormControlType(formLengthIterator);
             const bOptValReq = optValCase !== null && optionValues.length && optionValues[0] === '' ? false : true;
-            if(!targetGroupFilter.get('filterOption').value || (!this.isOptionLookUpHidden(formLengthIterator) && !targetGroupFilter.get('filterOptionLookUp').value) || !targetGroupFilter.get('filterOptionComparison').value || !bOptValReq){
+            if (!targetGroupFilter.get('filterOption').value || (!this.isOptionLookUpHidden(formLengthIterator) && !targetGroupFilter.get('filterOptionLookUp').value) || !targetGroupFilter.get('filterOptionComparison').value || !bOptValReq) {
                 return true;
             }
             formLengthIterator = formLengthIterator + 1;
@@ -865,6 +875,12 @@ export class CampaignTemplateDialogComponent implements OnInit {
                     });
                 }
                     break;
+                case 'Segment': {
+                    this.filtersMap.get('Segment').forEach((value: string[], key: string) => {
+                        filterOptionComparisonValues.push(key);
+                    });
+                }
+                    break;
                 case 'Event': {
                     switch (product) {
                         case 'SPORTS': {
@@ -1063,6 +1079,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 case 'Language':
                 case 'Last Open Date':
                 case 'OS':
+                case 'Segment':
                 case 'Timezone':
                     this.filtersMap.get(filterOptionSelected).get(filterOptionComparisonSelected).forEach((value: string) => {
                         optionValues.push(value);
@@ -1126,17 +1143,14 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 return 'daysCounter';
             } else if (formOptionValues[0] === 'date') {
                 return 'simpleDate';
-            }
-            else if (formOptionValues[0] === 'tagValue') {
+            } else if (formOptionValues[0] === 'tagValue') {
                 return 'tagValue';
-            }
-            else if (formOptionValues[0] === 'Number') {
+            } else if (formOptionValues[0] === 'Number') {
                 return 'Number';
             }
         } else if (formOptionValues && formOptionValues.length > 1) {
             return 'dropdown';
-        }
-        else {
+        } else {
             return '';
         }
     }
@@ -1165,7 +1179,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.populateLanguageParams();
         this.populateCountryParams();
         this.populateInstallDateParams();
-        this.populateOSParams();
+        this.populateOSParams();       
     }
     populateAppParams() {
         const filterComparisonVsValue: Map<string, string[]> = new Map<string, string[]>();
@@ -1228,6 +1242,13 @@ export class CampaignTemplateDialogComponent implements OnInit {
         filterOptionLookUpComparisonVsValue.set('is', this.operatingSystems);
         filterOptionLookUpComparisonVsValue.set('is not', this.operatingSystems);
         this.filtersMap.set('OS', filterOptionLookUpComparisonVsValue);
+    }
+
+    populateSegmentParams() {
+        const filterOptionLookUpComparisonVsValue: Map<string, string[]> = new Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue.set('is in', this.segmentNames);
+        filterOptionLookUpComparisonVsValue.set('is not in', this.segmentNames);
+        this.filtersMap.set('Segment', filterOptionLookUpComparisonVsValue);
     }
     populateCountries() {
         this.countries = ['Afghanistan', 'Aland Islands', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola', 'Anguilla', 'Antarctica',

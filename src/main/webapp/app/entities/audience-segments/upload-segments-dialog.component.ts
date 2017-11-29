@@ -55,7 +55,7 @@ export class UploadSegmentsDialogComponent implements OnInit {
                     this.audienceSegmentsService.upload(this.audienceSegments, this.formData));
             }
         } else {
-            alert('please select file...');
+            alert('Please select file..');
         }
     }
 

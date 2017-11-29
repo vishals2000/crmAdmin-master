@@ -60,6 +60,12 @@ export class CampaignTemplateService {
             return res.json();
         });
     }
+
+    getSegments(body: any): Observable<ResponseWrapper> {
+        return this.http.post('api/audience-segments/loadbyFeProductForSegmentation', body).map((res: Response) => {
+            return res.json();
+        });
+    }
     
         deletePushNotificationCampaign(body: any): Observable<ResponseWrapper> {
             return this.http.post(this.resourceUrl + '/deletePushNotificationCampaign', body).map((res: Response) => {
