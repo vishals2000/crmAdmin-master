@@ -7,8 +7,10 @@ import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { Location } from '@angular/common';
-import { CampaignTemplate, CampaignTemplateFilterCriterion, CampaignTemplateContentCriterion, RecurrenceType, FilterOption, CampaignTargetGroupSizeRequest,
-    TargetGroupFilterCriterionSizeRequest } from './campaign-template.model';
+import {
+    CampaignTemplate, CampaignTemplateFilterCriterion, CampaignTemplateContentCriterion, RecurrenceType, FilterOption, CampaignTargetGroupSizeRequest,
+    TargetGroupFilterCriterionSizeRequest
+} from './campaign-template.model';
 import { CampaignTemplatePopupService } from './campaign-template-popup.service';
 import { CampaignTemplateService } from './campaign-template.service';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
@@ -128,7 +130,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
 
     save() {
         let cuurentDateObj = new Date();
-        if (this.timerValidation || (!this.timerValidation && this.checkCurrentTime())){
+        if (this.timerValidation || (!this.timerValidation && this.checkCurrentTime())) {
             this.isSaving = true;
             const currentHourValue = cuurentDateObj.getUTCHours();
             const currentMinValue = cuurentDateObj.getUTCMinutes();
@@ -139,7 +141,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                     (this.campaignTemplateGroupCreationForm.value.time.minute < 10 ? '0' +
                         this.campaignTemplateGroupCreationForm.value.time.minute : this.campaignTemplateGroupCreationForm.value.time.minute) + ':00';
 
-            } else {             
+            } else {
                 this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + (currentHourValue < 10 ? '0' + currentHourValue : currentHourValue) + ':' + (currentMinValue < 10 ? '0' + currentMinValue : currentMinValue) + ':00';
             }
             if (this.campaignTemplate.sendImmediately) {
@@ -163,7 +165,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     checkCurrentTime() {
         let cuurentDateObj = new Date();
         const totalCurrentDayMinutes = cuurentDateObj.getUTCHours() * 60 + cuurentDateObj.getUTCMinutes();
-       
+
         if (((this.campaignTemplateGroupCreationForm.value.time.hour * 60) + this.campaignTemplateGroupCreationForm.value.time.minute) < totalCurrentDayMinutes) {
             return false;
         }
@@ -481,6 +483,11 @@ export class CampaignTemplateDialogComponent implements OnInit {
         targetGroupFilterCriterionFormControl.get('filterOptionComparison').setValue('');
         targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue('');
     }
+    onFilterOptionComparisonChange(index) {
+        const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
+        const targetGroupFilterCriterionFormControl: AbstractControl = targetGroupFilters.at(index);
+        targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue('');
+    }
     getSelectedFilterOptionValueValues(index) {
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
         const targetGroupFilterCriterionFormControl: AbstractControl = targetGroupFilters.at(index);
@@ -560,30 +567,34 @@ export class CampaignTemplateDialogComponent implements OnInit {
 
     populateSportsTagsMap() {
         let filterOptionLookUpComparisonVsValue: Map<string, string[]> = new Map<string, string[]>();
-        filterOptionLookUpComparisonVsValue.set('is', ['true', 'false']);
+        filterOptionLookUpComparisonVsValue.set('is', ['tagValue']);
+        filterOptionLookUpComparisonVsValue.set('is not', ['tagValue']);
+        filterOptionLookUpComparisonVsValue.set('contains', null);
+        filterOptionLookUpComparisonVsValue.set('exists', null);
+        filterOptionLookUpComparisonVsValue.set('does not exist', null);
         this.sportsTagsMap.set('hasLoggedIn', filterOptionLookUpComparisonVsValue);
-
-        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
-        filterOptionLookUpComparisonVsValue.set('is', ['true', 'false']);
         this.sportsTagsMap.set('lastBetInPlay', filterOptionLookUpComparisonVsValue);
 
         filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
         filterOptionLookUpComparisonVsValue.set('before', ['date']);
-        filterOptionLookUpComparisonVsValue.set('was', ['date']);
         filterOptionLookUpComparisonVsValue.set('after', ['date']);
+        filterOptionLookUpComparisonVsValue.set('was', ['date']);
+        filterOptionLookUpComparisonVsValue.set('exists', null);
+        filterOptionLookUpComparisonVsValue.set('does not exists', null);
         filterOptionLookUpComparisonVsValue.set('within', ['the last 2 days', 'the last 7 days', 'the last 2 weeks', 'the last month']);
-        filterOptionLookUpComparisonVsValue.set('days ago', ['number of days']);
+        filterOptionLookUpComparisonVsValue.set('N days ago', ['number of days']);
         filterOptionLookUpComparisonVsValue.set('greater than N days ago', ['number of days']);
         filterOptionLookUpComparisonVsValue.set('less than N days ago', ['number of days']);
-        filterOptionLookUpComparisonVsValue.set('exists', ['true', 'false']);
+
         this.sportsTagsMap.set('lastBetOnBasketBall', filterOptionLookUpComparisonVsValue);
         this.sportsTagsMap.set('lastBetOnBlackJack', filterOptionLookUpComparisonVsValue);
         this.sportsTagsMap.set('lastBetOnFootball', filterOptionLookUpComparisonVsValue);
         this.sportsTagsMap.set('lastBetOnOther', filterOptionLookUpComparisonVsValue);
         this.sportsTagsMap.set('lastBetOnRoulette', filterOptionLookUpComparisonVsValue);
         this.sportsTagsMap.set('lastBetOnTennis', filterOptionLookUpComparisonVsValue);
-        this.sportsTagsMap.set('lastBetOnVolleyball', filterOptionLookUpComparisonVsValue);
+        //this.sportsTagsMap.set('lastBetOnVolleyball', filterOptionLookUpComparisonVsValue);
         this.sportsTagsMap.set('lastLoginDate', filterOptionLookUpComparisonVsValue);
+        this.sportsTagsMap.set('lastRegistrationDate', filterOptionLookUpComparisonVsValue);
 
         filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
         filterOptionLookUpComparisonVsValue.set('equals', ['sessionBalance']);
@@ -593,20 +604,23 @@ export class CampaignTemplateDialogComponent implements OnInit {
         filterOptionLookUpComparisonVsValue.set('exists', ['sessionBalance']);
         this.sportsTagsMap.set('lastSessionCloseBalance', filterOptionLookUpComparisonVsValue);
 
-        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
-        filterOptionLookUpComparisonVsValue.set('is', ['leagueNameId']);
-        filterOptionLookUpComparisonVsValue.set('is not', ['leagueNameId']);
-        this.sportsTagsMap.set('lastBetOnLeague', filterOptionLookUpComparisonVsValue);
+        //  filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
+        // filterOptionLookUpComparisonVsValue.set('is', ['leagueNameId']);
+        // filterOptionLookUpComparisonVsValue.set('is not', ['leagueNameId']);
+        //this.sportsTagsMap.set('lastBetOnLeague', filterOptionLookUpComparisonVsValue);
 
         filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
-        filterOptionLookUpComparisonVsValue.set('is', ['eventId']);
-        filterOptionLookUpComparisonVsValue.set('is not', ['eventId']);
+        filterOptionLookUpComparisonVsValue.set('is', ['tagValue']);
+        filterOptionLookUpComparisonVsValue.set('is not', ['tagValue']);
+        filterOptionLookUpComparisonVsValue.set('contains', null);
+        filterOptionLookUpComparisonVsValue.set('exists', null);
+        filterOptionLookUpComparisonVsValue.set('does not exist', null);
         this.sportsTagsMap.set('lastEventIdBacked', filterOptionLookUpComparisonVsValue);
 
-        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
-        filterOptionLookUpComparisonVsValue.set('is', ['leagueName']);
-        filterOptionLookUpComparisonVsValue.set('is not', ['leagueName']);
-        this.sportsTagsMap.set('lastBetOnPremierLeague', filterOptionLookUpComparisonVsValue);
+        //filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
+        // filterOptionLookUpComparisonVsValue.set('is', ['leagueName']);
+        // filterOptionLookUpComparisonVsValue.set('is not', ['leagueName']);
+        //this.sportsTagsMap.set('lastBetOnPremierLeague', filterOptionLookUpComparisonVsValue);
     }
 
     populateCasinoTagsMap() {
@@ -1071,8 +1085,14 @@ export class CampaignTemplateDialogComponent implements OnInit {
             } else if (formOptionValues[0] === 'date') {
                 return 'simpleDate';
             }
-        } else {
+            else if (formOptionValues[0] === 'tagValue') {
+                return 'tagValue';
+            }
+        } else if (formOptionValues && formOptionValues.length > 1) {
             return 'dropdown';
+        }
+        else {
+            return '';
         }
     }
     isOptionValueSelectionHidden(index) {
