@@ -41,7 +41,7 @@ public class UploadSegmentsResource {
         this.uploadSegmentsService = uploadSegmentsService;
     }
 
-    @PostMapping("/upload-segment")
+    /*@PostMapping("/upload-segment")
     public ResponseEntity<UploadSegments> handleFileUpload(@RequestParam("front_end") String frontEnd, @RequestParam("product") String product, 
     		@RequestParam("name") String name, @RequestParam("file") MultipartFile file) {
 
@@ -74,10 +74,10 @@ public class UploadSegmentsResource {
     				.headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
     				.body(result);
     	}
-/*    	return ResponseEntity.ok()
+    	return ResponseEntity.ok()
 				.headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
-				.body(result);*/
-    }
+				.body(result);
+    }*/
     
     /**
      * POST  /upload-segments : Create a new uploadSegments.
