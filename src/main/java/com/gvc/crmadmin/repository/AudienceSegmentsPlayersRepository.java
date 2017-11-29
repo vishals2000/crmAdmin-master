@@ -13,5 +13,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 @SuppressWarnings("unused")
 @Repository
 public interface AudienceSegmentsPlayersRepository extends MongoRepository<AudienceSegmentsPlayers, String> {
-
+	
+	Long deleteBySegmentName(String segmentName);
+	
 }

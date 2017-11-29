@@ -50,4 +50,6 @@ public interface AudienceSegmentsService {
      *  @param id the id of the entity
      */
     void delete(String id);
+    
+    void deletePlayersBySegmentName(String segmentName);
 }

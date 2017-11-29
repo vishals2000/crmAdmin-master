@@ -169,4 +169,11 @@ public class AudienceSegmentsServiceImpl implements AudienceSegmentsService{
         log.debug("Request to delete AudienceSegments : {}", id);
         audienceSegmentsRepository.delete(id);
     }
+    
+    @Override
+    public void deletePlayersBySegmentName(String segmentName) {
+    	log.debug("Request to delete AudienceSegmentsPlayer for segmentName : ", segmentName);
+        long deletedCount = audienceSegmentsPlayersRepository.deleteBySegmentName(segmentName);
+        log.debug("delete count AudienceSegmentsPlayer for segmentName : ", segmentName + " deletedCount : " + deletedCount);
+    }
 }

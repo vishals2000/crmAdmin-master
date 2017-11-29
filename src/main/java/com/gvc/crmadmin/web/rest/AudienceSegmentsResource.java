@@ -218,7 +218,10 @@ public class AudienceSegmentsResource {
     @Timed
     public ResponseEntity<Void> deleteAudienceSegments(@PathVariable String id) {
         log.debug("REST request to delete AudienceSegments : {}", id);
+        
         audienceSegmentsService.delete(id);
+        audienceSegmentsService.deletePlayersBySegmentName(id);
+        
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
     }
 }
