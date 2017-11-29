@@ -71,7 +71,7 @@ export class CampaignTemplateCancelDialogComponent implements OnInit {
         }else {
             this.alertService.error(response.message);
         }
-        
+        this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' });
         /*
         this.campaignTemplateService.updateCancelStatus (
             {
