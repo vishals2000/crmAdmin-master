@@ -42,7 +42,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     countries: string[];
     languagesList: string[];
     targetGroupSize: number;
-    targetContentGroupSize: number;
+    targetContentGroupSize: number[];
     time: SimpleTime;
     ctrl: any;
     operatingSystems: string[] = ['android', 'ios'];
@@ -50,6 +50,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     timerValidation: boolean = false;
     currentDate: Date = new Date();
     isRecuEndDateVisible: boolean;
+    currentContentGrp : number;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -73,7 +74,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.appVersionMap = new Map<string, string[]>();
         this.countries = [];
         this.targetGroupSize = 0;
-        this.targetContentGroupSize = 0;
+        this.targetContentGroupSize = [0];
         this.campaignTemplateGroupCreationForm = this.fb.group({
             targetGroupFilterCriteria: this.fb.array([]),
             targetGroupContentCriteria: this.fb.array([])
@@ -479,19 +480,20 @@ export class CampaignTemplateDialogComponent implements OnInit {
             'language': this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria[i].languageSelected,
             'targetGroupFilterCriteria': targetGroupFilterCriteria
         }
+        this.currentContentGrp = i;
         this.campaignTemplateService.getTargetContentGroupSize(body).subscribe(
-            (res: ResponseWrapper) => this.onTargetGroupContentSizeRequestSuccess(res, res),
+            (res: ResponseWrapper) => this.onTargetGroupContentSizeRequestSuccess(res, res, this.currentContentGrp),
             (res: ResponseWrapper) => this.onError(res.json)
         );
 
     }
 
-    private onTargetGroupContentSizeRequestSuccess(data, headers) {
+    private onTargetGroupContentSizeRequestSuccess(data, headers, contentGrpNo) {
         // console.log(data);
         if (data) {
-            this.targetContentGroupSize = data.targetGroupSize;
+            this.targetContentGroupSize[contentGrpNo] = data.targetGroupSize;
         } else {
-            this.targetContentGroupSize = 0;
+            this.targetContentGroupSize[contentGrpNo] = 0;
         }
     }
     private onTargetGroupSizeRequestSuccess(data, headers) {

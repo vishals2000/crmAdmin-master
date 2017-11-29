@@ -18,7 +18,6 @@ export class AudienceSegmentsDialogComponent implements OnInit {
 
     audienceSegments: AudienceSegments;
     isSaving: boolean;
-    formData: FormData;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -30,7 +29,6 @@ export class AudienceSegmentsDialogComponent implements OnInit {
 
     ngOnInit() {
         this.isSaving = false;
-        this.formData = new FormData();
         this.audienceSegmentsService.currentAppInfo.subscribe((data) => {
             this.audienceSegments.frontEnd = data[0];
             this.audienceSegments.product = data[1];
@@ -48,7 +46,7 @@ export class AudienceSegmentsDialogComponent implements OnInit {
                 this.audienceSegmentsService.update(this.audienceSegments));
         } else {
             this.subscribeToSaveResponse(
-                this.audienceSegmentsService.create(this.audienceSegments, this.formData));
+                this.audienceSegmentsService.create(this.audienceSegments));
         }
     }
 
@@ -58,7 +56,7 @@ export class AudienceSegmentsDialogComponent implements OnInit {
     }
 
     private onSaveSuccess(result: AudienceSegments) {
-        this.eventManager.broadcast({ name: 'audienceSegmentsListModification', content: 'OK'});
+        this.eventManager.broadcast({ name: 'audienceSegmentsListModification', content: 'OK' });
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
@@ -89,11 +87,11 @@ export class AudienceSegmentsPopupComponent implements OnInit, OnDestroy {
     constructor(
         private route: ActivatedRoute,
         private audienceSegmentsPopupService: AudienceSegmentsPopupService
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.routeSub = this.route.params.subscribe((params) => {
-            if ( params['id'] ) {
+            if (params['id']) {
                 this.audienceSegmentsPopupService
                     .open(AudienceSegmentsDialogComponent as Component, params['id']);
             } else {

@@ -17,12 +17,12 @@ export class CampaignTemplateDetailComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
     private eventSubscriber: Subscription;
     data: any;
-    oCampInfo : any;
+    oCampInfo: any;
     constructor(
         private eventManager: JhiEventManager,
         private campaignTemplateService: CampaignTemplateService,
         private route: ActivatedRoute,
-        public breadCrumbService : BreadCrumbService
+        public breadCrumbService: BreadCrumbService
     ) {
         this.data = {
             labels: ['A', 'B', 'C'],
@@ -54,19 +54,19 @@ export class CampaignTemplateDetailComponent implements OnInit, OnDestroy {
             this.campaignTemplate = campaignTemplate;
             this.renderBreadcrumb();
         });
-        
+
     }
 
-    renderBreadcrumb(){
-        this.breadCrumbService.getBreadCrumbs().subscribe(breadCrumbArray=>{
-            if(breadCrumbArray && breadCrumbArray.length < 2){
+    renderBreadcrumb() {
+        this.breadCrumbService.getBreadCrumbs().subscribe(breadCrumbArray => {
+            if (breadCrumbArray && breadCrumbArray.length < 2) {
                 this.campaignTemplateService.getAppCapGrpIdFromTemp(this.campaignTemplate.id).subscribe((oCampTempInfo) => {
                     this.oCampInfo = oCampTempInfo;
-                    this.breadCrumbService.updateBreadCrumbs(breadCrumbArray, {name : this.oCampInfo.campaignGroupName, router : '#/campaign-template/group/' + this.oCampInfo.campaignGroupId  + "/" + this.oCampInfo.campaignGroupName, brdCrmbId : '3', appId : this.oCampInfo.appId, appName : this.oCampInfo.appName});
+                    this.breadCrumbService.updateBreadCrumbs(breadCrumbArray, { name: this.oCampInfo.campaignGroupName, router: '#/campaign-template/group/' + this.oCampInfo.campaignGroupId + '/' + this.oCampInfo.campaignGroupName, brdCrmbId: '3', appId: this.oCampInfo.appId, appName: this.oCampInfo.appName });
                 });
             }
-            else{
-               // this.breadCrumbService.updateBreadCrumbs(breadCrumbArray, {name : this.campaignTemplate.campaignGroupId, router : '#/campaign-template/group/' + this.campaignTemplate.campaignGroupId  + "/" + this.campaignTemplate.campaignName, brdCrmbId : '3'});
+            else {
+                // this.breadCrumbService.updateBreadCrumbs(breadCrumbArray, {name : this.campaignTemplate.campaignGroupId, router : '#/campaign-template/group/' + this.campaignTemplate.campaignGroupId  + "/" + this.campaignTemplate.campaignName, brdCrmbId : '3'});
             }
         });
     }

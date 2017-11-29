@@ -29,7 +29,7 @@ export class NavbarComponent implements OnInit {
     swaggerEnabled: boolean;
     modalRef: NgbModalRef;
     version: string;
-    crumbsArray : any[]
+    crumbsArray: any[]
 
     constructor(
         private loginService: LoginService,
@@ -37,7 +37,7 @@ export class NavbarComponent implements OnInit {
         private loginModalService: LoginModalService,
         private profileService: ProfileService,
         private router: Router,
-        private breadCrumbService :BreadCrumbService
+        private breadCrumbService: BreadCrumbService
     ) {
         this.version = VERSION ? 'v' + VERSION : '';
         this.isNavbarCollapsed = true;
@@ -80,7 +80,7 @@ export class NavbarComponent implements OnInit {
         return this.isAuthenticated() ? this.principal.getImageUrl() : null;
     }
 
-    gotToCampnPage($event){
+    gotToCampnPage($event) {
         console.log($event);
         alert(1);
     }
