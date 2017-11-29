@@ -5,6 +5,8 @@ import com.gvc.crmadmin.config.Constants;
 import com.gvc.crmadmin.domain.AudienceSegments;
 import com.gvc.crmadmin.domain.UploadSegments;
 import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentUploadResponse;
+import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentsRequest;
+import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentsResponse;
 import com.gvc.crmadmin.domain.campaignMgmtApi.StoreFileResponse;
 import com.gvc.crmadmin.service.AudienceSegmentsService;
 import com.gvc.crmadmin.web.rest.util.HeaderUtil;
@@ -166,9 +168,9 @@ public class AudienceSegmentsResource {
      */
     @PostMapping("/audience-segments/loadbyFeProduct")
     @Timed
-    public ResponseEntity<List<AudienceSegments>> getAudienceSegments(@ApiParam Pageable pageable, @RequestParam("frontEnd") String frontEnd, @RequestParam("product") String product) {
-        log.debug("REST request to get a page of AudienceSegments for frontEnd = " + frontEnd + " and product = " + product);
-        Page<AudienceSegments> page = audienceSegmentsService.findByFrontEndAndProduct(frontEnd, product, pageable);
+    public ResponseEntity<List<AudienceSegments>> getAudienceSegments(@ApiParam Pageable pageable, @Valid @RequestBody AudienceSegmentsRequest request) {
+        log.debug("REST request to get a page of AudienceSegments for frontEnd = " + request.getFrontEnd() + " and product = " + request.getProduct());
+        Page<AudienceSegments> page = audienceSegmentsService.findByFrontEndAndProduct(request.getFrontEnd(), request.getFrontEnd(), pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/audience-segments/loadbyFeProduct");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -181,9 +183,9 @@ public class AudienceSegmentsResource {
      */
     @PostMapping("/audience-segments/loadbyFeProductForSegmentation")
     @Timed
-    public ResponseEntity<List<String>> getAudienceSegmentsForSegmentation(@RequestParam("frontEnd") String frontEnd, @RequestParam("product") String product) {
-        log.debug("REST request to get complete list of AudienceSegments for frontEnd = " + frontEnd + " and product = " + product);
-        List<AudienceSegments> segments = audienceSegmentsService.findByFrontEndAndProduct(frontEnd, product);
+    public ResponseEntity<AudienceSegmentsResponse> getAudienceSegmentsForSegmentation(@Valid @RequestBody AudienceSegmentsRequest request) {
+        log.debug("REST request to get complete list of AudienceSegments for frontEnd = " + request.getFrontEnd() + " and product = " + request.getProduct());
+        List<AudienceSegments> segments = audienceSegmentsService.findByFrontEndAndProduct(request.getFrontEnd(), request.getProduct());
         
         List<String> segmentNames = new ArrayList<>();
         if(segments != null) {
@@ -191,7 +193,10 @@ public class AudienceSegmentsResource {
 				segmentNames.add(segment.getName());
 			}
         }
-        return ResponseUtil.wrapOrNotFound(Optional.of(segmentNames));
+        AudienceSegmentsResponse response = new AudienceSegmentsResponse();
+        response.setSegmentNames(segmentNames);
+        
+        return ResponseUtil.wrapOrNotFound(Optional.of(response));
     }
 
     /**
