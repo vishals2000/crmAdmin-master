@@ -176,8 +176,8 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
             this.initialCampainGroups = data;
         }
         this.breadCrumbService.getBreadCrumbs().subscribe(val=>{
-            this.breadCrumbService.updateBreadCrumbs(val, {name : 'Campaigns', appsData: data, key: this.projectName, router : '#/campaign-group/project/' + this.projectId  + "/" + this.projectName, brdCrmbId : '2'});
-         });
+            this.breadCrumbService.updateBreadCrumbs(val, {name : this.projectName, router : '#/campaign-group/project/' + this.projectId  + "/" + this.projectName, brdCrmbId : '2'});
+        });
     }
     private onError(error) {
         this.alertService.error(error.message, null, null);

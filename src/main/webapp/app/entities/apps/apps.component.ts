@@ -135,7 +135,7 @@ export class AppsComponent implements OnInit, OnDestroy {
             this.initialApps = data;
         }
         this.breadCrumbService.getBreadCrumbs().subscribe(val=>{
-            this.breadCrumbService.updateBreadCrumbs(val, {name : 'Apps', selVal : 'Apps', router : '#/apps', brdCrmbId : '1', appsData:data});
+            this.breadCrumbService.updateBreadCrumbs(val, {name : 'Apps', router : '#/apps', brdCrmbId : '1'});
         });
     }
     private onError(error) {

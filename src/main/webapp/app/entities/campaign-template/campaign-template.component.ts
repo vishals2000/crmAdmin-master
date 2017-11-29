@@ -37,6 +37,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     groupId: string;
     groupName: string;
     searchValue: string;
+    oCampInfo : any;
     constructor(
         private campaignTemplateService: CampaignTemplateService,
         private parseLinks: JhiParseLinks,
@@ -195,8 +196,16 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         if(!bIsFromSearch){
             this.initialCampainTemp = data;
         }
-        this.breadCrumbService.getBreadCrumbs().subscribe(val=>{
-            this.breadCrumbService.updateBreadCrumbs(val, {name : 'Messages',  key :this.groupName, router : '#/campaign-template/group/' + this.groupId  + "/" + this.groupName, brdCrmbId : '3'});
+        this.breadCrumbService.getBreadCrumbs().subscribe(breadCrumbArray=>{
+            if(breadCrumbArray && breadCrumbArray.length < 2){
+                this.campaignTemplateService.getAppCapGrpIdFromCapGrp(this.groupId).subscribe((oCampGrpInfo) => {
+                    this.oCampInfo = oCampGrpInfo;
+                    this.breadCrumbService.updateBreadCrumbs(breadCrumbArray, {name : this.groupName, router : '#/campaign-template/group/' + this.groupId  + "/" + this.groupName, brdCrmbId : '3', appId : this.oCampInfo.appId, appName : this.oCampInfo.appName});
+                });
+            }
+            else{
+                this.breadCrumbService.updateBreadCrumbs(breadCrumbArray, {name : this.groupName, router : '#/campaign-template/group/' + this.groupId  + "/" + this.groupName, brdCrmbId : '3'});
+            }
         });
     }
     private onError(error) {

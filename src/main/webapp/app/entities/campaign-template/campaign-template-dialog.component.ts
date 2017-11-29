@@ -566,62 +566,55 @@ export class CampaignTemplateDialogComponent implements OnInit {
     }
 
     populateSportsTagsMap() {
-        let filterOptionLookUpComparisonVsValue: Map<string, string[]> = new Map<string, string[]>();
-        filterOptionLookUpComparisonVsValue.set('is', ['tagValue']);
-        filterOptionLookUpComparisonVsValue.set('is not', ['tagValue']);
-        filterOptionLookUpComparisonVsValue.set('contains', null);
-        filterOptionLookUpComparisonVsValue.set('exists', null);
-        filterOptionLookUpComparisonVsValue.set('does not exist', null);
+        let filterOptionLookUpComparisonVsValue: Map<string, string[]> = new Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue.set('is', ['true', 'false']);
         this.sportsTagsMap.set('hasLoggedIn', filterOptionLookUpComparisonVsValue);
+        
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue.set('is', ['true', 'false']);
         this.sportsTagsMap.set('lastBetInPlay', filterOptionLookUpComparisonVsValue);
-
-        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
+        
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
         filterOptionLookUpComparisonVsValue.set('before', ['date']);
-        filterOptionLookUpComparisonVsValue.set('after', ['date']);
         filterOptionLookUpComparisonVsValue.set('was', ['date']);
-        filterOptionLookUpComparisonVsValue.set('exists', null);
-        filterOptionLookUpComparisonVsValue.set('does not exists', null);
-        filterOptionLookUpComparisonVsValue.set('within', ['the last 2 days', 'the last 7 days', 'the last 2 weeks', 'the last month']);
-        filterOptionLookUpComparisonVsValue.set('N days ago', ['number of days']);
+        filterOptionLookUpComparisonVsValue.set('after', ['date']);
+        filterOptionLookUpComparisonVsValue.set('within', ['the last 2 days', 'the last 7 days', 'the last 2 weeks', 'the last month']);
+        filterOptionLookUpComparisonVsValue.set('days ago', ['number of days']);
         filterOptionLookUpComparisonVsValue.set('greater than N days ago', ['number of days']);
         filterOptionLookUpComparisonVsValue.set('less than N days ago', ['number of days']);
-
+        filterOptionLookUpComparisonVsValue.set('exists', ['true', 'false']);
         this.sportsTagsMap.set('lastBetOnBasketBall', filterOptionLookUpComparisonVsValue);
         this.sportsTagsMap.set('lastBetOnBlackJack', filterOptionLookUpComparisonVsValue);
         this.sportsTagsMap.set('lastBetOnFootball', filterOptionLookUpComparisonVsValue);
         this.sportsTagsMap.set('lastBetOnOther', filterOptionLookUpComparisonVsValue);
         this.sportsTagsMap.set('lastBetOnRoulette', filterOptionLookUpComparisonVsValue);
         this.sportsTagsMap.set('lastBetOnTennis', filterOptionLookUpComparisonVsValue);
-        //this.sportsTagsMap.set('lastBetOnVolleyball', filterOptionLookUpComparisonVsValue);
+        this.sportsTagsMap.set('lastBetOnVolleyball', filterOptionLookUpComparisonVsValue);
         this.sportsTagsMap.set('lastLoginDate', filterOptionLookUpComparisonVsValue);
-        this.sportsTagsMap.set('lastRegistrationDate', filterOptionLookUpComparisonVsValue);
-
-        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
+        
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
         filterOptionLookUpComparisonVsValue.set('equals', ['sessionBalance']);
         filterOptionLookUpComparisonVsValue.set('not equals', ['sessionBalance']);
         filterOptionLookUpComparisonVsValue.set('less than', ['sessionBalance']);
         filterOptionLookUpComparisonVsValue.set('greater than', ['sessionBalance']);
         filterOptionLookUpComparisonVsValue.set('exists', ['sessionBalance']);
         this.sportsTagsMap.set('lastSessionCloseBalance', filterOptionLookUpComparisonVsValue);
-
-        //  filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
-        // filterOptionLookUpComparisonVsValue.set('is', ['leagueNameId']);
-        // filterOptionLookUpComparisonVsValue.set('is not', ['leagueNameId']);
-        //this.sportsTagsMap.set('lastBetOnLeague', filterOptionLookUpComparisonVsValue);
-
-        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
-        filterOptionLookUpComparisonVsValue.set('is', ['tagValue']);
-        filterOptionLookUpComparisonVsValue.set('is not', ['tagValue']);
-        filterOptionLookUpComparisonVsValue.set('contains', null);
-        filterOptionLookUpComparisonVsValue.set('exists', null);
-        filterOptionLookUpComparisonVsValue.set('does not exist', null);
+        
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue.set('is', ['leagueNameId']);
+        filterOptionLookUpComparisonVsValue.set('is not', ['leagueNameId']);
+        this.sportsTagsMap.set('lastBetOnLeague', filterOptionLookUpComparisonVsValue);
+        
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue.set('is', ['eventId']);
+        filterOptionLookUpComparisonVsValue.set('is not', ['eventId']);
         this.sportsTagsMap.set('lastEventIdBacked', filterOptionLookUpComparisonVsValue);
-
-        //filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
-        // filterOptionLookUpComparisonVsValue.set('is', ['leagueName']);
-        // filterOptionLookUpComparisonVsValue.set('is not', ['leagueName']);
-        //this.sportsTagsMap.set('lastBetOnPremierLeague', filterOptionLookUpComparisonVsValue);
-    }
+        
+        filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
+        filterOptionLookUpComparisonVsValue.set('is', ['leagueName']);
+        filterOptionLookUpComparisonVsValue.set('is not', ['leagueName']);
+        this.sportsTagsMap.set('lastBetOnPremierLeague', filterOptionLookUpComparisonVsValue);
+    } 
 
     populateCasinoTagsMap() {
         let filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
