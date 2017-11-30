@@ -70,4 +70,11 @@ public class CampaignTemplateService {
         Page<CampaignTemplate> result = campaignTemplateRepository.findByCampaignGroupId(campaignGroupId, pageable);
         return result;
     }
+    
+    public Page<CampaignTemplate> findByCampaignGroupIdAndName(Pageable pageable, String campaignGroupId, String campaignTemplateName) {
+        log.debug("Request to get all campaign Template for campaign Group Id " + campaignGroupId + " and campaignTemplateName " + campaignTemplateName);
+        Page<CampaignTemplate> result = campaignTemplateRepository.findByCampaignGroupIdAndCampaignNameLike(campaignGroupId, campaignTemplateName, pageable);
+        return result;
+    }
+
 }

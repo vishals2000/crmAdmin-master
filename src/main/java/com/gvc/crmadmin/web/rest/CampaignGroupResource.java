@@ -123,6 +123,17 @@ public class CampaignGroupResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+    @GetMapping("/campaign-group/project/{projectId}/search/{campaignGroupName}")
+    @Timed
+    public ResponseEntity<List<CampaignGroup>> getAllCampaignGroupsbyProjectIdAndName(@ApiParam Pageable pageable, @PathVariable String projectId, @PathVariable String campaignGroupName) {
+        log.debug("REST request to get a page of CampaignGroups with projectId : " + projectId + " campaignGroupName :  " + campaignGroupName);
+        
+        Page<CampaignGroup> page = campaignGroupService.findByProjectIdAndName(pageable, projectId, campaignGroupName);
+        
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/campaign-group/project/"+ projectId + "/search/" + campaignGroupName);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
     @GetMapping("/campaign-group/feProduct/{campaignGroupId}")
     @Timed
     public ResponseEntity<FrontendProduct> getFeProduct(@PathVariable String campaignGroupId) {

@@ -330,10 +330,31 @@ public class CampaignTemplateResource {
     @GetMapping("/campaign-templates/group/{campaignGroupId}")
     @Timed
     public ResponseEntity<List<CampaignTemplate>> getAllCampaignsForCampaignGroup(@ApiParam Pageable pageable, @PathVariable String campaignGroupId) {
-        log.debug("REST request to get a page of CampaignGroups with projectId");
+        log.debug("REST request to get a page of CampaignTemplates with campaignGroupId : " + campaignGroupId);
         Page<CampaignTemplate> page = campaignTemplateService.findByCampaignGroupId(pageable, campaignGroupId);
-        final DateTime currentDateTime = new DateTime(DateTimeZone.UTC);
-        for(final CampaignTemplate campaignTemplate : page.getContent()){
+        
+        updateCampaignTemplates(page);
+        
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/campaign-templates/group/" + campaignGroupId);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/campaign-templates/group/{campaignGroupId}/search/{campaignTemplateName}")
+    @Timed
+    public ResponseEntity<List<CampaignTemplate>> getAllCampaignsForCampaignGroupByName(@ApiParam Pageable pageable, @PathVariable String campaignGroupId, @PathVariable String campaignTemplateName) {
+        log.debug("REST request to get a page of CampaignTemplates with campaignGroupId : " + campaignGroupId + " campaignTemplateName : " + campaignTemplateName);
+        Page<CampaignTemplate> page = campaignTemplateService.findByCampaignGroupIdAndName(pageable, campaignGroupId, campaignTemplateName);
+
+        updateCampaignTemplates(page);
+        
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/campaign-templates/group/" + campaignGroupId + "/search/" + campaignTemplateName);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+    
+    private void updateCampaignTemplates(Page<CampaignTemplate> page) {
+    	final DateTime currentDateTime = new DateTime(DateTimeZone.UTC);
+    	
+    	for(final CampaignTemplate campaignTemplate : page.getContent()){
             final DateTime startTime = getCampaignStartTime(campaignTemplate);
             final DateTime endTime = getCampaignEndTime(campaignTemplate);
 
@@ -454,10 +475,7 @@ public class CampaignTemplateResource {
                 campaignTemplateService.save(campaignTemplate);
             }
         }
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/campaign-group");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
-
     /**
      * Save Campaign Template with the correct statuses to enable the UI to enable/disable the buttons based on the campaign status
      * */

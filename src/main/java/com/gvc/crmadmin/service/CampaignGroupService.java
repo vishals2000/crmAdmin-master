@@ -41,4 +41,6 @@ public interface CampaignGroupService {
     void delete(String id);
 
     Page<CampaignGroup> findByProjectId(Pageable pageable, String projectId);
+    
+    Page<CampaignGroup> findByProjectIdAndName(Pageable pageable, String projectId, String campaignGroupName);
 }

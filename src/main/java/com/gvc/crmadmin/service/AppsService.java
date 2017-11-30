@@ -25,6 +25,8 @@ public interface AppsService {
      */
     Page<Apps> findAll(Pageable pageable);
 
+    Page<Apps> findByName(Pageable pageable, String appName);
+    
     /**
      *  Get the "id" apps.
      *

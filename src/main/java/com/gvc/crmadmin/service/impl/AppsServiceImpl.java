@@ -46,6 +46,13 @@ public class AppsServiceImpl implements AppsService{
         log.debug("Request to get all Apps");
         return appsRepository.findAll(pageable);
     }
+    
+    @Override
+    public Page<Apps> findByName(Pageable pageable, String appName) {
+    	log.debug("Request to get all Apps by name : " + appName);
+    	
+    	return appsRepository.findByNameLike(appName, pageable);
+    }
 
     /**
      *  Get one apps by id.

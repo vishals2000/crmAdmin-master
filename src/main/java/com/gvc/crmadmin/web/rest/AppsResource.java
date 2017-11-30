@@ -121,6 +121,17 @@ public class AppsResource {
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(apps));
     }
 
+    @GetMapping("/apps/search/{appName}")
+    @Timed
+    public ResponseEntity<List<Apps>> getAppsByName(@ApiParam Pageable pageable, @PathVariable String appName) {
+        log.debug("REST request to get Apps by name: {}", appName);
+
+        Page<Apps> page = appsService.findByName(pageable, appName);
+        
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/apps/search/"+appName);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
     /**
      * DELETE  /apps/:id : delete the "id" apps.
      *

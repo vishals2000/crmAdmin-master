@@ -20,7 +20,7 @@ public class AudienceSegmentsPlayers implements Serializable {
 	    private String id;
 
 	    @NotNull
-	    @Field("segment_name")
+	    @Field("segmentName")
 	    private String segmentName;
 
 	    @Field("accountName")
@@ -77,11 +77,11 @@ public class AudienceSegmentsPlayers implements Serializable {
 	        if (o == null || getClass() != o.getClass()) {
 	            return false;
 	        }
-	        AudienceSegments audienceSegments = (AudienceSegments) o;
-	        if (audienceSegments.getId() == null || getId() == null) {
+	        AudienceSegmentsPlayers audienceSegmentsPlayers = (AudienceSegmentsPlayers) o;
+	        if (audienceSegmentsPlayers.getId() == null || getId() == null) {
 	            return false;
 	        }
-	        return Objects.equals(getId(), audienceSegments.getId());
+	        return Objects.equals(getId(), audienceSegmentsPlayers.getId());
 	    }
 
 	    @Override

@@ -15,4 +15,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface CampaignGroupRepository extends MongoRepository<CampaignGroup, String> {
 
     Page<CampaignGroup> findByProjectId(String projectId, Pageable pageable);
+    
+    Page<CampaignGroup> findByProjectIdAndNameLike(String projectId, String name, Pageable pageable);
 }
