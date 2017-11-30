@@ -145,7 +145,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
 
     save() {
         const cuurentDateObj = new Date();
-        if (this.timerValidation || (!this.timerValidation && this.checkCurrentTime())) {
+        if (this.campaignTemplate.sendImmediately || (!this.campaignTemplate.sendImmediately && this.checkCurrentTime())) {
             this.isSaving = true;
             const currentHourValue = cuurentDateObj.getUTCHours();
             const currentMinValue = cuurentDateObj.getUTCMinutes();
@@ -174,6 +174,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                     this.campaignTemplateService.create(this.campaignTemplateGroupCreationForm.value));
             }
         } else {
+            this.timerValidation = this.campaignTemplate.sendImmediately ? true : false;
             this.addTimeControl();
         }
 
@@ -1166,6 +1167,9 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 return 'tagValue';
             } else if (formOptionValues[0] === 'Number') {
                 return 'Number';
+            }
+            else if(formOptionValues[0]){
+                return 'dropdown'
             }
         } else if (formOptionValues && formOptionValues.length > 1) {
             return 'dropdown';
