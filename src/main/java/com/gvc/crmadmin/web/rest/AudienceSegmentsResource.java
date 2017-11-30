@@ -7,6 +7,8 @@ import com.gvc.crmadmin.domain.UploadSegments;
 import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentUploadResponse;
 import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentsRequest;
 import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentsResponse;
+import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentsResponseTest;
+import com.gvc.crmadmin.domain.campaignMgmtApi.NameIdPair;
 import com.gvc.crmadmin.domain.campaignMgmtApi.StoreFileResponse;
 import com.gvc.crmadmin.service.AudienceSegmentsService;
 import com.gvc.crmadmin.web.rest.util.HeaderUtil;
@@ -195,6 +197,28 @@ public class AudienceSegmentsResource {
         }
         AudienceSegmentsResponse response = new AudienceSegmentsResponse();
         response.setSegmentNames(segmentNames);
+        
+        return ResponseUtil.wrapOrNotFound(Optional.of(response));
+    }
+
+    @PostMapping("/audience-segments/loadbyFeProductForSegmentationTest")
+    @Timed
+    public ResponseEntity<AudienceSegmentsResponseTest> getAudienceSegmentsForSegmentationTest(@Valid @RequestBody AudienceSegmentsRequest request) {
+        log.debug("REST request to get complete list of AudienceSegments for frontEnd = " + request.getFrontEnd() + " and product = " + request.getProduct());
+        List<AudienceSegments> segments = audienceSegmentsService.findByFrontEndAndProduct(request.getFrontEnd(), request.getProduct());
+        
+        List<NameIdPair> nameIdPairs = new ArrayList<>();
+        if(segments != null) {
+        	for (AudienceSegments segment : segments) {
+        		NameIdPair nameIdPair = new NameIdPair();
+        		nameIdPair.setId(segment.getId());
+        		nameIdPair.setName(segment.getName());
+        		
+        		nameIdPairs.add(nameIdPair);
+			}
+        }
+        AudienceSegmentsResponseTest response = new AudienceSegmentsResponseTest();
+        response.setNameIdPairs(nameIdPairs);
         
         return ResponseUtil.wrapOrNotFound(Optional.of(response));
     }
