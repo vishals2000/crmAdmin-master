@@ -170,7 +170,7 @@ public class AudienceSegmentsResource {
     @Timed
     public ResponseEntity<List<AudienceSegments>> getAudienceSegments(@ApiParam Pageable pageable, @Valid @RequestBody AudienceSegmentsRequest request) {
         log.debug("REST request to get a page of AudienceSegments for frontEnd = " + request.getFrontEnd() + " and product = " + request.getProduct());
-        Page<AudienceSegments> page = audienceSegmentsService.findByFrontEndAndProduct(request.getFrontEnd(), request.getFrontEnd(), pageable);
+        Page<AudienceSegments> page = audienceSegmentsService.findByFrontEndAndProduct(request.getFrontEnd(), request.getProduct(), pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/audience-segments/loadbyFeProduct");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
