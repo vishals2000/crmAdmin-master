@@ -32,8 +32,9 @@ export class AppsService {
         });
     }
 
-    search(id: string): Observable<ResponseWrapper> {
-        return this.http.get(`${this.resourceUrl}/search/${id}`)
+    search(id: string, req?: any): Observable<ResponseWrapper> {
+        const options = createRequestOption(req);
+        return this.http.get(`${this.resourceUrl}/search/${id}`, options)
             .map((res: Response) => this.convertResponse(res));
     }
 
