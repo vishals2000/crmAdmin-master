@@ -25,6 +25,7 @@ export class AppsComponent implements OnInit, OnDestroy {
     links: any;
     totalItems: any;
     queryCount: any;
+    initialQueryCount: any;
     itemsPerPage: any;
     page: any;
     predicate: any;
@@ -106,8 +107,12 @@ export class AppsComponent implements OnInit, OnDestroy {
                 (res: ResponseWrapper) => this.onSuccess(res.json, res.headers, true),
                 (res: ResponseWrapper) => this.onError(res.json)
                 );
-        } else {
+        }
+    }
+    onSearchKeyChange(serachVal){
+        if(!serachVal){
             this.apps = this.initialApps;
+            this.totalItems = this.initialQueryCount;
         }
     }
     trackId(index: number, item: Apps) {
@@ -133,6 +138,7 @@ export class AppsComponent implements OnInit, OnDestroy {
         this.apps = data;
         if(!bIsFromSearch){
             this.initialApps = data;
+            this.initialQueryCount = this.totalItems;
         }
         this.breadCrumbService.getBreadCrumbs().subscribe(val=>{
             this.breadCrumbService.updateBreadCrumbs(val, {name : 'Apps', router : '#/apps', brdCrmbId : '1'});

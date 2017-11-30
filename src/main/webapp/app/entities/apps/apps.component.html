@@ -9,7 +9,7 @@
         </button>
     </h2>
     <div style="overflow:hidden;">
-        <input class="form-control" placeholder="Search" [(ngModel)]="searchValue" (keypress)="filterItems($event)" style="max-width:500px;float:right;"/>
+        <input class="form-control" placeholder="Search" [(ngModel)]="searchValue" (ngModelChange)="onSearchKeyChange(searchValue)" (keypress)="filterItems($event)" style="max-width:500px;float:right;"/>
         </div>
     <jhi-alert></jhi-alert>
     <div class="row">

@@ -28,6 +28,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     links: any;
     totalItems: any;
     queryCount: any;
+    initialQueryCount: any;
     itemsPerPage: any;
     page: any;
     predicate: any;
@@ -182,8 +183,14 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
                 (res: ResponseWrapper) => this.onSuccess(res.json, res.headers, true),
                 (res: ResponseWrapper) => this.onError(res.json)
                 );
-        } else {
+        } else if((this.searchValue && this.searchValue === '') || !this.searchValue){
             this.campaignTemplates = this.initialCampainTemp;
+        }
+    }
+    onSearchKeyChange(serachVal){
+        if(!serachVal){
+            this.campaignTemplates = this.initialCampainTemp;
+            this.totalItems = this.initialQueryCount;
         }
     }
 
@@ -195,6 +202,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         this.campaignTemplates = data;
         if(!bIsFromSearch){
             this.initialCampainTemp = data;
+            this.initialQueryCount = this.totalItems;
         }
         this.breadCrumbService.getBreadCrumbs().subscribe(breadCrumbArray=>{
             if(breadCrumbArray && breadCrumbArray.length < 2){

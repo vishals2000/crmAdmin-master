@@ -15,6 +15,7 @@ import { CampaignTemplatePopupService } from './campaign-template-popup.service'
 import { CampaignTemplateService } from './campaign-template.service';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgbModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { setTimeout } from 'timers';
 
 @Component({
     selector: 'jhi-campaign-template-dialog',
@@ -116,9 +117,9 @@ export class CampaignTemplateDialogComponent implements OnInit {
 
         const now = new Date();
         this.minDate = {
-            year: now.getFullYear(),
-            month: now.getMonth() + 1,
-            day: now.getDate()
+            year: now.getUTCFullYear(),
+            month: now.getUTCMonth() + 1,
+            day: now.getUTCDate()
         };
         // this.ctrl = new FormControl('', (control: FormControl) => {
         //     const value = control.value;
@@ -180,11 +181,16 @@ export class CampaignTemplateDialogComponent implements OnInit {
 
     checkCurrentTime() {
         const cuurentDateObj = new Date();
-        const totalCurrentDayMinutes = cuurentDateObj.getUTCHours() * 60 + cuurentDateObj.getUTCMinutes();
-
-        if (((this.campaignTemplateGroupCreationForm.value.time.hour * 60) + this.campaignTemplateGroupCreationForm.value.time.minute) < totalCurrentDayMinutes) {
-            return false;
-        } else {
+        const startDt = this.campaignTemplateGroupCreationForm.value.startDate;
+        if(startDt.year === cuurentDateObj.getUTCFullYear() && startDt.month === cuurentDateObj.getUTCMonth()+1 && startDt.day === cuurentDateObj.getUTCDate()){
+            const totalCurrentDayMinutes = cuurentDateObj.getUTCHours() * 60 + cuurentDateObj.getUTCMinutes();
+            if (((this.campaignTemplateGroupCreationForm.value.time.hour * 60) + this.campaignTemplateGroupCreationForm.value.time.minute) < totalCurrentDayMinutes) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        else {
             return true;
         }
     }
@@ -223,11 +229,13 @@ export class CampaignTemplateDialogComponent implements OnInit {
             this.campaignTemplate = new CampaignTemplate();
         }
         const now = new Date();
+        now.setUTCDate(now.getUTCDate() + 1);
         const todayDt = {
-            year: now.getFullYear(),
-            month: now.getMonth() + 1,
-            day: now.getDate() + 1
+            year: now.getUTCFullYear(),
+            month: now.getUTCMonth() + 1,
+            day: now.getUTCDate()
         };
+        this.timerValidation = this.campaignTemplate.scheduledTime ? true : false;
         this.campaignTemplateGroupCreationForm = this.fb.group({
             id: (!this.campaignTemplate.id) ? null : this.campaignTemplate.id,
             frontEnd: (!this.campaignTemplate.frontEnd) ? '' : this.campaignTemplate.frontEnd,
@@ -282,6 +290,12 @@ export class CampaignTemplateDialogComponent implements OnInit {
     get targetGroupContentCriteria(): FormArray {
         return this.campaignTemplateGroupCreationForm.get('targetGroupContentCriteria') as FormArray;
     };
+    onStartDtChange(){
+        var _this = this;
+        setTimeout(function(){
+            _this.addTimeControl();
+        }, 0);
+    }
     addTimeControl() {
         const cuurentDateObj = new Date();
         this.campaignTemplateGroupCreationForm.addControl('time', new FormControl(
@@ -293,15 +307,18 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 if (this.timerValidation) {
                     return null;
                 }
-                const value = control.value;
-                const cuurentDateObj = new Date();
-                const totalCurrentDayMinutes = cuurentDateObj.getUTCHours() * 60 + cuurentDateObj.getUTCMinutes();
-                const minutes = this.currentDate.getUTCMinutes();
-                if (!value) {
-                    return null;
-                }
-                if (((value.hour * 60) + value.minute) < totalCurrentDayMinutes) {
-                    return { invalid: true };
+                const startDt = this.campaignTemplateGroupCreationForm.value.startDate;
+                if(startDt.year === cuurentDateObj.getUTCFullYear() && startDt.month === cuurentDateObj.getUTCMonth()+1 && startDt.day === cuurentDateObj.getUTCDate()){
+                    const value = control.value;
+                    const cuurentDateObj = new Date();
+                    const totalCurrentDayMinutes = cuurentDateObj.getUTCHours() * 60 + cuurentDateObj.getUTCMinutes();
+                    const minutes = this.currentDate.getUTCMinutes();
+                    if (!value) {
+                        return null;
+                    }
+                    if (((value.hour * 60) + value.minute) < totalCurrentDayMinutes) {
+                        return { invalid: true };
+                    }
                 }
                 return null;
             }));
@@ -344,14 +361,16 @@ export class CampaignTemplateDialogComponent implements OnInit {
     sendImmediatelyCheck() {
         const now = new Date();
         const todayDt1 = {
-            year: now.getFullYear(),
-            month: now.getMonth() + 1,
-            day: now.getDate()
+            year: now.getUTCFullYear(),
+            month: now.getUTCMonth() + 1,
+            day: now.getUTCDate()
         };
+        const cuurentDateObj= new Date();
+        cuurentDateObj.setUTCDate(cuurentDateObj.getUTCDate() + 1);
         const todayDt2 = {
-            year: now.getFullYear(),
-            month: now.getMonth() + 1,
-            day: now.getDate() + 1
+            year: cuurentDateObj.getUTCFullYear(),
+            month: cuurentDateObj.getUTCMonth() + 1,
+            day: cuurentDateObj.getUTCDate()
         };
         this.timerValidation = this.campaignTemplateGroupCreationForm.controls['sendImmediately'].value;
         if (this.timerValidation) {

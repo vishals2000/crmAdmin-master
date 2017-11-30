@@ -42,7 +42,7 @@
             <div class="form-group">
                 <label class="form-control-label" for="field_startDate">Start Date</label>
                 <div class="input-group">
-                    <input id="field_startDate" type="text" class="form-control" name="startDate" ngbDatepicker [minDate]="minDate" #startDateDp="ngbDatepicker"
+                    <input id="field_startDate" type="text" class="form-control" name="startDate" ngbDatepicker [minDate]="minDate" #startDateDp="ngbDatepicker" (ngModelChange)="onStartDtChange()"
                         formControlName="startDate" required/>
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default" (click)="startDateDp.toggle()">
