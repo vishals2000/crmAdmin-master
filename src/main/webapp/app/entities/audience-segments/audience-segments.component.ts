@@ -33,6 +33,7 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
     apps: Apps[];
     showUploadDiv: boolean;
     selectedApp: any;
+    segName: any;
 
     constructor(
         private audienceSegmentsService: AudienceSegmentsService,
@@ -52,17 +53,22 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
             this.previousPage = data['pagingParams'].page;
             this.reverse = data['pagingParams'].ascending;
             this.predicate = data['pagingParams'].predicate;
+            this.segName = data['pagingParams'].segName;
         });
     }
 
     loadAll() {
         this.audienceSegmentsService.query({
-            page: this.page - 1,
-            size: this.itemsPerPage,
-            sort: this.sort()}).subscribe(
+            frontEnd: this.selectedApp.frontEnd,
+            product: this.selectedApp.product
+        }, {
+                page: this.page - 1,
+                size: this.itemsPerPage,
+                sort: this.sort()
+            }).subscribe(
             (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
             (res: ResponseWrapper) => this.onError(res.json)
-        );
+            );
     }
     loadPage(page: number) {
         if (page !== this.previousPage) {
@@ -71,12 +77,14 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
         }
     }
     transition() {
-        this.router.navigate(['/audience-segments'], {queryParams:
-            {
-                page: this.page,
-                size: this.itemsPerPage,
-                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-            }
+        this.router.navigate(['/audience-segments'], {
+            queryParams:
+                {
+                    page: this.page,
+                    size: this.itemsPerPage,
+                    sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
+                    segName : this.selectedApp.frontEnd
+                }
         });
         this.loadAll();
     }
@@ -85,7 +93,8 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
         this.page = 0;
         this.router.navigate(['/audience-segments', {
             page: this.page,
-            sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+            sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
+            segName : this.selectedApp.frontEnd
         }]);
         this.loadAll();
     }
@@ -93,8 +102,27 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
         this.showUploadDiv = false
         this.appsService.query().subscribe((res: ResponseWrapper) => {
             this.apps = res.json;
+            if(!this.segName){
+                this.selectedApp = this.apps[0];
+            }
+            else{
+                for(let i=0;i<this.apps.length;i++){
+                    if(this.apps[i].frontEnd === this.segName){
+                        this.selectedApp = this.apps[i];
+                        break;
+                    }
+                }
+            }
+            this.showUploadDiv = true;
+            const values: string[] = [this.selectedApp.frontEnd, this.selectedApp.product.toString()];
+            this.audienceSegmentsService.changeAppInfo(values);
+            if(this.segName){
+                this.loadAll();
+            }
+            else{
+                this.clear();
+            }
         });
-        this.loadAll();
         this.principal.identity().then((account) => {
             this.currentAccount = account;
         });
@@ -117,6 +145,8 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
             this.showUploadDiv = true;
             const values: string[] = [app.frontEnd, app.product.toString()];
             this.audienceSegmentsService.changeAppInfo(values);
+            this.clear();
+            //this.loadAll();
             // alert(app.product.toString()  + '   --  ' + app.frontEnd);
         } else {
             console.log(app);

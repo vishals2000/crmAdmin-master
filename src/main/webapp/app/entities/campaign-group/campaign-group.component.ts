@@ -160,6 +160,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
     onSearchKeyChange(serachVal){
         if(!serachVal){
             this.campaignGroups = this.initialCampainGroups;
+            this.queryCount = this.initialQueryCount;
             this.totalItems = this.initialQueryCount;
         }
     }

@@ -11,6 +11,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export class AudienceSegmentsService {
 
     private resourceUrl = 'api/audience-segments';
+    private getAppSegments = '/api/audience-segments/loadbyFeProduct ';
 
     private messageSource = new BehaviorSubject<string[]>([]);
     currentAppInfo = this.messageSource.asObservable();
@@ -54,9 +55,10 @@ export class AudienceSegmentsService {
         });
     }
 
-    query(req?: any): Observable<ResponseWrapper> {
-        const options = createRequestOption(req);
-        return this.http.get(this.resourceUrl, options)
+    query(req?: any, reqOptions?:any): Observable<ResponseWrapper> {
+        const req1 = this.convert(req);
+        const options = createRequestOption(reqOptions);
+        return this.http.post(this.resourceUrl + "/loadbyFeProduct",req1, options)
             .map((res: Response) => this.convertResponse(res));
     }
 

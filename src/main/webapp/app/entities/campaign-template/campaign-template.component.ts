@@ -190,7 +190,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     onSearchKeyChange(serachVal){
         if(!serachVal){
             this.campaignTemplates = this.initialCampainTemp;
-            this.totalItems = this.initialQueryCount;
+            this.queryCount = this.initialQueryCount;
         }
     }
 
