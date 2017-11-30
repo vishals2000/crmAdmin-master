@@ -1,6 +1,7 @@
 package com.gvc.crmadmin.service.impl;
 
 import com.gvc.crmadmin.service.AudienceSegmentsService;
+import com.gvc.crmadmin.config.Constants;
 import com.gvc.crmadmin.domain.AudienceSegments;
 import com.gvc.crmadmin.domain.AudienceSegmentsPlayers;
 import com.gvc.crmadmin.domain.campaignMgmtApi.StoreFileResponse;
@@ -8,6 +9,7 @@ import com.gvc.crmadmin.repository.AudienceSegmentsPlayersRepository;
 import com.gvc.crmadmin.repository.AudienceSegmentsRepository;
 
 import static com.gvc.crmadmin.config.Constants.CAMPAIGN_SCHEDULE_TIME_FORMAT;
+import static com.gvc.crmadmin.config.Constants.DATA_DIR;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -39,7 +41,7 @@ public class AudienceSegmentsServiceImpl implements AudienceSegmentsService{
 
     private final Logger log = LoggerFactory.getLogger(AudienceSegmentsServiceImpl.class);
 
-    private final Path rootLocation = Paths.get("D:\\");
+    private final Path rootLocation = Paths.get(DATA_DIR);
     
     private final AudienceSegmentsRepository audienceSegmentsRepository;
     

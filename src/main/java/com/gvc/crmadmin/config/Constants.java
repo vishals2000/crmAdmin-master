@@ -28,6 +28,7 @@ public final class Constants {
 //    public static final String ADD_OPTIMOVE_CHANNEL_TEMPLATE_URL = "http://10.166.144.114:8080/api/rest/cmsgateway/v1/addChannelTemplate";
 //    public static final String INSIGHTS_URL = "http://10.166.144.114:8080/api/rest/cmsgateway/v1/getAppInsights";
 //    public static final String CANCEL_URL = "http://10.166.144.114:8080/api/rest/cmsgateway/v1/cancelPushNotificationCampaign";
+//    public static final String DATA_DIR = "/home/pg/data/";
 
     public static final String REFRESH_URL = "http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/getTargetGroupSize";
     public static final String LAUNCH_URL = "http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/pushNotificationCampaign";
@@ -36,6 +37,7 @@ public final class Constants {
     public static final String ADD_OPTIMOVE_CHANNEL_TEMPLATE_URL = "http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/addChannelTemplate";
     public static final String INSIGHTS_URL = "http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/getAppInsights";
     public static final String CANCEL_URL = "http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/cancelPushNotificationCampaign";
+    public static final String DATA_DIR = "/home/ppoker/data/";
 
     private Constants() {
     }
