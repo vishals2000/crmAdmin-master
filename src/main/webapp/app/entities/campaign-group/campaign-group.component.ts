@@ -25,6 +25,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
     routeData: any;
     links: any;
     totalItems: any;
+    initialQueryCount: any;
     queryCount: any;
     itemsPerPage: any;
     page: any;
@@ -154,8 +155,12 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
                 (res: ResponseWrapper) => this.onSuccess(res.json, res.headers, true),
                 (res: ResponseWrapper) => this.onError(res.json)
                 );
-        } else {
+        }
+    }
+    onSearchKeyChange(serachVal){
+        if(!serachVal){
             this.campaignGroups = this.initialCampainGroups;
+            this.totalItems = this.initialQueryCount;
         }
     }
     sort() {
@@ -174,6 +179,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
         this.campaignGroups = data;
         if(!bIsFromSearch){
             this.initialCampainGroups = data;
+            this.initialQueryCount = this.totalItems;
         }
         this.breadCrumbService.getBreadCrumbs().subscribe(val=>{
             this.breadCrumbService.updateBreadCrumbs(val, {name : this.projectName, router : '#/campaign-group/project/' + this.projectId  + "/" + this.projectName, brdCrmbId : '2'});
