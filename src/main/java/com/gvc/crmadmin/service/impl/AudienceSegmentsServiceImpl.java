@@ -16,7 +16,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -81,6 +83,8 @@ public class AudienceSegmentsServiceImpl implements AudienceSegmentsService{
 
             String accountName;
             List<AudienceSegmentsPlayers> players = new ArrayList<>();
+            Set<String> uniquePlayers = new HashSet<>();
+            
             while ((accountName = reader.readLine()) != null) {
             	if(StringUtils.hasText(accountName)) {
             		AudienceSegmentsPlayers audienceSegmentsPlayers = new AudienceSegmentsPlayers();
@@ -89,13 +93,14 @@ public class AudienceSegmentsServiceImpl implements AudienceSegmentsService{
             		audienceSegmentsPlayers.setAccountName(accountName);
             		
             		players.add(audienceSegmentsPlayers);
+            		uniquePlayers.add(accountName);
             	}
             }
             
             audienceSegmentsPlayersRepository.save(players);
             
             AudienceSegments segment = audienceSegmentsRepository.findOne(id);
-            segment.setEstimate(players.size()+"");
+            segment.setEstimate(uniquePlayers.size()+"");
             segment.setLastEstimatedAt(CAMPAIGN_SCHEDULE_TIME_FORMAT.print(new DateTime()));
             
             audienceSegmentsRepository.save(segment);
