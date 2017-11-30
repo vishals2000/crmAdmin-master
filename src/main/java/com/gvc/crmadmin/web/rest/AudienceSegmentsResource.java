@@ -192,7 +192,7 @@ public class AudienceSegmentsResource {
         List<String> segmentNames = new ArrayList<>();
         if(segments != null) {
         	for (AudienceSegments segment : segments) {
-				segmentNames.add(segment.getName());
+				segmentNames.add(segment.getId());//TODO: change later
 			}
         }
         AudienceSegmentsResponse response = new AudienceSegmentsResponse();
