@@ -145,7 +145,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
 
     save() {
         const cuurentDateObj = new Date();
-        if (this.campaignTemplate.sendImmediately || (!this.campaignTemplate.sendImmediately && this.checkCurrentTime())) {
+        if (this.campaignTemplateGroupCreationForm.value.sendImmediately || (!this.campaignTemplateGroupCreationForm.value.sendImmediately && this.checkCurrentTime())) {
             this.isSaving = true;
             const currentHourValue = cuurentDateObj.getUTCHours();
             const currentMinValue = cuurentDateObj.getUTCMinutes();
@@ -159,7 +159,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             } else {
                 this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + (currentHourValue < 10 ? '0' + currentHourValue : currentHourValue) + ':' + (currentMinValue < 10 ? '0' + currentMinValue : currentMinValue) + ':00';
             }
-            if (this.campaignTemplate.sendImmediately) {
+            if (this.campaignTemplateGroupCreationForm.value.sendImmediately) {
                 this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + (currentHourValue < 10 ? '0' + currentHourValue : currentHourValue) + ':' + (currentMinValue < 10 ? '0' + currentMinValue : currentMinValue) + ':00';
             }
             if (this.campaignTemplateGroupCreationForm.value.recurrenceType === 'NONE') {
@@ -293,9 +293,11 @@ export class CampaignTemplateDialogComponent implements OnInit {
     };
     onStartDtChange(){
         var _this = this;
-        setTimeout(function(){
-            _this.addTimeControl();
-        }, 0);
+        if(!this.campaignTemplateGroupCreationForm.value.sendImmediately){
+            setTimeout(function(){
+                _this.addTimeControl();
+            }, 0);
+        }
     }
     addTimeControl() {
         const cuurentDateObj = new Date();
