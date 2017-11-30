@@ -127,9 +127,10 @@ export class AppsComponent implements OnInit, OnDestroy {
     }
     onSearchKeyChange(serachVal){
         if(!serachVal){
-            this.apps = this.initialApps;
-            this.queryCount = this.initialQueryCount;
-            this.totalItems = this.initialQueryCount;
+            this.clear();
+            //this.apps = this.initialApps;
+            //this.queryCount = this.initialQueryCount;
+            //this.totalItems = this.initialQueryCount;
         }
     }
     trackId(index: number, item: Apps) {
