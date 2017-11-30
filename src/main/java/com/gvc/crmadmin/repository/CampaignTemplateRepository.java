@@ -15,5 +15,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface CampaignTemplateRepository extends MongoRepository<CampaignTemplate, String> {
 
     Page<CampaignTemplate> findByCampaignGroupId(String campaignGroupId, Pageable pageable);
-    Page<CampaignTemplate> findByCampaignGroupIdAndCampaignNameLike(String campaignGroupId, String campaignName, Pageable pageable);
+    Page<CampaignTemplate> findByCampaignGroupIdAndCampaignNameLikeIgnoreCase(String campaignGroupId, String campaignName, Pageable pageable);
 }

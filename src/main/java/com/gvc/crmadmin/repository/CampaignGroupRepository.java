@@ -16,5 +16,5 @@ public interface CampaignGroupRepository extends MongoRepository<CampaignGroup, 
 
     Page<CampaignGroup> findByProjectId(String projectId, Pageable pageable);
     
-    Page<CampaignGroup> findByProjectIdAndNameLike(String projectId, String name, Pageable pageable);
+    Page<CampaignGroup> findByProjectIdAndNameLikeIgnoreCase(String projectId, String name, Pageable pageable);
 }

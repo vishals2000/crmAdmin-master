@@ -13,5 +13,5 @@ import com.gvc.crmadmin.domain.Apps;
 @SuppressWarnings("unused")
 @Repository
 public interface AppsRepository extends MongoRepository<Apps, String> {
-	Page<Apps> findByNameLike(String name, Pageable pageable);
+	Page<Apps> findByNameLikeIgnoreCase(String name, Pageable pageable);
 }

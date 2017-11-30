@@ -59,7 +59,7 @@ public class CampaignGroupServiceImpl implements CampaignGroupService{
     @Override
     public Page<CampaignGroup> findByProjectIdAndName(Pageable pageable, String projectId, String campaignGroupName) {
         log.debug("Request to get all CampaignGroups for projectId : " + projectId + " campaignGroupName : " + campaignGroupName);
-        Page<CampaignGroup> result = campaignGroupRepository.findByProjectIdAndNameLike(projectId, campaignGroupName, pageable);
+        Page<CampaignGroup> result = campaignGroupRepository.findByProjectIdAndNameLikeIgnoreCase(projectId, campaignGroupName, pageable);
         System.out.print("Result" + result.toString());
         return result;
 //        return campaignGroupRepository.findAll(pageable);

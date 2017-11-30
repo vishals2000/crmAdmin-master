@@ -51,7 +51,7 @@ public class AppsServiceImpl implements AppsService{
     public Page<Apps> findByName(Pageable pageable, String appName) {
     	log.debug("Request to get all Apps by name : " + appName);
     	
-    	return appsRepository.findByNameLike(appName, pageable);
+    	return appsRepository.findByNameLikeIgnoreCase(appName, pageable);
     }
 
     /**
