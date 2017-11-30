@@ -54,14 +54,26 @@ export class AppsComponent implements OnInit, OnDestroy {
     }
 
     loadAll() {
-        this.appsService.query({
-            page: this.page - 1,
-            size: this.itemsPerPage,
-            sort: this.sort()
-        }).subscribe(
-            (res: ResponseWrapper) => this.onSuccess(res.json, res.headers, false),
-            (res: ResponseWrapper) => this.onError(res.json)
-            );
+        if(this.searchValue){
+            this.appsService.search(this.searchValue, {
+                page: this.page - 1,
+                size: this.itemsPerPage,
+                sort: this.sort()
+            }).subscribe(
+                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers, true),
+                (res: ResponseWrapper) => this.onError(res.json)
+                );
+        }
+        else {
+            this.appsService.query({
+                page: this.page - 1,
+                size: this.itemsPerPage,
+                sort: this.sort()
+            }).subscribe(
+                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers, false),
+                (res: ResponseWrapper) => this.onError(res.json)
+                );
+        }
     }
     loadPage(page: number) {
         if (page !== this.previousPage) {
@@ -103,7 +115,11 @@ export class AppsComponent implements OnInit, OnDestroy {
     filterItems($event) {
         if (this.searchValue && this.searchValue !== '' && $event && $event.keyCode === 13) {
             //this.apps = this.initialApps.filter((item) => item.name.toLowerCase().indexOf(this.searchValue) > -1);
-            this.appsService.search(this.searchValue).subscribe(
+            this.appsService.search(this.searchValue, {
+                page: this.page - 1,
+                size: this.itemsPerPage,
+                sort: this.sort()
+            }).subscribe(
                 (res: ResponseWrapper) => this.onSuccess(res.json, res.headers, true),
                 (res: ResponseWrapper) => this.onError(res.json)
                 );
