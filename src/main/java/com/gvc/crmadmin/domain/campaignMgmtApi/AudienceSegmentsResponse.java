@@ -15,14 +15,14 @@ public class AudienceSegmentsResponse implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("segments")
-    private List<String> segmentNames;
+    private List<NameIdPair> nameIdPairs;
 
-    public List<String> getSegmentNames() {
-		return segmentNames;
+    public List<NameIdPair> getNameIdPairs() {
+		return nameIdPairs;
 	}
     
-    public void setSegmentNames(List<String> segmentNames) {
-		this.segmentNames = segmentNames;
+    public void setNameIdPairs(List<NameIdPair> nameIdPairs) {
+		this.nameIdPairs = nameIdPairs;
 	}
     
     @Override

@@ -1,33 +1,6 @@
 package com.gvc.crmadmin.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.gvc.crmadmin.config.Constants;
-import com.gvc.crmadmin.domain.AudienceSegments;
-import com.gvc.crmadmin.domain.UploadSegments;
-import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentUploadResponse;
-import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentsRequest;
-import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentsResponse;
-import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentsResponseTest;
-import com.gvc.crmadmin.domain.campaignMgmtApi.NameIdPair;
-import com.gvc.crmadmin.domain.campaignMgmtApi.StoreFileResponse;
-import com.gvc.crmadmin.service.AudienceSegmentsService;
-import com.gvc.crmadmin.web.rest.util.HeaderUtil;
-import com.gvc.crmadmin.web.rest.util.PaginationUtil;
-import io.swagger.annotations.ApiParam;
-import io.github.jhipster.web.util.ResponseUtil;
-
-import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.validation.Valid;
+import static com.gvc.crmadmin.config.Constants.CAMPAIGN_SCHEDULE_TIME_FORMAT;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -37,7 +10,40 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.gvc.crmadmin.config.Constants.*;
+import javax.validation.Valid;
+
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.codahale.metrics.annotation.Timed;
+import com.gvc.crmadmin.domain.AudienceSegments;
+import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentUploadResponse;
+import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentsRequest;
+import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentsResponse;
+import com.gvc.crmadmin.domain.campaignMgmtApi.NameIdPair;
+import com.gvc.crmadmin.domain.campaignMgmtApi.StoreFileResponse;
+import com.gvc.crmadmin.service.AudienceSegmentsService;
+import com.gvc.crmadmin.web.rest.util.HeaderUtil;
+import com.gvc.crmadmin.web.rest.util.PaginationUtil;
+
+import io.github.jhipster.web.util.ResponseUtil;
+import io.swagger.annotations.ApiParam;
 /**
  * REST controller for managing AudienceSegments.
  */
@@ -183,27 +189,10 @@ public class AudienceSegmentsResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of audienceSegments in body
      */
+
     @PostMapping("/audience-segments/loadbyFeProductForSegmentation")
     @Timed
     public ResponseEntity<AudienceSegmentsResponse> getAudienceSegmentsForSegmentation(@Valid @RequestBody AudienceSegmentsRequest request) {
-        log.debug("REST request to get complete list of AudienceSegments for frontEnd = " + request.getFrontEnd() + " and product = " + request.getProduct());
-        List<AudienceSegments> segments = audienceSegmentsService.findByFrontEndAndProduct(request.getFrontEnd(), request.getProduct());
-        
-        List<String> segmentNames = new ArrayList<>();
-        if(segments != null) {
-        	for (AudienceSegments segment : segments) {
-				segmentNames.add(segment.getId());//TODO: change later
-			}
-        }
-        AudienceSegmentsResponse response = new AudienceSegmentsResponse();
-        response.setSegmentNames(segmentNames);
-        
-        return ResponseUtil.wrapOrNotFound(Optional.of(response));
-    }
-
-    @PostMapping("/audience-segments/loadbyFeProductForSegmentationTest")
-    @Timed
-    public ResponseEntity<AudienceSegmentsResponseTest> getAudienceSegmentsForSegmentationTest(@Valid @RequestBody AudienceSegmentsRequest request) {
         log.debug("REST request to get complete list of AudienceSegments for frontEnd = " + request.getFrontEnd() + " and product = " + request.getProduct());
         List<AudienceSegments> segments = audienceSegmentsService.findByFrontEndAndProduct(request.getFrontEnd(), request.getProduct());
         
@@ -217,7 +206,7 @@ public class AudienceSegmentsResource {
         		nameIdPairs.add(nameIdPair);
 			}
         }
-        AudienceSegmentsResponseTest response = new AudienceSegmentsResponseTest();
+        AudienceSegmentsResponse response = new AudienceSegmentsResponse();
         response.setNameIdPairs(nameIdPairs);
         
         return ResponseUtil.wrapOrNotFound(Optional.of(response));
