@@ -17,7 +17,6 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
 
     currentAccount: any;
     campaignGroups: CampaignGroup[];
-    initialCampainGroups: CampaignGroup[];
     error: any;
     success: any;
     eventSubscriber: Subscription;
@@ -25,7 +24,6 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
     routeData: any;
     links: any;
     totalItems: any;
-    initialQueryCount: any;
     queryCount: any;
     itemsPerPage: any;
     page: any;
@@ -46,7 +44,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
         private eventManager: JhiEventManager,
         private paginationUtil: JhiPaginationUtil,
         private paginationConfig: PaginationConfig,
-        public breadCrumbService : BreadCrumbService
+        public breadCrumbService: BreadCrumbService
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.routeData = this.activatedRoute.data.subscribe((data) => {
@@ -58,15 +56,28 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
     }
 
     loadAll() {
-        this.campaignGroupService.query({
-            appId: this.projectId,
-            page: this.page - 1,
-            size: this.itemsPerPage,
-            sort: this.sort()
-        }).subscribe(
-            (res: ResponseWrapper) => this.onSuccess(res.json, res.headers, false),
-            (res: ResponseWrapper) => this.onError(res.json)
-            );
+        if (this.searchValue) {
+            this.campaignGroupService.search({ appId: this.projectId, searchVal: this.searchValue }, {
+                appId: this.projectId,
+                page: (this.page > 0 ? this.page - 1 : this.page),
+                size: this.itemsPerPage,
+                sort: this.sort()
+            }).subscribe(
+                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
+                (res: ResponseWrapper) => this.onError(res.json)
+                );
+        }
+        else {
+            this.campaignGroupService.query({
+                appId: this.projectId,
+                page: (this.page > 0 ? this.page - 1 : this.page),
+                size: this.itemsPerPage,
+                sort: this.sort()
+            }).subscribe(
+                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
+                (res: ResponseWrapper) => this.onError(res.json)
+                );
+        }
     }
     loadPage(page: number) {
         if (page !== this.previousPage) {
@@ -80,7 +91,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
                 {
                     page: this.page,
                     size: this.itemsPerPage,
-                    sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+                    sort: this.sort()
                 }
         });
         this.loadAll();
@@ -88,11 +99,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
 
     clear() {
         this.page = 0;
-        this.router.navigate(['/campaign-group', {
-            page: this.page,
-            sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-        }]);
-        this.loadAll();
+        this.transition();
     }
     ngOnInit() {
         // this.loadAll();
@@ -151,17 +158,21 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
     filterItems($event) {
         if (this.searchValue && this.searchValue !== '' && $event && $event.keyCode === 13) {
             //this.campaignGroups = this.initialCampainGroups.filter((item) => item.name.toLowerCase().indexOf(this.searchValue) > -1);
-            this.campaignGroupService.search({appId: this.projectId, searchVal : this.searchValue}).subscribe(
-                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers, true),
+            this.page = 0;
+            this.campaignGroupService.search({ appId: this.projectId, searchVal: this.searchValue }, {
+                appId: this.projectId,
+                page: this.page,
+                size: this.itemsPerPage,
+                sort: this.sort()
+            }).subscribe(
+                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
                 (res: ResponseWrapper) => this.onError(res.json)
                 );
         }
     }
-    onSearchKeyChange(serachVal){
-        if(!serachVal){
-            this.campaignGroups = this.initialCampainGroups;
-            this.queryCount = this.initialQueryCount;
-            this.totalItems = this.initialQueryCount;
+    onSearchKeyChange(serachVal) {
+        if (!serachVal) {
+            this.clear();
         }
     }
     sort() {
@@ -172,18 +183,13 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    private onSuccess(data, headers, bIsFromSearch) {
+    private onSuccess(data, headers) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
         this.queryCount = this.totalItems;
-        // this.page = pagingParams.page;
         this.campaignGroups = data;
-        if(!bIsFromSearch){
-            this.initialCampainGroups = data;
-            this.initialQueryCount = this.totalItems;
-        }
-        this.breadCrumbService.getBreadCrumbs().subscribe(val=>{
-            this.breadCrumbService.updateBreadCrumbs(val, {name : this.projectName, router : '#/campaign-group/project/' + this.projectId  + "/" + this.projectName, brdCrmbId : '2'});
+        this.breadCrumbService.getBreadCrumbs().subscribe(val => {
+            this.breadCrumbService.updateBreadCrumbs(val, { name: this.projectName, router: '#/campaign-group/project/' + this.projectId + "/" + this.projectName, brdCrmbId: '2' });
         });
     }
     private onError(error) {

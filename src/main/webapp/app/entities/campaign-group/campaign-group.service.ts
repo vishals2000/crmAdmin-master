@@ -51,8 +51,9 @@ export class CampaignGroupService {
             .map((res: Response) => this.convertResponse(res));
     }
 
-    search(req?: any): Observable<ResponseWrapper> {
-        return this.http.get(this.resourceUrl + '/project/' + req.appId + '/search/' + req.searchVal)
+    search(req?: any, option?: any): Observable<ResponseWrapper> {
+        const options = createRequestOption(option);
+        return this.http.get(this.resourceUrl + '/project/' + req.appId + '/search/' + req.searchVal, options)
             .map((res: Response) => this.convertResponse(res));
     }
 

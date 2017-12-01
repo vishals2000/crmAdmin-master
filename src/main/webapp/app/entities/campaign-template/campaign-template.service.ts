@@ -118,9 +118,9 @@ export class CampaignTemplateService {
             .map((res: Response) => this.convertResponse(res));
     }
 
-    search(req?: any): Observable<ResponseWrapper> {
-        const options = createRequestOption(req);
-        return this.http.get(this.resourceUrl + '/group/' + req.campGroupId + '/search/' + req.searchVal)
+    search(req?: any, option?:any): Observable<ResponseWrapper> {
+        const options = createRequestOption(option);
+        return this.http.get(this.resourceUrl + '/group/' + req.campGroupId + '/search/' + req.searchVal, options)
             .map((res: Response) => this.convertResponse(res));
     }
 

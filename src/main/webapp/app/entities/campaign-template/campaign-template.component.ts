@@ -24,11 +24,9 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
 
     routeData: any;
-    initialCampainTemp: CampaignTemplate[];
     links: any;
     totalItems: any;
     queryCount: any;
-    initialQueryCount: any;
     itemsPerPage: any;
     page: any;
     predicate: any;
@@ -38,7 +36,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     groupId: string;
     groupName: string;
     searchValue: string;
-    oCampInfo : any;
+    oCampInfo: any;
     constructor(
         private campaignTemplateService: CampaignTemplateService,
         private parseLinks: JhiParseLinks,
@@ -52,7 +50,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         private paginationUtil: JhiPaginationUtil,
         private paginationConfig: PaginationConfig,
         private http: HttpClient,
-        public breadCrumbService : BreadCrumbService
+        public breadCrumbService: BreadCrumbService
 
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
@@ -67,15 +65,27 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     }
 
     loadAll() {
-        this.campaignTemplateService.query({
-            campGroupId: this.groupId,
-            page: this.page - 1,
-            size: this.itemsPerPage,
-            sort: this.sort()
-        }).subscribe(
-            (res: ResponseWrapper) => this.onSuccess(res.json, res.headers, false),
-            (res: ResponseWrapper) => this.onError(res.json)
-            );
+        if (this.searchValue) {
+            this.campaignTemplateService.search({ campGroupId: this.groupId, searchVal: this.searchValue }, {
+                page: (this.page > 0 ? this.page - 1 : this.page),
+                size: this.itemsPerPage,
+                sort: this.sort()
+            }).subscribe(
+                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
+                (res: ResponseWrapper) => this.onError(res.json)
+                );
+        }
+        else {
+            this.campaignTemplateService.query({
+                campGroupId: this.groupId,
+                page: (this.page > 0 ? this.page - 1 : this.page),
+                size: this.itemsPerPage,
+                sort: this.sort()
+            }).subscribe(
+                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
+                (res: ResponseWrapper) => this.onError(res.json)
+                );
+        }
     }
     loadPage(page: number) {
         if (page !== this.previousPage) {
@@ -86,22 +96,18 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     transition() {
         this.router.navigate(['/campaign-template/group/' + this.groupId + '/' + this.groupName], {
             queryParams:
-            {
-                page: this.page,
-                size: this.itemsPerPage,
-                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-            }
+                {
+                    page: this.page,
+                    size: this.itemsPerPage,
+                    sort: this.sort()
+                }
         });
         this.loadAll();
     }
 
     clear() {
         this.page = 0;
-        this.router.navigate(['/campaign-template', {
-            page: this.page,
-            sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-        }]);
-        this.loadAll();
+        this.transition();
     }
     ngOnInit() {
         // this.campaignTemplateService.cuttentMesage.subscribe((message) => this.groupId = message);
@@ -179,41 +185,37 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     filterItems($event) {
         if (this.searchValue && this.searchValue !== '' && $event && $event.keyCode === 13) {
             //this.campaignGroups = this.initialCampainGroups.filter((item) => item.name.toLowerCase().indexOf(this.searchValue) > -1);
-            this.campaignTemplateService.search({campGroupId: this.groupId, searchVal : this.searchValue}).subscribe(
-                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers, true),
+            this.page = 0;
+            this.campaignTemplateService.search({ campGroupId: this.groupId, searchVal: this.searchValue }, {
+                page: this.page,
+                size: this.itemsPerPage,
+                sort: this.sort()
+            }).subscribe(
+                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
                 (res: ResponseWrapper) => this.onError(res.json)
                 );
-        } else if((this.searchValue && this.searchValue === '') || !this.searchValue){
-            this.campaignTemplates = this.initialCampainTemp;
         }
     }
-    onSearchKeyChange(serachVal){
-        if(!serachVal){
-            this.campaignTemplates = this.initialCampainTemp;
-            this.queryCount = this.initialQueryCount;
-            this.totalItems = this.initialQueryCount;
+    onSearchKeyChange(serachVal) {
+        if (!serachVal) {
+            this.clear();
         }
     }
 
-    private onSuccess(data, headers, bIsFromSearch) {
+    private onSuccess(data, headers) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
         this.queryCount = this.totalItems;
-        // this.page = pagingParams.page;
         this.campaignTemplates = data;
-        if(!bIsFromSearch){
-            this.initialCampainTemp = data;
-            this.initialQueryCount = this.totalItems;
-        }
-        this.breadCrumbService.getBreadCrumbs().subscribe(breadCrumbArray=>{
-            if(breadCrumbArray && breadCrumbArray.length < 2){
+        this.breadCrumbService.getBreadCrumbs().subscribe(breadCrumbArray => {
+            if (breadCrumbArray && breadCrumbArray.length < 2) {
                 this.campaignTemplateService.getAppCapGrpIdFromCapGrp(this.groupId).subscribe((oCampGrpInfo) => {
                     this.oCampInfo = oCampGrpInfo;
-                    this.breadCrumbService.updateBreadCrumbs(breadCrumbArray, {name : this.groupName, router : '#/campaign-template/group/' + this.groupId  + "/" + this.groupName, brdCrmbId : '3', appId : this.oCampInfo.appId, appName : this.oCampInfo.appName});
+                    this.breadCrumbService.updateBreadCrumbs(breadCrumbArray, { name: this.groupName, router: '#/campaign-template/group/' + this.groupId + "/" + this.groupName, brdCrmbId: '3', appId: this.oCampInfo.appId, appName: this.oCampInfo.appName });
                 });
             }
-            else{
-                this.breadCrumbService.updateBreadCrumbs(breadCrumbArray, {name : this.groupName, router : '#/campaign-template/group/' + this.groupId  + "/" + this.groupName, brdCrmbId : '3'});
+            else {
+                this.breadCrumbService.updateBreadCrumbs(breadCrumbArray, { name: this.groupName, router: '#/campaign-template/group/' + this.groupId + "/" + this.groupName, brdCrmbId: '3' });
             }
         });
     }
