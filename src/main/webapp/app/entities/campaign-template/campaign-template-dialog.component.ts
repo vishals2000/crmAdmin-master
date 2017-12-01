@@ -898,9 +898,11 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 }
                     break;
                 case 'Segment': {
-                    this.filtersMap.get('Segment').forEach((value: string[], key: string) => {
-                        filterOptionComparisonValues.push(key);
-                    });
+                    if(this.filtersMap.has("Segment")){
+                        this.filtersMap.get('Segment').forEach((value: string[], key: string) => {
+                            filterOptionComparisonValues.push(key);
+                        });
+                    }
                 }
                     break;
                 case 'Event': {
@@ -1065,7 +1067,10 @@ export class CampaignTemplateDialogComponent implements OnInit {
                     }
                 }
                 default: {
-                    return this.getFormControlTypeFromFilterOptionValues(this.filtersMap.get(filterOption).get(filterOptionComparison));
+                    if(this.filtersMap.has(filterOption)){
+                        return this.getFormControlTypeFromFilterOptionValues(this.filtersMap.get(filterOption).get(filterOptionComparison));
+                    }
+                    return 'textbox';
                 }
             }
         } else {
@@ -1165,16 +1170,23 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 return 'daysCounter';
             } else if (formOptionValues[0] === 'date') {
                 return 'simpleDate';
-            } else if (formOptionValues[0] === 'tagValue') {
+            }  else if (formOptionValues[0] === 'tagValue') {
                 return 'tagValue';
-            } else if (formOptionValues[0] === 'Number') {
+            } else if (formOptionValues[0] === 'leagueName') {
+                return 'leagueName';
+            } else if (formOptionValues[0] === 'leagueNameId') {
+                return 'leagueNameId';
+            } else if (formOptionValues[0] === 'eventId') {
+                return 'eventId';
+            }
+            else if (formOptionValues[0] === 'Number') {
                 return 'Number';
             }
             else if(formOptionValues[0]){
-                return 'dropdown'
+                return (typeof formOptionValues[0] === 'object' ? 'dropdownWithObj' : 'dropdown');
             }
         } else if (formOptionValues && formOptionValues.length > 1) {
-            return 'dropdown';
+            return (typeof formOptionValues[0] === 'object' ? 'dropdownWithObj' : 'dropdown');
         } else {
             return '';
         }
