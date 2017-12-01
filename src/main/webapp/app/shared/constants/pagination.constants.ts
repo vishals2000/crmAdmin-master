@@ -1,4 +1,4 @@
-export const ITEMS_PER_PAGE = 1;
+export const ITEMS_PER_PAGE = 10;
 export const LANGUAGES: string[] = ['Avestan', 'Afrikaans', 'Albanian', 'Armenian', 'Aragonese', 'Arabic', 'Assamese', 'Azerbaijani', 'Bashkir', 'Belarusian',
 'Bulgarian', 'Bihari', 'Bislama', 'Bambara', 'Bengali', 'Tibetan Standard', 'Breton', 'Bosnian', 'Catalan', 'Chamorro',
 'Chinese', 'Corsican', 'Cree', 'Czech', 'Chuvash', 'Welsh', 'German', 'Danish', 'Dzongkha', 'Ewe', 'English', 'Spanish',
