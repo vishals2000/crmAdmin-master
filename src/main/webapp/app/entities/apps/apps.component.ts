@@ -25,7 +25,6 @@ export class AppsComponent implements OnInit, OnDestroy {
     links: any;
     totalItems: any;
     queryCount: any;
-    initialQueryCount: any;
     itemsPerPage: any;
     page: any;
     predicate: any;
@@ -42,7 +41,7 @@ export class AppsComponent implements OnInit, OnDestroy {
         private eventManager: JhiEventManager,
         private paginationUtil: JhiPaginationUtil,
         private paginationConfig: PaginationConfig,
-        public breadCrumbService : BreadCrumbService
+        public breadCrumbService: BreadCrumbService
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.routeData = this.activatedRoute.data.subscribe((data) => {
@@ -54,23 +53,23 @@ export class AppsComponent implements OnInit, OnDestroy {
     }
 
     loadAll() {
-        if(this.searchValue){
+        if (this.searchValue) {
             this.appsService.search(this.searchValue, {
-                page: this.page - 1,
+                page: (this.page > 0 ? this.page - 1 : this.page),
                 size: this.itemsPerPage,
                 sort: this.sort()
             }).subscribe(
-                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers, true),
+                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
                 (res: ResponseWrapper) => this.onError(res.json)
                 );
         }
         else {
             this.appsService.query({
-                page: this.page - 1,
+                page: (this.page > 0 ? this.page - 1 : this.page),
                 size: this.itemsPerPage,
                 sort: this.sort()
             }).subscribe(
-                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers, false),
+                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
                 (res: ResponseWrapper) => this.onError(res.json)
                 );
         }
@@ -87,7 +86,7 @@ export class AppsComponent implements OnInit, OnDestroy {
                 {
                     page: this.page,
                     size: this.itemsPerPage,
-                    sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+                    sort: this.sort()
                 }
         });
         this.loadAll();
@@ -95,11 +94,7 @@ export class AppsComponent implements OnInit, OnDestroy {
 
     clear() {
         this.page = 0;
-        this.router.navigate(['/apps', {
-            page: this.page,
-            sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-        }]);
-        this.loadAll();
+        this.transition();
     }
     ngOnInit() {
         this.loadAll();
@@ -115,22 +110,20 @@ export class AppsComponent implements OnInit, OnDestroy {
     filterItems($event) {
         if (this.searchValue && this.searchValue !== '' && $event && $event.keyCode === 13) {
             //this.apps = this.initialApps.filter((item) => item.name.toLowerCase().indexOf(this.searchValue) > -1);
+            this.page = 0;
             this.appsService.search(this.searchValue, {
-                page: this.page - 1,
+                page: this.page,
                 size: this.itemsPerPage,
                 sort: this.sort()
             }).subscribe(
-                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers, true),
+                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
                 (res: ResponseWrapper) => this.onError(res.json)
                 );
         }
     }
-    onSearchKeyChange(serachVal){
-        if(!serachVal){
+    onSearchKeyChange(serachVal) {
+        if (!serachVal) {
             this.clear();
-            //this.apps = this.initialApps;
-            //this.queryCount = this.initialQueryCount;
-            //this.totalItems = this.initialQueryCount;
         }
     }
     trackId(index: number, item: Apps) {
@@ -148,18 +141,14 @@ export class AppsComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    private onSuccess(data, headers, bIsFromSearch) {
+    private onSuccess(data, headers) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
         this.queryCount = this.totalItems;
         // this.page = pagingParams.page;
         this.apps = data;
-        if(!bIsFromSearch){
-            this.initialApps = data;
-            this.initialQueryCount = this.totalItems;
-        }
-        this.breadCrumbService.getBreadCrumbs().subscribe(val=>{
-            this.breadCrumbService.updateBreadCrumbs(val, {name : 'Apps', router : '#/apps', brdCrmbId : '1'});
+        this.breadCrumbService.getBreadCrumbs().subscribe(val => {
+            this.breadCrumbService.updateBreadCrumbs(val, { name: 'Apps', router: '#/apps', brdCrmbId: '1' });
         });
     }
     private onError(error) {
