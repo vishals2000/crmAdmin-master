@@ -16,4 +16,6 @@ public interface AudienceSegmentsPlayersRepository extends MongoRepository<Audie
 	
 	Long deleteBySegmentName(String segmentName);
 	
+	Long countBySegmentName(String segmentName);
+	
 }

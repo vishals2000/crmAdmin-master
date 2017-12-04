@@ -4,6 +4,7 @@ public class StoreFileResponse {
 	
 	private boolean result;
 	private String message;
+	private int estimate;
 	
 	public String getMessage() {
 		return message;
@@ -20,10 +21,18 @@ public class StoreFileResponse {
 	public void setResult(boolean result) {
 		this.result = result;
 	}
+	
+	public int getEstimate() {
+		return estimate;
+	}
+	
+	public void setEstimate(int estimate) {
+		this.estimate = estimate;
+	}
 
 	@Override
 	public String toString() {
-		return "StoreFileResponse [result=" + result + ", message=" + message + "]";
+		return "StoreFileResponse [result=" + result + ", message=" + message + ", estimate=" + estimate + "]";
 	}
-	
+
 }

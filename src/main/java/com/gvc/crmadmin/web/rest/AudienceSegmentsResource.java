@@ -2,6 +2,7 @@ package com.gvc.crmadmin.web.rest;
 
 import static com.gvc.crmadmin.config.Constants.CAMPAIGN_SCHEDULE_TIME_FORMAT;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -33,6 +34,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
 import com.gvc.crmadmin.domain.AudienceSegments;
+import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentSizeRequest;
+import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentSizeResponse;
 import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentUploadResponse;
 import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentsRequest;
 import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentsResponse;
@@ -69,7 +72,7 @@ public class AudienceSegmentsResource {
     	
     	AudienceSegmentUploadResponse response = new AudienceSegmentUploadResponse();
     	
-    	String id = product + "_" + frontEnd + "_" + name.trim().toLowerCase();
+    	String id = getSegmentId(product, frontEnd, name);
     	AudienceSegments existingSegment = audienceSegmentsService.findOne(id);
     	
     	if(existingSegment != null) {//already existing
@@ -111,6 +114,68 @@ public class AudienceSegmentsResource {
     	}
     }
     
+    private String getSegmentId(String product, String frontEnd, String name) {
+    	return product + "_" + frontEnd + "_" + name.trim().toLowerCase();
+    }
+    
+    @PostMapping("/audience-segments/edit-segment")
+    public ResponseEntity<AudienceSegmentUploadResponse> editFileUpload(@RequestParam("id") String id, @RequestParam("file") MultipartFile file, @RequestParam("editType") String editType) throws URISyntaxException, UnsupportedEncodingException, IOException {
+
+    	System.out.println("id = " + id + " editType = " + editType);
+    	
+    	AudienceSegmentUploadResponse response = new AudienceSegmentUploadResponse();
+    	
+    	AudienceSegments existingSegment = audienceSegmentsService.findOne(id);
+    	
+    	if(existingSegment == null) {//doesn't exist
+    		return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, id, "Segment with the given name does not exists"))
+                    .body(response);
+    	}
+    	
+    	existingSegment.setModifiedAt(CAMPAIGN_SCHEDULE_TIME_FORMAT.print(new DateTime()));
+    	
+    	AudienceSegments result = audienceSegmentsService.save(existingSegment);
+    	
+    	int existingEstimate = existingSegment.getEstimate() != null ? Integer.parseInt(existingSegment.getEstimate()) : 0;
+    	
+    	StoreFileResponse storeFileResponse = null;
+    	if("APPEND".equalsIgnoreCase(editType)) {
+    		storeFileResponse = audienceSegmentsService.store(id, file);
+    	}else if("OVERWRITE".equalsIgnoreCase(editType)) {
+    		audienceSegmentsService.deletePlayersBySegmentName(id);
+    		storeFileResponse = audienceSegmentsService.store(id, file);
+
+    	}
+
+    	if(storeFileResponse != null && storeFileResponse.isResult()) {
+    		return ResponseEntity.created(new URI(URLEncoder.encode("/api/audience-segments/edit-segment/" + id, "UTF-8")))
+    	            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, id))
+    	            .body(response);
+//    		return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
+    	}else {
+    		audienceSegmentsService.delete(id);
+    		
+    		response.setCode(-2);
+    		response.setMessage(storeFileResponse.getMessage());
+    		return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, id, storeFileResponse.getMessage()))
+                    .body(response);
+    	}
+    }
+
+    @PostMapping("/audience-segments/getSegmentSize")
+    @Timed
+    public ResponseEntity<AudienceSegmentSizeResponse> getSegmentSize(@Valid @RequestBody AudienceSegmentSizeRequest segmentSizeRequest) throws URISyntaxException, UnsupportedEncodingException {
+        log.debug("REST request to get getSegmentSize", segmentSizeRequest);
+
+        AudienceSegmentSizeResponse response = new AudienceSegmentSizeResponse();
+        response.setSegmentSize(audienceSegmentsService.getSegmentSize(segmentSizeRequest.getId()));
+        
+        System.out.println(response);
+        return ResponseUtil.wrapOrNotFound(Optional.of(response));
+    }
+
     /**
      * POST  /audience-segments : Create a new audienceSegments.
      *

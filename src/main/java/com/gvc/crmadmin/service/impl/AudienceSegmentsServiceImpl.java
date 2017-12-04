@@ -8,8 +8,7 @@ import com.gvc.crmadmin.domain.campaignMgmtApi.StoreFileResponse;
 import com.gvc.crmadmin.repository.AudienceSegmentsPlayersRepository;
 import com.gvc.crmadmin.repository.AudienceSegmentsRepository;
 
-import static com.gvc.crmadmin.config.Constants.CAMPAIGN_SCHEDULE_TIME_FORMAT;
-import static com.gvc.crmadmin.config.Constants.DATA_DIR;
+import static com.gvc.crmadmin.config.Constants.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -85,8 +84,8 @@ public class AudienceSegmentsServiceImpl implements AudienceSegmentsService{
 
             String accountName;
             List<AudienceSegmentsPlayers> players = new ArrayList<>();
-            Set<String> uniquePlayers = new HashSet<>();
             
+            int totalSaved = 0;
             while ((accountName = reader.readLine()) != null) {
             	if(StringUtils.hasText(accountName)) {
             		AudienceSegmentsPlayers audienceSegmentsPlayers = new AudienceSegmentsPlayers();
@@ -95,14 +94,22 @@ public class AudienceSegmentsServiceImpl implements AudienceSegmentsService{
             		audienceSegmentsPlayers.setAccountName(accountName);
             		
             		players.add(audienceSegmentsPlayers);
-            		uniquePlayers.add(accountName);
+            		if(players.size() >= BULK_SAVE_BATCH_SIZE) {
+            			audienceSegmentsPlayersRepository.save(players);
+            			totalSaved += BULK_SAVE_BATCH_SIZE;
+            			log.debug("total segments saved : size = " + totalSaved);
+            			players.clear();
+            		}
             	}
             }
             
-            audienceSegmentsPlayersRepository.save(players);
+            if(!players.isEmpty()) {
+            	audienceSegmentsPlayersRepository.save(players);
+            }
+            log.debug("total segments saved : size = " + totalSaved + players.size());
             
             AudienceSegments segment = audienceSegmentsRepository.findOne(id);
-            segment.setEstimate(uniquePlayers.size()+"");
+            segment.setEstimate(getSegmentSize(id) + "");
             segment.setLastEstimatedAt(CAMPAIGN_SCHEDULE_TIME_FORMAT.print(new DateTime()));
             
             audienceSegmentsRepository.save(segment);
@@ -182,5 +189,10 @@ public class AudienceSegmentsServiceImpl implements AudienceSegmentsService{
     	log.debug("Request to delete AudienceSegmentsPlayer for segmentName : " + segmentName);
         long deletedCount = audienceSegmentsPlayersRepository.deleteBySegmentName(segmentName);
         log.debug("delete count AudienceSegmentsPlayer for segmentName : " + segmentName + " deletedCount : " + deletedCount);
+    }
+    
+    @Override
+    public long getSegmentSize(String segmentName) {
+    	return audienceSegmentsPlayersRepository.countBySegmentName(segmentName);
     }
 }
