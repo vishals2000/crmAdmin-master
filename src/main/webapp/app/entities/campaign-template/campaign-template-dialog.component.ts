@@ -484,7 +484,8 @@ export class CampaignTemplateDialogComponent implements OnInit {
     getTargetContentGroupRefreshBtnEnabled(i) {
         return this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria[i].languageSelected ? false : true;
     }
-    getTargetContentGroupSize(i) {
+    getTargetContentGroupSize(i, $event) {
+        debugger
         //  console.log(this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteriavalue);
         console.log(this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteria);
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;

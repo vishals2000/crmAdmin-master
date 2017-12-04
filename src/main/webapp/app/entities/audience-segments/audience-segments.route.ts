@@ -22,9 +22,9 @@ export class AudienceSegmentsResolvePagingParams implements Resolve<any> {
         const sort = route.queryParams['sort'] ? route.queryParams['sort'] : 'id,asc';
         return {
             page: this.paginationUtil.parsePage(page),
-            segName: this.paginationUtil.parsePredicate(segName),
             predicate: this.paginationUtil.parsePredicate(sort),
-            ascending: this.paginationUtil.parseAscending(sort)
+            ascending: this.paginationUtil.parseAscending(sort),
+            segName: this.paginationUtil.parsePredicate(segName)
       };
     }
 }

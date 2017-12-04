@@ -35,6 +35,19 @@ export class AudienceSegmentsService {
         .catch(error => Observable.throw(error));
     }
 
+    uploadToExisting(audienceSegments: any, formData: FormData): Observable<AudienceSegments> {
+        const copy = this.convert(audienceSegments);
+        const headers = new Headers();
+        // headers.append('Content-Type', undefined);
+        const options = new RequestOptions({
+            headers: headers,
+            params : copy
+         });
+        return this.http.post(this.resourceUrl + '/edit-segment', formData, options)
+        .map(response => response.json())
+        .catch(error => Observable.throw(error));
+    }
+
     create(audienceSegments: AudienceSegments): Observable<AudienceSegments> {
         const copy = this.convert(audienceSegments);
         return this.http.post(this.resourceUrl, copy).map((res: Response) => {

@@ -142,7 +142,7 @@
                         </select>
                     </div>
                     <div class="form-group" [ngSwitch]="getFormControlType(i)" [hidden]="isOptionValueSelectionHidden(i)" optional>
-                        <label *ngIf="getFormControlType(i)" class="center-block">filterOptionValue:</label>
+                        <label *ngIf="getFormControlType(i)" class="center-block">FilterOptionValue:</label>
                         <!-- <input class="form-control" formControlName="filterOptionValue"> -->
                         <input class="form-control" formControlName="filterOptionValue" optional *ngSwitchCase="'textbox'">
                         <input class="form-control" placeholder="yyyy-MM-dd" formControlName="filterOptionValue" optional *ngSwitchCase="'simpleDate'">
@@ -176,12 +176,12 @@
                 </div>
                 <!-- End of the repeated address template -->
                 <div align="right">
-                    <button (click)="removeTargetGroupFilterCriterion(i)" type="button">Remove Criterion</button>
+                    <button (click)="removeTargetGroupFilterCriterion(i)" type="button">Remove Filter</button>
                 </div>
                 <br>
             </div>
             <br>
-            <button (click)="addCampaignTemplateFilterCriterion()" type="button">Add Criterion</button>
+            <button (click)="addCampaignTemplateFilterCriterion()" type="button">Add Filter</button>
         </div>
         <div formArrayName="targetGroupContentCriteria" class="overrideInvalid well well-lg">
             <div class="overrideInvalid" *ngFor="let targetGroupFilterCriterion of targetGroupContentCriteria.controls; let i=index"
@@ -213,13 +213,13 @@
                     </div>
                 </div>
                 <div align="right" *ngIf="i != 0">
-                    <button (click)="removeTargetGroupContentCriterion(i)" type="button">Remove Content Criterion</button>
+                    <button (click)="removeTargetGroupContentCriterion(i)" type="button">Remove Language</button>
                 </div>
             </div>
             <!-- End of the repeated address template -->
             <br>
         </div>
-        <button (click)="addCampaignTemplateContentCriterion()" type="button">Add Content Criterion</button>
+        <button (click)="addCampaignTemplateContentCriterion()" type="button">Add Language</button>
         <div class="form-group" class="well well-lg">
             <label class="form-control-label" for="field_metaData">Deep Link</label>
             <input type="text" class="form-control" name="metaData" id="field_metaData" formControlName="metaData" />

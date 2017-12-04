@@ -18,6 +18,8 @@ export class AudienceSegmentsDialogComponent implements OnInit {
 
     audienceSegments: AudienceSegments;
     isSaving: boolean;
+    formData: FormData;
+    uploadOpt : string;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -29,6 +31,8 @@ export class AudienceSegmentsDialogComponent implements OnInit {
 
     ngOnInit() {
         this.isSaving = false;
+        this.uploadOpt = 'APPEND';
+        this.formData = new FormData();
         this.audienceSegmentsService.currentAppInfo.subscribe((data) => {
             this.audienceSegments.frontEnd = data[0];
             this.audienceSegments.product = data[1];
@@ -40,14 +44,36 @@ export class AudienceSegmentsDialogComponent implements OnInit {
     }
 
     save() {
-        this.isSaving = true;
         if (this.audienceSegments.id !== undefined) {
-            this.subscribeToSaveResponse(
-                this.audienceSegmentsService.update(this.audienceSegments));
+            if (this.formData.get('file') != null) {
+                this.isSaving = true;
+                this.subscribeToSaveResponse(
+                    this.audienceSegmentsService.uploadToExisting({id: this.audienceSegments.id, editType: this.uploadOpt}, this.formData));
+            }
+            /*else{
+                this.subscribeToSaveResponse(
+                    this.audienceSegmentsService.update(this.audienceSegments));
+            }*/
+            
         } else {
+            this.isSaving = true;
             this.subscribeToSaveResponse(
                 this.audienceSegmentsService.create(this.audienceSegments));
         }
+    }
+
+    // file upload event
+    fileChange(event) {
+        const fileList: FileList = event.target.files;
+        if (fileList.length > 0) {
+            const file: File = fileList[0];
+            this.formData = new FormData();
+            this.formData.append('file', file);
+        }
+    }
+
+    onSelectionChange(sSelectedType){
+        this.uploadOpt = sSelectedType;
     }
 
     private subscribeToSaveResponse(result: Observable<AudienceSegments>) {
