@@ -218,7 +218,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     }
 
     addCampaignTemplateFilterCriterion() {
-        this.targetGroupFilterCriteria.push(this.fb.group(new CampaignTemplateFilterCriterion('', '', '', [])));
+        this.targetGroupFilterCriteria.push(this.fb.group(new CampaignTemplateFilterCriterion('', '', '', [],{})));
     }
 
     addCampaignTemplateContentCriterion() {
@@ -333,11 +333,23 @@ export class CampaignTemplateDialogComponent implements OnInit {
         if (this.campaignTemplate.targetGroupFilterCriteria) {
             for (const i of this.campaignTemplate.targetGroupFilterCriteria) {
                 if (Array.isArray(i.filterOptionValue)) {
+                    let simpDt;
+                    if(i.filterOptionValue[0].indexOf("-") > -1){
+                        const simpDtarray = i.filterOptionValue[0].split('-');
+                        if(simpDtarray.length === 3){
+                            simpDt = {
+                                year : parseInt(simpDtarray[0]),
+                                month : parseInt(simpDtarray[1]),
+                                day :  parseInt(simpDtarray[2])
+                            }
+                        }
+                    }
                     const formBuilderGroup = this.fb.group({
                         filterOption: i.filterOption,
                         filterOptionComparison: i.filterOptionComparison,
                         filterOptionLookUp: i.filterOptionLookUp,
-                        filterOptionValue: [i.filterOptionValue]
+                        filterOptionValue: [i.filterOptionValue],
+                        simpleDate : simpDt
                     });
                     this.targetGroupFilterCriteria.push(formBuilderGroup);
                 } else {
@@ -484,7 +496,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     getTargetContentGroupRefreshBtnEnabled(i) {
         return this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria[i].languageSelected ? false : true;
     }
-    getTargetContentGroupSize(i, $event) {
+    getTargetContentGroupSize(i) {
         debugger
         //  console.log(this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteriavalue);
         console.log(this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteria);
@@ -520,6 +532,17 @@ export class CampaignTemplateDialogComponent implements OnInit {
         );
 
     }
+    onSimpleDateChange(index){
+        var _this = this;
+        setTimeout(function(){
+            const targetGroupFilters = _this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
+            const targetGroupFilterCriterionFormControl: AbstractControl = targetGroupFilters.at(index);
+            const simpDt = _this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteria[index].simpleDate;
+            if(simpDt && simpDt.year){
+                targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue( simpDt.year + "-" + (parseInt(simpDt.month)  < 10 ? '0' + simpDt.month : simpDt.month) + "-" +  (parseInt(simpDt.day)  < 10 ? '0' + simpDt.day : simpDt.day));
+            }
+        },0);
+    }
 
     private onTargetGroupContentSizeRequestSuccess(data, headers, contentGrpNo) {
         // console.log(data);
@@ -552,17 +575,20 @@ export class CampaignTemplateDialogComponent implements OnInit {
         targetGroupFilterCriterionFormControl.get('filterOptionLookUp').setValue('');
         targetGroupFilterCriterionFormControl.get('filterOptionComparison').setValue('');
         targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue('');
+        targetGroupFilterCriterionFormControl.get('simpleDate').setValue(null);
     }
     onFilterOptionLookupChange(index) {
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
         const targetGroupFilterCriterionFormControl: AbstractControl = targetGroupFilters.at(index);
         targetGroupFilterCriterionFormControl.get('filterOptionComparison').setValue('');
         targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue('');
+        targetGroupFilterCriterionFormControl.get('simpleDate').setValue(null);
     }
     onFilterOptionComparisonChange(index) {
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
         const targetGroupFilterCriterionFormControl: AbstractControl = targetGroupFilters.at(index);
         targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue('');
+        targetGroupFilterCriterionFormControl.get('simpleDate').setValue(null);
     }
     getSelectedFilterOptionValueValues(index) {
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;

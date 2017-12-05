@@ -145,7 +145,16 @@
                         <label *ngIf="getFormControlType(i)" class="center-block">FilterOptionValue:</label>
                         <!-- <input class="form-control" formControlName="filterOptionValue"> -->
                         <input class="form-control" formControlName="filterOptionValue" optional *ngSwitchCase="'textbox'">
-                        <input class="form-control" placeholder="yyyy-MM-dd" formControlName="filterOptionValue" optional *ngSwitchCase="'simpleDate'">
+                        <!-- input class="form-control" placeholder="yyyy-MM-dd" formControlName="filterOptionValue" optional *ngSwitchCase="'simpleDate'" -->
+                        <div class="input-group" *ngSwitchCase="'simpleDate'">
+                                <input type="text" class="form-control" formControlName="simpleDate" ngbDatepicker #filterOptionValue1="ngbDatepicker" optional placeholder="yyyy-MM-dd"
+                                     (ngModelChange)="onSimpleDateChange(i)" />
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" (click)="filterOptionValue1.toggle()">
+                                        <i class="fa fa-calendar"></i>
+                                    </button>
+                                </span>
+                            </div>
                         <input class="form-control" placeholder="the value of N" formControlName="filterOptionValue" optional *ngSwitchCase="'daysCounter'">
                         <input class="form-control" placeholder="version number" formControlName="filterOptionValue" optional *ngSwitchCase="'appVersionSelector'">
                         <input class="form-control" placeholder="Type to add a tag value" formControlName="filterOptionValue" optional *ngSwitchCase="'tagValue'">

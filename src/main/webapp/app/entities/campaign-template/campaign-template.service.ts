@@ -212,7 +212,7 @@ export class CampaignTemplateService {
                     campaignTemplateFilterCriterion.filterOption,
                     campaignTemplateFilterCriterion.filterOptionLookUp,
                     campaignTemplateFilterCriterion.filterOptionComparison,
-                    campaignTemplateFilterCriterion.filterOptionValue));
+                    campaignTemplateFilterCriterion.filterOptionValue, undefined));
             } else {
                 const optionValues: string[] = [];
                 optionValues.push(campaignTemplateFilterCriterion.filterOptionValue);
@@ -220,7 +220,8 @@ export class CampaignTemplateService {
                     campaignTemplateFilterCriterion.filterOption,
                     campaignTemplateFilterCriterion.filterOptionLookUp,
                     campaignTemplateFilterCriterion.filterOptionComparison,
-                    optionValues));
+                    optionValues,
+                    undefined));
             }
         }
         campaignTemplateCopy.targetGroupFilterCriteria = campaignTemplateFilterCriteria;
