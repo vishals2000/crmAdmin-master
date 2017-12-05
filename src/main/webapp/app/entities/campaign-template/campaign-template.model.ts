@@ -70,6 +70,7 @@ export class CampaignTemplate implements BaseEntity {
         public sendImmediately?: boolean,
         public optimoveInstances?: string[],
         public pushToOptimoveInstances?: boolean,
+        public targetGroupMetaData?: CampaignTemplateMetaDataCriterion[]
     ) {
         this.inPlayerTimezone = false;
         this.sendImmediately = false;
@@ -103,6 +104,13 @@ export class CampaignTemplateContentCriterion {
         public contentTitle: string,
         public contentBody: string,
         public languageSelected: string,
+    ) {
+    }
+}
+export class CampaignTemplateMetaDataCriterion {
+    constructor(
+        public key: string,
+        public value: string
     ) {
     }
 }

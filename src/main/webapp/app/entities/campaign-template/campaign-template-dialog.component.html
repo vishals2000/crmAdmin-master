@@ -229,6 +229,31 @@
             <br>
         </div>
         <button (click)="addCampaignTemplateContentCriterion()" type="button">Add Language</button>
+
+        <div formArrayName="targetGroupMetaData" class="overrideInvalid well well-lg">
+                <div class="overrideInvalid" *ngFor="let targetGroupMetaDataCriterion of targetGroupMetaData.controls; let i=index"
+                    [formGroupName]="i">
+                    <!-- The repeated address template -->
+                    <h4>targetGroupMetaDataCriterion #{{i + 1}}</h4>
+                    <div style="margin-left: 1em;">
+                        <div class="form-group">
+                            <label class="form-control-label">Key</label>
+                            <input type="text" class="form-control" name="key" formControlName="key" optional/>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label">Value</label>
+                            <input type="text" class="form-control" name="value" formControlName="value" optional/>
+                        </div>
+                    </div>
+                    <div align="right">
+                        <button (click)="removeTargetGroupMetaDataCriterion(i)" type="button">Remove MetaData</button>
+                    </div>
+                </div>
+                <!-- End of the repeated address template -->
+                <br>
+            </div>
+            <button (click)="addCampaignTemplateMetaDataCriterion()" type="button">Add MetaData</button>
+
         <div class="form-group" class="well well-lg">
             <label class="form-control-label" for="field_metaData">Deep Link</label>
             <input type="text" class="form-control" name="metaData" id="field_metaData" formControlName="metaData" />

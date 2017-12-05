@@ -8,7 +8,7 @@ import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { Location } from '@angular/common';
 import {
-    CampaignTemplate, CampaignTemplateFilterCriterion, CampaignTemplateContentCriterion, RecurrenceType, FilterOption, CampaignTargetGroupSizeRequest,
+    CampaignTemplate, CampaignTemplateFilterCriterion, CampaignTemplateContentCriterion, CampaignTemplateMetaDataCriterion, RecurrenceType, FilterOption, CampaignTargetGroupSizeRequest,
     TargetGroupFilterCriterionSizeRequest
 } from './campaign-template.model';
 import { CampaignTemplatePopupService } from './campaign-template-popup.service';
@@ -225,6 +225,10 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.targetGroupContentCriteria.push(this.fb.group(new CampaignTemplateContentCriterion('', '', '')));
     }
 
+    addCampaignTemplateMetaDataCriterion() {
+        this.targetGroupMetaData.push(this.fb.group(new CampaignTemplateMetaDataCriterion('', '')));
+    }
+
     createForm() {
         if (!this.campaignTemplate) {
             this.campaignTemplate = new CampaignTemplate();
@@ -257,6 +261,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             metaData: (!this.campaignTemplate.metaData) ? '' : this.campaignTemplate.metaData,
             targetGroupFilterCriteria: this.fb.array([]),
             targetGroupContentCriteria: this.fb.array([]),
+            targetGroupMetaData: this.fb.array([]),
             // time: this.fb.control((!this.campaignTemplate.scheduledTime) ? new SimpleTime(this.currentDate.getUTCHours(), this.currentDate.getUTCMinutes()) :
             //     new SimpleTime(Number(this.campaignTemplate.scheduledTime.substr(0, 2)),
             //         Number(this.campaignTemplate.scheduledTime.substr(3, 2))), (control: FormControl) => {
@@ -291,6 +296,11 @@ export class CampaignTemplateDialogComponent implements OnInit {
     get targetGroupContentCriteria(): FormArray {
         return this.campaignTemplateGroupCreationForm.get('targetGroupContentCriteria') as FormArray;
     };
+
+    get targetGroupMetaData(): FormArray {
+        return (this.campaignTemplateGroupCreationForm.get('targetGroupMetaData') || []) as FormArray;
+    };
+
     onStartDtChange(){
         var _this = this;
         if(!this.campaignTemplateGroupCreationForm.value.sendImmediately){
@@ -567,6 +577,10 @@ export class CampaignTemplateDialogComponent implements OnInit {
     }
     removeTargetGroupContentCriterion(i) {
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupContentCriteria') as FormArray;
+        targetGroupFilters.removeAt(i);
+    }
+    removeTargetGroupMetaDataCriterion(i) {
+        const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupMetaData') as FormArray;
         targetGroupFilters.removeAt(i);
     }
     onFilterOptionChange(index) {

@@ -3,7 +3,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { JhiDateUtils } from 'ng-jhipster';
 
-import { CampaignTemplate, CampaignTemplateFilterCriterion, CampaignTemplateContentCriterion } from './campaign-template.model';
+import { CampaignTemplate, CampaignTemplateFilterCriterion, CampaignTemplateContentCriterion, CampaignTemplateMetaDataCriterion } from './campaign-template.model';
 import { ResponseWrapper, createRequestOption } from '../../shared';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -235,6 +235,14 @@ export class CampaignTemplateService {
                     campaignTemplateContentCriterion.languageSelected));
         }
         campaignTemplateCopy.targetGroupContentCriteria = campaignTemplateContentCriteria;
+
+        const campaignTemplateMetaCriteria: CampaignTemplateMetaDataCriterion[] = [];
+        for (const campaignTemplateMetaDCriterion of campaignTemplate.targetGroupMetaData) {
+            campaignTemplateMetaCriteria.push(new CampaignTemplateMetaDataCriterion(
+                   campaignTemplateMetaDCriterion.key,
+                   campaignTemplateMetaDCriterion.value));
+        }
+        campaignTemplateCopy.targetGroupMetaData = campaignTemplateMetaCriteria;
 
         return campaignTemplateCopy;
     }
