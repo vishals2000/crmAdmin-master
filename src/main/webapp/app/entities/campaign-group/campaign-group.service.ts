@@ -35,30 +35,30 @@ export class CampaignGroupService {
     }
 
     find(id: string): Observable<CampaignGroup> {
-        return this.http.get(`${this.resourceUrl}/${id}`).map((res: Response) => {
+        return this.http.get(`${this.resourceUrl}/${id}/`).map((res: Response) => {
             return res.json();
         });
     }
     findProjects(id: string, project: string): Observable<CampaignGroup[]> {
-        return this.http.get(`${this.resourceUrl}/${project}/${id}`).map((res: Response) => {
+        return this.http.get(`${this.resourceUrl}/${project}/${id}/`).map((res: Response) => {
             return res.json();
         }
         );
     }
     query(req?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(req);
-        return this.http.get(this.resourceUrl + '/project/' + req.appId, options)
+        return this.http.get(this.resourceUrl + '/project/' + req.appId + "/", options)
             .map((res: Response) => this.convertResponse(res));
     }
 
     search(req?: any, option?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(option);
-        return this.http.get(this.resourceUrl + '/project/' + req.appId + '/search/' + req.searchVal, options)
+        return this.http.get(this.resourceUrl + '/project/' + req.appId + '/search/' + req.searchVal + "/", options)
             .map((res: Response) => this.convertResponse(res));
     }
 
     delete(id: string): Observable<Response> {
-        return this.http.delete(`${this.resourceUrl}/${id}`);
+        return this.http.delete(`${this.resourceUrl}/${id}/`);
     }
 
     private convertResponse(res: Response): ResponseWrapper {

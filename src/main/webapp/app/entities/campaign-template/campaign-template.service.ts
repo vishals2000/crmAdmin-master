@@ -80,7 +80,7 @@ export class CampaignTemplateService {
     }
 
     find(id: string): Observable<CampaignTemplate> {
-        return this.http.get(`${this.resourceUrl}/${id}`).map((res: Response) => {
+        return this.http.get(`${this.resourceUrl}/${id}/`).map((res: Response) => {
             const jsonResponse = res.json();
             this.convertItemFromServer(jsonResponse);
             return jsonResponse;
@@ -88,7 +88,7 @@ export class CampaignTemplateService {
     }
 
     getFeProduct(id: string, name: string): Observable<Response> {
-        return this.http.get(`${this.resourceUrl}/${name}/${id}`).map((res: Response) => {
+        return this.http.get(`${this.resourceUrl}/${name}/${id}/`).map((res: Response) => {
             return res.json();
         });
     }
@@ -106,7 +106,7 @@ export class CampaignTemplateService {
     // }
 
     findCampGroups(id: string, group: string): Observable<CampaignTemplate[]> {
-        return this.http.get(`${this.resourceUrl}/${group}/${id}`).map((res: Response) => {
+        return this.http.get(`${this.resourceUrl}/${group}/${id}/`).map((res: Response) => {
             return res.json();
         }
         );
@@ -114,19 +114,19 @@ export class CampaignTemplateService {
 
     query(req?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(req);
-        return this.http.get(this.resourceUrl + '/group/' + req.campGroupId, options)
+        return this.http.get(this.resourceUrl + '/group/' + req.campGroupId +"/", options)
             .map((res: Response) => this.convertResponse(res));
     }
 
     search(req?: any, option?:any): Observable<ResponseWrapper> {
         const options = createRequestOption(option);
-        return this.http.get(this.resourceUrl + '/group/' + req.campGroupId + '/search/' + req.searchVal, options)
+        return this.http.get(this.resourceUrl + '/group/' + req.campGroupId + '/search/' + req.searchVal + "/", options)
             .map((res: Response) => this.convertResponse(res));
     }
 
     getPushNotificationCampaignTemplate(req?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(req);
-        return this.http.get(`${this.resourceUrl}/${req.campaignTemplateId}`, options)
+        return this.http.get(`${this.resourceUrl}/${req.campaignTemplateId}/`, options)
             .map((res: Response) => this.convertResponse(res));
     }
 
@@ -149,17 +149,17 @@ export class CampaignTemplateService {
     }
 
     delete(id: string): Observable<Response> {
-        return this.http.delete(`${this.resourceUrl}/${id}`);
+        return this.http.delete(`${this.resourceUrl}/${id}/`);
     }
 
     getAppCapGrpIdFromTemp(id: string): Observable<Response> {
-        return this.http.get(this.resourceUrl + '/appCampaignGroupInfoWithCampaignTemplateId/' + id).map((res: Response) => {
+        return this.http.get(this.resourceUrl + '/appCampaignGroupInfoWithCampaignTemplateId/' + id + "/").map((res: Response) => {
             return res.json();
         });
     }
 
     getAppCapGrpIdFromCapGrp(id: string): Observable<Response> {
-        return this.http.get(this.resourceUrl + '/appCampaignGroupInfoWithCampaignGroupId/' + id).map((res: Response) => {
+        return this.http.get(this.resourceUrl + '/appCampaignGroupInfoWithCampaignGroupId/' + id + "/").map((res: Response) => {
             return res.json();
         });
     }

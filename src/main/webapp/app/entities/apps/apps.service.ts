@@ -27,14 +27,14 @@ export class AppsService {
     }
 
     find(id: string): Observable<Apps> {
-        return this.http.get(`${this.resourceUrl}/${id}`).map((res: Response) => {
+        return this.http.get(`${this.resourceUrl}/${id}/`).map((res: Response) => {
             return res.json();
         });
     }
 
     search(id: string, req?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(req);
-        return this.http.get(`${this.resourceUrl}/search/${id}`, options)
+        return this.http.get(`${this.resourceUrl}/search/${id}/`, options)
             .map((res: Response) => this.convertResponse(res));
     }
 
@@ -45,7 +45,7 @@ export class AppsService {
     }
 
     delete(id: string): Observable<Response> {
-        return this.http.delete(`${this.resourceUrl}/${id}`);
+        return this.http.delete(`${this.resourceUrl}/${id}/`);
     }
 
     private convertResponse(res: Response): ResponseWrapper {
