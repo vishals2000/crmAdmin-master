@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -101,6 +102,10 @@ public class CampaignTemplate implements Serializable {
 
     @Field("targetGroupFilterCriteria")
     private TargetGroupCriteria.TargetGroupFilterCriterion[] targetGroupFilterCriteria;
+
+    @Field("targetGroupMetaData")
+    private Map<String, String> targetGroupMetaData;
+
 
     // jhipster-needle-entity-add-field - Jhipster will add fields here, do not remove
     public String getId() {
@@ -400,5 +405,14 @@ public class CampaignTemplate implements Serializable {
 
     public void setPushToOptimoveInstances(boolean pushToOptimoveInstances) {
         this.pushToOptimoveInstances = pushToOptimoveInstances;
+    }
+
+    public Map<String, String> getTargetGroupMetaData() {
+        return targetGroupMetaData;
+    }
+
+    public CampaignTemplate setTargetGroupMetaData(Map<String, String> targetGroupMetaData) {
+        this.targetGroupMetaData = targetGroupMetaData;
+        return this;
     }
 }
