@@ -32,7 +32,6 @@ public class MessageTemplate implements Serializable {
     @Field("contentBody")
     private String contentBody;
 
-    @NotNull
     @Field("languageSelected")
     private String languageSelected;
 
