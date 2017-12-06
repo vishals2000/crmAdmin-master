@@ -56,7 +56,7 @@
                             <span class="fa fa-pencil"></span>
                             <!--<span class="hidden-md-down">Edit</span>-->
                         </button>
-                        <button type="submit" title="Delete"
+                        <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit" title="Delete"
                                 [routerLink]="['/', { outlets: { popup: 'apps/'+ apps.id + '/delete'} }]"
                                 replaceUrl="true"
                                 class="btn btn-danger btn-sm">
