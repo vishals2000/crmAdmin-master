@@ -79,7 +79,8 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.targetContentGroupSize = [0];
         this.campaignTemplateGroupCreationForm = this.fb.group({
             targetGroupFilterCriteria: this.fb.array([]),
-            targetGroupContentCriteria: this.fb.array([])
+            targetGroupContentCriteria: this.fb.array([]),
+            targetGroupMetaData : this.fb.array([])
         });
         this.isLaunch = false;
     }
@@ -383,6 +384,11 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 contentBody: '',
                 languageSelected: ''
             }));
+        }
+        if (this.campaignTemplate.targetGroupMetaData) {
+            for (const i of this.campaignTemplate.targetGroupMetaData) {
+                this.targetGroupMetaData.push(this.fb.group(i));
+            }
         }
     }
     populateLanguagesList() {
