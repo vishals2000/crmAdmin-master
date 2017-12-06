@@ -54,58 +54,34 @@
                 <dd>
                     <span>{{campaignTemplate.campaignGroupId}}</span>
                 </dd>
-                <!-- <dt>
-                    <span>Filter Option</span>
-                </dt>
-                <dd>
-                    <span>{{campaignTemplate.filterOption}}</span>
-                </dd>
                 <dt>
-                    <span>Filter Option Comparison</span>
+                        <span>Filter Critiria</span>
                 </dt>
-                <dd>
-                    <span>{{campaignTemplate.filterOptionComparison}}</span>
-                </dd>
-                <dt>
-                    <span>Filter Option Value</span>
-                </dt>
-                <dd>
-                    <span>{{campaignTemplate.filterOptionValue}}</span>
-                </dd> -->
-                <dt>
-                    <span>Content Name</span>
-                </dt>
-                <dd>
-                    <span>{{campaignTemplate.contentName}}</span>
-                </dd>
-                <dt>
-                    <span>Content Title</span>
-                </dt>
-                <dd>
-                    <span>{{campaignTemplate.contentTitle}}</span>
-                </dd>
-                <dt>
-                    <span>Content Body</span>
-                </dt>
-                <dd>
-                    <span>{{campaignTemplate.contentBody}}</span>
-                </dd>
+                <ul *ngIf="campaignTemplate.targetGroupFilterCriteria">
+                        <li *ngFor="let i of campaignTemplate.targetGroupFilterCriteria"> 
+                            {{ i.filterOption }} <span *ngIf="i.filterOption.length" ><span class="fa fa-arrow-right arrowColor"></span></span>
+                            {{ i.filterOptionComparison }} <span *ngIf="i.filterOptionComparison.length" ><span class="fa fa-arrow-right arrowColor"></span></span>
+                            {{ i.filterOptionLookUp }} <span *ngIf="i.filterOptionLookUp.length"> <span class="fa fa-arrow-right arrowColor"></span></span>
+                            {{ i.filterOptionValue }}
+                        </li>
+                </ul>
+                    <!-- <p *ngIf="!campaignTemplate.targetGroupFilterCriteria.length">**You will not be able to launch the campaign unless atleast one filter criteria is selected.</p> -->
+
+                    <dt>
+                            <span>Content Title - Content Body - Language Selected</span> 
+                    </dt>
+                    <ul *ngIf="campaignTemplate.targetGroupContentCriteria">
+                            <li *ngFor="let i of campaignTemplate.targetGroupContentCriteria">
+                                    {{ i.contentTitle }} - {{ i.contentBody }} - {{ i.languageSelected }}
+                            </li>
+                    </ul>
                 <dt>
                     <span>Meta Data</span>
                 </dt>
                 <dd>
                     <span>{{campaignTemplate.metaData}}</span>
                 </dd>
-                <dt>
-                    <span>Language Comparision</span>
-                </dt>
-                <dd>
-                    <span>{{campaignTemplate.languageComparision}}</span>
-                </dd>
-                <dd>
-                    <span>{{campaignTemplate.languageSelected}}</span>
-                </dd>
-            </dl>
+        </dl>
         </div>
         <div class="col-lg-4 col-sm-4 col-xs-12">
             <h2>
