@@ -216,7 +216,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-control-label" for="field_languageComparision">Language</label>
-                        <select class="form-control" name="languageSelected" formControlName="languageSelected" id="languageSelected" required>
+                        <select class="form-control" name="languageSelected" formControlName="languageSelected" id="languageSelected" [required]="targetGroupContentCriteria.controls.length === 1 ? false : true " >
                             <option *ngFor="let language of languagesList" [value]="language">{{language}}</option>
                         </select>
                     </div>

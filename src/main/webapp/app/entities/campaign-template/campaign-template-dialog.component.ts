@@ -504,6 +504,9 @@ export class CampaignTemplateDialogComponent implements OnInit {
         return false;
     }
     getTargetContentGroupRefreshBtnEnabled(i) {
+        if(this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria.length === 1){
+            return false;
+        }
         return this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria[i].languageSelected ? false : true;
     }
     getTargetContentGroupSize(i) {
