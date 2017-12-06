@@ -538,7 +538,8 @@ public class CampaignTemplateResource {
                 return ResponseEntity.ok().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, pushNotificationCampaignTemplate.getCampaignName(),"Campaign already deleted")).build();
             } else if (campaignTemplate.isAlreadyLaunched()) {
                 if(!campaignTemplate.isAlreadyCancelled()) {
-                    log.info("Cancelling campaign " + pushNotificationCampaignTemplate);
+                	
+                    log.info("Deleting campaign " + pushNotificationCampaignTemplate);
                     PushNotificationCampaignCancellationResponse pushNotificationCampaignCancellationResponse = cancelPushNotificationCampaignHelper(pushNotificationCampaignTemplate).getBody();
                     if(pushNotificationCampaignCancellationResponse.isResult()) {
 

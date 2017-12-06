@@ -54,4 +54,6 @@ public interface AudienceSegmentsService {
     void deletePlayersBySegmentName(String segmentName);
     
     long getSegmentSize(String segmentName);
+    
+    long getEstimate(String id);
 }

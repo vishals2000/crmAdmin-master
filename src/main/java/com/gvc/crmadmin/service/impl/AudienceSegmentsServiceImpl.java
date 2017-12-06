@@ -195,4 +195,15 @@ public class AudienceSegmentsServiceImpl implements AudienceSegmentsService{
     public long getSegmentSize(String segmentName) {
     	return audienceSegmentsPlayersRepository.countBySegmentName(segmentName);
     }
+    
+    @Override
+    public long getEstimate(String id) {
+    	AudienceSegments segment = audienceSegmentsRepository.findOne(id);
+    	if(segment == null) {
+    		return 0;
+    	}
+    	return Long.parseLong(segment.getEstimate());
+    	
+    }
+
 }

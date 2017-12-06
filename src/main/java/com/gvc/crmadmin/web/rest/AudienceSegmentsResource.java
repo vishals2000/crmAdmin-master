@@ -170,7 +170,7 @@ public class AudienceSegmentsResource {
         log.debug("REST request to get getSegmentSize", segmentSizeRequest);
 
         AudienceSegmentSizeResponse response = new AudienceSegmentSizeResponse();
-        response.setSegmentSize(audienceSegmentsService.getSegmentSize(segmentSizeRequest.getId()));
+        response.setSegmentSize(audienceSegmentsService.getEstimate(segmentSizeRequest.getId()));
         
         System.out.println(response);
         return ResponseUtil.wrapOrNotFound(Optional.of(response));
