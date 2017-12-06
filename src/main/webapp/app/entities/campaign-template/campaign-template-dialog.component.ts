@@ -226,7 +226,12 @@ export class CampaignTemplateDialogComponent implements OnInit {
     }
 
     addCampaignTemplateMetaDataCriterion() {
-        this.targetGroupMetaData.push(this.fb.group(new CampaignTemplateMetaDataCriterion('', '')));
+        //this.targetGroupMetaData.push(this.fb.group(new CampaignTemplateMetaDataCriterion('', '')));
+        
+        this.targetGroupMetaData.push(this.fb.group({
+            key: ["", this.liveOddKeyUniqueCheck()],
+            value: ['', Validators.required]
+          }));
     }
 
     createForm() {
@@ -510,9 +515,6 @@ export class CampaignTemplateDialogComponent implements OnInit {
         return this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria[i].languageSelected ? false : true;
     }
     getTargetContentGroupSize(i) {
-        debugger
-        //  console.log(this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteriavalue);
-        console.log(this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteria);
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
         let formLengthIterator = 0;
         const targetGroupFilterCriteria: TargetGroupFilterCriterionSizeRequest[] = [];
@@ -546,7 +548,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
 
     }
     onSimpleDateChange(index){
-        var _this = this;
+        var _this = this;//Donot remove time out. change event is not giving changed value imediatly.
         setTimeout(function(){
             const targetGroupFilters = _this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
             const targetGroupFilterCriterionFormControl: AbstractControl = targetGroupFilters.at(index);
@@ -555,6 +557,21 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue( simpDt.year + "-" + (parseInt(simpDt.month)  < 10 ? '0' + simpDt.month : simpDt.month) + "-" +  (parseInt(simpDt.day)  < 10 ? '0' + simpDt.day : simpDt.day));
             }
         },0);
+    }
+    liveOddKeyUniqueCheck(){
+        var _this = this;
+        return (c: AbstractControl): {[key: string]: any} => {
+            let isValid = true;
+            for(let i=0;i<_this.campaignTemplateGroupCreationForm.value.targetGroupMetaData.length;i++){
+                if(_this.campaignTemplateGroupCreationForm.value.targetGroupMetaData[i].key === c.value){
+                   isValid = false;
+                }
+            }
+            if (isValid)
+                return null;
+            else 
+            return {invalid: true};
+        }
     }
 
     private onTargetGroupContentSizeRequestSuccess(data, headers, contentGrpNo) {

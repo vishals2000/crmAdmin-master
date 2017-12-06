@@ -221,7 +221,7 @@
                         </select>
                     </div>
                 </div>
-                <div align="right" *ngIf="i != 0">
+                <div align="right" [hidden]="targetGroupContentCriteria.controls.length === 1 ? true : false ">
                     <button (click)="removeTargetGroupContentCriterion(i)" type="button">Remove Language</button>
                 </div>
             </div>
@@ -237,12 +237,17 @@
                     <h4>targetGroupMetaDataCriterion #{{i + 1}}</h4>
                     <div style="margin-left: 1em;">
                         <div class="form-group">
-                            <label class="form-control-label">Key</label>
-                            <input type="text" class="form-control" name="key" formControlName="key" optional/>
+                            <label class="form-control-label">Key*</label>
+                            <input type="text" placeholder="Key*" class="form-control" name="key" formControlName="key" required />
+                            <div [hidden]="!targetGroupMetaDataCriterion.controls.key?.invalid">
+                                    <small class="form-text text-danger">
+                                            Key must be unique
+                                    </small>
+                                </div>
                         </div>
                         <div class="form-group">
-                            <label class="form-control-label">Value</label>
-                            <input type="text" class="form-control" name="value" formControlName="value" optional/>
+                            <label class="form-control-label">Value*</label>
+                            <input type="text" placeholder="Value*" class="form-control" name="value" formControlName="value" required/>
                         </div>
                     </div>
                     <div align="right">
