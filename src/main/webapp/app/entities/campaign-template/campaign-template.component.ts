@@ -201,6 +201,13 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
             this.clear();
         }
     }
+    copyCurrentTemp(copyFromTemp) {
+        console.log(copyFromTemp);
+        this.campaignTemplateService.copyCampaignTemplate(copyFromTemp).subscribe(
+            (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' }),
+            (res: ResponseWrapper) => this.onError(res.json)
+        );
+    }
 
     private onSuccess(data, headers) {
         this.links = this.parseLinks.parse(headers.get('link'));

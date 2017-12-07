@@ -43,8 +43,8 @@
                 <label class="form-control-label" for="field_startDate">Start Date</label>
                 <!--input type="date" name="startDate" id="field_startDate" (ngModelChange)="onStartDtChange()"  /-->
                 <div class="input-group">
-                    <input id="field_startDate" type="text" class="form-control" name="startDate" ngbDatepicker [minDate]="minDate" #startDateDp="ngbDatepicker" (ngModelChange)="onStartDtChange()"
-                        formControlName="startDate" required/>
+                    <input id="field_startDate" type="text" class="form-control" name="startDate" ngbDatepicker [minDate]="minDate" #startDateDp="ngbDatepicker"
+                        (ngModelChange)="onStartDtChange()" formControlName="startDate" required/>
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default" (click)="startDateDp.toggle()">
                             <i class="fa fa-calendar"></i>
@@ -59,7 +59,7 @@
             </div>
             <div class="form-group">
                 <label class="form-control-label" for="field_recurrenceType">Recurrence Type</label>
-                <select class="form-control" name="recurrenceType" formControlName="recurrenceType" id="field_recurrenceType" required  (change)="onRecurrenceType()">
+                <select class="form-control" name="recurrenceType" formControlName="recurrenceType" id="field_recurrenceType" required (change)="onRecurrenceType()">
                     <option value="NONE">NONE</option>
                     <option value="WEEKLY">WEEKLY</option>
                     <option value="DAILY">DAILY</option>
@@ -113,7 +113,7 @@
         <!-- </div> -->
         <div align="right">
             Target Group Size {{targetGroupSize}}
-            <button (click)="getTargetGroupSize()" [disabled]="getTargetGroupRefreshBtnEnabled()"  type="button">Refresh</button>
+            <button (click)="getTargetGroupSize()" [disabled]="getTargetGroupRefreshBtnEnabled()" type="button">Refresh</button>
         </div>
         <div formArrayName="targetGroupFilterCriteria" class="well well-lg">
             <div *ngFor="let targetGroupFilterCriterion of targetGroupFilterCriteria.controls; let i=index" [formGroupName]="i">
@@ -147,14 +147,14 @@
                         <input class="form-control" formControlName="filterOptionValue" optional *ngSwitchCase="'textbox'">
                         <!-- input class="form-control" placeholder="yyyy-MM-dd" formControlName="filterOptionValue" optional *ngSwitchCase="'simpleDate'" -->
                         <div class="input-group" *ngSwitchCase="'simpleDate'">
-                                <input type="text" class="form-control" formControlName="simpleDate" ngbDatepicker #filterOptionValue1="ngbDatepicker" optional placeholder="yyyy-MM-dd"
-                                     (ngModelChange)="onSimpleDateChange(i)" />
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default" (click)="filterOptionValue1.toggle()">
-                                        <i class="fa fa-calendar"></i>
-                                    </button>
-                                </span>
-                            </div>
+                            <input type="text" class="form-control" formControlName="simpleDate" ngbDatepicker #filterOptionValue1="ngbDatepicker" optional
+                                placeholder="yyyy-MM-dd" (ngModelChange)="onSimpleDateChange(i)" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" (click)="filterOptionValue1.toggle()">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </span>
+                        </div>
                         <input class="form-control" placeholder="the value of N" formControlName="filterOptionValue" optional *ngSwitchCase="'daysCounter'">
                         <input class="form-control" placeholder="version number" formControlName="filterOptionValue" optional *ngSwitchCase="'appVersionSelector'">
                         <input class="form-control" placeholder="Type to add a tag value" formControlName="filterOptionValue" optional *ngSwitchCase="'tagValue'">
@@ -170,7 +170,7 @@
                             <!-- <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option> -->
                             <option *ngFor="let filterOption of getFilterOptionValueValues(i)" [value]="filterOption.id">{{filterOption.name}}</option>
                         </select>
-                        
+
                         <select class="form-control" formControlName="filterOptionValue" multiple *ngSwitchCase="'multiSelectDropdown'">
                             <!-- <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option> -->
                             <option *ngFor="let filterOption of getFilterOptionValueValues(i)" [value]="filterOption">{{filterOption}}</option>
@@ -216,7 +216,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-control-label" for="field_languageComparision">Language</label>
-                        <select class="form-control" name="languageSelected" formControlName="languageSelected" id="languageSelected" [required]="targetGroupContentCriteria.controls.length === 1 ? false : true " >
+                        <select class="form-control" name="languageSelected" formControlName="languageSelected" id="languageSelected" [required]="targetGroupContentCriteria.controls.length === 1 ? false : true ">
                             <option *ngFor="let language of languagesList" [value]="language">{{language}}</option>
                         </select>
                     </div>
@@ -231,33 +231,32 @@
         <button (click)="addCampaignTemplateContentCriterion()" type="button">Add Language</button>
 
         <div formArrayName="targetGroupMetaData" class="overrideInvalid well well-lg">
-                <div class="overrideInvalid" *ngFor="let targetGroupMetaDataCriterion of targetGroupMetaData.controls; let i=index"
-                    [formGroupName]="i">
-                    <!-- The repeated address template -->
-                    <h4>targetGroupMetaDataCriterion #{{i + 1}}</h4>
-                    <div style="margin-left: 1em;">
-                        <div class="form-group">
-                            <label class="form-control-label">Key*</label>
-                            <input type="text" placeholder="Key*" class="form-control" name="key" formControlName="key" required />
-                            <div [hidden]="!targetGroupMetaDataCriterion.controls.key?.invalid">
-                                    <small class="form-text text-danger">
-                                            Key must be unique
-                                    </small>
-                                </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-control-label">Value*</label>
-                            <input type="text" placeholder="Value*" class="form-control" name="value" formControlName="value" required/>
+            <div class="overrideInvalid" *ngFor="let targetGroupMetaDataCriterion of targetGroupMetaData.controls; let i=index" [formGroupName]="i">
+                <!-- The repeated address template -->
+                <h4>targetGroupMetaDataCriterion #{{i + 1}}</h4>
+                <div style="margin-left: 1em;">
+                    <div class="form-group">
+                        <label class="form-control-label">Key*</label>
+                        <input type="text" placeholder="Key*" class="form-control" name="key" formControlName="key" required />
+                        <div [hidden]="!targetGroupMetaDataCriterion.controls.key?.invalid">
+                            <small class="form-text text-danger">
+                                Key must be unique
+                            </small>
                         </div>
                     </div>
-                    <div align="right">
-                        <button (click)="removeTargetGroupMetaDataCriterion(i)" type="button">Remove MetaData</button>
+                    <div class="form-group">
+                        <label class="form-control-label">Value*</label>
+                        <input type="text" placeholder="Value*" class="form-control" name="value" formControlName="value" required/>
                     </div>
                 </div>
-                <!-- End of the repeated address template -->
-                <br>
+                <div align="right">
+                    <button (click)="removeTargetGroupMetaDataCriterion(i)" type="button">Remove MetaData</button>
+                </div>
             </div>
-            <button (click)="addCampaignTemplateMetaDataCriterion()" type="button">Add MetaData</button>
+            <!-- End of the repeated address template -->
+            <br>
+        </div>
+        <button (click)="addCampaignTemplateMetaDataCriterion()" type="button">Add MetaData</button>
 
         <div class="form-group" class="well well-lg">
             <label class="form-control-label" for="field_metaData">Deep Link</label>
@@ -269,11 +268,13 @@
             <span class="fa fa-ban"></span>&nbsp;
             <span>Cancel</span>
         </button>
-        <button type="submit" [disabled]="campaignTemplateGroupCreationForm.invalid || isSaving" (click)="save()" class="btn btn-primary">
+        <button [hidden]="!campaignTemplateGroupCreationForm.value.editEnabled" type="submit" [disabled]="campaignTemplateGroupCreationForm.invalid || isSaving"
+            (click)="save()" class="btn btn-primary">
             <span class="fa fa-save"></span>&nbsp;
             <span>Save</span>
         </button>
-        <button type="submit" [disabled]="campaignTemplateGroupCreationForm.invalid || isSaving" (click)="launch()" class="btn btn-primary">
+        <button [hidden]="!campaignTemplateGroupCreationForm.value.launchEnabled" type="submit" [disabled]="campaignTemplateGroupCreationForm.invalid || isSaving"
+            (click)="launch()" class="btn btn-primary">
             <span class="fa fa-save"></span>&nbsp;
             <span>Launch</span>
         </button>

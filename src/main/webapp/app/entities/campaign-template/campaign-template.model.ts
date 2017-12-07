@@ -70,11 +70,15 @@ export class CampaignTemplate implements BaseEntity {
         public sendImmediately?: boolean,
         public optimoveInstances?: string[],
         public pushToOptimoveInstances?: boolean,
-        public targetGroupMetaData?: CampaignTemplateMetaDataCriterion[]
+        public targetGroupMetaData?: CampaignTemplateMetaDataCriterion[],
+        public launchEnabled?: boolean,
+        public editEnabled?: boolean
     ) {
         this.inPlayerTimezone = false;
         this.sendImmediately = false;
         this.targetGroupFilterCriteria = [];
+        this.editEnabled = true;
+        this.launchEnabled = true;
         // this.campaignTemplateFilterCriteria = [];
     }
 }
@@ -93,7 +97,7 @@ export class CampaignTemplateFilterCriterion {
         public filterOptionLookUp: string,
         public filterOptionComparison: string,
         public filterOptionValue: string[],
-        public simpleDate : any
+        public simpleDate: any
     ) {
     }
 }

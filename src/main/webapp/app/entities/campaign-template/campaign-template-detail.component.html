@@ -55,33 +55,42 @@
                     <span>{{campaignTemplate.campaignGroupId}}</span>
                 </dd>
                 <dt>
-                        <span>Filter Critiria</span>
+                    <span>Filter Critiria</span>
                 </dt>
                 <ul *ngIf="campaignTemplate.targetGroupFilterCriteria">
-                        <li *ngFor="let i of campaignTemplate.targetGroupFilterCriteria"> 
-                            {{ i.filterOption }} <span *ngIf="i.filterOption.length" ><span class="fa fa-arrow-right arrowColor"></span></span>
-                            {{ i.filterOptionComparison }} <span *ngIf="i.filterOptionComparison.length" ><span class="fa fa-arrow-right arrowColor"></span></span>
-                            {{ i.filterOptionLookUp }} <span *ngIf="i.filterOptionLookUp.length"> <span class="fa fa-arrow-right arrowColor"></span></span>
-                            {{ i.filterOptionValue }}
-                        </li>
+                    <li *ngFor="let i of campaignTemplate.targetGroupFilterCriteria">
+                        {{ i.filterOption }}
+                        <span *ngIf="i.filterOption.length">
+                            <span class="fa fa-arrow-right arrowColor"></span>
+                        </span>
+                        {{ i.filterOptionComparison }}
+                        <span *ngIf="i.filterOptionComparison.length">
+                            <span class="fa fa-arrow-right arrowColor"></span>
+                        </span>
+                        {{ i.filterOptionLookUp }}
+                        <span *ngIf="i.filterOptionLookUp.length">
+                            <span class="fa fa-arrow-right arrowColor"></span>
+                        </span>
+                        {{ i.filterOptionValue }}
+                    </li>
                 </ul>
-                    <!-- <p *ngIf="!campaignTemplate.targetGroupFilterCriteria.length">**You will not be able to launch the campaign unless atleast one filter criteria is selected.</p> -->
+                <!-- <p *ngIf="!campaignTemplate.targetGroupFilterCriteria.length">**You will not be able to launch the campaign unless atleast one filter criteria is selected.</p> -->
 
-                    <dt>
-                            <span>Content Title - Content Body - Language Selected</span> 
-                    </dt>
-                    <ul *ngIf="campaignTemplate.targetGroupContentCriteria">
-                            <li *ngFor="let i of campaignTemplate.targetGroupContentCriteria">
-                                    {{ i.contentTitle }} - {{ i.contentBody }} - {{ i.languageSelected }}
-                            </li>
-                    </ul>
+                <dt>
+                    <span>Content Title - Content Body - Language Selected</span>
+                </dt>
+                <ul *ngIf="campaignTemplate.targetGroupContentCriteria">
+                    <li *ngFor="let i of campaignTemplate.targetGroupContentCriteria">
+                        {{ i.contentTitle }} - {{ i.contentBody }} - {{ i.languageSelected }}
+                    </li>
+                </ul>
                 <dt>
                     <span>Meta Data</span>
                 </dt>
                 <dd>
                     <span>{{campaignTemplate.metaData}}</span>
                 </dd>
-        </dl>
+            </dl>
         </div>
         <div class="col-lg-4 col-sm-4 col-xs-12">
             <h2>
@@ -97,9 +106,9 @@
         <span> Back</span>
     </button>
 
-    <button type="button" [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/edit'} }]" replaceUrl="true"
+    <!-- <button type="button" [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/edit'} }]" replaceUrl="true"
         class="btn btn-primary">
         <span class="fa fa-pencil"></span>&nbsp;
         <span> Edit</span>
-    </button>
+    </button> -->
 </div>

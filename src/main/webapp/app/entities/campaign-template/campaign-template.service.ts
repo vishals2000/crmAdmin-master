@@ -66,13 +66,13 @@ export class CampaignTemplateService {
             return res.json();
         });
     }
-    
-        deletePushNotificationCampaign(body: any): Observable<ResponseWrapper> {
-            return this.http.post(this.resourceUrl + '/deletePushNotificationCampaign', body).map((res: Response) => {
-                return res;
-            });
-        }
-    
+
+    deletePushNotificationCampaign(body: any): Observable<ResponseWrapper> {
+        return this.http.post(this.resourceUrl + '/deletePushNotificationCampaign', body).map((res: Response) => {
+            return res;
+        });
+    }
+
     sendPushNotificationForScreenName(body: any): Observable<ResponseWrapper> {
         return this.http.post(this.resourceUrl + '/sendPushNotificationForScreenName', body).map((res: Response) => {
             return res.json();
@@ -114,11 +114,11 @@ export class CampaignTemplateService {
 
     query(req?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(req);
-        return this.http.get(this.resourceUrl + '/group/' + req.campGroupId +"/", options)
+        return this.http.get(this.resourceUrl + '/group/' + req.campGroupId + "/", options)
             .map((res: Response) => this.convertResponse(res));
     }
 
-    search(req?: any, option?:any): Observable<ResponseWrapper> {
+    search(req?: any, option?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(option);
         return this.http.get(this.resourceUrl + '/group/' + req.campGroupId + '/search/' + req.searchVal + "/", options)
             .map((res: Response) => this.convertResponse(res));
@@ -164,6 +164,14 @@ export class CampaignTemplateService {
         });
     }
 
+    copyCampaignTemplate(body: any): Observable<ResponseWrapper> {
+        let postObj = this.convert(body);
+        postObj.campaignName = "(Copy of) " + postObj.campaignName;
+        return this.http.post(this.resourceUrl, postObj).map((res: Response) => {
+            return res.json();
+        });
+    }
+
     private convertResponse(res: Response): ResponseWrapper {
         const jsonResponse = res.json();
         for (let i = 0; i < jsonResponse.length; i++) {
@@ -191,13 +199,33 @@ export class CampaignTemplateService {
         campaignTemplateCopy.campaignName = campaignTemplate.campaignName;
         campaignTemplateCopy.status = campaignTemplate.status;
         campaignTemplateCopy.campaignDescription = campaignTemplate.campaignDescription;
-        campaignTemplateCopy.startDate = this.dateUtils.convertLocalDateToServer(campaignTemplate.startDate);
+        if (typeof campaignTemplate.startDate === 'object' && !campaignTemplate.startDate.hasOwnProperty("year")) {
+            campaignTemplateCopy.startDate = {
+                year: campaignTemplate.startDate.getFullYear(),
+                month: campaignTemplate.startDate.getMonth() + 1,
+                day: campaignTemplate.startDate.getDate()
+            };
+        }
+        else{
+            campaignTemplateCopy.startDate = campaignTemplate.startDate;
+        }
+        if (typeof campaignTemplate.recurrenceEndDate === 'object' && !campaignTemplate.recurrenceEndDate.hasOwnProperty("year")) {
+            campaignTemplateCopy.recurrenceEndDate = {
+                year: campaignTemplate.recurrenceEndDate.getFullYear(),
+                month: campaignTemplate.recurrenceEndDate.getMonth() + 1,
+                day: campaignTemplate.recurrenceEndDate.getDate()
+            };
+        }
+        else{
+            campaignTemplateCopy.recurrenceType = campaignTemplate.recurrenceType;
+        }
+        campaignTemplateCopy.startDate = this.dateUtils.convertLocalDateToServer(campaignTemplateCopy.startDate);
         campaignTemplateCopy.recurrenceType = campaignTemplate.recurrenceType;
-        campaignTemplateCopy.recurrenceEndDate = this.dateUtils.convertLocalDateToServer(campaignTemplate.recurrenceEndDate);
+        campaignTemplateCopy.recurrenceEndDate = this.dateUtils.convertLocalDateToServer(campaignTemplateCopy.recurrenceEndDate);
         campaignTemplateCopy.inPlayerTimezone = campaignTemplate.inPlayerTimezone;
         campaignTemplateCopy.scheduledTime = campaignTemplate.scheduledTime;
-       // campaignTemplateCopy.contentName = campaignTemplate.contentName;
-       campaignTemplateCopy.contentTitle = campaignTemplate.contentTitle;
+        // campaignTemplateCopy.contentName = campaignTemplate.contentName;
+        campaignTemplateCopy.contentTitle = campaignTemplate.contentTitle;
         campaignTemplateCopy.contentBody = campaignTemplate.contentBody;
         campaignTemplateCopy.metaData = campaignTemplate.metaData;
         campaignTemplateCopy.languageSelected = campaignTemplate.languageSelected;
@@ -228,22 +256,23 @@ export class CampaignTemplateService {
 
         const campaignTemplateContentCriteria: CampaignTemplateContentCriterion[] = [];
         for (const campaignTemplateContentCriterion of campaignTemplate.targetGroupContentCriteria) {
-                campaignTemplateContentCriteria.push(new CampaignTemplateContentCriterion(
-                   // campaignTemplateContentCriterion.contentName,
-                   campaignTemplateContentCriterion.contentTitle,
-                    campaignTemplateContentCriterion.contentBody,
-                    campaignTemplateContentCriterion.languageSelected));
+            campaignTemplateContentCriteria.push(new CampaignTemplateContentCriterion(
+                // campaignTemplateContentCriterion.contentName,
+                campaignTemplateContentCriterion.contentTitle,
+                campaignTemplateContentCriterion.contentBody,
+                campaignTemplateContentCriterion.languageSelected));
         }
         campaignTemplateCopy.targetGroupContentCriteria = campaignTemplateContentCriteria;
 
         const campaignTemplateMetaCriteria: CampaignTemplateMetaDataCriterion[] = [];
         for (const campaignTemplateMetaDCriterion of campaignTemplate.targetGroupMetaData) {
             campaignTemplateMetaCriteria.push(new CampaignTemplateMetaDataCriterion(
-                   campaignTemplateMetaDCriterion.key,
-                   campaignTemplateMetaDCriterion.value));
+                campaignTemplateMetaDCriterion.key,
+                campaignTemplateMetaDCriterion.value));
         }
         campaignTemplateCopy.targetGroupMetaData = campaignTemplateMetaCriteria;
-
+        campaignTemplateCopy.editEnabled = undefined;
+        campaignTemplateCopy.launchEnabled = undefined;
         return campaignTemplateCopy;
     }
 }
