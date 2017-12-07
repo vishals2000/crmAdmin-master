@@ -217,7 +217,7 @@ export class CampaignTemplateService {
             };
         }
         else{
-            campaignTemplateCopy.recurrenceType = campaignTemplate.recurrenceType;
+            campaignTemplateCopy.recurrenceEndDate = campaignTemplate.recurrenceEndDate;
         }
         campaignTemplateCopy.startDate = this.dateUtils.convertLocalDateToServer(campaignTemplateCopy.startDate);
         campaignTemplateCopy.recurrenceType = campaignTemplate.recurrenceType;
