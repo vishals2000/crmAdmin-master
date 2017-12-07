@@ -1,15 +1,17 @@
 package com.gvc.crmadmin.domain.campaignMgmtApi;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gvc.crmadmin.domain.MessageTemplate;
-import com.gvc.crmadmin.domain.enumeration.Product;
-import com.gvc.crmadmin.domain.fcm.RecurrenceDetail;
+import java.io.Serializable;
+import java.util.List;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import java.io.Serializable;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gvc.crmadmin.domain.LiveOddsMetaData;
+import com.gvc.crmadmin.domain.MessageTemplate;
+import com.gvc.crmadmin.domain.enumeration.Product;
+import com.gvc.crmadmin.domain.fcm.RecurrenceDetail;
 
 /**
  * This represents the push notification campaign template
@@ -76,6 +78,9 @@ public class PushNotificationCampaignTemplate implements Serializable {
 
     @JsonProperty("id")
     private String campaignTemplateId;
+    
+    @JsonProperty("targetGroupMetaData")
+    private LiveOddsMetaData[] targetGroupMetaData;
 
     public String getFrontEnd() {
         return frontEnd;
