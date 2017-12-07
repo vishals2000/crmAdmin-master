@@ -29,9 +29,6 @@ public class CampaignTemplate implements Serializable {
     @Field("campaign_name")
     private String campaignName;
 
-    @Field("campaign_description")
-    private String campaignDescription;
-
     @NotNull
     @Field("start_date")
     private LocalDate startDate;
@@ -134,19 +131,6 @@ public class CampaignTemplate implements Serializable {
 
     public void setCampaignName(String campaignName) {
         this.campaignName = campaignName;
-    }
-
-    public String getCampaignDescription() {
-        return campaignDescription;
-    }
-
-    public CampaignTemplate campaignDescription(String campaignDescription) {
-        this.campaignDescription = campaignDescription;
-        return this;
-    }
-
-    public void setCampaignDescription(String campaignDescription) {
-        this.campaignDescription = campaignDescription;
     }
 
     public LocalDate getStartDate() {
