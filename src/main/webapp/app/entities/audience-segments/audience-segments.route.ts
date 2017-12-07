@@ -17,9 +17,9 @@ export class AudienceSegmentsResolvePagingParams implements Resolve<any> {
     constructor(private paginationUtil: JhiPaginationUtil) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const page = route.queryParams['page'] ? route.queryParams['page'] : (route.params['page'] || '1');
-        const segName = route.queryParams['segName'] ? route.queryParams['segName'] : (route.params['segName'] || '');
-        const sort = route.queryParams['sort'] ? route.queryParams['sort'] : (route.params['sort'] || 'id,asc');
+        const page = route.queryParams['page'] ? route.queryParams['page'] : '1';
+        const segName = route.queryParams['segName'] ? route.queryParams['segName'] : '';
+        const sort = route.queryParams['sort'] ? route.queryParams['sort'] : 'id,asc';
         return {
             page: this.paginationUtil.parsePage(page),
             predicate: this.paginationUtil.parsePredicate(sort),
