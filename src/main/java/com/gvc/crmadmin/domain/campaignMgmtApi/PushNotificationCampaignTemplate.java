@@ -2,6 +2,7 @@ package com.gvc.crmadmin.domain.campaignMgmtApi;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gvc.crmadmin.domain.LiveOddsMetaData;
 import com.gvc.crmadmin.domain.MessageTemplate;
 import com.gvc.crmadmin.domain.enumeration.Product;
 import com.gvc.crmadmin.domain.fcm.RecurrenceDetail;
@@ -73,6 +74,10 @@ public class PushNotificationCampaignTemplate implements Serializable {
 
     @JsonProperty("id")
     private String campaignTemplateId;
+    
+    @JsonProperty("targetGroupMetaData")
+    private LiveOddsMetaData[] targetGroupMetaData;
+
 
     public String getFrontEnd() {
         return frontEnd;
@@ -209,4 +214,12 @@ public class PushNotificationCampaignTemplate implements Serializable {
     public void setTargetGroupContentCriteria(List<MessageTemplate> targetGroupContentCriteria) {
         this.targetGroupContentCriteria = targetGroupContentCriteria;
     }
+    
+    public LiveOddsMetaData[] getTargetGroupMetaData() {
+		return targetGroupMetaData;
+	}
+    
+    public void setTargetGroupMetaData(LiveOddsMetaData[] targetGroupMetaData) {
+		this.targetGroupMetaData = targetGroupMetaData;
+	}
 }
