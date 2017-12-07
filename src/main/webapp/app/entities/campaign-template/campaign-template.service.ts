@@ -265,10 +265,12 @@ export class CampaignTemplateService {
         campaignTemplateCopy.targetGroupContentCriteria = campaignTemplateContentCriteria;
 
         const campaignTemplateMetaCriteria: CampaignTemplateMetaDataCriterion[] = [];
-        for (const campaignTemplateMetaDCriterion of campaignTemplate.targetGroupMetaData) {
-            campaignTemplateMetaCriteria.push(new CampaignTemplateMetaDataCriterion(
-                campaignTemplateMetaDCriterion.key,
-                campaignTemplateMetaDCriterion.value));
+        if(campaignTemplate.targetGroupMetaData && campaignTemplate.targetGroupMetaData.length){
+            for (const campaignTemplateMetaDCriterion of campaignTemplate.targetGroupMetaData) {
+                campaignTemplateMetaCriteria.push(new CampaignTemplateMetaDataCriterion(
+                    campaignTemplateMetaDCriterion.key,
+                    campaignTemplateMetaDCriterion.value));
+            }
         }
         campaignTemplateCopy.targetGroupMetaData = campaignTemplateMetaCriteria;
         campaignTemplateCopy.editEnabled = undefined;
