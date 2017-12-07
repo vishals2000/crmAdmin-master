@@ -29,9 +29,6 @@ public class PushNotificationCampaignTemplate implements Serializable {
     @JsonProperty("campaignName")
     private String campaignName;
 
-    @JsonProperty("campaignDescription")
-    private String campaignDescription;
-
     @JsonProperty("targetGroupFilterCriteria")
     private List<TargetGroupFilterCriterion> targetGroupFilterCriterionList;
 
@@ -91,14 +88,6 @@ public class PushNotificationCampaignTemplate implements Serializable {
 
     public void setCampaignName(String campaignName) {
         this.campaignName = campaignName;
-    }
-
-    public String getCampaignDescription() {
-        return campaignDescription;
-    }
-
-    public void setCampaignDescription(String campaignDescription) {
-        this.campaignDescription = campaignDescription;
     }
 
     public Product getProduct() {

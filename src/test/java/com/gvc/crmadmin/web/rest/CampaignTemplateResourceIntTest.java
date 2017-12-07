@@ -111,7 +111,6 @@ public class CampaignTemplateResourceIntTest {
     public static CampaignTemplate createEntity() {
         CampaignTemplate campaignTemplate = new CampaignTemplate()
             .campaignName(DEFAULT_CAMPAIGN_NAME)
-            .campaignDescription(DEFAULT_CAMPAIGN_DESCRIPTION)
             .startDate(DEFAULT_START_DATE)
             .recurrenceType(DEFAULT_RECURRENCE_TYPE)
             .recurrenceEndDate(DEFAULT_RECURRENCE_END_DATE)
@@ -142,7 +141,6 @@ public class CampaignTemplateResourceIntTest {
         assertThat(campaignTemplateList).hasSize(databaseSizeBeforeCreate + 1);
         CampaignTemplate testCampaignTemplate = campaignTemplateList.get(campaignTemplateList.size() - 1);
         assertThat(testCampaignTemplate.getCampaignName()).isEqualTo(DEFAULT_CAMPAIGN_NAME);
-        assertThat(testCampaignTemplate.getCampaignDescription()).isEqualTo(DEFAULT_CAMPAIGN_DESCRIPTION);
         assertThat(testCampaignTemplate.getStartDate()).isEqualTo(DEFAULT_START_DATE);
         assertThat(testCampaignTemplate.getRecurrenceType()).isEqualTo(DEFAULT_RECURRENCE_TYPE);
         assertThat(testCampaignTemplate.getRecurrenceEndDate()).isEqualTo(DEFAULT_RECURRENCE_END_DATE);
@@ -268,7 +266,6 @@ public class CampaignTemplateResourceIntTest {
             .andExpect(jsonPath("$.[*].frontEnd").value(hasItem(DEFAULT_FRONT_END.toString())))
             .andExpect(jsonPath("$.[*].product").value(hasItem(DEFAULT_PRODUCT.toString())))
             .andExpect(jsonPath("$.[*].campaignName").value(hasItem(DEFAULT_CAMPAIGN_NAME.toString())))
-            .andExpect(jsonPath("$.[*].campaignDescription").value(hasItem(DEFAULT_CAMPAIGN_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].recurrenceType").value(hasItem(DEFAULT_RECURRENCE_TYPE.toString())))
             .andExpect(jsonPath("$.[*].recurrenceEndDate").value(hasItem(DEFAULT_RECURRENCE_END_DATE.toString())))
@@ -292,7 +289,6 @@ public class CampaignTemplateResourceIntTest {
             .andExpect(jsonPath("$.frontEnd").value(DEFAULT_FRONT_END.toString()))
             .andExpect(jsonPath("$.product").value(DEFAULT_PRODUCT.toString()))
             .andExpect(jsonPath("$.campaignName").value(DEFAULT_CAMPAIGN_NAME.toString()))
-            .andExpect(jsonPath("$.campaignDescription").value(DEFAULT_CAMPAIGN_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
             .andExpect(jsonPath("$.recurrenceType").value(DEFAULT_RECURRENCE_TYPE.toString()))
             .andExpect(jsonPath("$.recurrenceEndDate").value(DEFAULT_RECURRENCE_END_DATE.toString()))
@@ -321,7 +317,6 @@ public class CampaignTemplateResourceIntTest {
         CampaignTemplate updatedCampaignTemplate = campaignTemplateRepository.findOne(campaignTemplate.getId());
         updatedCampaignTemplate
             .campaignName(UPDATED_CAMPAIGN_NAME)
-            .campaignDescription(UPDATED_CAMPAIGN_DESCRIPTION)
             .startDate(UPDATED_START_DATE)
             .recurrenceType(UPDATED_RECURRENCE_TYPE)
             .recurrenceEndDate(UPDATED_RECURRENCE_END_DATE)
@@ -339,7 +334,6 @@ public class CampaignTemplateResourceIntTest {
         assertThat(campaignTemplateList).hasSize(databaseSizeBeforeUpdate);
         CampaignTemplate testCampaignTemplate = campaignTemplateList.get(campaignTemplateList.size() - 1);
         assertThat(testCampaignTemplate.getCampaignName()).isEqualTo(UPDATED_CAMPAIGN_NAME);
-        assertThat(testCampaignTemplate.getCampaignDescription()).isEqualTo(UPDATED_CAMPAIGN_DESCRIPTION);
         assertThat(testCampaignTemplate.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testCampaignTemplate.getRecurrenceType()).isEqualTo(UPDATED_RECURRENCE_TYPE);
         assertThat(testCampaignTemplate.getRecurrenceEndDate()).isEqualTo(UPDATED_RECURRENCE_END_DATE);
