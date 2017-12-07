@@ -41,12 +41,12 @@ public class AudienceSegmentsServiceImpl implements AudienceSegmentsService{
     private final Logger log = LoggerFactory.getLogger(AudienceSegmentsServiceImpl.class);
 
     private final Path rootLocation = Paths.get(DATA_DIR);
-    
+
     private final AudienceSegmentsRepository audienceSegmentsRepository;
-    
+
     @Autowired
     AudienceSegmentsPlayersRepository audienceSegmentsPlayersRepository;
-    
+
     public AudienceSegmentsServiceImpl(AudienceSegmentsRepository audienceSegmentsRepository) {
         this.audienceSegmentsRepository = audienceSegmentsRepository;
     }
@@ -55,7 +55,7 @@ public class AudienceSegmentsServiceImpl implements AudienceSegmentsService{
     public StoreFileResponse store(String id, MultipartFile file) {
     	StoreFileResponse response = new StoreFileResponse();
     	response.setResult(false);
-    	
+
     	log.info("In store");
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         BufferedReader reader = null;
@@ -79,12 +79,12 @@ public class AudienceSegmentsServiceImpl implements AudienceSegmentsService{
             filename = id + "_" + filename;
             Files.copy(file.getInputStream(), this.rootLocation.resolve(filename),
                     StandardCopyOption.REPLACE_EXISTING);
-            
+
             reader = new BufferedReader(new InputStreamReader(file.getInputStream()));
 
             String accountName;
             List<AudienceSegmentsPlayers> players = new ArrayList<>();
-            
+
             int totalSaved = 0;
             while ((accountName = reader.readLine()) != null) {
             	if(StringUtils.hasText(accountName)) {
@@ -92,7 +92,7 @@ public class AudienceSegmentsServiceImpl implements AudienceSegmentsService{
             		audienceSegmentsPlayers.setSegmentName(id);
             		audienceSegmentsPlayers.setId(id + "_" + accountName);
             		audienceSegmentsPlayers.setAccountName(accountName);
-            		
+
             		players.add(audienceSegmentsPlayers);
             		if(players.size() >= BULK_SAVE_BATCH_SIZE) {
             			audienceSegmentsPlayersRepository.save(players);
@@ -102,20 +102,20 @@ public class AudienceSegmentsServiceImpl implements AudienceSegmentsService{
             		}
             	}
             }
-            
+
             if(!players.isEmpty()) {
             	audienceSegmentsPlayersRepository.save(players);
             }
             log.debug("total segments saved : size = " + totalSaved + players.size());
-            
+
             AudienceSegments segment = audienceSegmentsRepository.findOne(id);
             segment.setEstimate(getSegmentSize(id) + "");
             segment.setLastEstimatedAt(CAMPAIGN_SCHEDULE_TIME_FORMAT.print(new DateTime()));
-            
+
             audienceSegmentsRepository.save(segment);
-            
+
             response.setResult(true);
-            
+
             return response;
         }
         catch (Exception e) {
@@ -160,7 +160,7 @@ public class AudienceSegmentsServiceImpl implements AudienceSegmentsService{
     	log.debug("Request to get all AudienceSegments for frontEnd = " + frontEnd + " product = " + product );
     	return audienceSegmentsRepository.findByFrontEndAndProduct(frontEnd, product);
     }
-    
+
     /**
      *  Get one audienceSegments by id.
      *
@@ -183,19 +183,19 @@ public class AudienceSegmentsServiceImpl implements AudienceSegmentsService{
         log.debug("Request to delete AudienceSegments : {}", id);
         audienceSegmentsRepository.delete(id);
     }
-    
+
     @Override
     public void deletePlayersBySegmentName(String segmentName) {
     	log.debug("Request to delete AudienceSegmentsPlayer for segmentName : " + segmentName);
         long deletedCount = audienceSegmentsPlayersRepository.deleteBySegmentName(segmentName);
         log.debug("delete count AudienceSegmentsPlayer for segmentName : " + segmentName + " deletedCount : " + deletedCount);
     }
-    
+
     @Override
     public long getSegmentSize(String segmentName) {
     	return audienceSegmentsPlayersRepository.countBySegmentName(segmentName);
     }
-    
+
     @Override
     public long getEstimate(String id) {
     	AudienceSegments segment = audienceSegmentsRepository.findOne(id);
@@ -203,7 +203,7 @@ public class AudienceSegmentsServiceImpl implements AudienceSegmentsService{
     		return 0;
     	}
     	return Long.parseLong(segment.getEstimate());
-    	
+
     }
 
 }
