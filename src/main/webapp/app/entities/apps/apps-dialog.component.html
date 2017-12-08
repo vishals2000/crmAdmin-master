@@ -14,7 +14,7 @@
         </div>
         <div class="form-group">
             <label class="form-control-label" for="field_frontEnd">Label</Label></label>
-            <input type="text" class="form-control" name="frontEnd" id="field_frontEnd" [(ngModel)]="apps.frontEnd" required/>
+            <input type="text" class="form-control" name="frontEnd" id="field_frontEnd" [(ngModel)]="apps.frontEnd" [disabled]="!apps.id ? false : true" required/>
             <div [hidden]="!(editForm.controls.frontEnd?.dirty && editForm.controls.frontEnd?.invalid)">
                 <small class="form-text text-danger"
                    [hidden]="!editForm.controls.frontEnd?.errors?.required">
@@ -32,7 +32,7 @@
         </div>
         <div class="form-group">
             <label class="form-control-label" for="field_product">Product</label>
-            <select class="form-control" name="product" [(ngModel)]="apps.product" id="field_product"  required>
+            <select class="form-control" name="product" [(ngModel)]="apps.product" id="field_product" [disabled]="!apps.id ? false : true"  required>
                 <option value="CASINO">CASINO</option>
                 <option value="POKER">POKER</option>
                 <option value="SPORTS">SPORTS</option>
