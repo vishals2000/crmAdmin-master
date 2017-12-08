@@ -253,7 +253,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             product: (!this.campaignTemplate.product) ? '' : this.campaignTemplate.product,
             campaignName: (!this.campaignTemplate.campaignName) ? '' : this.campaignTemplate.campaignName,
             status: (!this.campaignTemplate.status) ? 'Draft' : this.campaignTemplate.status,
-            campaignDescription: (!this.campaignTemplate.campaignDescription) ? '' : this.campaignTemplate.campaignDescription,
+           // campaignDescription: (!this.campaignTemplate.campaignDescription) ? '' : this.campaignTemplate.campaignDescription,
             startDate: (!this.campaignTemplate.startDate) ? todayDt : this.campaignTemplate.startDate,
             sendImmediately: (!this.campaignTemplate.sendImmediately) ? false : this.campaignTemplate.sendImmediately,
             recurrenceType: (!this.campaignTemplate.recurrenceType) ? 'NONE' : this.campaignTemplate.recurrenceType,

@@ -76,7 +76,7 @@ export class AudienceSegmentsService {
     }
 
     delete(id: string): Observable<Response> {
-        return this.http.delete(`${this.resourceUrl}/${id}`);
+        return this.http.post(this.resourceUrl + "/delete/", {segId : id});
     }
 
     private convertResponse(res: Response): ResponseWrapper {
