@@ -567,7 +567,7 @@ public class CampaignTemplateResource {
                     log.info("Deleting campaign " + pushNotificationCampaignTemplate);
                     PushNotificationCampaignCancellationResponse pushNotificationCampaignCancellationResponse = cancelPushNotificationCampaignHelper(pushNotificationCampaignTemplate).getBody();
                     if(pushNotificationCampaignCancellationResponse.isResult()) {
-                        final DateTime currentDateTime = new DateTime(DateTimeZone.UTC);
+                        final DateTime currentDateTime = new DateTime(DateTimeZone.UTC).withSecondOfMinute(0).withMillisOfSecond(0);
                         final DateTime startTime = getCampaignStartTime(campaignTemplate);
                         final DateTime endTime = getCampaignEndTime(campaignTemplate);
                         //After the campaign is successfully cancelled, then, if the status in PENDING, delete the campaign from the system. If the status is LIVE, then change the status to DELETED.
