@@ -15,6 +15,7 @@ import static org.joda.time.DateTimeZone.UTC;
 public class Utils {
 
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormat.forPattern("yyyy-MM-dd").withZone(UTC);
+    public static final DateTimeFormatter TIME_STAMP_FORMAT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").withZone(UTC);
     public static final String SPACE = " ";
     public static final String UNDER_SCORE = "_";
 
@@ -26,5 +27,13 @@ public class Utils {
         return new DateTime(DateTimeZone.UTC).withDate(
             scheduledDate.getYear(), scheduledDate.getMonthValue(), scheduledDate.getDayOfMonth()
         ).withTime(0, 0, 0, 0);
+    }
+
+    public static DateTime getCurrentDateTimeInUTC() {
+        return new DateTime(DateTimeZone.UTC);
+    }
+
+    public static String getCurrentDateTimeInUTCAsString() {
+        return TIME_STAMP_FORMAT.print(new DateTime(UTC));
     }
 }

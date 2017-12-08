@@ -3,6 +3,7 @@ package com.gvc.crmadmin.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.gvc.crmadmin.domain.Apps;
 import com.gvc.crmadmin.domain.CampaignGroup;
+import com.gvc.crmadmin.domain.DeleteCampaignGroup;
 import com.gvc.crmadmin.domain.FrontendProduct;
 import com.gvc.crmadmin.service.AppsService;
 import com.gvc.crmadmin.service.CampaignGroupService;
@@ -127,9 +128,9 @@ public class CampaignGroupResource {
     @Timed
     public ResponseEntity<List<CampaignGroup>> getAllCampaignGroupsbyProjectIdAndName(@ApiParam Pageable pageable, @PathVariable String projectId, @PathVariable String campaignGroupName) {
         log.debug("REST request to get a page of CampaignGroups with projectId : " + projectId + " campaignGroupName :  " + campaignGroupName);
-        
+
         Page<CampaignGroup> page = campaignGroupService.findByProjectIdAndName(pageable, projectId, campaignGroupName);
-        
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/campaign-group/project/"+ projectId + "/search/" + campaignGroupName);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -178,5 +179,15 @@ public class CampaignGroupResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
     }
 
-
+    @PostMapping("/campaign-group/delete")
+    @Timed
+    public ResponseEntity<Void> deleteCampaignGroup(@Valid @RequestBody DeleteCampaignGroup deleteCampaignGroup) {
+        log.debug("REST request to delete CampaignGroup : {}", deleteCampaignGroup);
+        CampaignGroup campaignGroupFromDB = campaignGroupService.findOne(deleteCampaignGroup.getGroupId());
+        if(campaignGroupFromDB == null){
+            return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, deleteCampaignGroup.getGroupId())).build();
+        } else{campaignGroupService.delete(deleteCampaignGroup.getGroupId());
+            return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, deleteCampaignGroup.getGroupId())).build();
+        }
+    }
 }

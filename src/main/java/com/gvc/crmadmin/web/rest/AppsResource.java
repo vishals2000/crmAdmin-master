@@ -2,6 +2,7 @@ package com.gvc.crmadmin.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.gvc.crmadmin.domain.Apps;
+import com.gvc.crmadmin.domain.DeleteApp;
 import com.gvc.crmadmin.service.AppsService;
 import com.gvc.crmadmin.web.rest.util.HeaderUtil;
 import com.gvc.crmadmin.web.rest.util.PaginationUtil;
@@ -127,7 +128,7 @@ public class AppsResource {
         log.debug("REST request to get Apps by name: {}", appName);
 
         Page<Apps> page = appsService.findByName(pageable, appName);
-        
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/apps/search/"+appName);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -144,5 +145,19 @@ public class AppsResource {
         log.debug("REST request to delete Apps : {}", id);
         appsService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
+    }
+
+    @PostMapping("/apps/delete")
+    @Timed
+    public ResponseEntity<Apps> deleteApps(@Valid @RequestBody DeleteApp deleteApp) {
+        log.debug("REST request to delete Apps : {}", deleteApp);
+        Apps appFromDB = appsService.findOne(deleteApp.getAppId());
+
+        if (appFromDB == null) {
+            return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, deleteApp.getAppId())).build();
+        } else {
+            appsService.delete(deleteApp.getAppId());
+            return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, deleteApp.getAppId())).build();
+        }
     }
 }

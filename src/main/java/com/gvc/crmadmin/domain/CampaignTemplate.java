@@ -29,9 +29,6 @@ public class CampaignTemplate implements Serializable {
     @Field("campaign_name")
     private String campaignName;
 
-    @Field("campaign_description")
-    private String campaignDescription;
-
     @NotNull
     @Field("start_date")
     private LocalDate startDate;
@@ -105,6 +102,13 @@ public class CampaignTemplate implements Serializable {
     @Field("targetGroupMetaData")
     private LiveOddsMetaData[] targetGroupMetaData;
 
+    @Field("modifiedAt")
+    private String modifiedAt;
+
+    private String launchTime;
+    private String cancellationTime;
+    private String deletionTime;
+
 
     // jhipster-needle-entity-add-field - Jhipster will add fields here, do not remove
     public String getId() {
@@ -134,19 +138,6 @@ public class CampaignTemplate implements Serializable {
 
     public void setCampaignName(String campaignName) {
         this.campaignName = campaignName;
-    }
-
-    public String getCampaignDescription() {
-        return campaignDescription;
-    }
-
-    public CampaignTemplate campaignDescription(String campaignDescription) {
-        this.campaignDescription = campaignDescription;
-        return this;
-    }
-
-    public void setCampaignDescription(String campaignDescription) {
-        this.campaignDescription = campaignDescription;
     }
 
     public LocalDate getStartDate() {
@@ -415,12 +406,39 @@ public class CampaignTemplate implements Serializable {
         return this;
     }
 
-//    public Map<String, String> getTargetGroupMetaData() {
-//        return targetGroupMetaData;
-//    }
-//
-//    public CampaignTemplate setTargetGroupMetaData(Map<String, String> targetGroupMetaData) {
-//        this.targetGroupMetaData = targetGroupMetaData;
-//        return this;
-//    }
+    public String getModifiedAt() {
+        return modifiedAt;
+    }
+
+    public CampaignTemplate setModifiedAt(String modifiedAt) {
+        this.modifiedAt = modifiedAt;
+        return this;
+    }
+
+    public String getLaunchTime() {
+        return launchTime;
+    }
+
+    public CampaignTemplate setLaunchTime(String launchTime) {
+        this.launchTime = launchTime;
+        return this;
+    }
+
+    public String getCancellationTime() {
+        return cancellationTime;
+    }
+
+    public CampaignTemplate setCancellationTime(String cancellationTime) {
+        this.cancellationTime = cancellationTime;
+        return this;
+    }
+
+    public String getDeletionTime() {
+        return deletionTime;
+    }
+
+    public CampaignTemplate setDeletionTime(String deletionTime) {
+        this.deletionTime = deletionTime;
+        return this;
+    }
 }

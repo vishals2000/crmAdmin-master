@@ -1,7 +1,28 @@
 package com.gvc.crmadmin.web.rest;
 
-import static com.gvc.crmadmin.config.Constants.CAMPAIGN_SCHEDULE_TIME_FORMAT;
+import com.codahale.metrics.annotation.Timed;
+import com.gvc.crmadmin.domain.AudienceSegments;
+import com.gvc.crmadmin.domain.CampaignGroup;
+import com.gvc.crmadmin.domain.DeleteCampaignGroup;
+import com.gvc.crmadmin.domain.DeleteSegment;
+import com.gvc.crmadmin.domain.campaignMgmtApi.*;
+import com.gvc.crmadmin.service.AudienceSegmentsService;
+import com.gvc.crmadmin.web.rest.util.HeaderUtil;
+import com.gvc.crmadmin.web.rest.util.PaginationUtil;
+import io.github.jhipster.web.util.ResponseUtil;
+import io.swagger.annotations.ApiParam;
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -11,42 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
-
-import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.codahale.metrics.annotation.Timed;
-import com.gvc.crmadmin.domain.AudienceSegments;
-import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentSizeRequest;
-import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentSizeResponse;
-import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentUploadResponse;
-import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentsRequest;
-import com.gvc.crmadmin.domain.campaignMgmtApi.AudienceSegmentsResponse;
-import com.gvc.crmadmin.domain.campaignMgmtApi.NameIdPair;
-import com.gvc.crmadmin.domain.campaignMgmtApi.StoreFileResponse;
-import com.gvc.crmadmin.service.AudienceSegmentsService;
-import com.gvc.crmadmin.web.rest.util.HeaderUtil;
-import com.gvc.crmadmin.web.rest.util.PaginationUtil;
-
-import io.github.jhipster.web.util.ResponseUtil;
-import io.swagger.annotations.ApiParam;
+import static com.gvc.crmadmin.config.Constants.CAMPAIGN_SCHEDULE_TIME_FORMAT;
 /**
  * REST controller for managing AudienceSegments.
  */
@@ -65,26 +51,26 @@ public class AudienceSegmentsResource {
     }
 
     @PostMapping("/audience-segments/upload-segment")
-    public ResponseEntity<AudienceSegmentUploadResponse> handleFileUpload(@RequestParam("frontEnd") String frontEnd, @RequestParam("product") String product, 
+    public ResponseEntity<AudienceSegmentUploadResponse> handleFileUpload(@RequestParam("frontEnd") String frontEnd, @RequestParam("product") String product,
     		@RequestParam("name") String name, @RequestParam("file") MultipartFile file) throws URISyntaxException, UnsupportedEncodingException {
 
     	System.out.println("frontEnd = " + frontEnd + " product = " + product + " name = " + name);
-    	
+
     	AudienceSegmentUploadResponse response = new AudienceSegmentUploadResponse();
-    	
+
     	String id = getSegmentId(product, frontEnd, name);
     	AudienceSegments existingSegment = audienceSegmentsService.findOne(id);
-    	
+
     	if(existingSegment != null) {//already existing
     		return ResponseEntity.badRequest()
                     .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, existingSegment.getId(), "Segment with the given name exists"))
                     .body(response);
-    		
+
     		/*response.setCode(-1);
     		response.setMessage("Name already existing for product and fe combination");
     		return ResponseUtil.wrapOrNotFound(Optional.of(response));*/
     	}
-    	
+
     	AudienceSegments segments = new AudienceSegments();
     	segments.setId(id);
 
@@ -93,7 +79,7 @@ public class AudienceSegmentsResource {
     	segments.setName(name);
     	segments.setType("MANUAL_UPLOAD");
     	segments.setCreatedAt(CAMPAIGN_SCHEDULE_TIME_FORMAT.print(new DateTime()));
-        
+
     	AudienceSegments result = audienceSegmentsService.save(segments);
 
     	StoreFileResponse storeFileResponse = audienceSegmentsService.store(id, file);
@@ -105,7 +91,7 @@ public class AudienceSegmentsResource {
 //    		return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
     	}else {
     		audienceSegmentsService.delete(id);
-    		
+
     		response.setCode(-2);
     		response.setMessage(storeFileResponse.getMessage());
     		return ResponseEntity.badRequest()
@@ -113,32 +99,32 @@ public class AudienceSegmentsResource {
                     .body(response);
     	}
     }
-    
+
     private String getSegmentId(String product, String frontEnd, String name) {
     	return product + "_" + frontEnd + "_" + name.trim().toLowerCase();
     }
-    
+
     @PostMapping("/audience-segments/edit-segment")
     public ResponseEntity<AudienceSegmentUploadResponse> editFileUpload(@RequestParam("id") String id, @RequestParam("file") MultipartFile file, @RequestParam("editType") String editType) throws URISyntaxException, UnsupportedEncodingException, IOException {
 
     	System.out.println("id = " + id + " editType = " + editType);
-    	
+
     	AudienceSegmentUploadResponse response = new AudienceSegmentUploadResponse();
-    	
+
     	AudienceSegments existingSegment = audienceSegmentsService.findOne(id);
-    	
+
     	if(existingSegment == null) {//doesn't exist
     		return ResponseEntity.badRequest()
                     .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, id, "Segment with the given name does not exists"))
                     .body(response);
     	}
-    	
+
     	existingSegment.setModifiedAt(CAMPAIGN_SCHEDULE_TIME_FORMAT.print(new DateTime()));
-    	
+
     	AudienceSegments result = audienceSegmentsService.save(existingSegment);
-    	
+
     	int existingEstimate = existingSegment.getEstimate() != null ? Integer.parseInt(existingSegment.getEstimate()) : 0;
-    	
+
     	StoreFileResponse storeFileResponse = null;
     	if("APPEND".equalsIgnoreCase(editType)) {
     		storeFileResponse = audienceSegmentsService.store(id, file);
@@ -155,7 +141,7 @@ public class AudienceSegmentsResource {
 //    		return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
     	}else {
     		audienceSegmentsService.delete(id);
-    		
+
     		response.setCode(-2);
     		response.setMessage(storeFileResponse.getMessage());
     		return ResponseEntity.badRequest()
@@ -171,7 +157,7 @@ public class AudienceSegmentsResource {
 
         AudienceSegmentSizeResponse response = new AudienceSegmentSizeResponse();
         response.setSegmentSize(audienceSegmentsService.getEstimate(segmentSizeRequest.getId()));
-        
+
         System.out.println(response);
         return ResponseUtil.wrapOrNotFound(Optional.of(response));
     }
@@ -260,20 +246,20 @@ public class AudienceSegmentsResource {
     public ResponseEntity<AudienceSegmentsResponse> getAudienceSegmentsForSegmentation(@Valid @RequestBody AudienceSegmentsRequest request) {
         log.debug("REST request to get complete list of AudienceSegments for frontEnd = " + request.getFrontEnd() + " and product = " + request.getProduct());
         List<AudienceSegments> segments = audienceSegmentsService.findByFrontEndAndProduct(request.getFrontEnd(), request.getProduct());
-        
+
         List<NameIdPair> nameIdPairs = new ArrayList<>();
         if(segments != null) {
         	for (AudienceSegments segment : segments) {
         		NameIdPair nameIdPair = new NameIdPair();
         		nameIdPair.setId(segment.getId());
         		nameIdPair.setName(segment.getName());
-        		
+
         		nameIdPairs.add(nameIdPair);
 			}
         }
         AudienceSegmentsResponse response = new AudienceSegmentsResponse();
         response.setNameIdPairs(nameIdPairs);
-        
+
         return ResponseUtil.wrapOrNotFound(Optional.of(response));
     }
 
@@ -301,10 +287,24 @@ public class AudienceSegmentsResource {
     @Timed
     public ResponseEntity<Void> deleteAudienceSegments(@PathVariable String id) {
         log.debug("REST request to delete AudienceSegments : {}", id);
-        
+
         audienceSegmentsService.delete(id);
         audienceSegmentsService.deletePlayersBySegmentName(id);
-        
+
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
+    }
+
+    @PostMapping("/audience-segments/delete")
+    @Timed
+    public ResponseEntity<Void> deleteAudienceSegments(@Valid @RequestBody DeleteSegment deleteSegment) {
+        log.debug("REST request to delete CampaignGroup : {}", deleteSegment);
+        AudienceSegments campaignGroupFromDB = audienceSegmentsService.findOne(deleteSegment.getSegId());
+        if(campaignGroupFromDB == null){
+            return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, deleteSegment.getSegId())).build();
+        } else{
+            audienceSegmentsService.delete(deleteSegment.getSegId());
+            audienceSegmentsService.deletePlayersBySegmentName(deleteSegment.getSegId());
+            return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, deleteSegment.getSegId())).build();
+        }
     }
 }
