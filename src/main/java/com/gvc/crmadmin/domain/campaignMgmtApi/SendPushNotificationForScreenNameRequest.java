@@ -2,6 +2,7 @@ package com.gvc.crmadmin.domain.campaignMgmtApi;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gvc.crmadmin.domain.LiveOddsMetaData;
 import com.gvc.crmadmin.domain.MessageTemplate;
 import com.gvc.crmadmin.domain.enumeration.Product;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -42,6 +43,9 @@ public class SendPushNotificationForScreenNameRequest implements Serializable {
 
     @JsonProperty("campaignId")
     private String campaignId;
+
+    @JsonProperty("targetGroupMetaData")
+    private LiveOddsMetaData[] targetGroupMetaData;
 
     public String getMetaData() {
         return metaData;
@@ -118,4 +122,13 @@ public class SendPushNotificationForScreenNameRequest implements Serializable {
         this.messageContents = messageContents;
         return this;
     }
+    
+    public LiveOddsMetaData[] getTargetGroupMetaData() {
+		return targetGroupMetaData;
+	}
+    
+    public SendPushNotificationForScreenNameRequest setTargetGroupMetaData(LiveOddsMetaData[] targetGroupMetaData) {
+		this.targetGroupMetaData = targetGroupMetaData;
+		return this;
+	}
 }
