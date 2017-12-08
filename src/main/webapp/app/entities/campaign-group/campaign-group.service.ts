@@ -58,7 +58,7 @@ export class CampaignGroupService {
     }
 
     delete(id: string): Observable<Response> {
-        return this.http.delete(`${this.resourceUrl}/${id}/`);
+        return this.http.post(this.resourceUrl + "/delete/", {groupId : id});
     }
 
     private convertResponse(res: Response): ResponseWrapper {

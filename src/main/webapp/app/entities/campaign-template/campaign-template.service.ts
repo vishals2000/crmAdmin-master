@@ -198,7 +198,7 @@ export class CampaignTemplateService {
         campaignTemplateCopy.campaignGroupId = campaignTemplate.campaignGroupId;
         campaignTemplateCopy.campaignName = campaignTemplate.campaignName;
         campaignTemplateCopy.status = campaignTemplate.status;
-        campaignTemplateCopy.campaignDescription = campaignTemplate.campaignDescription;
+        //campaignTemplateCopy.campaignDescription = campaignTemplate.campaignDescription;
         if (typeof campaignTemplate.startDate === 'object' && !campaignTemplate.startDate.hasOwnProperty("year")) {
             campaignTemplateCopy.startDate = {
                 year: campaignTemplate.startDate.getFullYear(),

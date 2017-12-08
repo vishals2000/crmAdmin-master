@@ -13,7 +13,7 @@
             Upload Segments
             </span>
         </button>
-        <div class="float-right">        
+        <div class="float-right audiaSegAppDp" style="line-height: 1rem !important;margin-right: 0.5rem;">        
             <select class="custom-selectbox rounded" name="appsList" [(ngModel)]="selectedApp" (change)="getData(selectedApp);">
               <option *ngFor="let app of apps" [ngValue]="app">{{app.name}}</option>
             </select>
