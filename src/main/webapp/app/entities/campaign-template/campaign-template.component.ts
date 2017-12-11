@@ -37,6 +37,8 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     groupName: string;
     searchValue: string;
     oCampInfo: any;
+    copyFromTemp: any;
+    
     constructor(
         private campaignTemplateService: CampaignTemplateService,
         private parseLinks: JhiParseLinks,
@@ -203,10 +205,41 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     }
     copyCurrentTemp(copyFromTemp) {
         console.log(copyFromTemp);
-        this.campaignTemplateService.copyCampaignTemplate(copyFromTemp).subscribe(
-            (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' }),
+        this.copyFromTemp = copyFromTemp;
+        this.campaignTemplateService.search({ campGroupId: this.groupId, searchVal: copyFromTemp.campaignName }, {}).subscribe(
+            (res: ResponseWrapper) => this.copyCurrentIrmWithCopyCount(res.json),
             (res: ResponseWrapper) => this.onError(res.json)
-        );
+            );
+    }
+
+    copyCurrentIrmWithCopyCount(acampaigns){
+        let count = 0;
+        if(acampaigns.length === 1){
+            this.campaignTemplateService.copyCampaignTemplate(this.copyFromTemp, 0).subscribe(
+                (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' }),
+                (res: Response) => this.OnSaveError(res)
+            );
+        }
+        else{
+            for(var i=0;i<acampaigns.length;i++){
+                if(acampaigns[i].campaignName.indexOf('(Copy ') > -1){
+                    let aSubName = acampaigns[i].campaignName.split('(Copy ');
+                    if(aSubName.length){
+                        let aActualCapName = aSubName[1].split(")");
+                        if(aActualCapName[1] === this.copyFromTemp.campaignName){
+                            count ++;
+                        }
+                    }
+                }
+            }
+            if(count > 0){
+                count += 1;
+            }
+            this.campaignTemplateService.copyCampaignTemplate(this.copyFromTemp, count).subscribe(
+                (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' }),
+                (res: Response) => this.OnSaveError(res)
+            );
+        }
     }
 
     private onSuccess(data, headers) {
@@ -225,6 +258,14 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
                 this.breadCrumbService.updateBreadCrumbs(breadCrumbArray, { name: this.groupName, router: '#/campaign-template/group/' + this.groupId + "/" + this.groupName, brdCrmbId: '3' });
             }
         });
+    }
+    private OnSaveError(error){
+        try {
+            error.json();
+        } catch (exception) {
+            error.message = error.text();
+        }
+        this.onError(error);
     }
     private onError(error) {
         this.alertService.error(error.message, null, null);
