@@ -202,6 +202,15 @@ export class CampaignTemplateService {
             postObj.scheduledTime = '' + (currentHourValue < 10 ? '0' + currentHourValue : currentHourValue) + ':' + (currentMinValue < 10 ? '0' + currentMinValue : currentMinValue) + ':00'
         }
         else{
+            if(currentMinValue >= 55){
+                currentHourValue += 1;
+                currentMinValue = (currentMinValue + 5) - 60;
+            }
+            else{
+                currentMinValue += 5;
+            }
+            postObj.scheduledTime = '' + (currentHourValue < 10 ? '0' + currentHourValue : currentHourValue) + ':' + (currentMinValue < 10 ? '0' + currentMinValue : currentMinValue) + ':00'
+
             let startDateObj = this.dateUtils.convertLocalDateFromServer(postObj.startDate);
             let endDateObj = this.dateUtils.convertLocalDateFromServer(postObj.recurrenceEndDate);
             if(startDateObj < dateObj){
