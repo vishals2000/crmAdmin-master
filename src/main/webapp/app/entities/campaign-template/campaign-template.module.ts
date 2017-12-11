@@ -33,6 +33,7 @@ import {
     CampaignTemplateTestDialogComponent
 } from './campaign-template-test-dialog.component'
 import { BreadCrumbService } from '../../layouts/navbar/navbar.service';
+import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
 const ENTITY_STATES = [
     ...campaignTemplateRoute,
     ...campaignTemplatePopupRoute,
@@ -43,7 +44,8 @@ const ENTITY_STATES = [
         CrmAdminSharedModule,
         ChartModule,
         RouterModule.forRoot(ENTITY_STATES, { useHash: true }),
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        AngularMultiSelectModule
     ],
     declarations: [
         CampaignTemplateComponent,

@@ -97,7 +97,8 @@ export class CampaignTemplateFilterCriterion {
         public filterOptionLookUp: string,
         public filterOptionComparison: string,
         public filterOptionValue: string[],
-        public simpleDate: any
+        public simpleDate: any,
+        public selectedItems : any[]
     ) {
     }
 }

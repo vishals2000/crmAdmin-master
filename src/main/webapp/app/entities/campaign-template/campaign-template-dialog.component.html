@@ -170,14 +170,27 @@
                             <!-- <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option> -->
                             <option *ngFor="let filterOption of getFilterOptionValueValues(i)" [value]="filterOption.id">{{filterOption.name}}</option>
                         </select>
-
-                        <select class="form-control" formControlName="filterOptionValue" multiple *ngSwitchCase="'multiSelectDropdown'">
-                            <!-- <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option> -->
+                        <angular2-multiselect [data]="getFilterOptionValueValues(i)" formControlName="selectedItems"  *ngSwitchCase="'multiSelectDropdown'"
+                        [settings]="{ 
+                            singleSelection: false, 
+                            text:'Select Countries',
+                            enableCheckAll : true,
+                            selectAllText:'Select All',
+                            unSelectAllText:'UnSelect All',
+                            enableSearchFilter: true,
+                            classes:'myclass custom-class',
+                            searchPlaceholderText : 'Search'
+                          }" 
+                        (onSelect)="onItemSelect(i)" 
+                        (onDeSelect)="onItemSelect(i)"
+                        (onSelectAll)="onItemSelect(i)"
+                        (onDeSelectAll)="onItemSelect(i)"></angular2-multiselect>
+                        <!-- <select class="form-control" formControlName="filterOptionValue" multiple *ngSwitchCase="'multiSelectDropdown'">
                             <option *ngFor="let filterOption of getFilterOptionValueValues(i)" [value]="filterOption">{{filterOption}}</option>
-                        </select>
-                        <div class="selFilLanguage" *ngSwitchCase="'multiSelectDropdown'">
+                        </select> -->
+                        <!-- <div class="selFilLanguage" *ngSwitchCase="'multiSelectDropdown'">
                             <span *ngFor="let filterOption of getSelectedFilterOptionValueValues(i)">{{filterOption}}</span>
-                        </div>
+                        </div> -->
                         <!-- <select class="form-control" formControlName="filterOptionValue">
                             <option *ngFor="let filterOption of getFilterOptionValueValues(i)" [value]="filterOption">{{filterOption}}</option>
                             </select> -->

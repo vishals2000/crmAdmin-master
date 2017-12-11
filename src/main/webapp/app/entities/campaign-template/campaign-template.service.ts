@@ -50,6 +50,12 @@ export class CampaignTemplateService {
     }
 
     pushNotificationCampaign(body: any): Observable<ResponseWrapper> {
+        if(body.sendImmediately){
+            var dateObj = new Date();
+            let currentHourValue = dateObj.getUTCHours();
+            let currentMinValue = dateObj.getUTCMinutes();
+            body.scheduledTime = '' + (currentHourValue < 10 ? '0' + currentHourValue : currentHourValue) + ':' + (currentMinValue < 10 ? '0' + currentMinValue : currentMinValue) + ':00';
+        }
         return this.http.post(this.resourceUrl + '/pushNotificationCampaign', body).map((res: Response) => {
             return res.json();
         });
@@ -168,9 +174,41 @@ export class CampaignTemplateService {
         let postObj = this.convert(body);
         postObj.campaignName = "(Copy " + (copyCount > 0 ? copyCount : '' )+ ")" + postObj.campaignName;
         postObj.id = undefined;
-        return this.http.post(this.resourceUrl, postObj).map((res: Response) => {
-            return res.json();
-        });
+        var dateObj = new Date();
+        let currentHourValue = dateObj.getUTCHours();
+        let currentMinValue = dateObj.getUTCMinutes();
+        const todayDt1 = {
+            year: dateObj.getUTCFullYear(),
+            month: dateObj.getUTCMonth() + 1,
+            day: dateObj.getUTCDate()
+        };
+        if(postObj.sendImmediately){
+            if(currentMinValue >= 55){
+                currentHourValue += 1;
+                currentMinValue = (currentMinValue + 5) - 60;
+            }
+            else{
+                currentMinValue += 5;
+            }
+            postObj.startDate = this.dateUtils.convertLocalDateToServer(todayDt1);
+            postObj.recurrenceEndDate = postObj.startDate;
+            postObj.scheduledTime = '' + (currentHourValue < 10 ? '0' + currentHourValue : currentHourValue) + ':' + (currentMinValue < 10 ? '0' + currentMinValue : currentMinValue) + ':00'
+        }
+        else{
+            let startDateObj = this.dateUtils.convertLocalDateFromServer(postObj.startDate);
+            let endDateObj = this.dateUtils.convertLocalDateFromServer(postObj.recurrenceEndDate);
+            if(startDateObj < dateObj){
+                postObj.startDate = this.dateUtils.convertLocalDateToServer(todayDt1);
+                if(postObj.recurrenceType.toString() === 'NONE'){
+                    postObj.recurrenceEndDate = this.dateUtils.convertLocalDateToServer(todayDt1);
+                }
+            }
+            //if(startDateObj.year)
+       
+        }
+         return this.http.post(this.resourceUrl, postObj).map((res: Response) => {
+             return res.json();
+         });
     }
 
     private convertResponse(res: Response): ResponseWrapper {
@@ -241,7 +279,7 @@ export class CampaignTemplateService {
                     campaignTemplateFilterCriterion.filterOption,
                     campaignTemplateFilterCriterion.filterOptionLookUp,
                     campaignTemplateFilterCriterion.filterOptionComparison,
-                    campaignTemplateFilterCriterion.filterOptionValue, undefined));
+                    campaignTemplateFilterCriterion.filterOptionValue, undefined, undefined));
             } else {
                 const optionValues: string[] = [];
                 optionValues.push(campaignTemplateFilterCriterion.filterOptionValue);
@@ -250,7 +288,7 @@ export class CampaignTemplateService {
                     campaignTemplateFilterCriterion.filterOptionLookUp,
                     campaignTemplateFilterCriterion.filterOptionComparison,
                     optionValues,
-                    undefined));
+                    undefined, undefined));
             }
         }
         campaignTemplateCopy.targetGroupFilterCriteria = campaignTemplateFilterCriteria;
