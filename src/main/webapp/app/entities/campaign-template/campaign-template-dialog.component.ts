@@ -1336,8 +1336,8 @@ export class CampaignTemplateDialogComponent implements OnInit {
 
     populateLanguageParams() {
         const filterComparisonVsValue: Map<string, string[]> = new Map<string, string[]>();
-        filterComparisonVsValue.set('is', LANGUAGES.sort());
-        filterComparisonVsValue.set('is not', LANGUAGES.sort());
+        filterComparisonVsValue.set('is', LANGUAGES);
+        filterComparisonVsValue.set('is not', LANGUAGES);
         this.filtersMap.set('Language', filterComparisonVsValue);
     }
 

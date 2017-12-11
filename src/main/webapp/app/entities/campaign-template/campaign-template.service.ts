@@ -54,6 +54,13 @@ export class CampaignTemplateService {
             var dateObj = new Date();
             let currentHourValue = dateObj.getUTCHours();
             let currentMinValue = dateObj.getUTCMinutes();
+            const todayDt1 = {
+                year: dateObj.getUTCFullYear(),
+                month: dateObj.getUTCMonth() + 1,
+                day: dateObj.getUTCDate()
+            };
+            body.startDate = this.dateUtils.convertLocalDateToServer(todayDt1);
+            body.recurrenceEndDate = body.startDate;
             body.scheduledTime = '' + (currentHourValue < 10 ? '0' + currentHourValue : currentHourValue) + ':' + (currentMinValue < 10 ? '0' + currentMinValue : currentMinValue) + ':00';
         }
         return this.http.post(this.resourceUrl + '/pushNotificationCampaign', body).map((res: Response) => {
