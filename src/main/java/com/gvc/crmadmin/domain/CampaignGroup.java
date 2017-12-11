@@ -25,8 +25,6 @@ public class CampaignGroup implements Serializable {
     @Field("name")
     private String name;
 
-    @NotNull
-    @Size(min = 3, max = 50)
     @Field("description")
     private String description;
 
