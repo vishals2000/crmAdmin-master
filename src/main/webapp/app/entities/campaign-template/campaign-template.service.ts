@@ -167,6 +167,7 @@ export class CampaignTemplateService {
     copyCampaignTemplate(body: any, copyCount : Number): Observable<ResponseWrapper> {
         let postObj = this.convert(body);
         postObj.campaignName = "(Copy " + (copyCount > 0 ? copyCount : '' )+ ")" + postObj.campaignName;
+        postObj.id = undefined;
         return this.http.post(this.resourceUrl, postObj).map((res: Response) => {
             return res.json();
         });
