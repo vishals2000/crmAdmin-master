@@ -41,6 +41,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     casinoTagsMap: Map<string, Map<string, string[]>>;
 
     countries: any[];
+    languages: any[];
     languagesList: string[];
     targetGroupSize: number;
     targetContentGroupSize: number[];
@@ -75,6 +76,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.casinoTagsMap = new Map<string, Map<string, string[]>>();
         this.appVersionMap = new Map<string, string[]>();
         this.countries = [];
+        this.languages = [];
         this.targetGroupSize = 0;
         this.targetContentGroupSize = [0];
         this.campaignTemplateGroupCreationForm = this.fb.group({
@@ -110,6 +112,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.createForm();
         this.prepareData();
         this.populateCountries();
+        this.populateLanguages();
         this.populateFilterOptions();
         this.populateEventsMaps();
         this.populateTagsMaps();
@@ -1334,18 +1337,25 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.filtersMap.set('Sessions', filterComparisonVsValue);
     }
 
-    populateLanguageParams() {
+    /*populateLanguageParams() {
         const filterComparisonVsValue: Map<string, string[]> = new Map<string, string[]>();
         filterComparisonVsValue.set('is', LANGUAGES);
         filterComparisonVsValue.set('is not', LANGUAGES);
         this.filtersMap.set('Language', filterComparisonVsValue);
-    }
+    }*/
 
     populateCountryParams() {
         const filterComparisonVsValue: Map<string, string[]> = new Map<string, string[]>();
         filterComparisonVsValue.set('is', this.countries);
         filterComparisonVsValue.set('is not', this.countries);
         this.filtersMap.set('Country', filterComparisonVsValue);
+    }
+
+    populateLanguageParams() {
+        const filterComparisonVsValue: Map<string, string[]> = new Map<string, string[]>();
+        filterComparisonVsValue.set('is', this.languages);
+        filterComparisonVsValue.set('is not', this.languages);
+        this.filtersMap.set('Language', filterComparisonVsValue);
     }
 
     populateInstallDateParams() {
@@ -1376,6 +1386,125 @@ export class CampaignTemplateDialogComponent implements OnInit {
     }
     populateCountries() {
         this.countries = [{"id":"Afghanistan","itemName":"Afghanistan"},{"id":"Aland Islands","itemName":"Aland Islands"},{"id":"Albania","itemName":"Albania"},{"id":"Algeria","itemName":"Algeria"},{"id":"American Samoa","itemName":"American Samoa"},{"id":"Andorra","itemName":"Andorra"},{"id":"Angola","itemName":"Angola"},{"id":"Anguilla","itemName":"Anguilla"},{"id":"Antarctica","itemName":"Antarctica"},{"id":"Antigua and Barbuda","itemName":"Antigua and Barbuda"},{"id":"Argentina","itemName":"Argentina"},{"id":"Armenia","itemName":"Armenia"},{"id":"Aruba","itemName":"Aruba"},{"id":"Australia","itemName":"Australia"},{"id":"Austria","itemName":"Austria"},{"id":"Azerbaijan","itemName":"Azerbaijan"},{"id":"Bahamas","itemName":"Bahamas"},{"id":"Bahrain","itemName":"Bahrain"},{"id":"Bangladesh","itemName":"Bangladesh"},{"id":"Barbados","itemName":"Barbados"},{"id":"Belarus","itemName":"Belarus"},{"id":"Belgium","itemName":"Belgium"},{"id":"Belize","itemName":"Belize"},{"id":"Benin","itemName":"Benin"},{"id":"Bermuda","itemName":"Bermuda"},{"id":"Bhutan","itemName":"Bhutan"},{"id":"Bolivia","itemName":"Bolivia"},{"id":"Bosnia and Herzegovina","itemName":"Bosnia and Herzegovina"},{"id":"Botswana","itemName":"Botswana"},{"id":"Bouvet Island","itemName":"Bouvet Island"},{"id":"Brazil","itemName":"Brazil"},{"id":"British Virgin Islands","itemName":"British Virgin Islands"},{"id":"British Indian Ocean Territory","itemName":"British Indian Ocean Territory"},{"id":"Brunei Darussalam","itemName":"Brunei Darussalam"},{"id":"Bulgaria","itemName":"Bulgaria"},{"id":"Burkina Faso","itemName":"Burkina Faso"},{"id":"Burundi","itemName":"Burundi"},{"id":"Cambodia","itemName":"Cambodia"},{"id":"Cameroon","itemName":"Cameroon"},{"id":"Canada","itemName":"Canada"},{"id":"Cape Verde","itemName":"Cape Verde"},{"id":"Cayman Islands","itemName":"Cayman Islands"},{"id":"Central African Republic","itemName":"Central African Republic"},{"id":"Chad","itemName":"Chad"},{"id":"Chile","itemName":"Chile"},{"id":"China","itemName":"China"},{"id":"Hong Kong, SAR China","itemName":"Hong Kong, SAR China"},{"id":"Macao, SAR China","itemName":"Macao, SAR China"},{"id":"Christmas Island","itemName":"Christmas Island"},{"id":"Cocos (Keeling) Islands","itemName":"Cocos (Keeling) Islands"},{"id":"Colombia","itemName":"Colombia"},{"id":"Comoros","itemName":"Comoros"},{"id":"Congo (Brazzaville)","itemName":"Congo (Brazzaville)"},{"id":"Congo, (Kinshasa)","itemName":"Congo, (Kinshasa)"},{"id":"Cook Islands","itemName":"Cook Islands"},{"id":"Costa Rica","itemName":"Costa Rica"},{"id":"Côte d'Ivoire","itemName":"Côte d'Ivoire"},{"id":"Croatia","itemName":"Croatia"},{"id":"Cuba","itemName":"Cuba"},{"id":"Cyprus","itemName":"Cyprus"},{"id":"Czech Republic","itemName":"Czech Republic"},{"id":"Denmark","itemName":"Denmark"},{"id":"Djibouti","itemName":"Djibouti"},{"id":"Dominica","itemName":"Dominica"},{"id":"Dominican Republic","itemName":"Dominican Republic"},{"id":"Ecuador","itemName":"Ecuador"},{"id":"Egypt","itemName":"Egypt"},{"id":"El Salvador","itemName":"El Salvador"},{"id":"Equatorial Guinea","itemName":"Equatorial Guinea"},{"id":"Eritrea","itemName":"Eritrea"},{"id":"Estonia","itemName":"Estonia"},{"id":"Ethiopia","itemName":"Ethiopia"},{"id":"Falkland Islands (Malvinas)","itemName":"Falkland Islands (Malvinas)"},{"id":"Faroe Islands","itemName":"Faroe Islands"},{"id":"Fiji","itemName":"Fiji"},{"id":"Finland","itemName":"Finland"},{"id":"France","itemName":"France"},{"id":"French Guiana","itemName":"French Guiana"},{"id":"French Polynesia","itemName":"French Polynesia"},{"id":"French Southern Territories","itemName":"French Southern Territories"},{"id":"Gabon","itemName":"Gabon"},{"id":"Gambia","itemName":"Gambia"},{"id":"Georgia","itemName":"Georgia"},{"id":"Germany","itemName":"Germany"},{"id":"Ghana","itemName":"Ghana"},{"id":"Gibraltar","itemName":"Gibraltar"},{"id":"Greece","itemName":"Greece"},{"id":"Greenland","itemName":"Greenland"},{"id":"Grenada","itemName":"Grenada"},{"id":"Guadeloupe","itemName":"Guadeloupe"},{"id":"Guam","itemName":"Guam"},{"id":"Guatemala","itemName":"Guatemala"},{"id":"Guernsey","itemName":"Guernsey"},{"id":"Guinea","itemName":"Guinea"},{"id":"Guinea-Bissau","itemName":"Guinea-Bissau"},{"id":"Guyana","itemName":"Guyana"},{"id":"Haiti","itemName":"Haiti"},{"id":"Heard and Mcdonald Islands","itemName":"Heard and Mcdonald Islands"},{"id":"Holy See (Vatican City State)","itemName":"Holy See (Vatican City State)"},{"id":"Honduras","itemName":"Honduras"},{"id":"Hungary","itemName":"Hungary"},{"id":"Iceland","itemName":"Iceland"},{"id":"India","itemName":"India"},{"id":"Indonesia","itemName":"Indonesia"},{"id":"Iran, Islamic Republic of","itemName":"Iran, Islamic Republic of"},{"id":"Iraq","itemName":"Iraq"},{"id":"Ireland","itemName":"Ireland"},{"id":"Isle of Man","itemName":"Isle of Man"},{"id":"Israel","itemName":"Israel"},{"id":"Italy","itemName":"Italy"},{"id":"Jamaica","itemName":"Jamaica"},{"id":"Japan","itemName":"Japan"},{"id":"Jersey","itemName":"Jersey"},{"id":"Jordan","itemName":"Jordan"},{"id":"Kazakhstan","itemName":"Kazakhstan"},{"id":"Kenya","itemName":"Kenya"},{"id":"Kiribati","itemName":"Kiribati"},{"id":"Korea (North)","itemName":"Korea (North)"},{"id":"Korea (South)","itemName":"Korea (South)"},{"id":"Kuwait","itemName":"Kuwait"},{"id":"Kyrgyzstan","itemName":"Kyrgyzstan"},{"id":"Lao PDR","itemName":"Lao PDR"},{"id":"Latvia","itemName":"Latvia"},{"id":"Lebanon","itemName":"Lebanon"},{"id":"Lesotho","itemName":"Lesotho"},{"id":"Liberia","itemName":"Liberia"},{"id":"Libya","itemName":"Libya"},{"id":"Liechtenstein","itemName":"Liechtenstein"},{"id":"Lithuania","itemName":"Lithuania"},{"id":"Luxembourg","itemName":"Luxembourg"},{"id":"Macedonia, Republic of","itemName":"Macedonia, Republic of"},{"id":"Madagascar","itemName":"Madagascar"},{"id":"Malawi","itemName":"Malawi"},{"id":"Malaysia","itemName":"Malaysia"},{"id":"Maldives","itemName":"Maldives"},{"id":"Mali","itemName":"Mali"},{"id":"Malta","itemName":"Malta"},{"id":"Marshall Islands","itemName":"Marshall Islands"},{"id":"Martinique","itemName":"Martinique"},{"id":"Mauritania","itemName":"Mauritania"},{"id":"Mauritius","itemName":"Mauritius"},{"id":"Mayotte","itemName":"Mayotte"},{"id":"Mexico","itemName":"Mexico"},{"id":"Micronesia, Federated States of","itemName":"Micronesia, Federated States of"},{"id":"Moldova","itemName":"Moldova"},{"id":"Monaco","itemName":"Monaco"},{"id":"Mongolia","itemName":"Mongolia"},{"id":"Montenegro","itemName":"Montenegro"},{"id":"Montserrat","itemName":"Montserrat"},{"id":"Morocco","itemName":"Morocco"},{"id":"Mozambique","itemName":"Mozambique"},{"id":"Myanmar","itemName":"Myanmar"},{"id":"Namibia","itemName":"Namibia"},{"id":"Nauru","itemName":"Nauru"},{"id":"Nepal","itemName":"Nepal"},{"id":"Netherlands","itemName":"Netherlands"},{"id":"Netherlands Antilles","itemName":"Netherlands Antilles"},{"id":"New Caledonia","itemName":"New Caledonia"},{"id":"New Zealand","itemName":"New Zealand"},{"id":"Nicaragua","itemName":"Nicaragua"},{"id":"Niger","itemName":"Niger"},{"id":"Nigeria","itemName":"Nigeria"},{"id":"Niue","itemName":"Niue"},{"id":"Norfolk Island","itemName":"Norfolk Island"},{"id":"Northern Mariana Islands","itemName":"Northern Mariana Islands"},{"id":"Norway","itemName":"Norway"},{"id":"Oman","itemName":"Oman"},{"id":"Pakistan","itemName":"Pakistan"},{"id":"Palau","itemName":"Palau"},{"id":"Palestinian Territory","itemName":"Palestinian Territory"},{"id":"Panama","itemName":"Panama"},{"id":"Papua New Guinea","itemName":"Papua New Guinea"},{"id":"Paraguay","itemName":"Paraguay"},{"id":"Peru","itemName":"Peru"},{"id":"Philippines","itemName":"Philippines"},{"id":"Pitcairn","itemName":"Pitcairn"},{"id":"Poland","itemName":"Poland"},{"id":"Portugal","itemName":"Portugal"},{"id":"Puerto Rico","itemName":"Puerto Rico"},{"id":"Qatar","itemName":"Qatar"},{"id":"Réunion","itemName":"Réunion"},{"id":"Romania","itemName":"Romania"},{"id":"Russian Federation","itemName":"Russian Federation"},{"id":"Rwanda","itemName":"Rwanda"},{"id":"Saint-Barthélemy","itemName":"Saint-Barthélemy"},{"id":"Saint Helena","itemName":"Saint Helena"},{"id":"Saint Kitts and Nevis","itemName":"Saint Kitts and Nevis"},{"id":"Saint Lucia","itemName":"Saint Lucia"},{"id":"Saint-Martin (French part)","itemName":"Saint-Martin (French part)"},{"id":"Saint Pierre and Miquelon","itemName":"Saint Pierre and Miquelon"},{"id":"Saint Vincent and Grenadines","itemName":"Saint Vincent and Grenadines"},{"id":"Samoa","itemName":"Samoa"},{"id":"San Marino","itemName":"San Marino"},{"id":"Sao Tome and Principe","itemName":"Sao Tome and Principe"},{"id":"Saudi Arabia","itemName":"Saudi Arabia"},{"id":"Senegal","itemName":"Senegal"},{"id":"Serbia","itemName":"Serbia"},{"id":"Seychelles","itemName":"Seychelles"},{"id":"Sierra Leone","itemName":"Sierra Leone"},{"id":"Singapore","itemName":"Singapore"},{"id":"Slovakia","itemName":"Slovakia"},{"id":"Slovenia","itemName":"Slovenia"},{"id":"Solomon Islands","itemName":"Solomon Islands"},{"id":"Somalia","itemName":"Somalia"},{"id":"South Africa","itemName":"South Africa"},{"id":"South Georgia and the South Sandwich Islands","itemName":"South Georgia and the South Sandwich Islands"},{"id":"South Sudan","itemName":"South Sudan"},{"id":"Spain","itemName":"Spain"},{"id":"Sri Lanka","itemName":"Sri Lanka"},{"id":"Sudan","itemName":"Sudan"},{"id":"Suriname","itemName":"Suriname"},{"id":"Svalbard and Jan Mayen Islands","itemName":"Svalbard and Jan Mayen Islands"},{"id":"Swaziland","itemName":"Swaziland"},{"id":"Sweden","itemName":"Sweden"},{"id":"Switzerland","itemName":"Switzerland"},{"id":"Syrian Arab Republic (Syria)","itemName":"Syrian Arab Republic (Syria)"},{"id":"Taiwan, Republic of China","itemName":"Taiwan, Republic of China"},{"id":"Tajikistan","itemName":"Tajikistan"},{"id":"Tanzania, United Republic of","itemName":"Tanzania, United Republic of"},{"id":"Thailand","itemName":"Thailand"},{"id":"Timor-Leste","itemName":"Timor-Leste"},{"id":"Togo","itemName":"Togo"},{"id":"Tokelau","itemName":"Tokelau"},{"id":"Tonga","itemName":"Tonga"},{"id":"Trinidad and Tobago","itemName":"Trinidad and Tobago"},{"id":"Tunisia","itemName":"Tunisia"},{"id":"Turkey","itemName":"Turkey"},{"id":"Turkmenistan","itemName":"Turkmenistan"},{"id":"Turks and Caicos Islands","itemName":"Turks and Caicos Islands"},{"id":"Tuvalu","itemName":"Tuvalu"},{"id":"Uganda","itemName":"Uganda"},{"id":"Ukraine","itemName":"Ukraine"},{"id":"United Arab Emirates","itemName":"United Arab Emirates"},{"id":"United Kingdom","itemName":"United Kingdom"},{"id":"United States of America","itemName":"United States of America"},{"id":"US Minor Outlying Islands","itemName":"US Minor Outlying Islands"},{"id":"Uruguay","itemName":"Uruguay"},{"id":"Uzbekistan","itemName":"Uzbekistan"},{"id":"Vanuatu","itemName":"Vanuatu"},{"id":"Venezuela (Bolivarian Republic)","itemName":"Venezuela (Bolivarian Republic)"},{"id":"Viet Nam","itemName":"Viet Nam"},{"id":"Virgin Islands, US","itemName":"Virgin Islands, US"},{"id":"Wallis and Futuna Islands","itemName":"Wallis and Futuna Islands"},{"id":"Western Sahara","itemName":"Western Sahara"},{"id":"Yemen","itemName":"Yemen"},{"id":"Zambia","itemName":"Zambia"},{"id":"Zimbabwe","itemName":"Zimbabwe"}];
+    }
+    populateLanguages() {
+        this.languages = [{"id":"Avestan", "itemName":"Avestan"},
+        {"id":"Afrikaans", "itemName":"Afrikaans"},
+        {"id":"Albanian", "itemName":"Albanian"},
+        {"id":"Armenian", "itemName":"Armenian"},
+        {"id":"Aragonese", "itemName":"Aragonese"},
+        {"id":"Arabic", "itemName":"Arabic"},
+        {"id":"Assamese", "itemName":"Assamese"},
+        {"id":"Azerbaijani", "itemName":"Azerbaijani"},
+        {"id":"Bashkir", "itemName":"Bashkir"},
+        {"id":"Belarusian", "itemName":"Belarusian"},
+        {"id":"Bulgarian", "itemName":"Bulgarian"},
+        {"id":"Bihari", "itemName":"Bihari"},
+        {"id":"Bislama", "itemName":"Bislama"},
+        {"id":"Bambara", "itemName":"Bambara"},
+        {"id":"Bengali", "itemName":"Bengali"},
+        {"id":"Tibetan Standard", "itemName":"Tibetan Standard"},
+        {"id":"Breton", "itemName":"Breton"},
+        {"id":"Bosnian", "itemName":"Bosnian"},
+        {"id":"Catalan", "itemName":"Catalan"},
+        {"id":"Chamorro", "itemName":"Chamorro"},
+        {"id":"Chinese", "itemName":"Chinese"},
+        {"id":"Corsican", "itemName":"Corsican"},
+        {"id":"Cree", "itemName":"Cree"},
+        {"id":"Czech", "itemName":"Czech"},
+        {"id":"Chuvash", "itemName":"Chuvash"},
+        {"id":"Welsh", "itemName":"Welsh"},
+        {"id":"German", "itemName":"German"},
+        {"id":"Danish", "itemName":"Danish"},
+        {"id":"Dzongkha", "itemName":"Dzongkha"},
+        {"id":"Ewe", "itemName":"Ewe"},
+        {"id":"English", "itemName":"English"},
+        {"id":"Spanish", "itemName":"Spanish"},
+        {"id":"Estonian", "itemName":"Estonian"},
+        {"id":"Finnish", "itemName":"Finnish"},
+        {"id":"Fijian", "itemName":"Fijian"},
+        {"id":"Faroese", "itemName":"Faroese"},
+        {"id":"French", "itemName":"French"},
+        {"id":"Irish", "itemName":"Irish"},
+        {"id":"Gaelic", "itemName":"Gaelic"},
+        {"id":"Georgian", "itemName":"Georgian"},
+        {"id":"Galician", "itemName":"Galician"},
+        {"id":"Guarana", "itemName":"Guarana"},
+        {"id":"Greek", "itemName":"Greek"},
+        {"id":"Gujarati", "itemName":"Gujarati"},
+        {"id":"Croatian", "itemName":"Croatian"},
+        {"id":"Haitian", "itemName":"Haitian"},
+        {"id":"Hungarian", "itemName":"Hungarian"},
+        {"id":"Indonesian", "itemName":"Indonesian"},
+        {"id":"Hebrew", "itemName":"Hebrew"},
+        {"id":"Hindi", "itemName":"Hindi"},
+        {"id":"Ido", "itemName":"Ido"},
+        {"id":"Persian", "itemName":"Persian"},
+        {"id":"Icelandic", "itemName":"Icelandic"},
+        {"id":"Italian", "itemName":"Italian"},
+        {"id":"Japanese", "itemName":"Japanese"},
+        {"id":"Kongo", "itemName":"Kongo"},
+        {"id":"Kikuyu", "itemName":"Kikuyu"},
+        {"id":"Khmer", "itemName":"Khmer"},
+        {"id":"Kannada", "itemName":"Kannada"},
+        {"id":"Korean", "itemName":"Korean"},
+        {"id":"Kyrgyz", "itemName":"Kyrgyz"},
+        {"id":"Luxembourgish", "itemName":"Luxembourgish"},
+        {"id":"Limburgish", "itemName":"Limburgish"},
+        {"id":"Lithuanian", "itemName":"Lithuanian"},
+        {"id":"Latvian", "itemName":"Latvian"},
+        {"id":"Malagasy", "itemName":"Malagasy"},
+        {"id":"Marshallese", "itemName":"Marshallese"},
+        {"id":"Macedonian", "itemName":"Macedonian"},
+        {"id":"Malayalam", "itemName":"Malayalam"},
+        {"id":"Mongolian", "itemName":"Mongolian"},
+        {"id":"Malay", "itemName":"Malay"},
+        {"id":"Maltese", "itemName":"Maltese"},
+        {"id":"Burmese", "itemName":"Burmese"},
+        {"id":"Nauru", "itemName":"Nauru"},
+        {"id":"Nepali", "itemName":"Nepali"},
+        {"id":"Ndonga", "itemName":"Ndonga"},
+        {"id":"Dutch", "itemName":"Dutch"},
+        {"id":"Norwegian", "itemName":"Norwegian"},
+        {"id":"Southern Ndebele", "itemName":"Southern Ndebele"},
+        {"id":"Oromo", "itemName":"Oromo"},
+        {"id":"Punjabi", "itemName":"Punjabi"},
+        {"id":"Urdu", "itemName":"Urdu"},
+        {"id":"Polish", "itemName":"Polish"},
+        {"id":"Pashto", "itemName":"Pashto"},
+        {"id":"Portuguese", "itemName":"Portuguese"},
+        {"id":"Romanian", "itemName":"Romanian"},
+        {"id":"Russian", "itemName":"Russian"},
+        {"id":"Kinyarwanda", "itemName":"Kinyarwanda"},
+        {"id":"Sanskrit", "itemName":"Sanskrit"},
+        {"id":"Sardinian", "itemName":"Sardinian"},
+        {"id":"Sindhi", "itemName":"Sindhi"},
+        {"id":"Northern Sami", "itemName":"Northern Sami"},
+        {"id":"Sango", "itemName":"Sango"},
+        {"id":"Sinhala", "itemName":"Sinhala"},
+        {"id":"Slovak", "itemName":"Slovak"},
+        {"id":"Slovene", "itemName":"Slovene"},
+        {"id":"Samoan", "itemName":"Samoan"},
+        {"id":"Shona", "itemName":"Shona"},
+        {"id":"Somali", "itemName":"Somali"},
+        {"id":"Serbian", "itemName":"Serbian"},
+        {"id":"Southern Sotho", "itemName":"Southern Sotho"},
+        {"id":"Swedish", "itemName":"Swedish"},
+        {"id":"Tajik", "itemName":"Tajik"},
+        {"id":"Thai", "itemName":"Thai"},
+        {"id":"Turkmen", "itemName":"Turkmen"},
+        {"id":"Tagalog", "itemName":"Tagalog"},
+        {"id":"Tswana", "itemName":"Tswana"},
+        {"id":"Tonga", "itemName":"Tonga"},
+        {"id":"Turkish", "itemName":"Turkish"},
+        {"id":"Tatar", "itemName":"Tatar"},
+        {"id":"Twi", "itemName":"Twi"},
+        {"id":"Uyghur", "itemName":"Uyghur"},
+        {"id":"Ukranian", "itemName":"Ukranian"},
+        {"id":"Uzbek", "itemName":"Uzbek"},
+        {"id":"Venda", "itemName":"Venda"},
+        {"id":"Vietnamese", "itemName":"Vietnamese"},
+        {"id":"Zhuang", "itemName":"Zhuang"}];
     }
 
     private subscribeToSaveResponse(result: Observable<CampaignTemplate>) {

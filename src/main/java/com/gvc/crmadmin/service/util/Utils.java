@@ -36,4 +36,12 @@ public class Utils {
     public static String getCurrentDateTimeInUTCAsString() {
         return TIME_STAMP_FORMAT.print(new DateTime(UTC));
     }
+
+    public static String getCurrentDateInUTCAsString() {
+        return DATE_FORMATTER.print(new DateTime(UTC));
+    }
+
+    public static DateTime getDateTimeFromString(DateTimeFormatter dateTimeFormatter, String scheduleTime) {
+        return dateTimeFormatter.parseDateTime(scheduleTime);
+    }
 }

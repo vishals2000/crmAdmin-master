@@ -112,7 +112,9 @@ public class CampaignTemplate implements Serializable {
 
     // jhipster-needle-entity-add-field - Jhipster will add fields here, do not remove
     public String getId() {
-        this.initialize();
+        if(this.id == null) {
+            this.initialize();
+        }
         return id;
     }
 
@@ -440,5 +442,71 @@ public class CampaignTemplate implements Serializable {
     public CampaignTemplate setDeletionTime(String deletionTime) {
         this.deletionTime = deletionTime;
         return this;
+    }
+
+    public CampaignTemplate copy() {
+        CampaignTemplate campaignTemplate = new CampaignTemplate();
+        campaignTemplate.setCampaignName(this.getCampaignName());
+        campaignTemplate.setStatus(this.getStatus());
+        campaignTemplate.setCancelEnabled(this.isCancelEnabled());
+        campaignTemplate.setDeleteEnabled(this.isDeleteEnabled());
+        campaignTemplate.setEditEnabled(this.isEditEnabled());
+        campaignTemplate.setLaunchEnabled(this.isLaunchEnabled());
+        campaignTemplate.setModifiedAt(this.getModifiedAt());
+        campaignTemplate.setAlreadyLaunched(this.isAlreadyLaunched());
+        campaignTemplate.setRecurrenceEndDate(this.getRecurrenceEndDate());
+        campaignTemplate.setRecurrenceType(this.getRecurrenceType());
+        campaignTemplate.setScheduledTime(this.getScheduledTime());
+        campaignTemplate.setStartDate(this.getStartDate());
+        campaignTemplate.setAlreadyCancelled(this.isAlreadyCancelled());
+        campaignTemplate.setAlreadyDeleted(this.isAlreadyDeleted());
+        campaignTemplate.setCampaignGroupId(this.getCampaignGroupId());
+        campaignTemplate.setCancellationTime(this.getCancellationTime());
+        campaignTemplate.setDeletionTime(this.getDeletionTime());
+        campaignTemplate.setFilterOption(this.getFilterOption());
+        campaignTemplate.setFilterOptionComparison(this.getFilterOptionComparison());
+        campaignTemplate.setFilterOptionValue(this.getFilterOptionValue());
+        campaignTemplate.setInPlayerTimezone(this.getInPlayerTimezone());
+        campaignTemplate.setLaunchTime(this.getLaunchTime());
+        campaignTemplate.setMetaData(this.getMetaData());
+        campaignTemplate.setPushToOptimoveInstances(this.isPushToOptimoveInstances());
+        campaignTemplate.setSendImmediately(this.isSendImmediately());
+        campaignTemplate.setTargetGroupContentCriteria(this.getTargetGroupContentCriteria());
+        campaignTemplate.setTargetGroupFilterCriteria(getTargetGroupFilterCriteria());
+        campaignTemplate.setTargetGroupMetaData(this.getTargetGroupMetaData());
+        return campaignTemplate;
+    }
+
+    public CampaignTemplate copyForNewCampaign() {
+        CampaignTemplate campaignTemplate = new CampaignTemplate();
+        campaignTemplate.setCampaignName(this.getCampaignName());
+        campaignTemplate.setStatus(this.getStatus());
+        campaignTemplate.setCancelEnabled(this.isCancelEnabled());
+        campaignTemplate.setDeleteEnabled(this.isDeleteEnabled());
+        campaignTemplate.setEditEnabled(this.isEditEnabled());
+        campaignTemplate.setLaunchEnabled(this.isLaunchEnabled());
+        campaignTemplate.setModifiedAt(this.getModifiedAt());
+        campaignTemplate.setAlreadyLaunched(this.isAlreadyLaunched());
+        campaignTemplate.setRecurrenceEndDate(this.getRecurrenceEndDate());
+        campaignTemplate.setRecurrenceType(this.getRecurrenceType());
+        campaignTemplate.setScheduledTime(this.getScheduledTime());
+        campaignTemplate.setStartDate(this.getStartDate());
+        campaignTemplate.setAlreadyCancelled(this.isAlreadyCancelled());
+        campaignTemplate.setAlreadyDeleted(this.isAlreadyDeleted());
+        campaignTemplate.setCampaignGroupId(this.getCampaignGroupId());
+        campaignTemplate.setCancellationTime(this.getCancellationTime());
+        campaignTemplate.setDeletionTime(this.getDeletionTime());
+        campaignTemplate.setFilterOption(this.getFilterOption());
+        campaignTemplate.setFilterOptionComparison(this.getFilterOptionComparison());
+        campaignTemplate.setFilterOptionValue(this.getFilterOptionValue());
+        campaignTemplate.setInPlayerTimezone(this.getInPlayerTimezone());
+        campaignTemplate.setLaunchTime(this.getLaunchTime());
+        campaignTemplate.setMetaData(this.getMetaData());
+        campaignTemplate.setPushToOptimoveInstances(this.isPushToOptimoveInstances());
+        campaignTemplate.setSendImmediately(this.isSendImmediately());
+        campaignTemplate.setTargetGroupContentCriteria(this.getTargetGroupContentCriteria());
+        campaignTemplate.setTargetGroupFilterCriteria(getTargetGroupFilterCriteria());
+        campaignTemplate.setTargetGroupMetaData(this.getTargetGroupMetaData());
+        return campaignTemplate;
     }
 }

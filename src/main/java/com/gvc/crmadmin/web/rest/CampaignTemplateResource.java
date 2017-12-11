@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.gvc.crmadmin.config.Constants;
 import com.gvc.crmadmin.domain.*;
 import com.gvc.crmadmin.domain.campaignMgmtApi.*;
+import com.gvc.crmadmin.domain.enumeration.RecurrenceType;
 import com.gvc.crmadmin.service.AppsService;
 import com.gvc.crmadmin.service.CampaignGroupService;
 import com.gvc.crmadmin.service.CampaignTemplateService;
@@ -39,7 +40,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.gvc.crmadmin.service.util.Utils.getCurrentDateTimeInUTCAsString;
+import static com.gvc.crmadmin.service.util.Utils.*;
 
 /**
  * REST controller for managing CampaignTemplate.
@@ -84,6 +85,7 @@ public class CampaignTemplateResource {
         CampaignTemplate campaignTemplateFromDB = campaignTemplateService.findOne(campaignTemplate.getId());
         if(campaignTemplateFromDB == null){
             campaignTemplate.setModifiedAt(getCurrentDateTimeInUTCAsString());
+            campaignTemplate.setStatus(Constants.CampaignTemplateStatus.DRAFT.toString());
             result = campaignTemplateService.save(campaignTemplate);
         } else{
             return ResponseEntity.badRequest()
@@ -108,14 +110,27 @@ public class CampaignTemplateResource {
     @Timed
     public ResponseEntity<CampaignTemplate> updateCampaignTemplate(@Valid @RequestBody CampaignTemplate campaignTemplate) throws URISyntaxException, UnsupportedEncodingException {
         log.debug("REST request to update CampaignTemplate : {}", campaignTemplate);
-        if (campaignTemplate.getId() == null) {
-            return createCampaignTemplate(campaignTemplate);
+        CampaignTemplate copyCampaignTemplate = campaignTemplate.copy();
+
+        //If there is no change in the campaign Name, then the campaign id will not change
+        if(campaignTemplate.getId().equals(copyCampaignTemplate.getId())) {
+            if (campaignTemplate.getId() == null) {
+                return createCampaignTemplate(campaignTemplate);
+            }
+            campaignTemplate.setModifiedAt(getCurrentDateTimeInUTCAsString());
+            CampaignTemplate result = campaignTemplateService.save(campaignTemplate);
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, campaignTemplate.getId()))
+                .body(result);
+        } else {
+            //There is a change in the campaign name
+            //Try creating new campaign template with the new name
+            ResponseEntity<CampaignTemplate> campaignCreationResponse = createCampaignTemplate(copyCampaignTemplate);
+            if(!campaignCreationResponse.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
+                campaignTemplateService.delete(campaignTemplate.getId());
+            }
+            return campaignCreationResponse;
         }
-        campaignTemplate.setModifiedAt(getCurrentDateTimeInUTCAsString());
-        CampaignTemplate result = campaignTemplateService.save(campaignTemplate);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, campaignTemplate.getId()))
-            .body(result);
     }
 
     @PostMapping("/campaign-templates/getTargetGroupSize")
@@ -134,6 +149,7 @@ public class CampaignTemplateResource {
     public ResponseEntity<PushNotificationCampaignTargetGroupContentSizeResponse> getPushNotificationTargetGroupSizeForLanguage(@Valid @RequestBody PushNotificationCampaignTargetGroupContentSizeRequest pushNotificationCampaignTargetGroupContentSizeRequest) throws URISyntaxException, UnsupportedEncodingException {
         log.debug("REST request to get pushNotificationCampaignTargetGroupContentSizeRequest", pushNotificationCampaignTargetGroupContentSizeRequest);
 
+        /*
         if(!StringUtils.hasText(pushNotificationCampaignTargetGroupContentSizeRequest.getLanguage())){
             log.debug("No language passed in pushNotificationCampaignTargetGroupContentSizeRequest", pushNotificationCampaignTargetGroupContentSizeRequest);
             PushNotificationCampaignTargetGroupContentSizeResponse pushNotificationCampaignTargetGroupSizeResponse = new PushNotificationCampaignTargetGroupContentSizeResponse();
@@ -141,6 +157,7 @@ public class CampaignTemplateResource {
             System.out.println(pushNotificationCampaignTargetGroupSizeResponse);
             return ResponseUtil.wrapOrNotFound(Optional.of(pushNotificationCampaignTargetGroupSizeResponse));
         }
+        */
 
         PushNotificationCampaignTargetGroupSizeRequest pushNotificationCampaignTargetGroupSizeRequest = new PushNotificationCampaignTargetGroupSizeRequest();
         pushNotificationCampaignTargetGroupSizeRequest.setFrontEnd(pushNotificationCampaignTargetGroupContentSizeRequest.getFrontEnd());
@@ -207,7 +224,20 @@ public class CampaignTemplateResource {
                     PushNotificationCampaignCancellationResponse pushNotificationCampaignCancellationResponse = restTemplate.postForObject(Constants.CANCEL_URL, pushNotificationCampaignTemplate, PushNotificationCampaignCancellationResponse.class);
                     if (pushNotificationCampaignCancellationResponse.isResult()) {
                         updateCampaignCancellationStatus(pushNotificationCampaignTemplate.getCampaignTemplateId(), pushNotificationCampaignCancellationResponse.isResult());
+                        //If the campaign is a recurring campaign, then cancellation of a LIVE campaign should change the status of the campaign to COMPLETED
+                        DateTime currentTime = getCurrentDateTimeInUTC();
+                        DateTime campaignEndTime = getDateTimeFromString(TIME_STAMP_FORMAT, campaignTemplate.getRecurrenceEndDate() + " " + campaignTemplate.getScheduledTime());
+                        if(!campaignTemplate.getRecurrenceType().equals(RecurrenceType.NONE) && !currentTime.isAfter(campaignEndTime)) {
+                            campaignTemplate.setStatus(Constants.CampaignTemplateStatus.COMPLETED.toString());
+                            campaignTemplate.setLaunchEnabled(false);
+                            campaignTemplate.setEditEnabled(false);
+                            campaignTemplate.setCancelEnabled(false);
+                            campaignTemplate.setDeleteEnabled(false);
+                            campaignTemplateService.save(campaignTemplate);
+                        }
                     }
+
+
                     return ResponseUtil.wrapOrNotFound(Optional.of(pushNotificationCampaignCancellationResponse));
                 } else {
                     return ResponseUtil.wrapOrNotFound(Optional.of(new PushNotificationCampaignCancellationResponse("Campaign already cancelled", true)));
@@ -433,7 +463,7 @@ public class CampaignTemplateResource {
                     campaignTemplate.setDeleteEnabled(true);
                 } else {
                     campaignTemplate.setStatus(Constants.CampaignTemplateStatus.DRAFT.getStatus()); // the campaign was not launched
-                    campaignTemplate.setLaunchEnabled(false);
+                    campaignTemplate.setLaunchEnabled(campaignTemplate.isSendImmediately());
                     campaignTemplate.setEditEnabled(true);
                     campaignTemplate.setCancelEnabled(false);
                     campaignTemplate.setDeleteEnabled(true);
@@ -460,7 +490,7 @@ public class CampaignTemplateResource {
                     campaignTemplate.setDeleteEnabled(false);
                 } else {
                     campaignTemplate.setStatus(Constants.CampaignTemplateStatus.DRAFT.getStatus()); // the campaign was not launched
-                    campaignTemplate.setLaunchEnabled(false);
+                    campaignTemplate.setLaunchEnabled(campaignTemplate.isSendImmediately());
                     campaignTemplate.setEditEnabled(true);
                     campaignTemplate.setCancelEnabled(false);
                     campaignTemplate.setDeleteEnabled(true);
