@@ -5,7 +5,6 @@ import { JhiEventManager, JhiParseLinks, JhiPaginationUtil, JhiAlertService } fr
 
 import { Apps } from './apps.model';
 import { AppsService } from './apps.service';
-import { BreadCrumbService } from '../../layouts/navbar/navbar.service';
 import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
@@ -40,8 +39,7 @@ export class AppsComponent implements OnInit, OnDestroy {
         private router: Router,
         private eventManager: JhiEventManager,
         private paginationUtil: JhiPaginationUtil,
-        private paginationConfig: PaginationConfig,
-        public breadCrumbService: BreadCrumbService
+        private paginationConfig: PaginationConfig
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.routeData = this.activatedRoute.data.subscribe((data) => {
@@ -51,8 +49,11 @@ export class AppsComponent implements OnInit, OnDestroy {
             this.predicate = data['pagingParams'].predicate;
         });
     }
-
-    loadAll() {
+    loadAll(){
+        this.appsService.query({}).subscribe(
+            (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'appListModified', content: res.json}));
+    }
+    loadAppPage() {
         if (this.searchValue) {
             this.appsService.search(this.searchValue, {
                 page: (this.page > 0 ? this.page - 1 : this.page),
@@ -89,7 +90,7 @@ export class AppsComponent implements OnInit, OnDestroy {
                     sort: this.sort()
                 }
         });
-        this.loadAll();
+        this.loadAppPage();
     }
 
     clear() {
@@ -98,6 +99,7 @@ export class AppsComponent implements OnInit, OnDestroy {
     }
     ngOnInit() {
         this.loadAll();
+        this.loadAppPage();
         this.principal.identity().then((account) => {
             this.currentAccount = account;
         });
@@ -130,7 +132,11 @@ export class AppsComponent implements OnInit, OnDestroy {
         return item.id;
     }
     registerChangeInApps() {
-        this.eventSubscriber = this.eventManager.subscribe('appsListModification', (response) => this.loadAll());
+        this.eventSubscriber = this.eventManager.subscribe('appsListModification', (response) => this.appModification());
+    }
+    appModification(){
+        this.loadAppPage();
+        this.loadAll();
     }
 
     sort() {
@@ -147,9 +153,7 @@ export class AppsComponent implements OnInit, OnDestroy {
         this.queryCount = this.totalItems;
         // this.page = pagingParams.page;
         this.apps = data;
-        this.breadCrumbService.getBreadCrumbs().subscribe(val => {
-            this.breadCrumbService.updateBreadCrumbs(val, { name: 'Apps', router: '#/apps', brdCrmbId: '1' });
-        });
+        this.eventManager.broadcast({ name: 'setBreadCrumbToApp', content: 'OK'});
     }
     private onError(error) {
         this.alertService.error(error.message, null, null);

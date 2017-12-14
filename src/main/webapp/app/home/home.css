@@ -10,10 +10,14 @@ Main page styles
     background-size: contain;
 }
 .selFilLanguage span::after {
-    content: ', ';
+    content: ', ' !important;
 }
 .selFilLanguage span:last-child::after {
-    content: '';
+    content: '' !important;
+}
+.audiaSegAppDp{
+    line-height: 1rem !important;
+    margin-right: 0.5rem;
 }
 /* wait autoprefixer update to allow simple generation of high pixel density media query */
 @media

@@ -18,6 +18,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { CrmAdminDashboardModule } from './dashboard/dashboard.module';
+import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 
 import {
@@ -44,6 +45,7 @@ import {
         ReactiveFormsModule,
         HttpClientModule,
         CrmAdminDashboardModule,
+        AngularMultiSelectModule
         // jhipster-needle-angular-add-module JHipster will add new module here
     ],
     declarations: [

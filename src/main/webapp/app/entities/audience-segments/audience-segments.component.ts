@@ -99,7 +99,9 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
         this.loadAll();
     }
     ngOnInit() {
-        this.showUploadDiv = false
+        this.showUploadDiv = false;
+        //this.eventManager.broadcast({ name: 'setBreadCrumbToAudSeg', content: 'OK'});
+        this.eventManager.broadcast({ name: 'clearBdData', content: 'OK'});
         this.appsService.query().subscribe((res: ResponseWrapper) => {
             this.apps = res.json;
             if(!this.segName){

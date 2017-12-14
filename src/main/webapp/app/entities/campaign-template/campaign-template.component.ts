@@ -8,7 +8,7 @@ import { CampaignTemplateService } from './campaign-template.service';
 import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
-import { BreadCrumbService } from '../../layouts/navbar/navbar.service';
+//import { BreadCrumbService } from '../../layouts/navbar/navbar.service';
 
 @Component({
     selector: 'jhi-campaign-template',
@@ -52,7 +52,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         private paginationUtil: JhiPaginationUtil,
         private paginationConfig: PaginationConfig,
         private http: HttpClient,
-        public breadCrumbService: BreadCrumbService
+      //  public breadCrumbService: BreadCrumbService
 
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
@@ -247,17 +247,16 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         this.totalItems = headers.get('X-Total-Count');
         this.queryCount = this.totalItems;
         this.campaignTemplates = data;
-        this.breadCrumbService.getBreadCrumbs().subscribe(breadCrumbArray => {
-            if (breadCrumbArray && breadCrumbArray.length < 2) {
-                this.campaignTemplateService.getAppCapGrpIdFromCapGrp(this.groupId).subscribe((oCampGrpInfo) => {
-                    this.oCampInfo = oCampGrpInfo;
-                    this.breadCrumbService.updateBreadCrumbs(breadCrumbArray, { name: this.groupName, router: '#/campaign-template/group/' + this.groupId + "/" + this.groupName, brdCrmbId: '3', appId: this.oCampInfo.appId, appName: this.oCampInfo.appName });
-                });
-            }
-            else {
-                this.breadCrumbService.updateBreadCrumbs(breadCrumbArray, { name: this.groupName, router: '#/campaign-template/group/' + this.groupId + "/" + this.groupName, brdCrmbId: '3' });
-            }
+        this.eventSubscriber = this.eventManager.subscribe('campGrpDataReady', response => this.callBreadCrumbToCampTemp(response));//handling refresh scenario
+        this.campaignTemplateService.getAppCapGrpIdFromCapGrp(this.groupId).subscribe((oCampGrpInfo) => {
+            this.oCampInfo = oCampGrpInfo;
+            this.eventManager.broadcast({ name: 'selectedApp', content: this.oCampInfo.appId});
+            this.eventManager.broadcast({ name: 'selectedCampGrp', content: this.groupId});
+            this.eventManager.broadcast({ name: 'setBreadCrumbToCampTemp', content: {campGrpId : this.groupId}});
         });
+    }
+    private callBreadCrumbToCampTemp(response){
+        this.eventManager.broadcast({ name: 'setBreadCrumbToCampTemp', content: {campGrpId : this.groupId}});
     }
     private OnSaveError(error){
         try {
