@@ -82,7 +82,8 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.campaignTemplateGroupCreationForm = this.fb.group({
             targetGroupFilterCriteria: this.fb.array([]),
             targetGroupContentCriteria: this.fb.array([]),
-            targetGroupMetaData: this.fb.array([])
+            targetGroupMetaData: this.fb.array([]),
+            campaignName: ['', Validators.required]
         });
         this.isLaunch = false;
     }
@@ -1530,14 +1531,14 @@ export class CampaignTemplateDialogComponent implements OnInit {
 
         if (this.isLaunch) {
             setTimeout(() => {
-                const pageLocation: string = decodeURI(encodeURI(location.href) + '(' + 'popup:' + 'campaign-template/' + result.id + '/launch' + ')');
+                // const pageLocation: string = decodeURI(encodeURI(location.href) + '(' + 'popup:' + 'campaign-template/' + result.id + '/launch' + ')');
+                this.router.navigate(['/', { outlets: { popup: 'campaign-template/'+ result.id + '/launch'} }]);
                 // alert(pageLocation);
-                location.href = pageLocation;
+                // location.href = pageLocation;
                 this.isLaunch = false;
             }, 100);
 
         }
-        // this.router.navigate([location.href + '(' + 'popup:' + 'campaign-template/' + result.id + '/launch' + ')']);
 
     }
 
