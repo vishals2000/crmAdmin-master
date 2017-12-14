@@ -365,7 +365,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                             }
                         }
                     }
-                    if(i.filterOption === 'Country'){
+                    if(i.filterOption === 'Country' || i.filterOption === 'Language'){
                         for(var j=0;j<i.filterOptionValue.length;j++)
                         fileOptArray.push({id:i.filterOptionValue[j], itemName:i.filterOptionValue[j]});
                     }
