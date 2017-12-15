@@ -176,18 +176,22 @@ a:hover {
     position: relative;
     display: block;
     margin-bottom: 27px;
-    border: 3px solid #fff;  
+    border: 3px solid #CCC;  
     overflow: hidden;
     padding-bottom: 10px;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     border-radius: 2px;
-    background-color: #FFF;
+    background-color: #CCC;
     color:#000;
     -webkit-background-clip: padding-box;  
     background-clip: padding-box;
     -moz-background-clip: padding;
     cursor:pointer;
+}
+.active .big-box{
+    background-color: #FFF !important;
+    border: 3px solid #FFF;  
 }
 .big-box .icon {
     color: #5e5e5e;

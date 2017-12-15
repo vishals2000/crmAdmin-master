@@ -1,14 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { JhiLanguageService } from 'ng-jhipster';
 import { Message } from 'primeng/components/common/api';
-import { AppsService } from '../../entities/apps/apps.service';
+//import { AppsService } from '../../entities/apps/apps.service';
 import { Apps } from '../../entities/apps/apps.model';
 import { ResponseWrapper } from '../../shared';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
 import { INSIGHTS_URL } from '../../app.constants';
-import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager, JhiParseLinks, JhiPaginationUtil, JhiAlertService } from 'ng-jhipster';
 import { NgbModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription, Observable } from 'rxjs/Rx';
+import { Http, Response } from '@angular/http';
+import { setTimeout } from 'timers';
 
 @Component({
     selector: 'jhi-linechart',
@@ -33,55 +37,93 @@ export class LinechartComponent implements OnInit {
     dailyUniqueUsers: Number;
     totalUsers: Number;
     sessions: Number;
+    routeData: any;
+    segName: any;
+    selected: string;
+    month_names_short: string[];
+    eventSubscriber: Subscription;
+    app: any;
 
     public activeModal: NgbActiveModal;
-
+    private subscription: Subscription;
+    appId: any;
     constructor(
-        private appsService: AppsService,
+        // private appsService: AppsService,
         private http: HttpClient,
         private alertService: JhiAlertService,
+        private activatedRoute: ActivatedRoute,
+        private router: Router,
+        private parseLinks: JhiParseLinks,
+        private paginationUtil: JhiPaginationUtil,
+        private eventManager: JhiEventManager,
+        private route: ActivatedRoute,
     ) {
-        this.chartHeading = 'Messages';
-        this.data = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-                {
-                    label: 'First Dataset',
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                    fill: false,
-                    borderColor: '#4bc0c0'
-                },
-                {
-                    label: 'Second Dataset',
-                    data: [28, 48, 40, 19, 86, 27, 90],
-                    fill: false,
-                    borderColor: '#565656'
-                }
-            ]
-        };
+        this.month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        this.routeData = this.activatedRoute.data.subscribe((data) => {
+            this.segName = data && data['pagingParams'] ? data['pagingParams'].segName : '';
+        });
     }
 
     ngOnInit() {
-        this.appsService.query().subscribe((res: ResponseWrapper) => {
-            this.apps = res.json;
-        });
-
-        const now = new Date();
-        this.minDate = {
-            year: now.getFullYear(),
-            month: now.getMonth() + 1,
-            day: now.getDate()
+        var dateObj = new Date();
+        const todayDt1 = {
+            year: dateObj.getFullYear(),
+            month: dateObj.getMonth() + 1,
+            day: dateObj.getDate()
         };
+        dateObj.setDate(dateObj.getDate() - 7);
+        const aWEekAgo = {
+            year: dateObj.getFullYear(),
+            month: dateObj.getMonth() + 1,
+            day: dateObj.getDate()
+        };
+        this.startDate = aWEekAgo;
+        this.endDate = todayDt1;
+        this.subscription = this.route.params.subscribe((params) => {
+            this.appId = params['id'];
+            if (this.appId) {
+                this.setDataToPageModel();
+            }
+            else {
+                this.eventManager.broadcast({ name: 'setBreadCrumbToInsightsFirstApp', content: 'OK' });
+            }
+        });
     }
 
+    setDataToPageModel() {
+        if(localStorage['sellectedApp']){
+            var obj = JSON.parse(localStorage['sellectedApp']);
+            this.app = {
+                product: obj.product,
+                frontEnd: obj.frontEnd,
+                id: obj.id
+            };
+            this.getData(this.app);
+            const now = new Date();
+            this.minDate = {
+                year: now.getFullYear(),
+                month: now.getMonth() + 1,
+                day: now.getDate()
+            };
+        }
+        else{
+            this.router.navigate(['/apps'], {});
+        }
+    }
+    onDtChange(){
+        var ocurrObj = this;
+        setTimeout(function(){
+            ocurrObj.getData(ocurrObj.app);
+        }, 0);
+    }
     getData(app: Apps) {
         if (app) {
             const data = {
                 'appId': app.id,
                 'frontEnd': app.frontEnd,
                 'product': app.product,
-                'startDate': '2017-11-13',
-                'endDate': '2017-11-25'
+                'startDate': this.startDate.year + "-" + (this.startDate.month < 9 ? '0' : '') + this.startDate.month + "-" + (this.startDate.day < 9 ? '0' : '') + this.startDate.day,
+                'endDate': this.endDate.year + "-" + (this.endDate.month < 9 ? '0' : '') + this.endDate.month + "-" + (this.endDate.day < 9 ? '0' : '') + this.endDate.day
             }
 
             const req = this.http.post(INSIGHTS_URL,
@@ -94,12 +136,14 @@ export class LinechartComponent implements OnInit {
             );
         } else {
             console.log(app);
-            this.alertService.error('Please select app from drop down list');
+            this.onError({ message: 'Please select app from drop down list' });
         }
     }
 
     private onError(error) {
-        this.alertService.error(error.message, null, null);
+        this.alertService.error((error && error.message ? error.message : error), null, null);
+        this.eventManager.broadcast({ name: 'selectedApp', content: this.appId });
+        this.eventManager.broadcast({ name: 'setBreadCrumbToInsights', content: 'OK' });
     }
 
     private onInsightsSuccess(response, headers) {
@@ -108,14 +152,45 @@ export class LinechartComponent implements OnInit {
         this.sessions = response.sessions;
         this.dailyUniqueUsers = response.dailyUniqueUsers;
         this.totalUsers = response.totalUsers;
+        this.eventManager.broadcast({ name: 'selectedApp', content: this.appId });
+        this.eventManager.broadcast({ name: 'setBreadCrumbToInsights', content: 'OK' });
+        this.getMessages();
     }
 
     getMessages() {
+        this.selected = 'M';
+        let data = {
+            labels: [],
+            datasets: []
+        };
+        let dataSetObj = {
+            label: 'Reach',
+            data: [],
+            fill: false,
+            borderColor: '#673AB7'
+        };
+        let dataSetObj1 = {
+            label: 'Engagement',
+            data: [],
+            fill: false,
+            borderColor: '#24B661'
+        };
+        if (this.insightsData && this.insightsData.dateVsMessageInfo && this.insightsData.dateVsMessageInfo) {
+            for (let key in this.insightsData.dateVsMessageInfo) {
+                var dt = new Date(key);
+                data.labels.push(dt.getDate() + ' ' + this.month_names_short[dt.getMonth()]);
+                dataSetObj.data.push(parseInt(this.insightsData.dateVsMessageInfo[key].reach));
+                dataSetObj1.data.push(parseInt(this.insightsData.dateVsMessageInfo[key].engagement));
+            }
+        }
+        data.datasets.push(dataSetObj);
+        data.datasets.push(dataSetObj1);
         this.chartHeading = 'Messages';
-        this.data = this.insightsData.dateVsMessageInfo;
+        this.data = data;
     }
 
     getTotalUsers() {
+        this.selected = 'T';
         this.chartHeading = 'Total Users';
         this.data = {
             labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -136,44 +211,53 @@ export class LinechartComponent implements OnInit {
         };
     }
     getUniqueUsers() {
+        this.selected = 'U';
+        let data = {
+            labels: [],
+            datasets: []
+        };
+        let dataSetObj = {
+            label: 'Active Users',
+            data: [],
+            fill: false,
+            borderColor: '#4bc0c0'
+        };
+        if (this.insightsData && this.insightsData.dateVsUniqueUsers && this.insightsData.dateVsUniqueUsers) {
+            for (let key in this.insightsData.dateVsUniqueUsers) {
+                var dt = new Date(key);
+                data.labels.push(dt.getDate() + ' ' + this.month_names_short[dt.getMonth()]);
+                dataSetObj.data.push(parseInt(this.insightsData.dateVsUniqueUsers[key]));
+            }
+        }
+        data.datasets.push(dataSetObj);
         this.chartHeading = 'Unique Users';
-        this.data = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-                {
-                    label: 'First Dataset',
-                    data: [45, 65, 78, 98, 68, 56, 41],
-                    fill: false,
-                    borderColor: '#4bc0c0'
-                },
-                {
-                    label: 'Second Dataset',
-                    data: [28, 48, 40, 19, 86, 27, 90],
-                    fill: false,
-                    borderColor: '#565656'
-                }
-            ]
-        };
+        this.data = data;
     }
+    // kFormatter(num) {
+    //     return num > 999 ? (num/1000).toFixed(1) + 'k' : num
+    // }
     getSessions() {
-        this.chartHeading = 'Sessions';
-        this.data = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-                {
-                    label: 'First Dataset',
-                    data: [24, 45, 28, 58, 60, 25, 84],
-                    fill: false,
-                    borderColor: '#4bc0c0'
-                },
-                {
-                    label: 'Second Dataset',
-                    data: [28, 48, 40, 19, 86, 27, 90],
-                    fill: false,
-                    borderColor: '#565656'
-                }
-            ]
+        this.selected = 'S';
+        let data = {
+            labels: [],
+            datasets: []
         };
+        let dataSetObj = {
+            label: 'Organic Sesssions',
+            data: [],
+            fill: false,
+            borderColor: '#565656'
+        };
+        if (this.insightsData && this.insightsData.dateVsSessions && this.insightsData.dateVsSessions) {
+            for (let key in this.insightsData.dateVsSessions) {
+                var dt = new Date(key);
+                data.labels.push(dt.getDate() + ' ' + this.month_names_short[dt.getMonth()]);
+                dataSetObj.data.push(parseInt(this.insightsData.dateVsSessions[key]));
+            }
+        }
+        data.datasets.push(dataSetObj);
+        this.chartHeading = 'Sessions';
+        this.data = data;
     }
 
     selectData(event) {

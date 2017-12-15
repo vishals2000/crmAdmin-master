@@ -7,19 +7,19 @@
             <span>Insights</span>
         </h2> 
     </div>            
-    <div class="float-right">        
+    <!-- <div class="float-right">        
             <select class="custom-selectbox rounded" name="appsList" [(ngModel)]="selectedApp">
               <option *ngFor="let app of apps" [ngValue]="app">{{app.name}}</option>
             </select>        
-            <button class="btn btn-primary float-right marginL15" (click)="getData(selectedApp);"> 
+            <button class="btn btn-primary float-right marginL15" (click)="goToSelectedApp(selectedApp);"> 
                     <span>Go</span> 
             </button>       
-    </div>
+    </div> -->
 </div>           
      
 
         <div class="row boxes">
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" (click)="getMessages();">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" (click)="getMessages();" [ngClass]="(selected=='M')?'active':''">
                 <div class="big-box">
                     <div class="icon"><i class="fa fa-envelope"></i> </div>
                     <div class="count">{{messages}}</div>
@@ -27,7 +27,7 @@
                     <p>Lorem ipsum psdea itgum rixt.</p>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" (click)="getTotalUsers();">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" (click)="getTotalUsers();" [ngClass]="(selected=='T')?'active':''">
                 <div class="big-box">
                     <div class="icon"><i class="fa fa-users"></i> </div>
                     <div class="count">{{totalUsers}}</div>
@@ -35,7 +35,7 @@
                     <p>Lorem ipsum psdea itgum rixt.</p>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" (click)="getUniqueUsers();">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" (click)="getUniqueUsers();" [ngClass]="(selected=='U')?'active':''">
                 <div class="big-box">
                     <div class="icon"><i class="fa fa-user"></i> </div>
                     <div class="count">{{dailyUniqueUsers}}</div>
@@ -43,7 +43,7 @@
                     <p>Lorem ipsum psdea itgum rixt.</p>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" (click)="getSessions();">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" (click)="getSessions();" [ngClass]="(selected=='S')?'active':''">
                 <div class="big-box">
                     <div class="icon"><i class="fa fa-clock-o"></i> </div>
                     <div class="count">{{sessions}}</div>
@@ -61,13 +61,13 @@
                         <div class="col-md-6">
                             <h3>{{chartHeading}}</h3>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" *ngIf="(selected=='T') ? false :true ">
     
                             <div class="pull-right">
                                 <div class="insight-calendar-box">
                                     <div class="mute-text">Start date</div>
                                     <div class="input-group">
-                                        <input id="startDate" type="text" class="form-control" name="startDate" ngbDatepicker [minDate]="minDate"  #startDateDp="ngbDatepicker"
+                                        <input id="startDate" (ngModelChange)="onDtChange()"  type="text" class="form-control" name="startDate" [(ngModel)]="startDate" ngbDatepicker  #startDateDp="ngbDatepicker"
                                         required/>
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default" (click)="startDateDp.toggle()"><i class="fa fa-calendar"></i></button>
@@ -84,7 +84,7 @@
                                 <div class="insight-calendar-box">
                                     <div class="mute-text">End date</div>
                                     <div class="input-group">
-                                        <input id="endDate" type="text" class="form-control" name="endDate" ngbDatepicker [minDate]="minDate"  #endDateDp="ngbDatepicker"
+                                        <input id="endDate" (ngModelChange)="onDtChange()" type="text" class="form-control" name="endDate" [(ngModel)]="endDate" ngbDatepicker [minDate]="minDate"  #endDateDp="ngbDatepicker"
                                         required/>
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default" (click)="endDateDp.toggle()"><i class="fa fa-calendar"></i></button>

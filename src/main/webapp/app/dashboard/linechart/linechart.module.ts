@@ -6,7 +6,8 @@ import { ChartModule } from 'primeng/primeng';
 
 import {
     LinechartComponent,
-    linechartRoute
+    linechartRoute,
+    LinechartResolvePagingParams
 } from './';
 
 const DASHBOARD_STATES = [
@@ -21,6 +22,12 @@ const DASHBOARD_STATES = [
     ],
     declarations: [
         LinechartComponent
+    ],
+    entryComponents: [
+        LinechartComponent
+    ],
+    providers: [
+        LinechartResolvePagingParams
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
