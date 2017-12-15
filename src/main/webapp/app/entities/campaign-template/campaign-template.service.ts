@@ -3,7 +3,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { JhiDateUtils } from 'ng-jhipster';
 
-import { CampaignTemplate, CampaignTemplateFilterCriterion, CampaignTemplateContentCriterion, CampaignTemplateMetaDataCriterion } from './campaign-template.model';
+import { CampaignTemplate, CampaignTemplateFilterCriterion, CampaignTemplateContentCriterion, CampaignTemplateMetaDataCriterion, RecurrenceType } from './campaign-template.model';
 import { ResponseWrapper, createRequestOption } from '../../shared';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -177,51 +177,65 @@ export class CampaignTemplateService {
         });
     }
 
-    copyCampaignTemplate(body: any, copyCount : Number): Observable<ResponseWrapper> {
+    copyorRetargetCampaignTemplate(body: any, copyCount : Number, bIsRetarget:boolean): Observable<ResponseWrapper> {
         let postObj = this.convert(body);
-        postObj.campaignName = "(Copy " + (copyCount > 0 ? copyCount : '' )+ ")" + postObj.campaignName;
+        if(bIsRetarget){
+            postObj.campaignName = "Retarget from " + (copyCount > 0 ? copyCount : '' )+ "-" + postObj.campaignName;
+        }
+        else{
+            postObj.campaignName = "(Copy " + (copyCount > 0 ? copyCount : '' )+ ")" + postObj.campaignName;
+        }
+        
+        if(bIsRetarget){
+            postObj.pcId = postObj.id;
+            postObj.retargetedCampaign = true;
+            postObj.targetGroupContentCriteria = [];
+            postObj.targetGroupFilterCriteria = [];
+        }
         postObj.id = undefined;
         var dateObj = new Date();
+        dateObj.setDate(dateObj.getDate() + 1);
         let currentHourValue = dateObj.getUTCHours();
         let currentMinValue = dateObj.getUTCMinutes();
-        const todayDt1 = {
+        let todayDt1 = {
             year: dateObj.getUTCFullYear(),
             month: dateObj.getUTCMonth() + 1,
             day: dateObj.getUTCDate()
         };
-        if(postObj.sendImmediately){
-            if(currentMinValue >= 55){
-                currentHourValue += 1;
-                currentMinValue = (currentMinValue + 5) - 60;
-            }
-            else{
-                currentMinValue += 5;
-            }
-            postObj.startDate = this.dateUtils.convertLocalDateToServer(todayDt1);
-            postObj.recurrenceEndDate = postObj.startDate;
-            postObj.scheduledTime = '' + (currentHourValue < 10 ? '0' + currentHourValue : currentHourValue) + ':' + (currentMinValue < 10 ? '0' + currentMinValue : currentMinValue) + ':00'
-        }
-        else{
-            if(currentMinValue >= 55){
-                currentHourValue += 1;
-                currentMinValue = (currentMinValue + 5) - 60;
-            }
-            else{
-                currentMinValue += 5;
-            }
-            postObj.scheduledTime = '' + (currentHourValue < 10 ? '0' + currentHourValue : currentHourValue) + ':' + (currentMinValue < 10 ? '0' + currentMinValue : currentMinValue) + ':00'
+        postObj.startDate = this.dateUtils.convertLocalDateToServer(todayDt1);
+        postObj.recurrenceEndDate = postObj.startDate;
+        postObj.recurrenceType = RecurrenceType.NONE;
+        // if(postObj.sendImmediately){
+        //     if(currentMinValue >= 55){
+        //         currentHourValue += 1;
+        //         currentMinValue = (currentMinValue + 5) - 60;
+        //     }
+        //     else{
+        //         currentMinValue += 5;
+        //     }
+        //     postObj.startDate = this.dateUtils.convertLocalDateToServer(todayDt1);
+        //     postObj.recurrenceEndDate = postObj.startDate;
+        //     postObj.scheduledTime = '' + (currentHourValue < 10 ? '0' + currentHourValue : currentHourValue) + ':' + (currentMinValue < 10 ? '0' + currentMinValue : currentMinValue) + ':00'
+        // }
+        // else{
+        //     if(currentMinValue >= 55){
+        //         currentHourValue += 1;
+        //         currentMinValue = (currentMinValue + 5) - 60;
+        //     }
+        //     else{
+        //         currentMinValue += 5;
+        //     }
+        //     postObj.scheduledTime = '' + (currentHourValue < 10 ? '0' + currentHourValue : currentHourValue) + ':' + (currentMinValue < 10 ? '0' + currentMinValue : currentMinValue) + ':00'
 
-            let startDateObj = this.dateUtils.convertLocalDateFromServer(postObj.startDate);
-            let endDateObj = this.dateUtils.convertLocalDateFromServer(postObj.recurrenceEndDate);
-            if(startDateObj < dateObj){
-                postObj.startDate = this.dateUtils.convertLocalDateToServer(todayDt1);
-                if(postObj.recurrenceType.toString() === 'NONE'){
-                    postObj.recurrenceEndDate = this.dateUtils.convertLocalDateToServer(todayDt1);
-                }
-            }
-            //if(startDateObj.year)
-       
-        }
+        //     let startDateObj = this.dateUtils.convertLocalDateFromServer(postObj.startDate);
+        //     let endDateObj = this.dateUtils.convertLocalDateFromServer(postObj.recurrenceEndDate);
+        //     if(startDateObj < dateObj){
+        //         postObj.startDate = this.dateUtils.convertLocalDateToServer(todayDt1);
+        //         if(postObj.recurrenceType.toString() === 'NONE'){
+        //             postObj.recurrenceEndDate = this.dateUtils.convertLocalDateToServer(todayDt1);
+        //         }
+        //     }
+        // }
          return this.http.post(this.resourceUrl, postObj).map((res: Response) => {
              return res.json();
          });

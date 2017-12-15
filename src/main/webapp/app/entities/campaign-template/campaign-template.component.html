@@ -76,7 +76,7 @@
                         <a [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/edit'} }]">{{campaignTemplate.campaignName}}</a>
                     </td>
                     <td>
-                        <span class="badge badge-info">{{campaignTemplate.status}}</span>
+                        <span class="badge" [ngClass]="{'DRAFT':'badge-default, btn-secondary btn-sm','COMPLETED':'badge-primary','PENDING':'badge-info','LIVE':'badge-success','DELETED':'badge-danger'}[campaignTemplate.status]">{{campaignTemplate.status}}</span>
                     </td>
                     <!-- <td>{{campaignTemplate.campaignDescription}}</td> -->
                     <td>{{campaignTemplate.modifiedAt}}</td>
@@ -111,7 +111,12 @@
                                 <span class="fa fa-eye"></span>
                                 <!-- <span class="hidden-md-down">Edit</span>-->
                             </button>
-                            <button type="submit" alt="Copy" title="Copy" (click)="copyCurrentTemp(campaignTemplate)" class="btn btn-primary btn-sm">
+                            <button type="submit" alt="Retarget" title="Retarget" [hidden]="campaignTemplate.status !== 'DRAFT' && campaignTemplate.recurrenceType === 'NONE' ? false : true" (click)="copyOrRetargetCurrentTemp(campaignTemplate, true)" replaceUrl="true"
+                                class="btn btn-primary btn-sm">
+                                <span class="fa fa-crosshairs"></span>
+                                <!-- <span class="hidden-md-down">Edit</span>-->
+                            </button>
+                            <button type="submit" alt="Copy" title="Copy" (click)="copyOrRetargetCurrentTemp(campaignTemplate, false)" class="btn btn-primary btn-sm">
                                 <span class="fa fa-copy"></span>
                             </button>
                             <button type="submit" alt="Test" title="Test" [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/test'} }]"

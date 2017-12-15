@@ -96,9 +96,11 @@ export class NavbarComponent implements OnInit {
         this.eventSubscriber = this.eventManager.subscribe('setBreadCrumbToCampGrp', response => this.setBreadCrumbToCampGrp(response));
         this.eventSubscriber = this.eventManager.subscribe('setBreadCrumbToCampTemp', response => this.setBreadCrumbToCampTemp(response));
         
-        this.eventSubscriber = this.eventManager.subscribe('setBreadCrumbToAudSeg', response => this.setBreadCrumbToAudSeg(response));
+        this.eventSubscriber = this.eventManager.subscribe('setBreadCrumbToAudSeg', response => this.setBreadCrumbToAudSeg(response, false));
         this.eventSubscriber = this.eventManager.subscribe('setBreadCrumbToInsights', response => this.setBreadCrumbToInsights(response, null));
         this.eventSubscriber = this.eventManager.subscribe('setBreadCrumbToInsightsFirstApp', response => this.setBreadCrumbToInsights(response, true));
+        this.eventSubscriber = this.eventManager.subscribe('setBreadCrumbToAudSegFirstApp', response => this.setBreadCrumbToAudSeg(response, true));
+        
        // this.eventSubscriber = this.eventManager.subscribe('clearBdData', response => this.clearBdData(response));
     }
     clearBdData(res){
@@ -178,17 +180,26 @@ export class NavbarComponent implements OnInit {
             this.crumbsArray.push({appPageType:this.appPageType, name: 'Messages', router: '#/campaign-template/group/' + this.selCampGrp.id + "/" + this.selCampGrp.name , brdCrmbId: '2', list:this.campGrpList, selVal : [this.selCampGrp]});
         }
     }
-    setBreadCrumbToAudSeg(response){
+    setBreadCrumbToAudSeg(response, bIsselectedFirstApp){
         var oCurObj = this;
         var fAfterGetResults = function(res){
             oCurObj.setBreadCrumbToApp(response);
-            if(!oCurObj.selApp){
+            if(!oCurObj.selApp || bIsselectedFirstApp){
                 oCurObj.selApp = oCurObj.appList[0];
                 localStorage["sellectedApp"] = JSON.stringify(oCurObj.selApp);
             }
             if(oCurObj.appList && oCurObj.appList.length){
                 oCurObj.appPageType = 'AS';
-                oCurObj.crumbsArray.push({appPageType:oCurObj.appPageType, name: 'Audience Segments', router: '#/audience-segments;page=0;sort=id,asc;segName=' + oCurObj.selApp.id, brdCrmbId: '2', list:oCurObj.appList, selVal: [oCurObj.selApp]});
+                oCurObj.crumbsArray.push({appPageType:oCurObj.appPageType, name: 'Audience Segments', router: '#/audience-segments/'+ oCurObj.selApp.id +';page=0;sort=id,asc;', brdCrmbId: '2', list:oCurObj.appList, selVal: [oCurObj.selApp]});
+            }
+            if(bIsselectedFirstApp){
+                oCurObj.router.navigate(['/audience-segments/' + oCurObj.selApp.id, 
+                    {
+                        page: 0,
+                        size: ITEMS_PER_PAGE,
+                        sort: 'id,asc'
+                    }
+                ]);
             }
         };
         this.loadAllApps(fAfterGetResults);
@@ -199,7 +210,7 @@ export class NavbarComponent implements OnInit {
             oCurObj.setBreadCrumbToApp(response);
             if(!oCurObj.selApp || bIsselectedFirstApp){
                 oCurObj.selApp = oCurObj.appList[0];
-                localStorage["sellectedApp"] = JSON.stringify(this.selApp);
+                localStorage["sellectedApp"] = JSON.stringify(oCurObj.selApp);
             }
             oCurObj.appPageType = 'INS';
             oCurObj.crumbsArray.push({appPageType:oCurObj.appPageType, name: 'Insights', router: '#/linechart/project/' + oCurObj.selApp.name, brdCrmbId: '2', list:oCurObj.appList, selVal: [oCurObj.selApp]});
@@ -250,6 +261,10 @@ export class NavbarComponent implements OnInit {
     getImageUrl() {
         return this.isAuthenticated() ? this.principal.getImageUrl() : null;
     }
+    onItemDeSelect(oSelectedItm, crumb){
+        crumb.selVal = [oSelectedItm];
+        document.body.focus();
+    }
     onItemSelect(oSelectedItm, appPageType){
         switch(appPageType){
             case 'app-CT':
@@ -270,15 +285,12 @@ export class NavbarComponent implements OnInit {
                 this.selApp = oSelectedItm;
                 localStorage["selectedApp"] = JSON.stringify(oSelectedItm);
                 //this.router.navigate(['/audience-segments/' + this.selApp.id], {});
-                this.router.navigate(['/audience-segments'], {
-                    queryParams:
-                        {
+                this.router.navigate(['/audience-segments/' + this.selApp.id, {
                             page: 0,
                             size: ITEMS_PER_PAGE,
-                            sort: 'id,asc',
-                            segName : this.selApp.id
+                            sort: 'id,asc'
                         }
-                });
+                ]);
             break;
         }
     }

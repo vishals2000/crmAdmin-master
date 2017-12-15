@@ -263,7 +263,7 @@
                             enableCheckAll : false,
                             enableSearchFilter: true
                           }" 
-                        (onSelect)="onItemSelect($event, crumb.appPageType)"> </angular2-multiselect>
+                        (onSelect)="onItemSelect($event, crumb.appPageType)" (onDeSelect)="onItemDeSelect($event, crumb)"> </angular2-multiselect>
                         <div layout="" layout-align="center center" class="ol-breadcrumbarrow crumb divider layout-align-center-center layout-row"  ng-show="!$last">
                                 <span aria-hidden="true">»</span><!-- ng-show="!$last" -->
                         </div>

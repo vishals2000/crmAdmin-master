@@ -72,13 +72,16 @@ export class CampaignTemplate implements BaseEntity {
         public pushToOptimoveInstances?: boolean,
         public targetGroupMetaData?: CampaignTemplateMetaDataCriterion[],
         public launchEnabled?: boolean,
-        public editEnabled?: boolean
+        public editEnabled?: boolean,
+        public pcId?: any,
+        public retargetedCampaign?: boolean
     ) {
         this.inPlayerTimezone = false;
         this.sendImmediately = false;
         this.targetGroupFilterCriteria = [];
         this.editEnabled = true;
         this.launchEnabled = true;
+        this.retargetedCampaign = false;
         // this.campaignTemplateFilterCriteria = [];
     }
 }

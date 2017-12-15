@@ -191,24 +191,24 @@ export class LinechartComponent implements OnInit {
 
     getTotalUsers() {
         this.selected = 'T';
-        this.chartHeading = 'Total Users';
-        this.data = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-                {
-                    label: 'First Dataset',
-                    data: [32, 51, 80, 65, 68, 56, 41],
-                    fill: false,
-                    borderColor: '#4bc0c0'
-                },
-                {
-                    label: 'Second Dataset',
-                    data: [21, 38, 50, 29, 56, 17, 60],
-                    fill: false,
-                    borderColor: '#565656'
-                }
-            ]
-        };
+        // this.chartHeading = 'Total Users';
+        // this.data = {
+        //     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        //     datasets: [
+        //         {
+        //             label: 'First Dataset',
+        //             data: [32, 51, 80, 65, 68, 56, 41],
+        //             fill: false,
+        //             borderColor: '#4bc0c0'
+        //         },
+        //         {
+        //             label: 'Second Dataset',
+        //             data: [21, 38, 50, 29, 56, 17, 60],
+        //             fill: false,
+        //             borderColor: '#565656'
+        //         }
+        //     ]
+        // };
     }
     getUniqueUsers() {
         this.selected = 'U';
