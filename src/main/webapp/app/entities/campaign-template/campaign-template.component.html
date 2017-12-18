@@ -123,7 +123,7 @@
                                 class="btn btn-info btn-sm">
                                 <span class="fa fa-sticky-note"></span>
                             </button>
-                            <button type="submit" alt="Launch" [title]="!campaignTemplate.launchEnabled ? 'Already Launched' : 'Launch'" [disabled]="!campaignTemplate.launchEnabled"
+                            <button type="submit" alt="Launch" [title]="!campaignTemplate.launchEnabled ? (campaignTemplate.status === 'DRAFT' ? 'Launch Disabled' : 'Already Launched') : 'Launch'" [disabled]="!campaignTemplate.launchEnabled"
                                 [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/launch'} }]"
                                 class="btn btn-info btn-sm">
                                 <span class="fa fa-rocket" [ngClass]="{'disabled':!campaignTemplate.launchEnabled}"></span>

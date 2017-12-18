@@ -7,29 +7,40 @@
         <jhi-alert-error></jhi-alert-error>
         <p>Application - {{campaignTemplate.id}}</p>
         <p>Target Group Size - {{targetGroupSize}}</p>
-        <p>Filter criteria: <span *ngIf="!campaignTemplate.targetGroupFilterCriteria.length">-- No criteria selected --</span>  </p>
-        
+        <p>Filter criteria:
+            <span *ngIf="!campaignTemplate.targetGroupFilterCriteria.length">-- No criteria selected --</span>
+        </p>
+
         <ul *ngIf="campaignTemplate.targetGroupFilterCriteria">
-            <li *ngFor="let i of campaignTemplate.targetGroupFilterCriteria"> 
-              {{ i.filterOption }}   {{ i.filterOptionComparison }} {{ i.filterOptionLookUp }} {{ i.filterOptionValue }}
+            <li *ngFor="let i of campaignTemplate.targetGroupFilterCriteria">
+                {{ i.filterOption }} {{ i.filterOptionComparison }} {{ i.filterOptionLookUp }} {{ i.filterOptionValue }}
             </li>
         </ul>
         <!-- <p *ngIf="!campaignTemplate.targetGroupFilterCriteria.length">**You will not be able to launch the campaign unless atleast one filter criteria is selected.</p> -->
         <p>Content body - (Language)</p>
         <ul *ngIf="campaignTemplate.targetGroupContentCriteria">
-                <li *ngFor="let i of campaignTemplate.targetGroupContentCriteria; let j=index"> 
-                  {{ i.contentBody }} - ({{i.languageSelected}}), Target Content Group Size - {{targetContentGroupSize[j]}}
-                </li>
-            </ul>
+            <li *ngFor="let i of campaignTemplate.targetGroupContentCriteria; let j=index">
+                {{ i.contentBody }} - ({{i.languageSelected}}), Target Content Group Size - {{targetContentGroupSize[j]}}
+            </li>
+        </ul>
+        <div *ngIf="campaignTemplate.sendImmediately">
+            Send immediately
+        </div>
+        <div *ngIf="!campaignTemplate.sendImmediately">
+            Scheduled to send at {{campaignTemplate.scheduledTime}} on {{campaignTemplate.startDate.year}}-{{campaignTemplate.startDate.month}}-{{campaignTemplate.startDate.day}} (UTC)
+        </div>
+<br>
         <p *ngIf="campaignTemplate.targetGroupFilterCriteria.length">Are you sure you want to launch this Campaign Template?</p>
     </div>
-    
+
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
-            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+            <span class="fa fa-ban"></span>&nbsp;
+            <span>Cancel</span>
         </button>
         <button type="submit" class="btn btn-primary">
-            &nbsp;<span>Launch</span>
+            &nbsp;
+            <span>Launch</span>
         </button>
     </div>
 </form>

@@ -318,6 +318,10 @@ select.custom-selectbox  {
 }
 .paddingL15{padding-left: 15px;}
 .paddingR15{padding-right: 15px;}
+.modal-body{
+    font-family: Roboto,sans-serif;
+    font-size: 15px;
+}
 /*insight page styles starts here*/
 
 ngb-timepicker.ng-invalid:not(form) fieldset {
