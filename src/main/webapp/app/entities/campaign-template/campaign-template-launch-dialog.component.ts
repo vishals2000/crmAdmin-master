@@ -25,6 +25,7 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
     campaignTemplate: CampaignTemplate;
     targetGroupSize: Number;
     targetContentGroupSize: Number[];
+    segmentNames: any[];
 
     constructor(
         private campaignTemplateService: CampaignTemplateService,
@@ -40,10 +41,27 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
             this.campaignTemplate.campaignGroupId = message[0];
             this.campaignTemplate.frontEnd = message[1];
             this.campaignTemplate.product = message[2];
-        });
-        this.targetContentGroupSize = [];
-        this.getTargetGroupSize();
-        this.getTargetContentGroupSize();
+            this.segmentNames = [];
+            this.getSegments();
+            this.targetContentGroupSize = [];
+        });       
+    }
+    getSegments(){
+        const body = {
+            'frontEnd': this.campaignTemplate.frontEnd,
+            'product': this.campaignTemplate.product
+        }
+        this.campaignTemplateService.getSegments(body).subscribe(
+            (res: ResponseWrapper) => {
+                this.segmentNames = res['segments'];
+                this.getTargetGroupSize();
+                this.getTargetContentGroupSize();
+            },
+            (res: ResponseWrapper) => {
+                this.getTargetGroupSize();
+                this.getTargetContentGroupSize();
+            }
+        );
     }
 
     getTargetGroupSize() {
@@ -62,6 +80,16 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
             (res: ResponseWrapper) => this.onTargetGroupSizeRequestSuccess(res, res),
             (res: ResponseWrapper) => this.onError(res.json)
         );
+    }
+    getFiltersWithDesc(oFilObj){
+        if(oFilObj.filterOption === 'Segment'){
+            for(var i=0;this.segmentNames && i<this.segmentNames.length;i++){
+                if(this.segmentNames[i].id === oFilObj.filterOptionValue[0]){
+                    return oFilObj.filterOption + " "+ oFilObj.filterOptionComparison + " " + oFilObj.filterOptionLookUp + " " +this.segmentNames[i].name;
+                }
+            }
+        }
+        return oFilObj.filterOption + " "+ oFilObj.filterOptionComparison + " " + oFilObj.filterOptionLookUp + " " + oFilObj.filterOptionValue;   
     }
     getTargetContentGroupSize() {
         for (let i =0;i<this.campaignTemplate.targetGroupContentCriteria.length;i++) {

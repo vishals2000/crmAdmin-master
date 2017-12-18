@@ -13,14 +13,14 @@
 
         <ul *ngIf="campaignTemplate.targetGroupFilterCriteria">
             <li *ngFor="let i of campaignTemplate.targetGroupFilterCriteria">
-                {{ i.filterOption }} {{ i.filterOptionComparison }} {{ i.filterOptionLookUp }} {{ i.filterOptionValue }}
+                {{ getFiltersWithDesc(i) }}
             </li>
         </ul>
         <!-- <p *ngIf="!campaignTemplate.targetGroupFilterCriteria.length">**You will not be able to launch the campaign unless atleast one filter criteria is selected.</p> -->
         <p>Content body - (Language)</p>
         <ul *ngIf="campaignTemplate.targetGroupContentCriteria">
             <li *ngFor="let i of campaignTemplate.targetGroupContentCriteria; let j=index">
-                {{ i.contentBody }} - ({{i.languageSelected}}), Target Content Group Size - {{targetContentGroupSize[j]}}
+                {{ i.contentBody }} - {{i.languageSelected}}, Target Content Group Size - {{targetContentGroupSize[j]}}
             </li>
         </ul>
         <div *ngIf="campaignTemplate.sendImmediately">
