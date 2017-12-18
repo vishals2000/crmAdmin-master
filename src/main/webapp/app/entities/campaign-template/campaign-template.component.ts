@@ -262,6 +262,8 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         });
     }
     private callBreadCrumbToCampTemp(response){
+        this.eventManager.broadcast({ name: 'selectedApp', content: this.oCampInfo.appId});
+        this.eventManager.broadcast({ name: 'selectedCampGrp', content: this.groupId});
         this.eventManager.broadcast({ name: 'setBreadCrumbToCampTemp', content: {campGrpId : this.groupId}});
     }
     private OnSaveError(error){

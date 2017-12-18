@@ -115,8 +115,11 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
             this.showUploadDiv = true;
             const values: string[] = [this.selectedApp.frontEnd, this.selectedApp.product.toString()];
             this.audienceSegmentsService.changeAppInfo(values);
-            this.eventManager.broadcast({ name: 'selectedApp', content: this.appId});
-            this.eventManager.broadcast({ name: 'setBreadCrumbToAudSeg', content: 'OK'});
+            setTimeout(() => {
+                this.eventManager.broadcast({ name: 'selectedApp', content: this.appId});
+                this.eventManager.broadcast({ name: 'setBreadCrumbToAudSeg', content: 'OK'});
+            }, 0);
+            
             if(this.appId){
                 this.loadAll();
             }

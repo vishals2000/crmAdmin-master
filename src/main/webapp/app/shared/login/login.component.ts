@@ -30,6 +30,9 @@ export class JhiLoginModalComponent implements AfterViewInit {
     }
 
     ngAfterViewInit() {
+        this.eventManager.broadcast({
+            name: 'clearBdData', content: 'Sending Authentication Req'
+        });
         this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#username'), 'focus', []);
     }
 

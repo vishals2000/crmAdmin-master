@@ -101,10 +101,11 @@ export class NavbarComponent implements OnInit {
         this.eventSubscriber = this.eventManager.subscribe('setBreadCrumbToInsightsFirstApp', response => this.setBreadCrumbToInsights(response, true));
         this.eventSubscriber = this.eventManager.subscribe('setBreadCrumbToAudSegFirstApp', response => this.setBreadCrumbToAudSeg(response, true));
         
-       // this.eventSubscriber = this.eventManager.subscribe('clearBdData', response => this.clearBdData(response));
+        this.eventSubscriber = this.eventManager.subscribe('clearBdData', response => this.clearBdData(response));
     }
     clearBdData(res){
-        this.setBreadCrumbToApp(res);
+        this.crumbsArray = [];
+        //this.setBreadCrumbToApp(res);
        // this.crumbsArray = this.crumbsArray.splice(0, this.crumbsArray.length);
     }
     setAppDataToBreadCrumbModel(appListModified){
@@ -257,6 +258,9 @@ export class NavbarComponent implements OnInit {
     }
 
     logout() {
+        this.eventManager.broadcast({
+            name: 'clearBdData', content: 'Sending Authentication Req'
+        });
         this.collapseNavbar();
         this.loginService.logout();
         this.router.navigate(['']);
