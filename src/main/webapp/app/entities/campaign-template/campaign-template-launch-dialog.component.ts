@@ -24,6 +24,7 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
 
     campaignTemplate: CampaignTemplate;
     targetGroupSize: Number;
+    targetContentGroupSize: Number[];
 
     constructor(
         private campaignTemplateService: CampaignTemplateService,
@@ -40,13 +41,16 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
             this.campaignTemplate.frontEnd = message[1];
             this.campaignTemplate.product = message[2];
         });
+        this.targetContentGroupSize = [];
         this.getTargetGroupSize();
+        this.getTargetContentGroupSize();
     }
 
     getTargetGroupSize() {
         const languagesUpdated: string[] = [];
-        for (const i of this.campaignTemplate.targetGroupContentCriteria) {
-            languagesUpdated.push(i.languageSelected);
+        for (var i =0;i<this.campaignTemplate.targetGroupContentCriteria.length;i++) {
+            languagesUpdated.push(this.campaignTemplate.targetGroupContentCriteria[i].languageSelected);
+            this.targetContentGroupSize[i] = 0;
         }
         const body = new CampaignTargetGroupSizeRequest(
             this.campaignTemplate.frontEnd,
@@ -58,6 +62,30 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
             (res: ResponseWrapper) => this.onTargetGroupSizeRequestSuccess(res, res),
             (res: ResponseWrapper) => this.onError(res.json)
         );
+    }
+    getTargetContentGroupSize() {
+        for (let i =0;i<this.campaignTemplate.targetGroupContentCriteria.length;i++) {
+            const body = {
+                'frontEnd': this.campaignTemplate.frontEnd,
+                'product': this.campaignTemplate.product,
+                'language': this.campaignTemplate.targetGroupContentCriteria[i].languageSelected,
+                'targetGroupFilterCriteria': this.campaignTemplate.targetGroupFilterCriteria
+            }
+          
+            this.campaignTemplateService.getTargetContentGroupSize(body).subscribe(
+                (res: ResponseWrapper) => this.onTargetGroupContentSizeRequestSuccess(res, res, i),
+                (res: ResponseWrapper) => this.onTargetGroupContentSizeRequestSuccess(res, res, i),
+            );
+        }
+        
+    }
+
+    private onTargetGroupContentSizeRequestSuccess(data, headers, contentGrpNo) {
+        if (data) {
+            this.targetContentGroupSize[contentGrpNo] = data.targetGroupSize;
+        } else {
+            this.targetContentGroupSize[contentGrpNo] = 0;
+        }
     }
 
     private onTargetGroupSizeRequestSuccess(data, headers) {

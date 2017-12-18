@@ -17,8 +17,8 @@
         <!-- <p *ngIf="!campaignTemplate.targetGroupFilterCriteria.length">**You will not be able to launch the campaign unless atleast one filter criteria is selected.</p> -->
         <p>Content body - (Language)</p>
         <ul *ngIf="campaignTemplate.targetGroupContentCriteria">
-                <li *ngFor="let i of campaignTemplate.targetGroupContentCriteria"> 
-                  {{ i.contentBody }} - ({{i.languageSelected}}) 
+                <li *ngFor="let i of campaignTemplate.targetGroupContentCriteria; let j=index"> 
+                  {{ i.contentBody }} - ({{i.languageSelected}}), Target Content Group Size - {{targetContentGroupSize[j]}}
                 </li>
             </ul>
         <p *ngIf="campaignTemplate.targetGroupFilterCriteria.length">Are you sure you want to launch this Campaign Template?</p>
