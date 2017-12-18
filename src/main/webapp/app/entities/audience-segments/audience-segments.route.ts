@@ -18,20 +18,18 @@ export class AudienceSegmentsResolvePagingParams implements Resolve<any> {
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const page = route.queryParams['page'] ? route.queryParams['page'] : (route.params['page'] || '1');
-        const segName = route.queryParams['segName'] ? route.queryParams['segName'] : (route.params['segName'] || '');
         const sort = route.queryParams['sort'] ? route.queryParams['sort'] : (route.params['sort'] || 'id,asc');
         return {
             page: this.paginationUtil.parsePage(page),
             predicate: this.paginationUtil.parsePredicate(sort),
-            ascending: this.paginationUtil.parseAscending(sort),
-            segName: this.paginationUtil.parsePredicate(segName)
+            ascending: this.paginationUtil.parseAscending(sort)
       };
     }
 }
 
 export const audienceSegmentsRoute: Routes = [
     {
-        path: 'audience-segments',
+        path: 'audience-segments/project/:id',
         component: AudienceSegmentsComponent,
         resolve: {
             'pagingParams': AudienceSegmentsResolvePagingParams
@@ -44,6 +42,9 @@ export const audienceSegmentsRoute: Routes = [
     }, {
         path: 'audience-segments/:id',
         component: AudienceSegmentsDetailComponent,
+        resolve: {
+            'pagingParams': AudienceSegmentsResolvePagingParams
+        },
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'AudienceSegments'

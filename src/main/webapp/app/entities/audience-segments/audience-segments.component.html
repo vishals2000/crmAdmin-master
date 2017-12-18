@@ -13,11 +13,11 @@
             Upload Segments
             </span>
         </button>
-        <div class="float-right audiaSegAppDp" style="line-height: 1rem !important;margin-right: 0.5rem;">        
+        <!-- <div class="float-right audiaSegAppDp" style="line-height: 1rem !important;margin-right: 0.5rem;">        
             <select class="custom-selectbox rounded" name="appsList" [(ngModel)]="selectedApp" (change)="getData(selectedApp);">
               <option *ngFor="let app of apps" [ngValue]="app">{{app.name}}</option>
             </select>
-        </div>
+        </div> -->
     </h2>
     <jhi-alert></jhi-alert>
     <div class="row">
@@ -53,7 +53,7 @@
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                [routerLink]="['../audience-segments', audienceSegments.id ]"
+                        (click)="openSegmentDetail(audienceSegments.id)"
                                 class="btn btn-info btn-sm">
                             <span class="fa fa-eye"></span>
                             <span class="hidden-md-down">View</span>

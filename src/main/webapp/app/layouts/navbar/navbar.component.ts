@@ -115,20 +115,18 @@ export class NavbarComponent implements OnInit {
     }
     setAppSelAppToBreadCrumbModel(appSelected){
         let AppId = appSelected.content;
-        this.loadAllApps(null);
-        if(this.appList){
-            for(var i=0;i<this.appList.length;i++){
-                if(this.appList[i].id === AppId || !AppId){
-                    this.selApp = this.appList[i];
-                    this.selApp.itemName = this.selApp.name;
-                    localStorage["sellectedApp"] = JSON.stringify(this.selApp);
+        var oCurObj = this;
+        var fAfterGetResults = function(res){
+            for(var i=0;i<oCurObj.appList.length;i++){
+                if(oCurObj.appList[i].id === AppId || !AppId){
+                    oCurObj.selApp = oCurObj.appList[i];
+                    oCurObj.selApp.itemName = oCurObj.selApp.name;
+                    localStorage["selectedApp"] = JSON.stringify(oCurObj.selApp);
                     break;
                 }
             }
         }
-        else{
-
-        }
+        this.loadAllApps(fAfterGetResults);
     }
     setCampGrpDataToBreadCrumbModel(campGrpListModified){
         this.campGrpList = campGrpListModified.content || [];
@@ -164,7 +162,7 @@ export class NavbarComponent implements OnInit {
         if(this.appList && this.appList.length){
             if(!this.selApp){
                 this.selApp = this.appList[0];
-                localStorage["sellectedApp"] = JSON.stringify(this.selApp);
+                localStorage["selectedApp"] = JSON.stringify(this.selApp);
             }
             this.appPageType = 'app-CG';
             this.crumbsArray.push({appPageType:this.appPageType, name: 'Campaigns', router: '#/campaign-group/project/' + this.selApp.id + "/" + this.selApp.name , brdCrmbId: '2', list:this.appList, selVal : [this.selApp]});
@@ -186,20 +184,14 @@ export class NavbarComponent implements OnInit {
             oCurObj.setBreadCrumbToApp(response);
             if(!oCurObj.selApp || bIsselectedFirstApp){
                 oCurObj.selApp = oCurObj.appList[0];
-                localStorage["sellectedApp"] = JSON.stringify(oCurObj.selApp);
+                localStorage["selectedApp"] = JSON.stringify(oCurObj.selApp);
             }
             if(oCurObj.appList && oCurObj.appList.length){
                 oCurObj.appPageType = 'AS';
-                oCurObj.crumbsArray.push({appPageType:oCurObj.appPageType, name: 'Audience Segments', router: '#/audience-segments/'+ oCurObj.selApp.id +';page=0;sort=id,asc;', brdCrmbId: '2', list:oCurObj.appList, selVal: [oCurObj.selApp]});
+                oCurObj.crumbsArray.push({appPageType:oCurObj.appPageType, name: 'Audience Segments', router: '#/audience-segments/project/'+ oCurObj.selApp.id, brdCrmbId: '2', list:oCurObj.appList, selVal: [oCurObj.selApp]});
             }
             if(bIsselectedFirstApp){
-                oCurObj.router.navigate(['/audience-segments/' + oCurObj.selApp.id, 
-                    {
-                        page: 0,
-                        size: ITEMS_PER_PAGE,
-                        sort: 'id,asc'
-                    }
-                ]);
+                oCurObj.router.navigate(['/audience-segments/project/' + oCurObj.selApp.id], {});
             }
         };
         this.loadAllApps(fAfterGetResults);
@@ -210,7 +202,7 @@ export class NavbarComponent implements OnInit {
             oCurObj.setBreadCrumbToApp(response);
             if(!oCurObj.selApp || bIsselectedFirstApp){
                 oCurObj.selApp = oCurObj.appList[0];
-                localStorage["sellectedApp"] = JSON.stringify(oCurObj.selApp);
+                localStorage["selectedApp"] = JSON.stringify(oCurObj.selApp);
             }
             oCurObj.appPageType = 'INS';
             oCurObj.crumbsArray.push({appPageType:oCurObj.appPageType, name: 'Insights', router: '#/linechart/project/' + oCurObj.selApp.name, brdCrmbId: '2', list:oCurObj.appList, selVal: [oCurObj.selApp]});
@@ -226,13 +218,29 @@ export class NavbarComponent implements OnInit {
             this.router.navigate(['/linechart/project/' + this.selApp.id], {});
         }
         else if(this.appList && this.appList.length){
-            localStorage["sellectedApp"] = JSON.stringify(this.appList[0]);
+            localStorage["selectedApp"] = JSON.stringify(this.appList[0]);
             this.router.navigate(['/linechart/project/' + this.appList[0].id], {});
         }
         else{
             this.loadAllApps(function(){
-                localStorage["sellectedApp"] = JSON.stringify(this.appList[0]);
+                localStorage["selectedApp"] = JSON.stringify(this.appList[0]);
                 oCurObj.router.navigate(['/linechart/project/' + oCurObj.appList[0].id], {});
+            })
+        }
+    }
+    goToSegAudPage(){
+        var oCurObj = this;
+        if(this.selApp){
+            this.router.navigate(['/audience-segments/project/' + this.selApp.id], {});
+        }
+        else if(this.appList && this.appList.length){
+            localStorage["selectedApp"] = JSON.stringify(this.appList[0]);
+            this.router.navigate(['/audience-segments/project/' + this.appList[0].id], {});
+        }
+        else{
+            this.loadAllApps(function(){
+                localStorage["selectedApp"] = JSON.stringify(this.appList[0]);
+                oCurObj.router.navigate(['/audience-segments/project/' + oCurObj.appList[0].id], {});
             })
         }
     }
@@ -285,12 +293,7 @@ export class NavbarComponent implements OnInit {
                 this.selApp = oSelectedItm;
                 localStorage["selectedApp"] = JSON.stringify(oSelectedItm);
                 //this.router.navigate(['/audience-segments/' + this.selApp.id], {});
-                this.router.navigate(['/audience-segments/' + this.selApp.id, {
-                            page: 0,
-                            size: ITEMS_PER_PAGE,
-                            sort: 'id,asc'
-                        }
-                ]);
+                this.router.navigate(['/audience-segments/project/' + this.selApp.id], {});
             break;
         }
     }

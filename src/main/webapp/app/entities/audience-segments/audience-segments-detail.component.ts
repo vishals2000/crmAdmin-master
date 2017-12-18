@@ -13,6 +13,7 @@ import { AudienceSegmentsService } from './audience-segments.service';
 export class AudienceSegmentsDetailComponent implements OnInit, OnDestroy {
 
     audienceSegments: AudienceSegments;
+    appId: any;
     private subscription: Subscription;
     private eventSubscriber: Subscription;
 
@@ -25,8 +26,11 @@ export class AudienceSegmentsDetailComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.subscription = this.route.params.subscribe((params) => {
+            this.appId = params['id'];
             this.load(params['id']);
         });
+        this.eventManager.broadcast({ name: 'selectedApp', content: this.appId});
+        this.eventManager.broadcast({ name: 'setBreadCrumbToAudSeg', content: 'OK'});
         this.registerChangeInAudienceSegments();
     }
 

@@ -319,3 +319,7 @@ select.custom-selectbox  {
 .paddingL15{padding-left: 15px;}
 .paddingR15{padding-right: 15px;}
 /*insight page styles starts here*/
+
+ngb-timepicker.ng-invalid:not(form) fieldset {
+    border-left: 5px solid red;
+}

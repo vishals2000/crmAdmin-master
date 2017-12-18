@@ -383,7 +383,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
                 }
             }
         }
-        if (this.campaignTemplate.targetGroupContentCriteria) {
+        if (this.campaignTemplate.targetGroupContentCriteria && this.campaignTemplate.targetGroupContentCriteria.length) {
             for (const i of this.campaignTemplate.targetGroupContentCriteria) {
                 this.targetGroupContentCriteria.push(this.fb.group(i));
             }

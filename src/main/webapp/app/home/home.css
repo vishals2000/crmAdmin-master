@@ -19,6 +19,9 @@ Main page styles
     line-height: 1rem !important;
     margin-right: 0.5rem;
 }
+ngb-timepicker.ng-invalid:not(form) fieldset {
+    border-left: 5px solid red;
+}
 /* wait autoprefixer update to allow simple generation of high pixel density media query */
 @media
 only screen and (-webkit-min-device-pixel-ratio: 2),

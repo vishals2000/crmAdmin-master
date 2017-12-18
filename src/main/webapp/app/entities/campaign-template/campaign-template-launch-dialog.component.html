@@ -6,8 +6,8 @@
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
         <p>Application - {{campaignTemplate.id}}</p>
-        <p>Targert Group Size - {{targetGroupSize}}</p>
-        <p>Filter Critiria: <span *ngIf="!campaignTemplate.targetGroupFilterCriteria.length">-- No criteria selected --</span>  </p>
+        <p>Target Group Size - {{targetGroupSize}}</p>
+        <p>Filter criteria: <span *ngIf="!campaignTemplate.targetGroupFilterCriteria.length">-- No criteria selected --</span>  </p>
         
         <ul *ngIf="campaignTemplate.targetGroupFilterCriteria">
             <li *ngFor="let i of campaignTemplate.targetGroupFilterCriteria"> 

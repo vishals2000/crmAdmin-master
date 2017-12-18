@@ -20,7 +20,7 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
     audienceSegments: AudienceSegments[];
     error: any;
     success: any;
-    eventSubscriber: Subscription;
+    eventSubscriberAd: Subscription;
     routeData: any;
     links: any;
     totalItems: any;
@@ -33,7 +33,8 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
     apps: Apps[];
     showUploadDiv: boolean;
     selectedApp: any;
-    segName: any;
+    private subscription: Subscription;
+    appId: any;
 
     constructor(
         private audienceSegmentsService: AudienceSegmentsService,
@@ -45,7 +46,8 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
         private router: Router,
         private eventManager: JhiEventManager,
         private paginationUtil: JhiPaginationUtil,
-        private paginationConfig: PaginationConfig
+        private paginationConfig: PaginationConfig,
+        private route: ActivatedRoute,
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.routeData = this.activatedRoute.data.subscribe((data) => {
@@ -53,7 +55,7 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
             this.previousPage = data['pagingParams'].page;
             this.reverse = data['pagingParams'].ascending;
             this.predicate = data['pagingParams'].predicate;
-            this.segName = data['pagingParams'].segName;
+            //this.appId = data['pagingParams'].appId;
         });
     }
 
@@ -77,13 +79,12 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
         }
     }
     transition() {
-        this.router.navigate(['/audience-segments'], {
+        this.router.navigate(['/audience-segments/project/' + this.selectedApp.id], {
             queryParams:
                 {
                     page: this.page,
                     size: this.itemsPerPage,
-                    sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
-                    segName : this.selectedApp.frontEnd
+                    sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
                 }
         });
         this.loadAll();
@@ -91,40 +92,37 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
 
     clear() {
         this.page = 0;
-        this.router.navigate(['/audience-segments', {
+        this.router.navigate(['/audience-segments/project/' + this.selectedApp.id, {
             page: this.page,
-            sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
-            segName : this.selectedApp.frontEnd
+            sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
         }]);
         this.loadAll();
     }
     ngOnInit() {
+        this.subscription = this.route.params.subscribe((params) => {
+            this.appId = params['id'];
+            if (this.appId) {
+                this.setDataToPageModel();
+            }
+            else {
+                this.eventManager.broadcast({ name: 'setBreadCrumbToAudSegFirstApp', content: 'OK' });
+            }
+        });
+    }
+    setDataToPageModel(){
         this.showUploadDiv = false;
-        //this.eventManager.broadcast({ name: 'setBreadCrumbToAudSeg', content: 'OK'});
-        this.eventManager.broadcast({ name: 'clearBdData', content: 'OK'});
-        this.appsService.query().subscribe((res: ResponseWrapper) => {
-            this.apps = res.json;
-            if(!this.segName){
-                this.selectedApp = this.apps[0];
-            }
-            else{
-                for(let i=0;i<this.apps.length;i++){
-                    if(this.apps[i].frontEnd === this.segName){
-                        this.selectedApp = this.apps[i];
-                        break;
-                    }
-                }
-            }
+            this.selectedApp = JSON.parse(localStorage['selectedApp']);
             this.showUploadDiv = true;
             const values: string[] = [this.selectedApp.frontEnd, this.selectedApp.product.toString()];
             this.audienceSegmentsService.changeAppInfo(values);
-            if(this.segName){
+            this.eventManager.broadcast({ name: 'selectedApp', content: this.appId});
+            this.eventManager.broadcast({ name: 'setBreadCrumbToAudSeg', content: 'OK'});
+            if(this.appId){
                 this.loadAll();
             }
             else{
                 this.clear();
             }
-        });
         this.principal.identity().then((account) => {
             this.currentAccount = account;
         });
@@ -132,14 +130,16 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.eventManager.destroy(this.eventSubscriber);
+        if(this.eventSubscriberAd){
+            this.eventManager.destroy(this.eventSubscriberAd);
+        }
     }
 
     trackId(index: number, item: AudienceSegments) {
         return item.id;
     }
     registerChangeInAudienceSegments() {
-        this.eventSubscriber = this.eventManager.subscribe('audienceSegmentsListModification', (response) => this.loadAll());
+        this.eventSubscriberAd = this.eventManager.subscribe('audienceSegmentsListModification', (response) => this.loadAll());
     }
 
     getData(app: Apps) {
@@ -162,6 +162,9 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
             result.push('id');
         }
         return result;
+    }
+    openSegmentDetail(id){
+        this.router.navigate(['/audience-segments/' + id], {});
     }
 
     private onSuccess(data, headers) {

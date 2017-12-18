@@ -20,6 +20,7 @@ export class UploadSegmentsDialogComponent implements OnInit {
     audienceSegments: AudienceSegments;
     isSaving: boolean;
     formData: FormData;
+    fileSizeError : boolean;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -28,6 +29,7 @@ export class UploadSegmentsDialogComponent implements OnInit {
         private eventManager: JhiEventManager,
         private http: Http
     ) {
+        this.fileSizeError = false;
     }
 
     ngOnInit() {
@@ -55,6 +57,7 @@ export class UploadSegmentsDialogComponent implements OnInit {
                     this.audienceSegmentsService.upload(this.audienceSegments, this.formData));
             }
         } else {
+            this.isSaving = false;
             alert('Please select file..');
         }
     }
@@ -63,12 +66,31 @@ export class UploadSegmentsDialogComponent implements OnInit {
     fileChange(event) {
         const fileList: FileList = event.target.files;
         if (fileList.length > 0) {
-            const file: File = fileList[0];
+            let file: File = fileList[0];
+
+            let regex = new RegExp("(.*?)\.(csv)$");
+
+            if (!(regex.test(file.name))) {
+                // $(this).val('');
+                this.fileSizeError = true;
+                this.isSaving = false;
+                //alert('Please select correct file format');
+            }
+            else if (file.size > 10485760) {
+                this.fileSizeError = true;
+                this.isSaving = false;
+            }
+            else {
+                this.fileSizeError = false;
+                this.isSaving = true;
+                this.formData = new FormData();
+                this.formData.append('file', file);
+            }
+            //if(file.fileSize < )
 
             // let formData: FormData = new FormData();
-            this.formData = new FormData();
-            this.formData.append('file', file);
-            
+
+
             // for (var j = 0; j < fileList.length; j++) {
             //     formData.append("file[]", fileList[j], fileList[j].name);
             // }

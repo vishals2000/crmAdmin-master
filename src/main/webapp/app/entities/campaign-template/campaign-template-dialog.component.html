@@ -14,11 +14,11 @@
                              [(ngModel)]="campaignTemplate.id" readonly />
                       </div> -->
 
-        <div class="form-group">
-            <label class="form-control-label" for="field_campaignName">Campaign Name</label>
-            <input type="text" class="form-control" name="campaignName" id="field_campaignName" formControlName="campaignName" required
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label" for="field_campaignName">Campaign Name</label>
+            <input type="text" class="form-control col-sm-6" name="campaignName" id="field_campaignName" formControlName="campaignName" required
             />
-            <div [hidden]="!(campaignTemplateGroupCreationForm.controls.campaignName?.dirty && campaignTemplateGroupCreationForm.controls.campaignName?.invalid)">
+            <div class='col-sm-3' [hidden]="!(campaignTemplateGroupCreationForm.controls.campaignName?.dirty && campaignTemplateGroupCreationForm.controls.campaignName?.invalid)">
                 <small class="form-text text-danger" [hidden]="!campaignTemplateGroupCreationForm.controls.campaignName?.errors?.required">
                     This field is required.
                 </small>
@@ -31,75 +31,6 @@
             />
         </div> -->
 
-        <div class="form-group">
-            <label for="frequent_date">Send immediately</label>&nbsp;&nbsp;
-            <input type="checkbox" name="inPlayerTimezone" id="frequent_date" formControlName="sendImmediately" (change)="sendImmediatelyCheck()"
-            />
-        </div>
-
-        <div *ngIf="showSendImmDiv" [hidden]="this.campaignTemplateGroupCreationForm.value.sendImmediately">
-
-            <div class="form-group">
-                <label class="form-control-label" for="field_startDate">Start Date</label>
-                <!--input type="date" name="startDate" id="field_startDate" (ngModelChange)="onStartDtChange()"  /-->
-                <div class="input-group">
-                    <input id="field_startDate" type="text" class="form-control" name="startDate" ngbDatepicker [minDate]="minDate" #startDateDp="ngbDatepicker"
-                        (ngModelChange)="onStartDtChange()" formControlName="startDate" required/>
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" (click)="startDateDp.toggle()">
-                            <i class="fa fa-calendar"></i>
-                        </button>
-                    </span>
-                </div>
-                <div [hidden]="!(campaignTemplateGroupCreationForm.controls.startDate?.dirty && campaignTemplateGroupCreationForm.controls.startDate?.invalid)">
-                    <small class="form-text text-danger" [hidden]="!campaignTemplateGroupCreationForm.controls.startDate?.errors?.required">
-                        This field is required.
-                    </small>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="form-control-label" for="field_recurrenceType">Recurrence Type</label>
-                <select class="form-control" name="recurrenceType" formControlName="recurrenceType" id="field_recurrenceType" required (change)="onRecurrenceType()">
-                    <option value="NONE">NONE</option>
-                    <option value="WEEKLY">WEEKLY</option>
-                    <option value="DAILY">DAILY</option>
-                </select>
-                <div [hidden]="!(campaignTemplateGroupCreationForm.controls.recurrenceType?.dirty && campaignTemplateGroupCreationForm.controls.recurrenceType?.invalid)">
-                    <small class="form-text text-danger" [hidden]="!campaignTemplateGroupCreationForm.controls.recurrenceType?.errors?.required">
-                        This field is required.
-                    </small>
-                </div>
-            </div>
-            <div class="form-group" *ngIf="isRecuEndDateVisible">
-                <label class="form-control-label" for="field_recurrenceEndDate">Recurrence End Date{{recurrenceType}}</label>
-                <div class="input-group">
-                    <input id="field_recurrenceEndDate" type="text" class="form-control" name="recurrenceEndDate" ngbDatepicker [minDate]="minDate"
-                        #recurrenceEndDateDp="ngbDatepicker" formControlName="recurrenceEndDate" required/>
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" (click)="recurrenceEndDateDp.toggle()">
-                            <i class="fa fa-calendar"></i>
-                        </button>
-                    </span>
-                </div>
-                <div [hidden]="!(campaignTemplateGroupCreationForm.controls.recurrenceEndDate?.dirty && campaignTemplateGroupCreationForm.controls.recurrenceEndDate?.invalid)">
-                    <small class="form-text text-danger" [hidden]="!campaignTemplateGroupCreationForm.controls.recurrenceEndDate?.errors?.required">
-                        This field is required.
-                    </small>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="form-control-label" for="field_scheduledTime">Scheduled Time (in UTC)</label>
-                <!-- <ngb-timepicker formControlName="time" [ngModelOptions]="{standalone: true}"></ngb-timepicker>                 -->
-                <ngb-timepicker formControlName="time" [ngModelOptions]="{standalone: true}"></ngb-timepicker>
-                <div *ngIf="campaignTemplateGroupCreationForm && campaignTemplateGroupCreationForm.controls && campaignTemplateGroupCreationForm.controls.time && campaignTemplateGroupCreationForm.controls.time.errors">
-                    <div *ngIf=" campaignTemplateGroupCreationForm.controls.time.errors['invalid']">invalid</div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="field_inPlayerTimezone">In Player Timezone</label>&nbsp;&nbsp;
-                <input type="checkbox" name="inPlayerTimezone" id="field_inPlayerTimezone" formControlName="inPlayerTimezone" />
-            </div>
-        </div>
         <!-- <div *ngIf="campaignTemplateGroupCreationForm.controls.id.value"> -->
         <!-- <div class="form-group" *ngIf="(campaignTemplate.id && campaignTemplate.pushToOptimoveInstances ) || !campaignTemplate.id">
                     <label for="frequent_date">Push to optimoveInstances</label>&nbsp;&nbsp;
@@ -120,33 +51,33 @@
                 <!-- The repeated address template -->
                 <h4>TargetGroupFilterCriterion #{{i + 1}}</h4>
                 <div style="margin-left: 1em;">
-                    <div class="form-group">
-                        <label class="center-block">FilterOption:</label>
+                    <div class="form-group row">
+                        <label class="center-block col-sm-4 col-form-label">FilterOption:</label>
                         <!-- <input class="form-control" formControlName="filterOption" (focus)="filterOptionFocus(i)"> -->
-                        <select class="form-control" formControlName="filterOption" (change)="onFilterOptionChange(i)">
+                        <select class="form-control col-sm-7" formControlName="filterOption" (change)="onFilterOptionChange(i)">
                             <option *ngFor="let filterOption of filterOptions" [value]="filterOption">{{filterOption}}</option>
                         </select>
                     </div>
-                    <div class="form-group" [hidden]="isOptionLookUpHidden(i)">
-                        <label class="center-block">FilterOptionLookUp:</label>
+                    <div class="form-group row" [hidden]="isOptionLookUpHidden(i)">
+                        <label class="center-block col-sm-4 col-form-label">FilterOptionLookUp:</label>
                         <!-- <input class="form-control" formControlName="filterOptionLookUp" required> -->
-                        <select class="form-control" formControlName="filterOptionLookUp" (change)="onFilterOptionLookupChange(i)">
+                        <select class="form-control col-sm-7" formControlName="filterOptionLookUp" (change)="onFilterOptionLookupChange(i)">
                             <option *ngFor="let filterOptionLookUp of getFilterOptionLookUpValues(i)" [value]="filterOptionLookUp">{{filterOptionLookUp}}</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label class="center-block">FilterOptionComparison:</label>
+                    <div class="form-group row">
+                        <label class="center-block col-sm-4 col-form-label">FilterOptionComparison:</label>
                         <!-- <input class="form-control" formControlName="filterOptionComparison" required> -->
-                        <select class="form-control" formControlName="filterOptionComparison" (change)="onFilterOptionComparisonChange(i)">
+                        <select class="form-control col-sm-7" formControlName="filterOptionComparison" (change)="onFilterOptionComparisonChange(i)">
                             <option *ngFor="let filterOption of getFilterOptionComparisonValues(i)" [value]="filterOption">{{filterOption}}</option>
                         </select>
                     </div>
-                    <div class="form-group" [ngSwitch]="getFormControlType(i)" [hidden]="isOptionValueSelectionHidden(i)" optional>
-                        <label *ngIf="getFormControlType(i)" class="center-block">FilterOptionValue:</label>
+                    <div class="form-group row" [ngSwitch]="getFormControlType(i)" [hidden]="isOptionValueSelectionHidden(i)" optional>
+                        <label *ngIf="getFormControlType(i)" class="center-block col-sm-4 col-form-label">FilterOptionValue:</label>
                         <!-- <input class="form-control" formControlName="filterOptionValue"> -->
-                        <input class="form-control" formControlName="filterOptionValue" optional *ngSwitchCase="'textbox'">
+                        <input class="form-control col-sm-7" formControlName="filterOptionValue" optional *ngSwitchCase="'textbox'">
                         <!-- input class="form-control" placeholder="yyyy-MM-dd" formControlName="filterOptionValue" optional *ngSwitchCase="'simpleDate'" -->
-                        <div class="input-group" *ngSwitchCase="'simpleDate'">
+                        <div class="input-group col-sm-8" *ngSwitchCase="'simpleDate'">
                             <input type="text" class="form-control" formControlName="simpleDate" ngbDatepicker #filterOptionValue1="ngbDatepicker" optional
                                 placeholder="yyyy-MM-dd" (ngModelChange)="onSimpleDateChange(i)" />
                             <span class="input-group-btn">
@@ -155,36 +86,38 @@
                                 </button>
                             </span>
                         </div>
-                        <input class="form-control" placeholder="the value of N" formControlName="filterOptionValue" optional *ngSwitchCase="'daysCounter'">
-                        <input class="form-control" placeholder="version number" formControlName="filterOptionValue" optional *ngSwitchCase="'appVersionSelector'">
-                        <input class="form-control" placeholder="Type to add a tag value" formControlName="filterOptionValue" optional *ngSwitchCase="'tagValue'">
-                        <input class="form-control" placeholder="League Name" formControlName="filterOptionValue" optional *ngSwitchCase="'leagueName'">
-                        <input class="form-control" placeholder="League Name Id" formControlName="filterOptionValue" optional *ngSwitchCase="'leagueNameId'">
-                        <input class="form-control" placeholder="Event Id" formControlName="filterOptionValue" optional *ngSwitchCase="'eventId'">
-                        <input class="form-control" formControlName="filterOptionValue" min="0" type="number" optional *ngSwitchCase="'Number'">
-                        <select class="form-control" formControlName="filterOptionValue" *ngSwitchCase="'dropdown'">
+                        <input class="form-control col-sm-7" placeholder="the value of N" formControlName="filterOptionValue" optional *ngSwitchCase="'daysCounter'">
+                        <input class="form-control col-sm-7" placeholder="version number" formControlName="filterOptionValue" optional *ngSwitchCase="'appVersionSelector'">
+                        <input class="form-control col-sm-7" placeholder="Type to add a tag value" formControlName="filterOptionValue" optional *ngSwitchCase="'tagValue'">
+                        <input class="form-control col-sm-7" placeholder="League Name" formControlName="filterOptionValue" optional *ngSwitchCase="'leagueName'">
+                        <input class="form-control col-sm-7" placeholder="League Name Id" formControlName="filterOptionValue" optional *ngSwitchCase="'leagueNameId'">
+                        <input class="form-control col-sm-7" placeholder="Event Id" formControlName="filterOptionValue" optional *ngSwitchCase="'eventId'">
+                        <input class="form-control col-sm-7" formControlName="filterOptionValue" min="0" type="number" optional *ngSwitchCase="'Number'">
+                        <select class="form-control col-sm-7" formControlName="filterOptionValue" *ngSwitchCase="'dropdown'">
                             <!-- <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option> -->
                             <option *ngFor="let filterOption of getFilterOptionValueValues(i)" [value]="filterOption">{{filterOption}}</option>
                         </select>
-                        <select class="form-control" formControlName="filterOptionValue" *ngSwitchCase="'dropdownWithObj'">
+                        <select class="form-control col-sm-7" formControlName="filterOptionValue" *ngSwitchCase="'dropdownWithObj'">
                             <!-- <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option> -->
                             <option *ngFor="let filterOption of getFilterOptionValueValues(i)" [value]="filterOption.id">{{filterOption.name}}</option>
                         </select>
-                        <angular2-multiselect [data]="getFilterOptionValueValues(i)" formControlName="selectedItems"  *ngSwitchCase="'multiSelectDropdown'"
-                        [settings]="{ 
-                            singleSelection: false, 
-                            text:'Select',
-                            enableCheckAll : true,
-                            selectAllText:'Select All',
-                            unSelectAllText:'UnSelect All',
-                            enableSearchFilter: true,
-                            classes:'myclass custom-class',
-                            searchPlaceholderText : 'Search'
-                          }" 
-                        (onSelect)="onItemSelect(i)" 
-                        (onDeSelect)="onItemSelect(i)"
-                        (onSelectAll)="onItemSelect(i)"
-                        (onDeSelectAll)="onItemSelect(i)"></angular2-multiselect>
+                        <div class='col-sm-7'  *ngSwitchCase="'multiSelectDropdown'">
+                            <angular2-multiselect  [data]="getFilterOptionValueValues(i)" formControlName="selectedItems" 
+                            [settings]="{ 
+                                singleSelection: false, 
+                                text:'Select',
+                                enableCheckAll : true,
+                                selectAllText:'Select All',
+                                unSelectAllText:'UnSelect All',
+                                enableSearchFilter: true,
+                                classes:'myclass custom-class',
+                                searchPlaceholderText : 'Search'
+                            }" 
+                            (onSelect)="onItemSelect(i)" 
+                            (onDeSelect)="onItemSelect(i)"
+                            (onSelectAll)="onItemSelect(i)"
+                            (onDeSelectAll)="onItemSelect(i)"></angular2-multiselect>
+                        </div>
                         <!-- <select class="form-control" formControlName="filterOptionValue" multiple *ngSwitchCase="'multiSelectDropdown'">
                             <option *ngFor="let filterOption of getFilterOptionValueValues(i)" [value]="filterOption">{{filterOption}}</option>
                         </select> -->
@@ -200,7 +133,6 @@
                 <div align="right">
                     <button (click)="removeTargetGroupFilterCriterion(i)" type="button">Remove Filter</button>
                 </div>
-                <br>
             </div>
             <br>
             <button (click)="addCampaignTemplateFilterCriterion()" type="button">Add Filter</button>
@@ -219,19 +151,21 @@
                                 <label class="form-control-label" for="field_contentName">Content Name</label>
                                 <input type="text" class="form-control" name="contentName" id="field_contentName" formControlName="contentName" required/>
                             </div> -->
-                    <div class="form-group">
-                        <label class="form-control-label" for="field_contentTitle">Content Title</label>
-                        <input type="text" class="form-control" name="contentTitle" id="field_contentTitle" formControlName="contentTitle" required/>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-control-label" for="field_contentBody">Content Body</label>
-                        <input type="text" class="form-control" name="contentBody" id="field_contentBody" formControlName="contentBody" required/>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-control-label" for="field_languageComparision">Language</label>
-                        <select class="form-control" name="languageSelected" formControlName="languageSelected" id="languageSelected" [required]="targetGroupContentCriteria.controls.length === 1 ? false : true ">
-                            <option *ngFor="let language of languagesList" [value]="language">{{language}}</option>
-                        </select>
+                    <div class="form-row">
+                        <div class="form-group form-group col-md-4">
+                            <label class="form-control-label" for="field_contentTitle">Content Title</label>
+                            <input type="text" class="form-control" name="contentTitle" id="field_contentTitle" formControlName="contentTitle" required/>
+                        </div>
+                        <div class="form-group  form-group col-md-4">
+                            <label class="form-control-label" for="field_contentBody">Content Body</label>
+                            <input type="text" class="form-control" name="contentBody" id="field_contentBody" formControlName="contentBody" required/>
+                        </div>
+                        <div class="form-group  form-group col-md-4">
+                            <label class="form-control-label" for="field_languageComparision">Language</label>
+                            <select class="form-control" name="languageSelected" formControlName="languageSelected" id="languageSelected" [required]="targetGroupContentCriteria.controls.length === 1 ? false : true ">
+                                <option *ngFor="let language of languagesList" [value]="language">{{language}}</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div align="right" [hidden]="targetGroupContentCriteria.controls.length === 1 ? true : false ">
@@ -248,18 +182,18 @@
                 <!-- The repeated address template -->
                 <h4>targetGroupMetaDataCriterion #{{i + 1}}</h4>
                 <div style="margin-left: 1em;">
-                    <div class="form-group">
-                        <label class="form-control-label">Key*</label>
-                        <input type="text" placeholder="Key*" class="form-control" name="key" formControlName="key" required />
-                        <div [hidden]="!targetGroupMetaDataCriterion.controls.key?.invalid">
+                    <div class="form-group row">
+                        <label class="form-control-label col-sm-2 col-form-label">Key*</label>
+                        <input type="text" placeholder="Key*" class="form-control col-sm-7" name="key" formControlName="key" required />
+                        <div [hidden]="!targetGroupMetaDataCriterion.controls.key?.invalid" class="col-sm-3">
                             <small class="form-text text-danger">
                                 Key must be unique
                             </small>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-control-label">Value*</label>
-                        <input type="text" placeholder="Value*" class="form-control" name="value" formControlName="value" required/>
+                    <div class="form-group  row">
+                        <label class="form-control-label col-sm-2 col-form-label">Value*</label>
+                        <input type="text" placeholder="Value*" class="form-control col-sm-7" name="value" formControlName="value" required/>
                     </div>
                 </div>
                 <div align="right">
@@ -270,10 +204,82 @@
             <br>
         </div>
         <button (click)="addCampaignTemplateMetaDataCriterion()" type="button">Add MetaData</button>
+        <br></br>
+        <div class="form-group  row" >
+            <label class="form-control-label col-sm-2 col-form-label" for="field_metaData">Deep Link</label>
+            <input type="text" class="form-control col-sm-7" name="metaData" id="field_metaData" formControlName="metaData" />
+        </div>
+        
+        <div class="form-group">
+            <label for="frequent_date">Send immediately</label>&nbsp;&nbsp;
+            <input type="checkbox" name="inPlayerTimezone" id="frequent_date" formControlName="sendImmediately" (change)="sendImmediatelyCheck()"
+            />
+        </div>
 
-        <div class="form-group" class="well well-lg">
-            <label class="form-control-label" for="field_metaData">Deep Link</label>
-            <input type="text" class="form-control" name="metaData" id="field_metaData" formControlName="metaData" />
+        <div *ngIf="showSendImmDiv" [hidden]="this.campaignTemplateGroupCreationForm.value.sendImmediately">
+
+            <div class="form-group row">
+                <label class="form-control-label col-sm-4 col-form-label" for="field_startDate">Start Date</label>
+                <!--input type="date" name="startDate" id="field_startDate" (ngModelChange)="onStartDtChange()"  /-->
+                <div class="input-group col-sm-4" style="padding-left: 0 !important; padding-right: 0 !important;">
+                    <input id="field_startDate" type="text" class="form-control" name="startDate" ngbDatepicker [minDate]="minDate" #startDateDp="ngbDatepicker"
+                        (ngModelChange)="onStartDtChange()" formControlName="startDate" required/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" (click)="startDateDp.toggle()">
+                            <i class="fa fa-calendar"></i>
+                        </button>
+                    </span>
+                </div>
+                <div class="col-sm-3" [hidden]="!(campaignTemplateGroupCreationForm.controls.startDate?.dirty && campaignTemplateGroupCreationForm.controls.startDate?.invalid)">
+                    <small class="form-text text-danger" [hidden]="!campaignTemplateGroupCreationForm.controls.startDate?.errors?.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="form-control-label col-sm-4 col-form-label" for="field_recurrenceType">Recurrence Type</label>
+                <select class="form-control col-sm-4" name="recurrenceType" formControlName="recurrenceType" id="field_recurrenceType" required (change)="onRecurrenceType()">
+                    <option value="NONE">NONE</option>
+                    <option value="WEEKLY">WEEKLY</option>
+                    <option value="DAILY">DAILY</option>
+                </select>
+                <div class="col-sm-3" [hidden]="!(campaignTemplateGroupCreationForm.controls.recurrenceType?.dirty && campaignTemplateGroupCreationForm.controls.recurrenceType?.invalid)">
+                    <small class="form-text text-danger" [hidden]="!campaignTemplateGroupCreationForm.controls.recurrenceType?.errors?.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div class="form-group row" *ngIf="isRecuEndDateVisible">
+                <label class="form-control-label col-sm-4 col-form-label" for="field_recurrenceEndDate">Recurrence End Date{{recurrenceType}}</label>
+                <div class="input-group col-sm-4" style="padding-left: 0 !important; padding-right: 0 !important;">
+                    <input id="field_recurrenceEndDate" type="text" class="form-control" name="recurrenceEndDate" ngbDatepicker [minDate]="minDate"
+                        #recurrenceEndDateDp="ngbDatepicker" formControlName="recurrenceEndDate" required/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" (click)="recurrenceEndDateDp.toggle()">
+                            <i class="fa fa-calendar"></i>
+                        </button>
+                    </span>
+                </div>
+                <div class="col-sm-3" [hidden]="!(campaignTemplateGroupCreationForm.controls.recurrenceEndDate?.dirty && campaignTemplateGroupCreationForm.controls.recurrenceEndDate?.invalid)">
+                    <small class="form-text text-danger" [hidden]="!campaignTemplateGroupCreationForm.controls.recurrenceEndDate?.errors?.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="form-control-label col-sm-4 col-form-label" for="field_scheduledTime">Scheduled Time (in UTC)</label>
+                <!-- <ngb-timepicker formControlName="time" [ngModelOptions]="{standalone: true}"></ngb-timepicker>                 -->
+                <div class="col-sm-4" style="padding-left: 0 !important; padding-right: 0 !important;">
+                    <ngb-timepicker formControlName="time" [ngModelOptions]="{standalone: true}"></ngb-timepicker>
+                </div>
+                <div class="col-sm-2" *ngIf="campaignTemplateGroupCreationForm && campaignTemplateGroupCreationForm.controls && campaignTemplateGroupCreationForm.controls.time && campaignTemplateGroupCreationForm.controls.time.errors">
+                    <div class="form-text text-danger" *ngIf=" campaignTemplateGroupCreationForm.controls.time.errors['invalid']">invalid</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="field_inPlayerTimezone">In Player Timezone</label>&nbsp;&nbsp;
+                <input type="checkbox" name="inPlayerTimezone" id="field_inPlayerTimezone" formControlName="inPlayerTimezone" />
+            </div>
         </div>
     </div>
     <div class="modal-footer">
