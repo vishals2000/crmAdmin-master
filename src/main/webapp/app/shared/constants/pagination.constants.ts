@@ -1,16 +1,5 @@
 export const ITEMS_PER_PAGE = 20;
-export const LANGUAGES: string[] = ['Avestan', 'Afrikaans', 'Albanian', 'Armenian', 'Aragonese', 'Arabic', 'Assamese', 'Azerbaijani', 'Bashkir', 'Belarusian',
-'Bulgarian', 'Bihari', 'Bislama', 'Bambara', 'Bengali', 'Tibetan Standard', 'Breton', 'Bosnian', 'Catalan', 'Chamorro',
-'Chinese', 'Corsican', 'Cree', 'Czech', 'Chuvash', 'Welsh', 'German', 'Danish', 'Dzongkha', 'Ewe', 'English', 'Spanish',
-'Estonian', 'Finnish', 'Fijian', 'Faroese', 'French', 'Irish', 'Gaelic', 'Georgian', 'Galician', 'Guarana', 'Greek',
-'Gujarati', 'Croatian', 'Haitian', 'Hungarian', 'Indonesian', 'Hebrew', 'Hindi', 'Ido', 'Persian', 'Icelandic',
-'Italian', 'Japanese', 'Kongo', 'Kikuyu', 'Khmer', 'Kannada', 'Korean', 'Kyrgyz', 'Luxembourgish', 'Limburgish',
-'Lithuanian', 'Latvian', 'Malagasy', 'Marshallese', 'Macedonian', 'Malayalam', 'Mongolian', 'Malay', 'Maltese',
-'Burmese', 'Nauru', 'Nepali', 'Ndonga', 'Dutch', 'Norwegian', 'Southern Ndebele', 'Oromo', 'Punjabi', 'Urdu', 'Polish',
-'Pashto', 'Portuguese', 'Romanian', 'Russian', 'Kinyarwanda', 'Sanskrit', 'Sardinian', 'Sindhi', 'Northern Sami',
-'Sango', 'Sinhala', 'Slovak', 'Slovene', 'Samoan', 'Shona', 'Somali', 'Serbian', 'Southern Sotho', 'Swedish', 'Tajik',
-'Thai', 'Turkmen', 'Tagalog', 'Tswana', 'Tonga', 'Turkish', 'Tatar', 'Twi', 'Uyghur', 'Ukranian', 'Uzbek', 'Venda',
-'Vietnamese', 'Zhuang'];
+export const LANGUAGES: string[] = ["Afrikaans","Albanian","Arabic","Aragonese","Armenian","Assamese","Avestan","Azerbaijani","Bambara","Bashkir","Belarusian","Bengali","Bihari","Bislama","Bosnian","Breton","Bulgarian","Burmese","Catalan","Chamorro","Chinese","Chuvash","Corsican","Cree","Croatian","Czech","Danish","Dutch","Dzongkha","English","Estonian","Ewe","Faroese","Fijian","Finnish","French","Gaelic","Galician","Georgian","German","Greek","Guarana","Gujarati","Haitian","Hebrew","Hindi","Hungarian","Icelandic","Ido","Indonesian","Irish","Italian","Japanese","Kannada","Khmer","Kikuyu","Kinyarwanda","Kongo","Korean","Kyrgyz","Latvian","Limburgish","Lithuanian","Luxembourgish","Macedonian","Malagasy","Malay","Malayalam","Maltese","Marshallese","Mongolian","Nauru","Ndonga","Nepali","Northern Sami","Norwegian","Oromo","Pashto","Persian","Polish","Portuguese","Punjabi","Romanian","Russian","Samoan","Sango","Sanskrit","Sardinian","Serbian","Shona","Sindhi","Sinhala","Slovak","Slovene","Somali","Southern Ndebele","Southern Sotho","Spanish","Swedish","Tagalog","Tajik","Tatar","Thai","Tibetan Standard","Tonga","Tswana","Turkish","Turkmen","Twi","Ukranian","Urdu","Uyghur","Uzbek","Venda","Vietnamese","Welsh","Zhuang"];
 export const TIME_ZONES: string[] = ['Adelaide, Darwin (UTC+9:30)', 'American Samoa (UTC-11)', 'Arizona, Chihuahua, La Paz, Mazatlan (UTC-7)',
 'Athens, Beirut, Bucharest, Harare, Istanbul, Pretoria (UTC+2)', 'Auckland, Wellington (UTC+12)', 'Azores (UTC-1)',
 'Baker Island, Howland Island (UTC-12)', 'Bangkok, Hanoi, Jakarta (UTC+7)', 'Barbados, Roraima (UTC-4)',
