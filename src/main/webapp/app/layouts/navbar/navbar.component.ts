@@ -175,8 +175,10 @@ export class NavbarComponent implements OnInit {
             if(response.content.campGrpId && !this.selCampGrp){
                 this.eventManager.broadcast({ name: 'selectedCampGrp', content: response.content.campGrpId});
             }
-            this.appPageType = 'app-CT';
-            this.crumbsArray.push({appPageType:this.appPageType, name: 'Messages', router: '#/campaign-template/group/' + this.selCampGrp.id + "/" + this.selCampGrp.name , brdCrmbId: '2', list:this.campGrpList, selVal : [this.selCampGrp]});
+            else{
+                this.appPageType = 'app-CT';
+                this.crumbsArray.push({appPageType:this.appPageType, name: 'Messages', router: '#/campaign-template/group/' + this.selCampGrp.id + "/" + this.selCampGrp.name , brdCrmbId: '2', list:this.campGrpList, selVal : [this.selCampGrp]});
+            }
         }
     }
     setBreadCrumbToAudSeg(response, bIsselectedFirstApp){

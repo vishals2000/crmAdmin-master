@@ -50,34 +50,34 @@
             <div *ngFor="let targetGroupFilterCriterion of targetGroupFilterCriteria.controls; let i=index" [formGroupName]="i">
                 <!-- The repeated address template -->
                 <h4>TargetGroupFilterCriterion #{{i + 1}}</h4>
-                <div style="margin-left: 1em;">
-                    <div class="form-group row">
-                        <label class="center-block col-sm-4 col-form-label">FilterOption:</label>
+                <div style="margin-left: 1em;" class="form-row">
+                    <div class="form-group  col-md-3">
+                        <!-- <label class="center-block col-sm-4 col-form-label">FilterOption:</label> -->
                         <!-- <input class="form-control" formControlName="filterOption" (focus)="filterOptionFocus(i)"> -->
-                        <select class="form-control col-sm-7" formControlName="filterOption" (change)="onFilterOptionChange(i)">
+                        <select placeholder="FilterOption" class="form-control " formControlName="filterOption" (change)="onFilterOptionChange(i)">
                             <option *ngFor="let filterOption of filterOptions" [value]="filterOption">{{filterOption}}</option>
                         </select>
                     </div>
-                    <div class="form-group row" [hidden]="isOptionLookUpHidden(i)">
-                        <label class="center-block col-sm-4 col-form-label">FilterOptionLookUp:</label>
+                    <div class="form-group  col-md-3" [hidden]="isOptionLookUpHidden(i)">
+                        <!-- <label class="center-block col-sm-4 col-form-label">FilterOptionLookUp:</label> -->
                         <!-- <input class="form-control" formControlName="filterOptionLookUp" required> -->
-                        <select class="form-control col-sm-7" formControlName="filterOptionLookUp" (change)="onFilterOptionLookupChange(i)">
+                        <select placeholder="FilterOptionLookUp" class="form-control " formControlName="filterOptionLookUp" (change)="onFilterOptionLookupChange(i)">
                             <option *ngFor="let filterOptionLookUp of getFilterOptionLookUpValues(i)" [value]="filterOptionLookUp">{{filterOptionLookUp}}</option>
                         </select>
                     </div>
-                    <div class="form-group row">
-                        <label class="center-block col-sm-4 col-form-label">FilterOptionComparison:</label>
+                    <div class="form-group  col-md-3">
+                        <!-- <label class="center-block col-sm-4 col-form-label">FilterOptionComparison:</label> -->
                         <!-- <input class="form-control" formControlName="filterOptionComparison" required> -->
-                        <select class="form-control col-sm-7" formControlName="filterOptionComparison" (change)="onFilterOptionComparisonChange(i)">
+                        <select placeholder="FilterOptionComparison" class="form-control " formControlName="filterOptionComparison" (change)="onFilterOptionComparisonChange(i)">
                             <option *ngFor="let filterOption of getFilterOptionComparisonValues(i)" [value]="filterOption">{{filterOption}}</option>
                         </select>
                     </div>
-                    <div class="form-group row" [ngSwitch]="getFormControlType(i)" [hidden]="isOptionValueSelectionHidden(i)" optional>
-                        <label *ngIf="getFormControlType(i)" class="center-block col-sm-4 col-form-label">FilterOptionValue:</label>
+                    <div class="form-group  col-md-3" [ngSwitch]="getFormControlType(i)" [hidden]="isOptionValueSelectionHidden(i)" optional>
+                        <!-- <label *ngIf="getFormControlType(i)" class="center-block col-sm-4 col-form-label">FilterOptionValue:</label> -->
                         <!-- <input class="form-control" formControlName="filterOptionValue"> -->
-                        <input class="form-control col-sm-7" formControlName="filterOptionValue" optional *ngSwitchCase="'textbox'">
+                        <input class="form-control " formControlName="filterOptionValue" optional *ngSwitchCase="'textbox'">
                         <!-- input class="form-control" placeholder="yyyy-MM-dd" formControlName="filterOptionValue" optional *ngSwitchCase="'simpleDate'" -->
-                        <div class="input-group col-sm-8" *ngSwitchCase="'simpleDate'">
+                        <div class="input-group" *ngSwitchCase="'simpleDate'">
                             <input type="text" class="form-control" formControlName="simpleDate" ngbDatepicker #filterOptionValue1="ngbDatepicker" optional
                                 placeholder="yyyy-MM-dd" (ngModelChange)="onSimpleDateChange(i)" />
                             <span class="input-group-btn">
@@ -86,22 +86,22 @@
                                 </button>
                             </span>
                         </div>
-                        <input class="form-control col-sm-7" placeholder="the value of N" formControlName="filterOptionValue" optional *ngSwitchCase="'daysCounter'">
-                        <input class="form-control col-sm-7" placeholder="version number" formControlName="filterOptionValue" optional *ngSwitchCase="'appVersionSelector'">
-                        <input class="form-control col-sm-7" placeholder="Type to add a tag value" formControlName="filterOptionValue" optional *ngSwitchCase="'tagValue'">
-                        <input class="form-control col-sm-7" placeholder="League Name" formControlName="filterOptionValue" optional *ngSwitchCase="'leagueName'">
-                        <input class="form-control col-sm-7" placeholder="League Name Id" formControlName="filterOptionValue" optional *ngSwitchCase="'leagueNameId'">
-                        <input class="form-control col-sm-7" placeholder="Event Id" formControlName="filterOptionValue" optional *ngSwitchCase="'eventId'">
-                        <input class="form-control col-sm-7" formControlName="filterOptionValue" min="0" type="number" optional *ngSwitchCase="'Number'">
-                        <select class="form-control col-sm-7" formControlName="filterOptionValue" *ngSwitchCase="'dropdown'">
+                        <input class="form-control " placeholder="the value of N" formControlName="filterOptionValue" optional *ngSwitchCase="'daysCounter'">
+                        <input class="form-control " placeholder="version number" formControlName="filterOptionValue" optional *ngSwitchCase="'appVersionSelector'">
+                        <input class="form-control " placeholder="Type to add a tag value" formControlName="filterOptionValue" optional *ngSwitchCase="'tagValue'">
+                        <input class="form-control " placeholder="League Name" formControlName="filterOptionValue" optional *ngSwitchCase="'leagueName'">
+                        <input class="form-control " placeholder="League Name Id" formControlName="filterOptionValue" optional *ngSwitchCase="'leagueNameId'">
+                        <input class="form-control " placeholder="Event Id" formControlName="filterOptionValue" optional *ngSwitchCase="'eventId'">
+                        <input class="form-control " formControlName="filterOptionValue" min="0" type="number" optional *ngSwitchCase="'Number'">
+                        <select class="form-control " formControlName="filterOptionValue" *ngSwitchCase="'dropdown'">
                             <!-- <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option> -->
                             <option *ngFor="let filterOption of getFilterOptionValueValues(i)" [value]="filterOption">{{filterOption}}</option>
                         </select>
-                        <select class="form-control col-sm-7" formControlName="filterOptionValue" *ngSwitchCase="'dropdownWithObj'">
+                        <select class="form-control " formControlName="filterOptionValue" *ngSwitchCase="'dropdownWithObj'">
                             <!-- <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option> -->
                             <option *ngFor="let filterOption of getFilterOptionValueValues(i)" [value]="filterOption.id">{{filterOption.name}}</option>
                         </select>
-                        <div class='col-sm-7'  *ngSwitchCase="'multiSelectDropdown'">
+                        <div class=''  *ngSwitchCase="'multiSelectDropdown'">
                             <angular2-multiselect  [data]="getFilterOptionValueValues(i)" formControlName="selectedItems" 
                             [settings]="{ 
                                 singleSelection: false, 
