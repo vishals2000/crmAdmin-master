@@ -73,7 +73,7 @@ export class CampaignTemplate implements BaseEntity {
         public targetGroupMetaData?: CampaignTemplateMetaDataCriterion[],
         public launchEnabled?: boolean,
         public editEnabled?: boolean,
-        public pcId?: any,
+        public parentCampaignTemplateId?: any,
         public retargetedCampaign?: boolean
     ) {
         this.inPlayerTimezone = false;

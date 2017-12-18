@@ -187,7 +187,7 @@ export class CampaignTemplateService {
         }
         
         if(bIsRetarget){
-            postObj.pcId = postObj.id;
+            postObj.parentCampaignTemplateId  = postObj.id;
             postObj.retargetedCampaign = true;
             postObj.targetGroupContentCriteria = [];
             postObj.targetGroupFilterCriteria = [];
