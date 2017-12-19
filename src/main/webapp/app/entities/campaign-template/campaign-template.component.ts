@@ -244,7 +244,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
             }
             copyCountArr.sort();
             if(count > 0){
-                count = copyCountArr[copyCountArr.length - 1] + 1;
+                count = (copyCountArr[copyCountArr.length - 1] || 0) + 1;
             }
             this.campaignTemplateService.copyorRetargetCampaignTemplate(this.copyFromTemp, count, bIsRetarget).subscribe(
                 (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' }),

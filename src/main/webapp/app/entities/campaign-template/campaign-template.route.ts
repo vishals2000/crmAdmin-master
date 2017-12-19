@@ -11,6 +11,8 @@ import { CampaignTemplateDeletePopupComponent } from './campaign-template-delete
 import { CampaignTemplateLaunchPopupComponent } from './campaign-template-launch-dialog.component';
 import { CampaignTemplateTestPopupComponent } from './campaign-template-test-dialog.component';
 import { CampaignTemplateCancelPopupComponent } from './campaign-template-cancel-dialog.component';
+import { CampaignTemplateCopyToPopupComponent } from './campaign-template-copyto-dialog.component';
+
 
 @Injectable()
 export class CampaignTemplateResolvePagingParams implements Resolve<any> {
@@ -20,10 +22,24 @@ export class CampaignTemplateResolvePagingParams implements Resolve<any> {
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const page = route.queryParams['page'] ? route.queryParams['page'] : '1';
         const sort = route.queryParams['sort'] ? route.queryParams['sort'] : 'modifiedAt,desc';
+        const appId = route.queryParams['appId'] ? route.queryParams['appId'] : '';
         return {
             page: this.paginationUtil.parsePage(page),
             predicate: this.paginationUtil.parsePredicate(sort),
-            ascending: this.paginationUtil.parseAscending(sort)
+            ascending: this.paginationUtil.parseAscending(sort),
+            appId: this.paginationUtil.parsePredicate(appId)
+      };
+    }
+}
+@Injectable()
+export class CampaignTemplateDialogResolvePagingParams implements Resolve<any> {
+
+    constructor(private paginationUtil: JhiPaginationUtil) {}
+
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        const appId = route.queryParams['appId'] ? route.queryParams['appId'] : '';
+        return {
+            appId: this.paginationUtil.parsePage(appId)
       };
     }
 }
@@ -122,5 +138,17 @@ export const campaignTemplatePopupRoute: Routes = [
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
-    }
+    },{
+        path: 'campaign-template/copyTo',
+        component: CampaignTemplateCopyToPopupComponent,
+        resolve: {
+            'pagingParams': CampaignTemplateResolvePagingParams
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'CampaignTemplates'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    },
 ];

@@ -1,24 +1,36 @@
 <div>
     <h2>
         <span>Campaign Templates in "{{groupName}}" </span>
-
-        <button class="btn btn-primary float-right jh-create-entity create-campaign-template" [routerLink]="['/', { outlets: { popup: ['campaign-template-new'] } }]">
-            <span class="fa fa-plus"></span>
-            <span>
-                Create new Campaign Template
-            </span>
-        </button>
     </h2>
-    <div style="overflow:hidden;">
-        <input class="form-control" placeholder="Search" [(ngModel)]="searchValue" (ngModelChange)="onSearchKeyChange(searchValue)"
-            (keypress)="filterItems($event)" style="max-width:500px;float:right;" />
-    </div>
     <jhi-alert></jhi-alert>
-    <div class="row">
-    </div>
     <br/>
     <jhi-alert-error></jhi-alert-error>
-    <div class="table-responsive" *ngIf="campaignTemplates">
+    <div class="jumbotron vertical-center" *ngIf="campaignTemplates && campaignTemplates.length === 0 || !campaignTemplates">
+        <div class="container text-center">
+            <h3 style="color: #000;">You haven't created any Campaign Templates</h3>
+            <button class="btn btn-primary" [routerLink]="['/', { outlets: { popup: ['campaign-template-new'] } }]">
+                <span class="fa fa-plus"></span>
+                <span>
+                    Create new Campaign Template
+                </span>
+            </button>
+        </div>
+    </div>
+    <div class="table-responsive" *ngIf="campaignTemplates && campaignTemplates.length">
+        <br>
+        <div class="row container-fluid" style=" justify-content: flex-end;">
+            <div class="col-md-4">
+                <input class="form-control" placeholder="Search" [(ngModel)]="searchValue" (ngModelChange)="onSearchKeyChange(searchValue)"
+                    (keypress)="filterItems($event)" />
+            </div>
+            <button class="btn btn-primary col-md-4" [routerLink]="['/', { outlets: { popup: ['campaign-template-new'] } }]">
+                <span class="fa fa-plus"></span>
+                <span>
+                    Create new Campaign Template
+                </span>
+            </button>
+        </div>
+        <br>
         <table class="table table-striped">
             <thead>
                 <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
@@ -36,25 +48,25 @@
                         <span class="fa fa-sort"></span>
                     </th> -->
                     <th jhiSortBy="modifiedAt">
-                            <span>Modified At (UTC)</span>
-                            <span class="fa fa-sort"></span>
-                        </th>
+                        <span>Modified At (UTC)</span>
+                        <span class="fa fa-sort"></span>
+                    </th>
                     <th jhiSortBy="startDate">
                         <span>Start Date</span>
                         <span class="fa fa-sort"></span>
                     </th>
-                    <th jhiSortBy="recurrenceType">
+                    <!-- <th jhiSortBy="recurrenceType">
                         <span>Recurrence Type</span>
                         <span class="fa fa-sort"></span>
-                    </th>
+                    </th> -->
                     <th jhiSortBy="recurrenceEndDate">
-                        <span>Recurrence End Date</span>
+                        <span>End Date</span>
                         <span class="fa fa-sort"></span>
                     </th>
-                    <th jhiSortBy="scheduledTime">
+                    <!-- <th jhiSortBy="scheduledTime">
                         <span>Scheduled Time (UTC)</span>
                         <span class="fa fa-sort"></span>
-                    </th>
+                    </th> -->
                     <!-- <th jhiSortBy="inPlayerTimezone"><span>In Player Timezone</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="campaignGroupId"><span>Campaign Group Id</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="filterOption"><span>Filter Option</span> <span class="fa fa-sort"></span></th>
@@ -81,9 +93,9 @@
                     <!-- <td>{{campaignTemplate.campaignDescription}}</td> -->
                     <td class="nowrap">{{campaignTemplate.modifiedAt}}</td>
                     <td class="nowrap">{{campaignTemplate.startDate | date:'mediumDate'}}</td>
-                    <td>{{campaignTemplate.recurrenceType}}</td>
+                    <!-- <td>{{campaignTemplate.recurrenceType}}</td> -->
                     <td class="nowrap">{{campaignTemplate.recurrenceEndDate | date:'mediumDate'}}</td>
-                    <td>{{campaignTemplate.scheduledTime}}</td>
+                    <!-- <td>{{campaignTemplate.scheduledTime}}</td> -->
                     <!-- <td>{{campaignTemplate.inPlayerTimezone}}</td>
                 <td>{{campaignTemplate.campaignGroupId}}</td>
                 <td>{{campaignTemplate.filterOption}}</td>
@@ -115,27 +127,27 @@
                                 <span class="fa fa-eye"></span>
                             </button>
                             <button type="submit" alt="Copy" title="Copy" (click)="copyOrRetargetCurrentTemp(campaignTemplate, false)" class="btn btn-primary btn-sm">
-                                <span class="fa fa-copy"></span>
+                                <span class="fa fa-clone"></span>
+                            </button>
+                            <button type="submit" alt="Copy selected template to another campaign" title="Copy selected template to another campaign" [routerLink]="['/', { outlets: { popup: 'campaign-template/copyTo'} }]" [queryParams]="{ appId: campaignTemplate.id }" class="btn btn-primary btn-sm">
+                                <span class="fa fa-external-link"></span>
                             </button>
                             <button type="submit" alt="Test" title="Test" [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/test'} }]"
                                 class="btn btn-info btn-sm">
                                 <span class="fa fa-sticky-note"></span>
                             </button>
-                            <button type="submit" alt="Launch" [title]="!campaignTemplate.launchEnabled ? (campaignTemplate.status === 'DRAFT' ? 'Launch Disabled' : 'Already Launched') : 'Launch'" [disabled]="!campaignTemplate.launchEnabled"
-                                [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/launch'} }]"
+                            <button type="submit" alt="Launch" [title]="!campaignTemplate.launchEnabled ? (campaignTemplate.status === 'DRAFT' ? 'Launch Disabled' : 'Already Launched') : 'Launch'"
+                                [disabled]="!campaignTemplate.launchEnabled" [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/launch'} }]"
                                 class="btn btn-info btn-sm">
                                 <span class="fa fa-rocket" [ngClass]="{'disabled':!campaignTemplate.launchEnabled}"></span>
-                                <!-- <span>{{campaignTemplate.launchEnabled}}</span> -->
                             </button>
                             <button type="submit" alt="Cancel" title="Cancel" [disabled]="!campaignTemplate.cancelEnabled" [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/cancel'} }]"
                                 replaceUrl="true" class="btn btn-danger btn-sm">
                                 <span class="fa fa-remove" [ngClass]="{'disabled':!campaignTemplate.cancelEnabled}"></span>
-                                <!--  <span class="hidden-md-down">Delete</span>-->
                             </button>
                             <button type="submit" alt="Delete" title="Delete" [disabled]="!campaignTemplate.deleteEnabled" [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/delete'} }]"
                                 replaceUrl="true" class="btn btn-danger btn-sm">
                                 <span class="fa fa-trash" [ngClass]="{'disabled':!campaignTemplate.deleteEnabled}"></span>
-                                <!--  <span class="hidden-md-down">Delete</span>-->
                             </button>
                         </div>
                     </td>

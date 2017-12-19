@@ -16,6 +16,7 @@ import {
     campaignTemplateRoute,
     campaignTemplatePopupRoute,
     CampaignTemplateResolvePagingParams,
+    CampaignTemplateDialogResolvePagingParams
 } from './';
 
 import {
@@ -27,6 +28,8 @@ import {
     CampaignTemplateCancelPopupComponent,
     CampaignTemplateCancelDialogComponent
 } from './campaign-template-cancel-dialog.component'
+
+import { CampaignTemplateCopyToPopupComponent, CampaignTemplateCopyToDialogComponent } from './campaign-template-copyto-dialog.component';
 
 import {
     CampaignTemplateTestPopupComponent,
@@ -59,7 +62,9 @@ const ENTITY_STATES = [
         CampaignTemplateTestPopupComponent,
         CampaignTemplateTestDialogComponent,
         CampaignTemplateCancelPopupComponent,
-        CampaignTemplateCancelDialogComponent
+        CampaignTemplateCancelDialogComponent,
+        CampaignTemplateCopyToPopupComponent,
+        CampaignTemplateCopyToDialogComponent
     ],
     entryComponents: [
         CampaignTemplateComponent,
@@ -72,12 +77,15 @@ const ENTITY_STATES = [
         CampaignTemplateTestPopupComponent,
         CampaignTemplateTestDialogComponent,
         CampaignTemplateCancelPopupComponent,
-        CampaignTemplateCancelDialogComponent
+        CampaignTemplateCancelDialogComponent,
+        CampaignTemplateCopyToPopupComponent,
+        CampaignTemplateCopyToDialogComponent
     ],
     providers: [
         CampaignTemplateService,
         CampaignTemplatePopupService,
         CampaignTemplateResolvePagingParams,
+        CampaignTemplateDialogResolvePagingParams,
         BreadCrumbService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]

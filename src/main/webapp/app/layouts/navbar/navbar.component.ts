@@ -113,6 +113,7 @@ export class NavbarComponent implements OnInit {
         for(var i=0;i<this.appList.length;i++){
             this.appList[i].itemName = this.appList[i].name;
         }
+        localStorage['appList'] = JSON.stringify(this.appList);
     }
     setAppSelAppToBreadCrumbModel(appSelected){
         let AppId = appSelected.content;
