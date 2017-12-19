@@ -249,7 +249,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             month: now.getUTCMonth() + 1,
             day: now.getUTCDate()
         };
-        this.timerValidation = this.campaignTemplate.scheduledTime ? true : false;
+        this.timerValidation = this.campaignTemplate.scheduledTime && !this.campaignTemplate.sendImmediately ? true : false;
         this.campaignTemplateGroupCreationForm = this.fb.group({
             id: (!this.campaignTemplate.id) ? null : this.campaignTemplate.id,
             frontEnd: (!this.campaignTemplate.frontEnd) ? '' : this.campaignTemplate.frontEnd,
@@ -257,10 +257,10 @@ export class CampaignTemplateDialogComponent implements OnInit {
             campaignName: (!this.campaignTemplate.campaignName) ? '' : this.campaignTemplate.campaignName,
             status: (!this.campaignTemplate.status) ? 'Draft' : this.campaignTemplate.status,
            // campaignDescription: (!this.campaignTemplate.campaignDescription) ? '' : this.campaignTemplate.campaignDescription,
-            startDate: (!this.campaignTemplate.startDate) ? todayDt : this.campaignTemplate.startDate,
+            startDate: (this.campaignTemplate.sendImmediately) ? todayDt : this.campaignTemplate.startDate,
             sendImmediately: (!this.campaignTemplate.sendImmediately) ? false : this.campaignTemplate.sendImmediately,
             recurrenceType: (!this.campaignTemplate.recurrenceType) ? 'NONE' : this.campaignTemplate.recurrenceType,
-            recurrenceEndDate: (!this.campaignTemplate.recurrenceEndDate) ? todayDt : this.campaignTemplate.recurrenceEndDate,
+            recurrenceEndDate: (this.campaignTemplate.sendImmediately) ? todayDt : this.campaignTemplate.recurrenceEndDate,
             scheduledTime: (!this.campaignTemplate.scheduledTime) ? '' : this.campaignTemplate.scheduledTime,
             inPlayerTimezone: (!this.campaignTemplate.inPlayerTimezone) ? false : this.campaignTemplate.inPlayerTimezone,
             campaignGroupId: (!this.campaignTemplate.campaignGroupId) ? '' : this.campaignTemplate.campaignGroupId,

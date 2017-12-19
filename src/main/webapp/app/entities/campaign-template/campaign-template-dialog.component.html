@@ -292,7 +292,7 @@
             <span class="fa fa-save"></span>&nbsp;
             <span>Save</span>
         </button>
-        <button [hidden]="!campaignTemplateGroupCreationForm.value.launchEnabled" type="submit" [disabled]="campaignTemplateGroupCreationForm.invalid || isSaving"
+        <button [hidden]="campaignTemplateGroupCreationForm.value.status !== 'DRAFT' && !campaignTemplateGroupCreationForm.value.launchEnabled" type="submit" [disabled]="campaignTemplateGroupCreationForm.invalid || isSaving"
             (click)="launch()" class="btn btn-primary">
             <span class="fa fa-save"></span>&nbsp;
             <span>Launch</span>
