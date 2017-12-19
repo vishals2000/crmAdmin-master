@@ -206,6 +206,7 @@ export class CampaignTemplateService {
         postObj.recurrenceEndDate = postObj.startDate;
         postObj.recurrenceType = RecurrenceType.NONE;
         postObj.sendImmediately = false;
+        postObj.scheduledTime = '' + (currentHourValue < 10 ? '0' + currentHourValue : currentHourValue) + ':' + (currentMinValue < 10 ? '0' + currentMinValue : currentMinValue) + ':00'
         // if(postObj.sendImmediately){
         //     if(currentMinValue >= 55){
         //         currentHourValue += 1;
