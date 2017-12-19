@@ -105,6 +105,13 @@ public class CampaignTemplate implements Serializable {
     @Field("modifiedAt")
     private String modifiedAt;
 
+    @Field("retargetedCampaign")
+    private boolean retargetedCampaign;
+
+    @Field("parentCampaignId")
+    private String parentCampaignTemplateId;
+
+
     private String launchTime;
     private String cancellationTime;
     private String deletionTime;
@@ -508,5 +515,23 @@ public class CampaignTemplate implements Serializable {
         campaignTemplate.setTargetGroupFilterCriteria(getTargetGroupFilterCriteria());
         campaignTemplate.setTargetGroupMetaData(this.getTargetGroupMetaData());
         return campaignTemplate;
+    }
+
+    public boolean isRetargetedCampaign() {
+        return retargetedCampaign;
+    }
+
+    public CampaignTemplate setRetargetedCampaign(boolean retargetedCampaign) {
+        this.retargetedCampaign = retargetedCampaign;
+        return this;
+    }
+
+    public String getParentCampaignTemplateId() {
+        return parentCampaignTemplateId;
+    }
+
+    public CampaignTemplate setParentCampaignTemplateId(String parentCampaignTemplateId) {
+        this.parentCampaignTemplateId = parentCampaignTemplateId;
+        return this;
     }
 }
