@@ -8,6 +8,7 @@ import com.gvc.crmadmin.domain.enumeration.RecurrenceType;
 import com.gvc.crmadmin.service.AppsService;
 import com.gvc.crmadmin.service.CampaignGroupService;
 import com.gvc.crmadmin.service.CampaignTemplateService;
+import com.gvc.crmadmin.service.util.Utils;
 import com.gvc.crmadmin.web.rest.util.HeaderUtil;
 import com.gvc.crmadmin.web.rest.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -40,6 +41,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static com.gvc.crmadmin.service.util.Utils.TIME_STAMP_FORMAT;
 import static com.gvc.crmadmin.service.util.Utils.getCurrentDateTimeInUTC;
 import static com.gvc.crmadmin.service.util.Utils.getCurrentDateTimeInUTCAsString;
 
@@ -443,13 +445,15 @@ public class CampaignTemplateResource {
                     if(currentDateTime.equals(startTime)) {
                         if(campaignTemplate.getRecurrenceType().equals(RecurrenceType.NONE)) {
                             campaignTemplate.setStatus(Constants.CampaignTemplateStatus.COMPLETED.getStatus());
+                            campaignTemplate.setCancelEnabled(false);
+                            campaignTemplate.setDeleteEnabled(false);
                         } else {
                             campaignTemplate.setStatus(Constants.CampaignTemplateStatus.LIVE.getStatus());
+                            campaignTemplate.setEditEnabled(false);
+                            campaignTemplate.setCancelEnabled(true);
+                            campaignTemplate.setDeleteEnabled(true);
                         }
                         campaignTemplate.setLaunchEnabled(false);
-                        campaignTemplate.setEditEnabled(false);
-                        campaignTemplate.setCancelEnabled(true);
-                        campaignTemplate.setDeleteEnabled(true);
                     } else {
                         campaignTemplate.setStatus(Constants.CampaignTemplateStatus.PENDING.getStatus()); // the campaign was launched
                         campaignTemplate.setLaunchEnabled(false);
@@ -607,9 +611,8 @@ public class CampaignTemplateResource {
                     [This is fine]
          */
         log.debug("REST request to delete CampaignTemplate : {}", pushNotificationCampaignTemplate);
-        return ResponseEntity.ok().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, null,"Cannot delete a campaign which has targeted players")).build();
 
-/*
+
         if(pushNotificationCampaignTemplate != null && StringUtils.hasText(pushNotificationCampaignTemplate.getCampaignTemplateId())) {
             CampaignTemplate campaignTemplate = campaignTemplateService.findOne(pushNotificationCampaignTemplate.getCampaignTemplateId());
             if (campaignTemplate == null || campaignTemplate.isAlreadyDeleted()) {
@@ -676,7 +679,6 @@ public class CampaignTemplateResource {
         } else {
             return ResponseEntity.ok().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, null,"Invalid campaign")).build();
         }
-*/
     }
 
     private static DateTime getDateTimeFromString(DateTimeFormatter dateTimeFormatter, String scheduleTime) {
