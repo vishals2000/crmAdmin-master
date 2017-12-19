@@ -199,3 +199,9 @@ ui bootstrap tweaks
 .btn-group.flex-btn-group-container .fa.disabled {
     color: gray;
 }
+.arrowColor {
+    color: #17a2b8;    
+}
+.table.table-striped tbody tr td.nowrap{
+    white-space: nowrap;
+}

@@ -79,10 +79,10 @@
                         <span class="badge" [ngClass]="{'DRAFT':'badge-default, btn-secondary btn-sm','COMPLETED':'badge-primary','PENDING':'badge-info','LIVE':'badge-success','DELETED':'badge-danger', 'CANCELLED':'badge-danger'}[campaignTemplate.status]">{{campaignTemplate.status}}</span>
                     </td>
                     <!-- <td>{{campaignTemplate.campaignDescription}}</td> -->
-                    <td>{{campaignTemplate.modifiedAt}}</td>
-                    <td>{{campaignTemplate.startDate | date:'mediumDate'}}</td>
+                    <td class="nowrap">{{campaignTemplate.modifiedAt}}</td>
+                    <td class="nowrap">{{campaignTemplate.startDate | date:'mediumDate'}}</td>
                     <td>{{campaignTemplate.recurrenceType}}</td>
-                    <td>{{campaignTemplate.recurrenceEndDate | date:'mediumDate'}}</td>
+                    <td class="nowrap">{{campaignTemplate.recurrenceEndDate | date:'mediumDate'}}</td>
                     <td>{{campaignTemplate.scheduledTime}}</td>
                     <!-- <td>{{campaignTemplate.inPlayerTimezone}}</td>
                 <td>{{campaignTemplate.campaignGroupId}}</td>
