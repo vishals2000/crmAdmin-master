@@ -223,6 +223,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
             );
         }
         else{
+            let copyCountArr = [];
             for(var i=0;i<acampaigns.length;i++){
                 if(acampaigns[i].campaignName.indexOf(copOrRetagTxt) > -1){
                     let aSubName = acampaigns[i].campaignName.split(copOrRetagTxt);
@@ -230,16 +231,20 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
                         aSubName.splice(0,1);
                         aSubName = aSubName.join(copOrRetagTxt);
                         let aActualCapName = aSubName.split(copyRertaEndSplitTxt);
-                        aActualCapName.splice(0,1);
+                        const copyCountNo = aActualCapName.splice(0,1);
                         aActualCapName = aActualCapName.join(copyRertaEndSplitTxt);
                         if(aActualCapName === this.copyFromTemp.campaignName){
                             count ++;
+                            if(copyCountNo[0] && !isNaN(copyCountNo[0])){
+                                copyCountArr.push(parseInt(copyCountNo[0] || 0));
+                            }
                         }
                     }
                 }
             }
+            copyCountArr.sort();
             if(count > 0){
-                count += 1;
+                count = copyCountArr[copyCountArr.length - 1] + 1;
             }
             this.campaignTemplateService.copyorRetargetCampaignTemplate(this.copyFromTemp, count, bIsRetarget).subscribe(
                 (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' }),
