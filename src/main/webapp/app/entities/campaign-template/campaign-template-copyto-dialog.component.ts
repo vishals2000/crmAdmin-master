@@ -77,7 +77,7 @@ export class CampaignTemplateCopyToDialogComponent implements OnInit {
     getCampaignGrpsForSelApp(itm){
         this.selectedCampGrp = [];
         if(this.selectedApp && this.selectedApp.length){
-            this.campaignGroupService.query({appId:this.selectedApp[0].id}).subscribe(
+            this.campaignGroupService.queryAll({appId:this.selectedApp[0].id}).subscribe(
                 (res: ResponseWrapper) => this.setCapgrpData(res.json),
                 (res: ResponseWrapper) => this.onError(res.json)
             );
