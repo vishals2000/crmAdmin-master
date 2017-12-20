@@ -85,7 +85,7 @@ export class AppsComponent implements OnInit, OnDestroy {
         this.router.navigate(['/apps'], {
             queryParams:
                 {
-                    page: this.page,
+                    page: (this.page > 0 ? this.page - 1 : this.page),
                     size: this.itemsPerPage,
                     sort: this.sort()
                 }
@@ -114,7 +114,7 @@ export class AppsComponent implements OnInit, OnDestroy {
             //this.apps = this.initialApps.filter((item) => item.name.toLowerCase().indexOf(this.searchValue) > -1);
             this.page = 0;
             this.appsService.search(this.searchValue, {
-                page: this.page,
+                page: (this.page > 0 ? this.page - 1 : this.page),
                 size: this.itemsPerPage,
                 sort: this.sort()
             }).subscribe(

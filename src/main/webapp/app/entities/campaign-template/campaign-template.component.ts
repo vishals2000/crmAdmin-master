@@ -93,6 +93,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     }
     loadPage(page: number) {
         if (page !== this.previousPage) {
+            this.campaignTemplates = null;
             this.previousPage = page;
             this.transition();
         }
@@ -101,7 +102,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         this.router.navigate(['/campaign-template/group/' + this.groupId + '/' + this.groupName], {
             queryParams:
                 {
-                    page: this.page,
+                    page: (this.page > 0 ? this.page - 1 : this.page),
                     size: this.itemsPerPage,
                     sort: this.sort()
                 }
@@ -152,7 +153,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         if (this.searchValue && this.searchValue !== '' && $event && $event.keyCode === 13) {
             this.page = 0;
             this.campaignTemplateService.search({ campGroupId: this.groupId, searchVal: this.searchValue }, {
-                page: this.page,
+                page: (this.page > 0 ? this.page - 1 : this.page),
                 size: this.itemsPerPage,
                 sort: this.sort()
             }).subscribe(
@@ -193,13 +194,15 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
                     if(aSubName.length){
                         aSubName.splice(0,1);
                         aSubName = aSubName.join(copOrRetagTxt);
-                        let aActualCapName = aSubName.split(copyRertaEndSplitTxt);
-                        const copyCountNo = aActualCapName.splice(0,1);
-                        aActualCapName = aActualCapName.join(copyRertaEndSplitTxt);
-                        if(aActualCapName === this.copyFromTemp.campaignName){
-                            count ++;
-                            if(copyCountNo[0] && !isNaN(copyCountNo[0])){
-                                copyCountArr.push(parseInt(copyCountNo[0] || 0));
+                        if(aSubName.indexOf(copyRertaEndSplitTxt) > -1){
+                            let aActualCapName = aSubName.split(copyRertaEndSplitTxt);
+                            const copyCountNo = aActualCapName.splice(0,1);
+                            aActualCapName = aActualCapName.join(copyRertaEndSplitTxt);
+                            if(aActualCapName === this.copyFromTemp.campaignName){
+                                count ++;
+                                if(copyCountNo[0] && !isNaN(copyCountNo[0])){
+                                    copyCountArr.push(parseInt(copyCountNo[0] || 0));
+                                }
                             }
                         }
                     }

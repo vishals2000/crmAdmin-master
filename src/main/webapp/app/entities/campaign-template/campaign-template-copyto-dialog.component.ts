@@ -114,13 +114,15 @@ export class CampaignTemplateCopyToDialogComponent implements OnInit {
                     if(aSubName.length){
                         aSubName.splice(0,1);
                         aSubName = aSubName.join(copOrRetagTxt);
-                        let aActualCapName = aSubName.split(copyRertaEndSplitTxt);
-                        const copyCountNo = aActualCapName.splice(0,1);
-                        aActualCapName = aActualCapName.join(copyRertaEndSplitTxt);
-                        if(aActualCapName === this.campaignTemplate.campaignName){
-                            count ++;
-                            if(copyCountNo[0] && !isNaN(copyCountNo[0])){
-                                copyCountArr.push(parseInt(copyCountNo[0] || 0));
+                        if(aSubName.indexOf(copyRertaEndSplitTxt) > -1){
+                            let aActualCapName = aSubName.split(copyRertaEndSplitTxt);
+                            const copyCountNo = aActualCapName.splice(0,1);
+                            aActualCapName = aActualCapName.join(copyRertaEndSplitTxt);
+                            if(aActualCapName === this.campaignTemplate.campaignName){
+                                count ++;
+                                if(copyCountNo[0] && !isNaN(copyCountNo[0])){
+                                    copyCountArr.push(parseInt(copyCountNo[0] || 0));
+                                }
                             }
                         }
                     }

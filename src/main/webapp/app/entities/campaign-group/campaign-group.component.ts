@@ -93,7 +93,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
         this.router.navigate(['/campaign-group/project/' + this.projectId + '/' + this.projectName], {
             queryParams:
                 {
-                    page: this.page,
+                    page: (this.page > 0 ? this.page - 1 : this.page),
                     size: this.itemsPerPage,
                     sort: this.sort()
                 }
@@ -168,7 +168,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
             this.page = 0;
             this.campaignGroupService.search({ appId: this.projectId, searchVal: this.searchValue }, {
                 appId: this.projectId,
-                page: this.page,
+                page: (this.page > 0 ? this.page - 1 : this.page),
                 size: this.itemsPerPage,
                 sort: this.sort()
             }).subscribe(
