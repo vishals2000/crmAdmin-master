@@ -16,8 +16,8 @@
 
         <div class="form-group row">
             <label class="col-sm-3 col-form-label" for="field_campaignName">Campaign Name</label>
-            <input type="text" class="form-control col-sm-6" name="campaignName" id="field_campaignName" formControlName="campaignName" required
-            />
+            <input type="text" class="form-control col-sm-6" name="campaignName" id="field_campaignName" formControlName="campaignName"
+                required />
             <div class='col-sm-3' [hidden]="!(campaignTemplateGroupCreationForm.controls.campaignName?.dirty && campaignTemplateGroupCreationForm.controls.campaignName?.invalid)">
                 <small class="form-text text-danger" [hidden]="!campaignTemplateGroupCreationForm.controls.campaignName?.errors?.required">
                     This field is required.
@@ -43,15 +43,25 @@
         </br>
         <!-- </div> -->
         <div align="right">
-            Target Group Size {{targetGroupSize}}
-            <button (click)="getTargetGroupSize()" [disabled]="getTargetGroupRefreshBtnEnabled()" type="button">Refresh</button>
+            Target Group Size {{targetGroupSize}}            
+            <button align="right" type="submit" alt="Target Group Size" [disabled]="getTargetGroupRefreshBtnEnabled()" title="Target Group Size"
+                (click)="getTargetGroupSize()" class="btn btn-lg btn-normal">
+                <span class="fa fa-refresh"></span>
+            </button>
         </div>
+        
         <div formArrayName="targetGroupFilterCriteria" class="well well-lg">
             <div *ngFor="let targetGroupFilterCriterion of targetGroupFilterCriteria.controls; let i=index" [formGroupName]="i">
                 <!-- The repeated address template -->
-                <h4>TargetGroupFilterCriterion #{{i + 1}}</h4>
-                <div style="margin-left: 1em;" class="form-row">
-                    <div class="form-group  col-md-3">
+                <!-- <h4>TargetGroupFilterCriterion #{{i + 1}}</h4> -->
+                <div class="form-row">
+                    <div class="form-group  col-md-1">
+                        <label></label>
+                        <button type="submit" alt="Remove Filter" title="Remove Filter" (click)="removeTargetGroupFilterCriterion(i)" class="btn btn-normal">
+                            <span class="fa fa-minus-circle"></span>
+                        </button>
+                    </div>
+                    <div class="form-group  col-md-2">
                         <!-- <label class="center-block col-sm-4 col-form-label">FilterOption:</label> -->
                         <!-- <input class="form-control" formControlName="filterOption" (focus)="filterOptionFocus(i)"> -->
                         <select placeholder="FilterOption" class="form-control " formControlName="filterOption" (change)="onFilterOptionChange(i)">
@@ -101,9 +111,8 @@
                             <!-- <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option> -->
                             <option *ngFor="let filterOption of getFilterOptionValueValues(i)" [value]="filterOption.id">{{filterOption.name}}</option>
                         </select>
-                        <div class=''  *ngSwitchCase="'multiSelectDropdown'">
-                            <angular2-multiselect  [data]="getFilterOptionValueValues(i)" formControlName="selectedItems" 
-                            [settings]="{ 
+                        <div class='' *ngSwitchCase="'multiSelectDropdown'">
+                            <angular2-multiselect [data]="getFilterOptionValueValues(i)" formControlName="selectedItems" [settings]="{ 
                                 singleSelection: false, 
                                 text:'Select',
                                 enableCheckAll : true,
@@ -112,11 +121,8 @@
                                 enableSearchFilter: true,
                                 classes:'myclass custom-class',
                                 searchPlaceholderText : 'Search'
-                            }" 
-                            (onSelect)="onItemSelect(i)" 
-                            (onDeSelect)="onItemSelect(i)"
-                            (onSelectAll)="onItemSelect(i)"
-                            (onDeSelectAll)="onItemSelect(i)"></angular2-multiselect>
+                            }" (onSelect)="onItemSelect(i)" (onDeSelect)="onItemSelect(i)" (onSelectAll)="onItemSelect(i)"
+                                (onDeSelectAll)="onItemSelect(i)"></angular2-multiselect>
                         </div>
                         <!-- <select class="form-control" formControlName="filterOptionValue" multiple *ngSwitchCase="'multiSelectDropdown'">
                             <option *ngFor="let filterOption of getFilterOptionValueValues(i)" [value]="filterOption">{{filterOption}}</option>
@@ -130,86 +136,95 @@
                     </div>
                 </div>
                 <!-- End of the repeated address template -->
-                <div align="right">
+                <!-- <div align="right">
                     <button (click)="removeTargetGroupFilterCriterion(i)" type="button">Remove Filter</button>
-                </div>
+                </div> -->
             </div>
-            <br>
-            <button (click)="addCampaignTemplateFilterCriterion()" type="button">Add Filter</button>
+            <button class="btn btn-info" (click)="addCampaignTemplateFilterCriterion()" type="button"><span class="fa fa-filter">Add Filter</span></button>
         </div>
+        <br></br>
         <div formArrayName="targetGroupContentCriteria" class="overrideInvalid well well-lg">
             <div class="overrideInvalid" *ngFor="let targetGroupFilterCriterion of targetGroupContentCriteria.controls; let i=index"
                 [formGroupName]="i">
                 <!-- The repeated address template -->
-                <h4>TargetGroupContentCriterion #{{i + 1}}</h4>
-                <div style="margin-left: 1em;">
-                    <div align="right">
-                        Target Content Group Size {{targetContentGroupSize[i]}}
-                        <button (click)="getTargetContentGroupSize(i)" [disabled]="getTargetContentGroupRefreshBtnEnabled(i)" type="button">Refresh</button>
-                    </div>
-                    <!-- <div class="form-group">
-                                <label class="form-control-label" for="field_contentName">Content Name</label>
-                                <input type="text" class="form-control" name="contentName" id="field_contentName" formControlName="contentName" required/>
-                            </div> -->
+                <!-- <h4>TargetGroupContentCriterion #{{i + 1}}</h4> -->
+                <div>
                     <div class="form-row">
-                        <div class="form-group form-group col-md-4">
+                        <div class="form-group  col-md-1" [hidden]="targetGroupContentCriteria.controls.length === 1 ? true : false ">
+                            <label></label>
+                            <button type="submit" alt="Remove Language" title="Remove Language" (click)="removeTargetGroupContentCriterion(i)" class="btn btn-normal">
+                                <span class="fa fa-minus-circle"></span>
+                            </button>
+                        </div>
+                        <div class="form-group form-group col-md-3">
                             <label class="form-control-label" for="field_contentTitle">Content Title</label>
                             <input type="text" class="form-control" name="contentTitle" id="field_contentTitle" formControlName="contentTitle" required/>
                         </div>
-                        <div class="form-group  form-group col-md-4">
+                        <div class="form-group  form-group col-md-3">
                             <label class="form-control-label" for="field_contentBody">Content Body</label>
                             <input type="text" class="form-control" name="contentBody" id="field_contentBody" formControlName="contentBody" required/>
                         </div>
-                        <div class="form-group  form-group col-md-4">
+                        <div class="form-group  form-group col-md-3">
                             <label class="form-control-label" for="field_languageComparision">Language</label>
                             <select class="form-control" name="languageSelected" formControlName="languageSelected" id="languageSelected" [required]="targetGroupContentCriteria.controls.length === 1 ? false : true ">
                                 <option *ngFor="let language of languagesList" [value]="language">{{language}}</option>
                             </select>
                         </div>
+                        <div class="form-group  col-md-2">
+                            <label></label>
+                            <button type="submit" alt="Target Content Group Size" [disabled]="getTargetContentGroupRefreshBtnEnabled(i)" title="Target Content Group Size"
+                                (click)="getTargetContentGroupSize(i)" class="btn btn-normal">
+                                <span class="fa fa-refresh">{{targetContentGroupSize[i]}}</span>
+                            </button>
+                            <!-- Target Content Group Size {{targetContentGroupSize[i]}} -->
+                            <!-- <button (click)="getTargetContentGroupSize(i)" [disabled]="getTargetContentGroupRefreshBtnEnabled(i)" type="button">Refresh</button> -->
+                        </div>
                     </div>
                 </div>
-                <div align="right" [hidden]="targetGroupContentCriteria.controls.length === 1 ? true : false ">
-                    <button (click)="removeTargetGroupContentCriterion(i)" type="button">Remove Language</button>
-                </div>
+
             </div>
             <!-- End of the repeated address template -->
-            <br>
         </div>
-        <button (click)="addCampaignTemplateContentCriterion()" type="button">Add Language</button>
-
+        <button (click)="addCampaignTemplateContentCriterion()" type="button" class="btn btn-info"><span class="fa fa-language">Add Language</span></button>
+        <br></br>
         <div formArrayName="targetGroupMetaData" class="overrideInvalid well well-lg">
             <div class="overrideInvalid" *ngFor="let targetGroupMetaDataCriterion of targetGroupMetaData.controls; let i=index" [formGroupName]="i">
                 <!-- The repeated address template -->
-                <h4>targetGroupMetaDataCriterion #{{i + 1}}</h4>
-                <div style="margin-left: 1em;">
-                    <div class="form-group row">
+                <!-- <h4>targetGroupMetaDataCriterion #{{i + 1}}</h4> -->
+                <div class="form-row">
+                        <div class="form-group  col-md-1">
+                                <label></label>
+                                <button type="submit" alt="Remove MetaData" title="Remove MetaData" (click)="removeTargetGroupMetaDataCriterion(i)" class="btn btn-normal">
+                                    <span class="fa fa-minus-circle"></span>
+                                </button>
+                            </div>
+                    <div class="form-group col-md-4">
                         <label class="form-control-label col-sm-2 col-form-label">Key*</label>
-                        <input type="text" placeholder="Key*" class="form-control col-sm-7" name="key" formControlName="key" required />
-                        <div [hidden]="!targetGroupMetaDataCriterion.controls.key?.invalid" class="col-sm-3">
+                        <input type="text" placeholder="Key*" class="form-control" name="key" formControlName="key" required />
+                        <div [hidden]="!targetGroupMetaDataCriterion.controls.key?.invalid" class="">
                             <small class="form-text text-danger">
                                 Key must be unique
                             </small>
                         </div>
                     </div>
-                    <div class="form-group  row">
+                    <div class="form-group col-md-4">
                         <label class="form-control-label col-sm-2 col-form-label">Value*</label>
-                        <input type="text" placeholder="Value*" class="form-control col-sm-7" name="value" formControlName="value" required/>
+                        <input type="text" placeholder="Value*" class="form-control" name="value" formControlName="value" required/>
                     </div>
                 </div>
-                <div align="right">
+                <!-- <div align="right">
                     <button (click)="removeTargetGroupMetaDataCriterion(i)" type="button">Remove MetaData</button>
-                </div>
+                </div> -->
             </div>
             <!-- End of the repeated address template -->
-            <br>
         </div>
-        <button (click)="addCampaignTemplateMetaDataCriterion()" type="button">Add MetaData</button>
+        <button (click)="addCampaignTemplateMetaDataCriterion()" type="button" class="btn btn-link"><span class="fa fa-asterisk">Add MetaData</span></button>
         <br></br>
-        <div class="form-group  row" >
+        <div class="form-group  row">
             <label class="form-control-label col-sm-2 col-form-label" for="field_metaData">Deep Link</label>
             <input type="text" class="form-control col-sm-7" name="metaData" id="field_metaData" formControlName="metaData" />
         </div>
-        
+
         <div class="form-group">
             <label for="frequent_date">Send immediately</label>&nbsp;&nbsp;
             <input type="checkbox" name="inPlayerTimezone" id="frequent_date" formControlName="sendImmediately" (change)="sendImmediatelyCheck()"
@@ -238,7 +253,8 @@
             </div>
             <div class="form-group row">
                 <label class="form-control-label col-sm-4 col-form-label" for="field_recurrenceType">Recurrence Type</label>
-                <select class="form-control col-sm-4" name="recurrenceType" formControlName="recurrenceType" id="field_recurrenceType" required (change)="onRecurrenceType()">
+                <select class="form-control col-sm-4" name="recurrenceType" formControlName="recurrenceType" id="field_recurrenceType" required
+                    (change)="onRecurrenceType()">
                     <option value="NONE">NONE</option>
                     <option value="WEEKLY">WEEKLY</option>
                     <option value="DAILY">DAILY</option>
@@ -278,9 +294,9 @@
             </div>
         </div>
         <div class="form-group">
-                <label for="field_inPlayerTimezone">In Player Timezone</label>&nbsp;&nbsp;
-                <input type="checkbox" name="inPlayerTimezone" id="field_inPlayerTimezone" formControlName="inPlayerTimezone" />
-            </div>
+            <label for="field_inPlayerTimezone">In Player Timezone</label>&nbsp;&nbsp;
+            <input type="checkbox" name="inPlayerTimezone" id="field_inPlayerTimezone" formControlName="inPlayerTimezone" />
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">
@@ -292,8 +308,8 @@
             <span class="fa fa-save"></span>&nbsp;
             <span>Save</span>
         </button>
-        <button [hidden]="campaignTemplateGroupCreationForm.value.status !== 'DRAFT' && !campaignTemplateGroupCreationForm.value.launchEnabled" type="submit" [disabled]="campaignTemplateGroupCreationForm.invalid || isSaving"
-            (click)="launch()" class="btn btn-primary">
+        <button [hidden]="campaignTemplateGroupCreationForm.value.status !== 'DRAFT' && !campaignTemplateGroupCreationForm.value.launchEnabled"
+            type="submit" [disabled]="campaignTemplateGroupCreationForm.invalid || isSaving" (click)="launch()" class="btn btn-primary">
             <span class="fa fa-save"></span>&nbsp;
             <span>Launch</span>
         </button>
