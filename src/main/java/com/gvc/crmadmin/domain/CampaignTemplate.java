@@ -111,6 +111,11 @@ public class CampaignTemplate implements Serializable {
     @Field("parentCampaignId")
     private String parentCampaignTemplateId;
 
+    @Field("frontEnd")
+    private String frontEnd;
+
+    @Field("product")
+    private String product;
 
     private String launchTime;
     private String cancellationTime;
@@ -532,6 +537,24 @@ public class CampaignTemplate implements Serializable {
 
     public CampaignTemplate setParentCampaignTemplateId(String parentCampaignTemplateId) {
         this.parentCampaignTemplateId = parentCampaignTemplateId;
+        return this;
+    }
+
+    public String getFrontEnd() {
+        return frontEnd;
+    }
+
+    public CampaignTemplate setFrontEnd(String frontEnd) {
+        this.frontEnd = frontEnd;
+        return this;
+    }
+
+    public String getProduct() {
+        return product;
+    }
+
+    public CampaignTemplate setProduct(String product) {
+        this.product = product;
         return this;
     }
 }

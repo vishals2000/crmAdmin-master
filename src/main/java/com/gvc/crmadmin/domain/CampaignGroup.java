@@ -31,6 +31,12 @@ public class CampaignGroup implements Serializable {
     @Field("projectId")
     private String projectId;
 
+    @Field("frontEnd")
+    private String frontEnd;
+
+    @Field("product")
+    private String product;
+
     // jhipster-needle-entity-add-field - Jhipster will add fields here, do not remove
     public String getId() {
         this.initialize();
@@ -116,5 +122,23 @@ public class CampaignGroup implements Serializable {
             ", description='" + getDescription() + "'" +
             ", projectId='" + getProjectId() + "'" +
             "}";
+    }
+
+    public String getFrontEnd() {
+        return frontEnd;
+    }
+
+    public CampaignGroup setFrontEnd(String frontEnd) {
+        this.frontEnd = frontEnd;
+        return this;
+    }
+
+    public String getProduct() {
+        return product;
+    }
+
+    public CampaignGroup setProduct(String product) {
+        this.product = product;
+        return this;
     }
 }
