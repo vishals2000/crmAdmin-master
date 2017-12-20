@@ -119,7 +119,6 @@ export class CampaignTemplateDialogComponent implements OnInit {
         this.populateTagsMaps();
         this.populateFiltersMap();
         this.populateLanguagesList();
-
         const now = new Date();
         this.minDate = {
             year: now.getUTCFullYear(),
@@ -298,6 +297,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         });
 
         this.addTimeControl();
+        this.onRecurrenceType();
         // (<FormControl>this.campaignTemplateGroupCreationForm.controls['recurrenceType']).setValue('NONE');
     }
     get targetGroupFilterCriteria(): FormArray {
