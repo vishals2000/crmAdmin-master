@@ -63,7 +63,7 @@ export class NavbarComponent implements OnInit {
             fcbk && fcbk();
         };
         if(!this.appList || this.appList.length === 0){
-            this.appsService.query({}).subscribe((res: ResponseWrapper) => fAfterGetResults(res));
+            this.appsService.queryAll({}).subscribe((res: ResponseWrapper) => fAfterGetResults(res));
         }
         else{
             fcbk && fcbk();
@@ -72,7 +72,7 @@ export class NavbarComponent implements OnInit {
     loadSelAppCampGrp(){
         //this.loadAllApps();
         if((!this.campGrpList || this.campGrpList.length === 0) && this.selApp){
-            this.campaignGroupService.query({appId:this.selApp.id}).subscribe((res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignGroupListModified', content: res.json}));
+            this.campaignGroupService.queryAll({appId:this.selApp.id}).subscribe((res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignGroupListModified', content: res.json}));
         }
     }
     ngOnInit() {

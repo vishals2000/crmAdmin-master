@@ -55,7 +55,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
         });
     }
     loadAll(){
-        this.campaignGroupService.query({appId: this.projectId}).subscribe(
+        this.campaignGroupService.queryAll({appId: this.projectId}).subscribe(
             (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignGroupListModified', content: res.json}));
     }
 

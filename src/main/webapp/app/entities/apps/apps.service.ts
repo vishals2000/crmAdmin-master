@@ -43,6 +43,11 @@ export class AppsService {
         return this.http.get(this.resourceUrl, options)
             .map((res: Response) => this.convertResponse(res));
     }
+    queryAll(req?: any): Observable<ResponseWrapper> {
+        const options = createRequestOption(req);
+        return this.http.get(this.resourceUrl+ "/allApps", options)
+            .map((res: Response) => this.convertResponse(res));
+    } 
 
     delete(id: string): Observable<Response> {
         return this.http.post(this.resourceUrl + "/delete/", {appId : id});

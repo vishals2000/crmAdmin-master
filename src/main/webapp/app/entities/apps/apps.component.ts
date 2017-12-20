@@ -50,7 +50,7 @@ export class AppsComponent implements OnInit, OnDestroy {
         });
     }
     loadAll(){
-        this.appsService.query({}).subscribe(
+        this.appsService.queryAll({}).subscribe(
             (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'appListModified', content: res.json}));
     }
     loadAppPage() {
