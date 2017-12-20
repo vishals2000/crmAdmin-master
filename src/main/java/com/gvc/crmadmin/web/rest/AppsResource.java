@@ -108,6 +108,14 @@ public class AppsResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+    @GetMapping("/apps/allApps")
+    @Timed
+    public ResponseEntity<List<Apps>> getAllApps() {
+        log.debug("REST request to get a page of Apps");
+        List<Apps> allApps = appsService.findAll();
+        return new ResponseEntity<>(allApps, HttpStatus.OK);
+    }
+
     /**
      * GET  /apps/:id : get the "id" apps.
      *

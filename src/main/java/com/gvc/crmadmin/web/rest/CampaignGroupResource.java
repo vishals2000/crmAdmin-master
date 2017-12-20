@@ -124,6 +124,14 @@ public class CampaignGroupResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+    @GetMapping("/campaign-group/project/allCampaignGroups/{projectId}")
+    @Timed
+    public ResponseEntity<List<CampaignGroup>> getAllCampaignGroups(@PathVariable String projectId) {
+        log.debug("REST request to get a page of CampaignGroups with projectId");
+        List<CampaignGroup> campaignGroups = campaignGroupService.findByProjectId(projectId);
+        return new ResponseEntity<>(campaignGroups, HttpStatus.OK);
+    }
+
     @GetMapping("/campaign-group/project/{projectId}/search/{campaignGroupName}")
     @Timed
     public ResponseEntity<List<CampaignGroup>> getAllCampaignGroupsbyProjectIdAndName(@ApiParam Pageable pageable, @PathVariable String projectId, @PathVariable String campaignGroupName) {

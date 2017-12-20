@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 /**
  * Service Implementation for managing CampaignGroup.
@@ -51,9 +53,13 @@ public class CampaignGroupServiceImpl implements CampaignGroupService{
     public Page<CampaignGroup> findByProjectId(Pageable pageable, String projectId) {
         log.debug("Request to get all CampaignGroups for projectId");
         Page<CampaignGroup> result = campaignGroupRepository.findByProjectId(projectId, pageable);
-        System.out.print("Result" + result.toString());
         return result;
-//        return campaignGroupRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<CampaignGroup> findByProjectId(String projectId) {
+        log.debug("Request to get all CampaignGroups for projectId - all ");
+        return campaignGroupRepository.findByProjectId(projectId);
     }
 
     @Override

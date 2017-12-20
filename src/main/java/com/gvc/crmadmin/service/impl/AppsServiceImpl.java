@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 /**
  * Service Implementation for managing Apps.
@@ -46,11 +48,17 @@ public class AppsServiceImpl implements AppsService{
         log.debug("Request to get all Apps");
         return appsRepository.findAll(pageable);
     }
-    
+
+    @Override
+    public List<Apps> findAll() {
+        log.debug("Request to get all Apps");
+        return appsRepository.findAll();
+    }
+
     @Override
     public Page<Apps> findByName(Pageable pageable, String appName) {
     	log.debug("Request to get all Apps by name : " + appName);
-    	
+
     	return appsRepository.findByNameLikeIgnoreCase(appName, pageable);
     }
 

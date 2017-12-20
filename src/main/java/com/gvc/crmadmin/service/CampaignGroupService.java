@@ -4,6 +4,8 @@ import com.gvc.crmadmin.domain.CampaignGroup;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 /**
  * Service Interface for managing CampaignGroup.
  */
@@ -41,6 +43,7 @@ public interface CampaignGroupService {
     void delete(String id);
 
     Page<CampaignGroup> findByProjectId(Pageable pageable, String projectId);
-    
+    List<CampaignGroup> findByProjectId(String projectId);
+
     Page<CampaignGroup> findByProjectIdAndName(Pageable pageable, String projectId, String campaignGroupName);
 }

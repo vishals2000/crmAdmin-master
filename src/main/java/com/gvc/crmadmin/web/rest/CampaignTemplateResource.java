@@ -232,11 +232,18 @@ public class CampaignTemplateResource {
                             updateCampaignCancellationStatus(pushNotificationCampaignTemplate.getCampaignTemplateId(), pushNotificationCampaignCancellationResponse.isResult());
                             campaignTemplate = campaignTemplateService.findOne(pushNotificationCampaignTemplate.getCampaignTemplateId());
                             //If the campaign is a recurring campaign, then cancellation of a LIVE campaign should change the status of the campaign to COMPLETED
-                            final DateTime campaignEndTime = getCampaignEndTime(campaignTemplate);
+                            final DateTime campaignStartTime = getCampaignStartTime(campaignTemplate);
 
                             final DateTime currentTime = getCurrentDateTimeInUTC();
-                            if(!campaignTemplate.getRecurrenceType().equals(RecurrenceType.NONE) && !currentTime.isAfter(campaignEndTime)) {
+                            if(!campaignTemplate.getRecurrenceType().equals(RecurrenceType.NONE) && currentTime.isAfter(campaignStartTime)) {
                                 campaignTemplate.setStatus(Constants.CampaignTemplateStatus.COMPLETED.toString());
+                                campaignTemplate.setLaunchEnabled(false);
+                                campaignTemplate.setEditEnabled(false);
+                                campaignTemplate.setCancelEnabled(false);
+                                campaignTemplate.setDeleteEnabled(false);
+                                campaignTemplateService.save(campaignTemplate);
+                            } else if(!campaignTemplate.getRecurrenceType().equals(RecurrenceType.NONE) && !currentTime.isAfter(campaignStartTime)) {
+                                campaignTemplate.setStatus(Constants.CampaignTemplateStatus.CANCELLED.toString());
                                 campaignTemplate.setLaunchEnabled(false);
                                 campaignTemplate.setEditEnabled(false);
                                 campaignTemplate.setCancelEnabled(false);
@@ -564,17 +571,6 @@ public class CampaignTemplateResource {
         return ResponseUtil.wrapOrNotFound(Optional.of(frontendProduct));
     }
 
-    /*
-    *
-    @DeleteMapping("/campaign-templates/{id}")
-    @Timed
-    public ResponseEntity<Void> deleteCampaignTemplate(@PathVariable String id) {
-        log.debug("REST request to delete CampaignTemplate : {}", id);
-        campaignTemplateService.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
-    }
-    * */
-
     /**
      * Deletes a push Notification campaign template
      * @param pushNotificationCampaignTemplate to be deleted
@@ -632,7 +628,8 @@ public class CampaignTemplateResource {
                         final DateTime campaignStartTime = getCampaignStartTime(campaignTemplate);
                         //After the campaign is successfully cancelled, then, if the status in PENDING, delete the campaign from the system. If the status is LIVE, then change the status to DELETED.
                         if(campaignCancellationTime.isBefore(campaignStartTime)) {
-                            campaignTemplateService.delete(campaignTemplate.getId());
+//                            campaignTemplateService.delete(campaignTemplate.getId());
+                            updateCampaignDeletionStatus(campaignTemplate.getId());
                             return ResponseEntity.ok().headers(HeaderUtil.createAlert(campaignTemplate.getCampaignName() +" successfully deleted", campaignTemplate.getId())).build();
                         } else {
                             //If a recurring campaign is cancelled before the recurrence end date, then the status should change to COMPLETE after cancellation of the pending campaigns in the recurrence and should disable the delete button.
@@ -656,7 +653,8 @@ public class CampaignTemplateResource {
                     final DateTime campaignStartTime = getCampaignStartTime(campaignTemplate);
 
                     if(campaignCancellationTime.isBefore(campaignStartTime)) {
-                        campaignTemplateService.delete(campaignTemplate.getId());
+//                        campaignTemplateService.delete(campaignTemplate.getId());
+                        updateCampaignDeletionStatus(campaignTemplate.getId());
                         return ResponseEntity.ok().headers(HeaderUtil.createAlert(campaignTemplate.getCampaignName() +" successfully deleted", campaignTemplate.getId())).build();
                     } else {
                         //If a recurring campaign is cancelled before the recurrence end date, then the status should change to COMPLETE after cancellation of the pending campaigns in the recurrence and should disable the delete button.
@@ -685,17 +683,17 @@ public class CampaignTemplateResource {
         return dateTimeFormatter.parseDateTime(scheduleTime);
     }
 
-    private void updateCampaignDeletionStatus(String campaignTemplateId, boolean deleteSuccessful){
-        Criteria criteria = Criteria.where("_id").is(campaignTemplateId);
-        final Query query = new Query();
-        query.addCriteria(criteria);
-        final Update update = new Update();
-        update.set("alreadyDeleted", deleteSuccessful);
-
-        if(deleteSuccessful) {
-            update.set("deletionTime", getCurrentDateTimeInUTCAsString());
-        }
-        mongoTemplate.upsert(query, update, CampaignTemplate.class);
+    private void updateCampaignDeletionStatus(String campaignTemplateId){
+        CampaignTemplate campaignTemplate = campaignTemplateService.findOne(campaignTemplateId);
+        campaignTemplate.setStatus(Constants.CampaignTemplateStatus.DELETED.toString());
+        campaignTemplate.setAlreadyDeleted(true);
+        campaignTemplate.setDeletionTime(getCurrentDateTimeInUTCAsString());
+        campaignTemplate.setStatus(Constants.CampaignTemplateStatus.DELETED.name());
+        campaignTemplate.setLaunchEnabled(false);
+        campaignTemplate.setEditEnabled(false);
+        campaignTemplate.setCancelEnabled(false);
+        campaignTemplate.setDeleteEnabled(false);
+        campaignTemplateService.save(campaignTemplate);
     }
 
     private void updateCampaignCancellationStatus(String campaignTemplateId, boolean cancelSuccessful){

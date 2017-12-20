@@ -4,6 +4,8 @@ import com.gvc.crmadmin.domain.Apps;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 /**
  * Service Interface for managing Apps.
  */
@@ -25,8 +27,10 @@ public interface AppsService {
      */
     Page<Apps> findAll(Pageable pageable);
 
+    List<Apps> findAll();
+
     Page<Apps> findByName(Pageable pageable, String appName);
-    
+
     /**
      *  Get the "id" apps.
      *
