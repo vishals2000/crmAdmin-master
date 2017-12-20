@@ -242,13 +242,6 @@ public class CampaignTemplateResource {
                                 campaignTemplate.setCancelEnabled(false);
                                 campaignTemplate.setDeleteEnabled(false);
                                 campaignTemplateService.save(campaignTemplate);
-                            } else if(!campaignTemplate.getRecurrenceType().equals(RecurrenceType.NONE) && !currentTime.isAfter(campaignStartTime)) {
-                                campaignTemplate.setStatus(Constants.CampaignTemplateStatus.CANCELLED.toString());
-                                campaignTemplate.setLaunchEnabled(false);
-                                campaignTemplate.setEditEnabled(false);
-                                campaignTemplate.setCancelEnabled(false);
-                                campaignTemplate.setDeleteEnabled(false);
-                                campaignTemplateService.save(campaignTemplate);
                             } else if(campaignTemplate.getStatus().equals(Constants.CampaignTemplateStatus.PENDING.toString())) {
                                 campaignTemplate.setStatus(Constants.CampaignTemplateStatus.CANCELLED.toString());
                                 campaignTemplate.setLaunchEnabled(false);
