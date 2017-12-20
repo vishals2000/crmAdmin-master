@@ -114,7 +114,9 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
         this.subscription = this.route.params.subscribe((params) => {
             this.projectId = params['id'];
             this.projectName = params['name'];
-            this.loadAll();
+            if(this.page === 1 && !this.searchValue){
+                this.loadAll();
+            }
             this.loadAppPage();
             this.campaignGroupService.changeGroupId(this.projectId);
         });
