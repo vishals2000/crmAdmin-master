@@ -6,10 +6,10 @@
     </div>
     <div class="statusRetargDiv">
         <div class="retargetContent" [hidden]="!campaignTemplate.retargetedCampaign">
-            <button align="right" type="submit" class="btn btn-lg btn-normal">
+            <!-- <button align="right" type="submit" class="btn btn-lg btn-normal" (click)="openParentCampaginDetails(campaignTemplate.parentCampaignTemplateId)">
                 <i class="fa fa-crosshairs"></i>
                 <span class="retargetBtnTxt">This message was retargeted from {{campaignTemplate.parentCampaignTemplateId}}</span>
-            </button>
+            </button> -->
         </div>
         <div class="campTempStatus" [hidden]="!campaignTemplateGroupCreationForm.value.id" [ngClass]="{'DRAFT':'badge-default, btn-secondary btn-sm','COMPLETED':'badge-primary','PENDING':'badge-info','LIVE':'badge-success','DELETED':'badge-danger', 'CANCELLED':'badge-danger'}[campaignTemplateGroupCreationForm.value.status]">{{campaignTemplateGroupCreationForm.value.status}}</div>
     </div>
@@ -179,7 +179,7 @@
                             <!-- <select class="form-control" name="languageSelected" formControlName="languageSelected" id="languageSelected" [required]="targetGroupContentCriteria.controls.length === 1 ? false : true ">
                                 <option *ngFor="let language of languagesList" [value]="language">{{language}}</option>
                             </select> -->
-                            <angular2-multiselect [data]="languages" formControlName="selectedItems" [settings]="{ 
+                            <angular2-multiselect [required]="targetGroupContentCriteria.controls.length === 1 ? false : true " [data]="languages" formControlName="selectedItems" [settings]="{ 
                                 singleSelection: true, 
                                 text:'Select',
                                 enableCheckAll : false,
