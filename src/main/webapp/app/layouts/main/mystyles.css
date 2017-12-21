@@ -414,6 +414,10 @@ select.custom-selectbox  {
     line-height: inherit;
     margin-right: 8px;
 }
+.multiselect .c-btn{
+    padding: 7px !important;
+    box-shadow: none !important;
+}
 /*insight page styles starts here*/
 
 ngb-timepicker.ng-invalid:not(form) fieldset {

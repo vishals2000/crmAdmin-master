@@ -225,7 +225,13 @@ export class CampaignTemplateDialogComponent implements OnInit {
     }
 
     addCampaignTemplateContentCriterion() {
-        this.targetGroupContentCriteria.push(this.fb.group(new CampaignTemplateContentCriterion('', '', '')));
+        this.targetGroupContentCriteria.push(this.fb.group({
+            //contentName: '',
+            contentTitle: '',
+            contentBody: '',
+            languageSelected: '',
+            selectedItems:[[]]
+        }));
     }
 
     addCampaignTemplateMetaDataCriterion() {
@@ -385,14 +391,22 @@ export class CampaignTemplateDialogComponent implements OnInit {
         }
         if (this.campaignTemplate.targetGroupContentCriteria && this.campaignTemplate.targetGroupContentCriteria.length) {
             for (const i of this.campaignTemplate.targetGroupContentCriteria) {
-                this.targetGroupContentCriteria.push(this.fb.group(i));
+                const languageSelItm = {id:i.languageSelected, itemName:i.languageSelected};
+                const formBuilderGroup = this.fb.group({
+                    contentTitle: i.contentTitle,
+                    contentBody: i.contentBody,
+                    languageSelected: i.languageSelected,
+                    selectedItems : [(i.languageSelected ? [languageSelItm] : [])]
+                });
+                this.targetGroupContentCriteria.push(formBuilderGroup);
             }
         } else {
             this.targetGroupContentCriteria.push(this.fb.group({
                 //contentName: '',
                 contentTitle: '',
                 contentBody: '',
-                languageSelected: ''
+                languageSelected: '',
+                selectedItems:[[]]
             }));
         }
         if (this.campaignTemplate.targetGroupMetaData) {
@@ -575,7 +589,6 @@ export class CampaignTemplateDialogComponent implements OnInit {
         }, 0);
     }
     onItemSelect(index){
-       // console.log(this.selectedItems);
        const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
        const targetGroupFilterCriterionFormControl: AbstractControl = targetGroupFilters.at(index);
        let aSelecteCnt = this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteria[index].selectedItems;
@@ -590,6 +603,21 @@ export class CampaignTemplateDialogComponent implements OnInit {
         targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue('');
        }
     }
+    onLangContItemSelect(index){
+        const targetGroupContentFilters = this.campaignTemplateGroupCreationForm.get('targetGroupContentCriteria') as FormArray;
+        const targetGroupContentCriterionFormControl: AbstractControl = targetGroupContentFilters.at(index);
+        let aSelecteCnt = this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria[index].selectedItems;
+        let aCntArray = '';
+        for(var i=0;i<aSelecteCnt.length;i++){
+             aCntArray = aSelecteCnt[i].id;
+        }
+        if(aCntArray.length){
+            targetGroupContentCriterionFormControl.get('languageSelected').setValue(aCntArray);
+        }
+        else{
+            targetGroupContentCriterionFormControl.get('languageSelected').setValue('');
+        }
+     }
     liveOddKeyUniqueCheck(index) {
         var _this = this;
         const targetGroupMetaData = _this.campaignTemplateGroupCreationForm.get('targetGroupMetaData') as FormArray;

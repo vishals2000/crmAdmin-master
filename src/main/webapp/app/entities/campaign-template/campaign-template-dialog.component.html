@@ -11,7 +11,7 @@
                 <span class="retargetBtnTxt">This message was retargeted from {{campaignTemplate.parentCampaignTemplateId}}</span>
             </button>
         </div>
-        <div class="campTempStatus" [ngClass]="{'DRAFT':'badge-default, btn-secondary btn-sm','COMPLETED':'badge-primary','PENDING':'badge-info','LIVE':'badge-success','DELETED':'badge-danger', 'CANCELLED':'badge-danger'}[campaignTemplateGroupCreationForm.value.status]">{{campaignTemplateGroupCreationForm.value.status}}</div>
+        <div class="campTempStatus" [hidden]="!campaignTemplateGroupCreationForm.value.id" [ngClass]="{'DRAFT':'badge-default, btn-secondary btn-sm','COMPLETED':'badge-primary','PENDING':'badge-info','LIVE':'badge-success','DELETED':'badge-danger', 'CANCELLED':'badge-danger'}[campaignTemplateGroupCreationForm.value.status]">{{campaignTemplateGroupCreationForm.value.status}}</div>
     </div>
     <div class="modal-body">
 
@@ -176,9 +176,20 @@
                         </div>
                         <div class="form-group  form-group col-md-3">
                             <label class="form-control-label" for="field_languageComparision">Language</label>
-                            <select class="form-control" name="languageSelected" formControlName="languageSelected" id="languageSelected" [required]="targetGroupContentCriteria.controls.length === 1 ? false : true ">
+                            <!-- <select class="form-control" name="languageSelected" formControlName="languageSelected" id="languageSelected" [required]="targetGroupContentCriteria.controls.length === 1 ? false : true ">
                                 <option *ngFor="let language of languagesList" [value]="language">{{language}}</option>
-                            </select>
+                            </select> -->
+                            <angular2-multiselect [data]="languages" formControlName="selectedItems" [settings]="{ 
+                                singleSelection: true, 
+                                text:'Select',
+                                enableCheckAll : false,
+                                selectAllText:'Select All',
+                                unSelectAllText:'UnSelect All',
+                                enableSearchFilter: true,
+                                classes:'multiselect custom-class',
+                                searchPlaceholderText : 'Search'
+                            }" (onSelect)="onLangContItemSelect(i)" (onDeSelect)="onLangContItemSelect(i)" (onSelectAll)="onLangContItemSelect(i)"
+                                (onDeSelectAll)="onLangContItemSelect(i)"></angular2-multiselect>
                         </div>
                         <div class="form-group  col-md-2">
                             <label></label>
