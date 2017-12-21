@@ -119,7 +119,7 @@
                                 selectAllText:'Select All',
                                 unSelectAllText:'UnSelect All',
                                 enableSearchFilter: true,
-                                classes:'myclass custom-class',
+                                classes:'multiselect custom-class',
                                 searchPlaceholderText : 'Search'
                             }" (onSelect)="onItemSelect(i)" (onDeSelect)="onItemSelect(i)" (onSelectAll)="onItemSelect(i)"
                                 (onDeSelectAll)="onItemSelect(i)"></angular2-multiselect>
@@ -200,7 +200,7 @@
                             </div>
                     <div class="form-group col-md-4">
                         <label class="form-control-label col-sm-2 col-form-label">Key*</label>
-                        <input type="text" placeholder="Key*" class="form-control" name="key" formControlName="key" required />
+                        <input type="text" placeholder="Key*" class="form-control" name="key" formControlName="key" required (keypress)="liveOddKeyUniqueCheck(i)" />
                         <div [hidden]="!targetGroupMetaDataCriterion.controls.key?.invalid" class="">
                             <small class="form-text text-danger">
                                 Key must be unique

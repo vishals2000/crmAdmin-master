@@ -221,7 +221,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     }
 
     addCampaignTemplateFilterCriterion() {
-        this.targetGroupFilterCriteria.push(this.fb.group(new CampaignTemplateFilterCriterion('', '', '', [], {}, [])));
+        this.targetGroupFilterCriteria.push(this.fb.group(new CampaignTemplateFilterCriterion('App', '', 'Was', ['opened in the last 2 days'], {}, [])));
     }
 
     addCampaignTemplateContentCriterion() {
@@ -232,7 +232,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         //this.targetGroupMetaData.push(this.fb.group(new CampaignTemplateMetaDataCriterion('', '')));
 
         this.targetGroupMetaData.push(this.fb.group({
-            key: ["", this.liveOddKeyUniqueCheck()],
+            key: ["", Validators.required],
             value: ['', Validators.required]
         }));
     }
@@ -590,20 +590,18 @@ export class CampaignTemplateDialogComponent implements OnInit {
         targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue('');
        }
     }
-    liveOddKeyUniqueCheck() {
+    liveOddKeyUniqueCheck(index) {
         var _this = this;
-        return (c: AbstractControl): { [key: string]: any } => {
-            let isValid = true;
-            for (let i = 0; i < _this.campaignTemplateGroupCreationForm.value.targetGroupMetaData.length; i++) {
-                if (_this.campaignTemplateGroupCreationForm.value.targetGroupMetaData[i].key === c.value) {
-                    isValid = false;
+        const targetGroupMetaData = _this.campaignTemplateGroupCreationForm.get('targetGroupMetaData') as FormArray;
+        const currentMetaDataObj = targetGroupMetaData.at(index);
+        setTimeout(() => {
+            for(var i=0;i<targetGroupMetaData.controls.length; i++){
+                let targetMetaDataObj = targetGroupMetaData.at(i);
+                if(i !== index && targetMetaDataObj.get("key").value === currentMetaDataObj.get("key").value){
+                    currentMetaDataObj.get("key").setValue('');
                 }
             }
-            if (isValid)
-                return null;
-            else
-                return { invalid: true };
-        }
+        }, 0);
     }
 
     private onTargetGroupContentSizeRequestSuccess(data, headers, contentGrpNo) {

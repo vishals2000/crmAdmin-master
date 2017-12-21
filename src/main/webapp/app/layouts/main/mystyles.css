@@ -347,7 +347,12 @@ select.custom-selectbox  {
 .copyToApp .pure-checkbox input[type="checkbox"]:checked + label{
     color: #007bff !important;
 }
-
+.multiselect .c-list{
+    overflow-x: scroll;
+    max-height: 38px;
+    display: inherit;
+    overflow-y: hidden;
+}
 /*insight page styles starts here*/
 
 ngb-timepicker.ng-invalid:not(form) fieldset {
