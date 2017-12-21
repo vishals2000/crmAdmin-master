@@ -4,7 +4,15 @@
         <h4 class="modal-title" id="myCampaignTemplateLabel">Create or edit a Campaign Template</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">&times;</button>
     </div>
-
+    <div class="statusRetargDiv">
+        <div class="retargetContent" [hidden]="!campaignTemplate.retargetedCampaign">
+            <button align="right" type="submit" class="btn btn-lg btn-normal">
+                <i class="fa fa-crosshairs"></i>
+                <span class="retargetBtnTxt">This message was retargeted from {{campaignTemplate.parentCampaignTemplateId}}</span>
+            </button>
+        </div>
+        <div class="campTempStatus" [ngClass]="{'DRAFT':'badge-default, btn-secondary btn-sm','COMPLETED':'badge-primary','PENDING':'badge-info','LIVE':'badge-success','DELETED':'badge-danger', 'CANCELLED':'badge-danger'}[campaignTemplateGroupCreationForm.value.status]">{{campaignTemplateGroupCreationForm.value.status}}</div>
+    </div>
     <div class="modal-body">
 
         <jhi-alert-error></jhi-alert-error>
@@ -43,13 +51,13 @@
         </br>
         <!-- </div> -->
         <div align="right">
-            Target Group Size {{targetGroupSize}}            
+            Target Group Size {{targetGroupSize}}
             <button align="right" type="submit" alt="Target Group Size" [disabled]="getTargetGroupRefreshBtnEnabled()" title="Target Group Size"
                 (click)="getTargetGroupSize()" class="btn btn-lg btn-normal">
                 <span class="fa fa-refresh"></span>
             </button>
         </div>
-        
+
         <div formArrayName="targetGroupFilterCriteria" class="well well-lg">
             <div *ngFor="let targetGroupFilterCriterion of targetGroupFilterCriteria.controls; let i=index" [formGroupName]="i">
                 <!-- The repeated address template -->
@@ -140,7 +148,9 @@
                     <button (click)="removeTargetGroupFilterCriterion(i)" type="button">Remove Filter</button>
                 </div> -->
             </div>
-            <button class="btn btn-info" (click)="addCampaignTemplateFilterCriterion()" type="button"><span class="fa fa-filter">Add Filter</span></button>
+            <button class="btn btn-info" (click)="addCampaignTemplateFilterCriterion()" type="button">
+                <span class="fa fa-filter">Add Filter</span>
+            </button>
         </div>
         <br></br>
         <div formArrayName="targetGroupContentCriteria" class="overrideInvalid well well-lg">
@@ -185,22 +195,25 @@
             </div>
             <!-- End of the repeated address template -->
         </div>
-        <button (click)="addCampaignTemplateContentCriterion()" type="button" class="btn btn-info"><span class="fa fa-language">Add Language</span></button>
+        <button (click)="addCampaignTemplateContentCriterion()" type="button" class="btn btn-info">
+            <span class="fa fa-language">Add Language</span>
+        </button>
         <br></br>
         <div formArrayName="targetGroupMetaData" class="overrideInvalid well well-lg">
             <div class="overrideInvalid" *ngFor="let targetGroupMetaDataCriterion of targetGroupMetaData.controls; let i=index" [formGroupName]="i">
                 <!-- The repeated address template -->
                 <!-- <h4>targetGroupMetaDataCriterion #{{i + 1}}</h4> -->
                 <div class="form-row">
-                        <div class="form-group  col-md-1">
-                                <label></label>
-                                <button type="submit" alt="Remove MetaData" title="Remove MetaData" (click)="removeTargetGroupMetaDataCriterion(i)" class="btn btn-normal">
-                                    <span class="fa fa-minus-circle"></span>
-                                </button>
-                            </div>
+                    <div class="form-group  col-md-1">
+                        <label></label>
+                        <button type="submit" alt="Remove MetaData" title="Remove MetaData" (click)="removeTargetGroupMetaDataCriterion(i)" class="btn btn-normal">
+                            <span class="fa fa-minus-circle"></span>
+                        </button>
+                    </div>
                     <div class="form-group col-md-4">
                         <label class="form-control-label col-sm-2 col-form-label">Key*</label>
-                        <input type="text" placeholder="Key*" class="form-control" name="key" formControlName="key" required (keypress)="liveOddKeyUniqueCheck(i)" />
+                        <input type="text" placeholder="Key*" class="form-control" name="key" formControlName="key" required (keypress)="liveOddKeyUniqueCheck(i)"
+                        />
                         <div [hidden]="!targetGroupMetaDataCriterion.controls.key?.invalid" class="">
                             <small class="form-text text-danger">
                                 Key must be unique
@@ -218,7 +231,9 @@
             </div>
             <!-- End of the repeated address template -->
         </div>
-        <button (click)="addCampaignTemplateMetaDataCriterion()" type="button" class="btn btn-link"><span class="fa fa-asterisk">Add MetaData</span></button>
+        <button (click)="addCampaignTemplateMetaDataCriterion()" type="button" class="btn btn-link">
+            <span class="fa fa-asterisk">Add MetaData</span>
+        </button>
         <br></br>
         <div class="form-group  row">
             <label class="form-control-label col-sm-2 col-form-label" for="field_metaData">Deep Link</label>
