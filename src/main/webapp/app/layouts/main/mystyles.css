@@ -418,6 +418,12 @@ select.custom-selectbox  {
     padding: 7px !important;
     box-shadow: none !important;
 }
+.multiselect.ng-invalid:not(form), .multiselect.ng-valid[required], .multiselect.ng-valid.required{
+    border-left: none !important;
+}
+.multiselect.ng-invalid:not(form) .cuppa-dropdown{
+    border-left: 5px solid red !important;
+}
 /*insight page styles starts here*/
 
 ngb-timepicker.ng-invalid:not(form) fieldset {
