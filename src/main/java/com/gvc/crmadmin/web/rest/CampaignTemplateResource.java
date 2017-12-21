@@ -445,6 +445,7 @@ public class CampaignTemplateResource {
                     if(currentDateTime.equals(startTime)) {
                         if(campaignTemplate.getRecurrenceType().equals(RecurrenceType.NONE)) {
                             campaignTemplate.setStatus(Constants.CampaignTemplateStatus.COMPLETED.getStatus());
+                            campaignTemplate.setEditEnabled(false);
                             campaignTemplate.setCancelEnabled(false);
                             campaignTemplate.setDeleteEnabled(false);
                         } else {
