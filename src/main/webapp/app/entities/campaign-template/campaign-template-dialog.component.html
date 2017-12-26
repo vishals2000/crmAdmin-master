@@ -6,10 +6,10 @@
     </div>
     <div class="statusRetargDiv">
         <div class="retargetContent" [hidden]="!campaignTemplate.retargetedCampaign">
-            <!-- <button align="right" type="submit" class="btn btn-lg btn-normal" (click)="openParentCampaginDetails(campaignTemplate.parentCampaignTemplateId)">
+            <button align="right" type="submit" class="btn btn-lg btn-normal" (click)="openParentCampaginDetails(campaignTemplate.parentCampaignTemplateId)">
                 <i class="fa fa-crosshairs"></i>
                 <span class="retargetBtnTxt">This message was retargeted from {{campaignTemplate.parentCampaignTemplateId}}</span>
-            </button> -->
+            </button> 
         </div>
         <div class="campTempStatus" [hidden]="!campaignTemplateGroupCreationForm.value.id" [ngClass]="{'DRAFT':'badge-default, btn-secondary btn-sm','COMPLETED':'badge-primary','PENDING':'badge-info','LIVE':'badge-success','DELETED':'badge-danger', 'CANCELLED':'badge-danger'}[campaignTemplateGroupCreationForm.value.status]">{{campaignTemplateGroupCreationForm.value.status}}</div>
     </div>

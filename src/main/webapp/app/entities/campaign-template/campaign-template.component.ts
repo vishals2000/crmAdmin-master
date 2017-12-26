@@ -8,6 +8,8 @@ import { CampaignTemplateService } from './campaign-template.service';
 import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
+import { CampaignTemplatePopupService } from './campaign-template-popup.service';
+import { CampaignTemplateDialogComponent } from './campaign-template-dialog.component';
 
 @Component({
     selector: 'jhi-campaign-template',
@@ -50,7 +52,8 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         private eventManager: JhiEventManager,
         private paginationUtil: JhiPaginationUtil,
         private paginationConfig: PaginationConfig,
-        private http: HttpClient
+        private http: HttpClient,
+        private campaignTemplatePopupService: CampaignTemplatePopupService
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.results = [];
@@ -175,7 +178,9 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
             (res: ResponseWrapper) => this.onError(res.json)
             );
     }
-
+    openCampaignTempPage(campTempId){
+        this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateDialogComponent as Component, {}, false, campTempId);
+    }
     copyCurrentIrmWithCopyCount(acampaigns, bIsRetarget){
         let count = 0;
         let copOrRetagTxt = bIsRetarget ? 'Retarget from ' : '(Copy ';

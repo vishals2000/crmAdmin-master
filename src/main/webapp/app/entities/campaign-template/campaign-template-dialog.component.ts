@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Response } from '@angular/http';
 import { FormBuilder, FormGroup, FormArray, FormControl, AbstractControl, Validators } from '@angular/forms';
 import { ResponseWrapper, LANGUAGES, TIME_ZONES } from '../../shared';
-import { Observable } from 'rxjs/Rx';
+import { Observable, Subscription } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { Location } from '@angular/common';
@@ -16,12 +16,13 @@ import { CampaignTemplateService } from './campaign-template.service';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgbModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { setTimeout } from 'timers';
+import { CampaignTemplateLaunchDialogComponent } from './campaign-template-launch-dialog.component';
 
 @Component({
     selector: 'jhi-campaign-template-dialog',
     templateUrl: './campaign-template-dialog.component.html'
 })
-export class CampaignTemplateDialogComponent implements OnInit {
+export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
 
     campaignTemplate: CampaignTemplate;
     isSaving: boolean;
@@ -39,6 +40,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     sportsTagsMap: Map<string, Map<string, string[]>>;
     pokerTagsMap: Map<string, Map<string, string[]>>;
     casinoTagsMap: Map<string, Map<string, string[]>>;
+    eventSubscriber: Subscription;
 
     countries: any[];
     languages: any[];
@@ -64,6 +66,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         private http: HttpClient,
         private router: Router,
         private location: Location,
+        private campaignTemplatePopupService: CampaignTemplatePopupService,
 
     ) {
         this.filtersMap = new Map<string, Map<string, string[]>>();
@@ -87,13 +90,16 @@ export class CampaignTemplateDialogComponent implements OnInit {
         });
         this.isLaunch = false;
     }
-
+    ngOnDestroy(){
+        this.eventSubscriber.unsubscribe();
+    }
     ngOnInit() {
         this.isSaving = false;
         this.showSendImmDiv = true;
         // this.campaignTemplateService.getOptimoveInstances().subscribe((data) => {
         //     this.campaignTemplate.optimoveInstances = data['message'];
         // });
+        this.eventSubscriber = this.eventManager.subscribe('closeCampaignTemp', response => this.clear());
         this.campaignTemplateService.currentMesage.subscribe((message) => {
             this.campaignTemplate.campaignGroupId = message[0];
             this.campaignTemplate.frontEnd = message[1];
@@ -232,6 +238,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
             languageSelected: '',
             selectedItems:[[]]
         }));
+        this.targetContentGroupSize.push(0);
     }
 
     addCampaignTemplateMetaDataCriterion() {
@@ -539,6 +546,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         return false;
     }
     getTargetContentGroupRefreshBtnEnabled(i) {
+        this.targetContentGroupSize[i] = 0;
         if (this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria.length === 1) {
             return false;
         }
@@ -617,6 +625,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
         else{
             targetGroupContentCriterionFormControl.get('languageSelected').setValue('');
         }
+        this.targetContentGroupSize[index] = 0;
      }
     liveOddKeyUniqueCheck(index) {
         var _this = this;
@@ -631,7 +640,9 @@ export class CampaignTemplateDialogComponent implements OnInit {
             }
         }, 0);
     }
-
+    openParentCampaginDetails(parentCampaignGrpDetails){
+        this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateLaunchDialogComponent as Component, {isRetarget: true}, false, parentCampaignGrpDetails);   
+    }
     private onTargetGroupContentSizeRequestSuccess(data, headers, contentGrpNo) {
         // console.log(data);
         if (data) {
@@ -656,6 +667,7 @@ export class CampaignTemplateDialogComponent implements OnInit {
     removeTargetGroupContentCriterion(i) {
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupContentCriteria') as FormArray;
         targetGroupFilters.removeAt(i);
+        this.targetContentGroupSize.splice(0, i);
     }
     removeTargetGroupMetaDataCriterion(i) {
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupMetaData') as FormArray;

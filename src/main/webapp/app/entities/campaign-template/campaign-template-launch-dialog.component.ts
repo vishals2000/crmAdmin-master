@@ -10,6 +10,8 @@ import { CampaignTemplatePopupService } from './campaign-template-popup.service'
 import { CampaignTemplateService } from './campaign-template.service';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
 import { ResponseWrapper } from '../../shared';
+import { Subscription } from 'rxjs/Rx';
+import { CampaignTemplateDialogComponent } from './campaign-template-dialog.component';
 
 import {
     CampaignTemplateFilterCriterion, RecurrenceType, FilterOption, CampaignTargetGroupSizeRequest,
@@ -24,8 +26,11 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
 
     campaignTemplate: CampaignTemplate;
     targetGroupSize: Number;
+    dialogParamters: any;
     targetContentGroupSize: Number[];
     segmentNames: any[];
+    eventSubscriber: Subscription;
+    isRetarget : boolean;
 
     constructor(
         private campaignTemplateService: CampaignTemplateService,
@@ -33,7 +38,9 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
         private eventManager: JhiEventManager,
         private http: HttpClient,
         private alertService: JhiAlertService,
+        private campaignTemplatePopupService: CampaignTemplatePopupService
     ) {
+        this.isRetarget = false;
     }
 
     ngOnInit() {
@@ -45,6 +52,7 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
             this.getSegments();
             this.targetContentGroupSize = [];
         });       
+        this.isRetarget = this.dialogParamters && this.dialogParamters.isRetarget ? true : false;
     }
     getSegments(){
         const body = {
@@ -106,6 +114,11 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
             );
         }
         
+    }
+    goToParent(){
+        this.activeModal.dismiss('cancel');
+        this.eventManager.broadcast({ name: 'closeCampaignTemp', content: 'OK' });
+        this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateDialogComponent as Component, {}, false, this.campaignTemplate.id);
     }
 
     private onTargetGroupContentSizeRequestSuccess(data, headers, contentGrpNo) {

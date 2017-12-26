@@ -7,6 +7,8 @@ import { CampaignTemplateService } from './campaign-template.service';
 @Injectable()
 export class CampaignTemplatePopupService {
     private ngbModalRef: NgbModalRef;
+    private isRoute: boolean;
+    private customObjectFromPage: any;
 
     constructor(
         private modalService: NgbModal,
@@ -14,7 +16,14 @@ export class CampaignTemplatePopupService {
         private campaignTemplateService: CampaignTemplateService
 
     ) {
+        this.isRoute = true;
         this.ngbModalRef = null;
+    }
+
+    openWithoutRouter(component: Component, customObject: any, bisNotRoute?: boolean, id?: number | any): Promise<NgbModalRef>{
+        this.isRoute = bisNotRoute;
+        this.customObjectFromPage = customObject;
+        return this.open(component, id);
     }
 
     open(component: Component, id?: number | any): Promise<NgbModalRef> {
@@ -56,12 +65,22 @@ export class CampaignTemplatePopupService {
     campaignTemplateModalRef(component: Component, campaignTemplate: CampaignTemplate): NgbModalRef {
         const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.campaignTemplate = campaignTemplate;
+        if(this.customObjectFromPage){
+            modalRef.componentInstance.dialogParamters = this.customObjectFromPage;
+        }
+        else{
+            modalRef.componentInstance.dialogParamters = {};
+        }
         modalRef.result.then((result) => {
-            this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
-            this.ngbModalRef = null;
+            console.log(this.ngbModalRef);
+                this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
+                this.ngbModalRef = null;
+                this.customObjectFromPage = null;
         }, (reason) => {
-            this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
+            console.log(this.ngbModalRef);
+                this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.ngbModalRef = null;
+            this.customObjectFromPage = null;
         });
         return modalRef;
     }

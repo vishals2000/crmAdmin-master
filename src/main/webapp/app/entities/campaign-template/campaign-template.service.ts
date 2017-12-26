@@ -192,6 +192,10 @@ export class CampaignTemplateService {
             postObj.targetGroupContentCriteria = [];
             postObj.targetGroupFilterCriteria = [];
         }
+        else{
+            postObj.retargetedCampaign = body.retargetedCampaign || false;
+            postObj.parentCampaignTemplateId = body.parentCampaignTemplateId || '';
+        }
         postObj.id = undefined;
         var dateObj = new Date();
         dateObj.setDate(dateObj.getDate() + 1);
