@@ -495,10 +495,10 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
             const optionValues: string[] = [];
             if (Array.isArray(targetGroupFilter.get('filterOptionValue').value)) {
                 for (const optionValue of targetGroupFilter.get('filterOptionValue').value) {
-                    optionValues.push((optionValue || '').toString());
+                    optionValues.push(optionValue.toString());
                 }
             } else {
-                optionValues.push((targetGroupFilter.get('filterOptionValue').value || '').toString());
+                optionValues.push(targetGroupFilter.get('filterOptionValue').value.toString());
             }
             targetGroupFilterCriteria.push(new TargetGroupFilterCriterionSizeRequest(targetGroupFilter.get('filterOption').value,
                 targetGroupFilter.get('filterOptionLookUp').value,
@@ -531,10 +531,10 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
             const optionValues: string[] = [];
             if (Array.isArray(targetGroupFilter.get('filterOptionValue').value)) {
                 for (const optionValue of targetGroupFilter.get('filterOptionValue').value) {
-                    optionValues.push((optionValue || '').toString());
+                    optionValues.push(optionValue.toString());
                 }
             } else {
-                optionValues.push((targetGroupFilter.get('filterOptionValue').value || '').toString());
+                optionValues.push(targetGroupFilter.get('filterOptionValue').value.toString());
             }
             const optValCase = this.getFormControlType(formLengthIterator);
             const bOptValReq = optValCase !== null && (!optionValues.length || optionValues.length && optionValues[0]) === '' ? false : true;
@@ -560,10 +560,10 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
             const optionValues: string[] = [];
             if (Array.isArray(targetGroupFilter.get('filterOptionValue').value)) {
                 for (const optionValue of targetGroupFilter.get('filterOptionValue').value) {
-                    optionValues.push((optionValue || '').toString());
+                    optionValues.push(optionValue.toString());
                 }
             } else {
-                optionValues.push((targetGroupFilter.get('filterOptionValue').value || '').toString());
+                optionValues.push(targetGroupFilter.get('filterOptionValue').value.toString());
             }
             targetGroupFilterCriteria.push(new TargetGroupFilterCriterionSizeRequest(targetGroupFilter.get('filterOption').value,
                 targetGroupFilter.get('filterOptionLookUp').value,
