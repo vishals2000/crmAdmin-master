@@ -249,6 +249,7 @@ export class NavbarComponent implements OnInit {
         }
     }
     collapseNavbar() {
+        this.crumbsArray = [];
         this.isNavbarCollapsed = true;
     }
 

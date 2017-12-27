@@ -29,11 +29,13 @@ import {
     UserResolve,
     UserModalService
 } from './';
+import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
 
 @NgModule({
     imports: [
         CrmAdminSharedModule,
         RouterModule.forRoot(adminState, { useHash: true }),
+        AngularMultiSelectModule
         /* jhipster-needle-add-admin-module - JHipster will add admin modules here */
     ],
     declarations: [

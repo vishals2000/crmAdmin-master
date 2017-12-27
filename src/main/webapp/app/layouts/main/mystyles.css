@@ -353,6 +353,13 @@ select.custom-selectbox  {
     display: inherit;
     overflow-y: hidden;
 }
+
+.multiselect .c-list .c-token{
+    display: flex !important;
+}
+.multiselect .c-list .c-token span:nth-child(2){
+    line-height: 21px !important;
+}
 .campTempStatus{
     text-align: center;
     border-radius: 0 0 0 10px;
