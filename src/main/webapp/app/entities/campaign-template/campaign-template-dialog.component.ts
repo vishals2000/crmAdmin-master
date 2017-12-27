@@ -46,7 +46,7 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
     languages: any[];
     languagesList: string[];
     targetGroupSize: number;
-    targetContentGroupSize: number[];
+    targetContentGroupSize: any[];
     time: SimpleTime;
     ctrl: any;
     operatingSystems: string[] = ['android', 'ios'];
@@ -81,7 +81,7 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
         this.countries = [];
         this.languages = [];
         this.targetGroupSize = 0;
-        this.targetContentGroupSize = [0];
+        this.targetContentGroupSize = [];
         this.campaignTemplateGroupCreationForm = this.fb.group({
             targetGroupFilterCriteria: this.fb.array([]),
             targetGroupContentCriteria: this.fb.array([]),
@@ -238,7 +238,7 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
             languageSelected: '',
             selectedItems:[[]]
         }));
-        this.targetContentGroupSize.push(0);
+        this.targetContentGroupSize.push('');
     }
 
     addCampaignTemplateMetaDataCriterion() {
@@ -546,7 +546,6 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
         return false;
     }
     getTargetContentGroupRefreshBtnEnabled(i) {
-        this.targetContentGroupSize[i] = 0;
         if (this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria.length === 1) {
             return false;
         }
@@ -625,7 +624,7 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
         else{
             targetGroupContentCriterionFormControl.get('languageSelected').setValue('');
         }
-        this.targetContentGroupSize[index] = 0;
+        this.targetContentGroupSize[index] = '';
      }
     liveOddKeyUniqueCheck(index) {
         var _this = this;
@@ -665,9 +664,9 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
         targetGroupFilters.removeAt(i);
     }
     removeTargetGroupContentCriterion(i) {
+        this.targetContentGroupSize.splice(i, 1);
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupContentCriteria') as FormArray;
         targetGroupFilters.removeAt(i);
-        this.targetContentGroupSize.splice(0, i);
     }
     removeTargetGroupMetaDataCriterion(i) {
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupMetaData') as FormArray;
