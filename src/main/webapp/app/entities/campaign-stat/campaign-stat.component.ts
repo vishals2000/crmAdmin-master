@@ -24,13 +24,17 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
     queryCount: any;
     reverse: any;
     totalItems: number;
+    appId: any;
+    selectedApp : any;
 
     constructor(
         private campaignStatService: CampaignStatService,
         private alertService: JhiAlertService,
         private eventManager: JhiEventManager,
         private parseLinks: JhiParseLinks,
-        private principal: Principal
+        private principal: Principal,
+        private route: ActivatedRoute,
+        private router: Router
     ) {
         this.campaignStats = [];
         this.itemsPerPage = ITEMS_PER_PAGE;
@@ -64,11 +68,47 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
         this.loadAll();
     }
     ngOnInit() {
-        this.loadAll();
+        //this.loadAll();
         this.principal.identity().then((account) => {
             this.currentAccount = account;
         });
         this.registerChangeInCampaignStats();
+        this.eventSubscriber = this.route.params.subscribe((params) => {
+            this.appId = params['id'];
+            if (this.appId) {
+                this.setDataToPageModel();
+            }
+            else {
+                this.eventManager.broadcast({ name: 'setBreadCrumbToCampStatFirstApp', content: 'OK' });
+            }
+        });
+    }
+    setDataToPageModel(){
+            this.selectedApp = JSON.parse(localStorage['selectedApp']);
+            const values: string[] = [this.selectedApp.frontEnd, this.selectedApp.product.toString()];
+            setTimeout(() => {
+                this.eventManager.broadcast({ name: 'selectedApp', content: this.appId});
+                this.eventManager.broadcast({ name: 'setBreadCrumbToCampStat', content: 'OK'});
+            }, 0);
+            
+            if(this.appId){
+                this.loadAll();
+            }
+            else{
+                this.clear();
+            }
+        this.principal.identity().then((account) => {
+            this.currentAccount = account;
+        });
+        this.registerChangeInCampaignStats();
+    }
+   clear() {
+            this.page = 0;
+            this.router.navigate(['/campaign-stat/project/' + this.selectedApp.id, {
+                page: this.page,
+                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+            }]);
+            this.loadAll();
     }
 
     ngOnDestroy() {
@@ -93,9 +133,7 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
     private onSuccess(data, headers) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
-        for (let i = 0; i < data.length; i++) {
-            this.campaignStats.push(data[i]);
-        }
+        this.campaignStats = data;
     }
 
     private onError(error) {

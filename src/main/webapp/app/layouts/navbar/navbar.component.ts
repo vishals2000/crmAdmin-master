@@ -97,9 +97,11 @@ export class NavbarComponent implements OnInit {
         this.eventSubscriber = this.eventManager.subscribe('setBreadCrumbToCampTemp', response => this.setBreadCrumbToCampTemp(response));
         
         this.eventSubscriber = this.eventManager.subscribe('setBreadCrumbToAudSeg', response => this.setBreadCrumbToAudSeg(response, false));
+        this.eventSubscriber = this.eventManager.subscribe('setBreadCrumbToCampStat', response => this.setBreadCrumbToCampStat(response, false));
         this.eventSubscriber = this.eventManager.subscribe('setBreadCrumbToInsights', response => this.setBreadCrumbToInsights(response, null));
         this.eventSubscriber = this.eventManager.subscribe('setBreadCrumbToInsightsFirstApp', response => this.setBreadCrumbToInsights(response, true));
         this.eventSubscriber = this.eventManager.subscribe('setBreadCrumbToAudSegFirstApp', response => this.setBreadCrumbToAudSeg(response, true));
+        this.eventSubscriber = this.eventManager.subscribe('setBreadCrumbToCampStatFirstApp', response => this.setBreadCrumbToCampStat(response, true));
         
         this.eventSubscriber = this.eventManager.subscribe('clearBdData', response => this.clearBdData(response));
     }
@@ -200,6 +202,24 @@ export class NavbarComponent implements OnInit {
         };
         this.loadAllApps(fAfterGetResults);
     }
+    setBreadCrumbToCampStat(response, bIsselectedFirstApp){
+        var oCurObj = this;
+        var fAfterGetResults = function(res){
+            oCurObj.setBreadCrumbToApp(response);
+            if(!oCurObj.selApp || bIsselectedFirstApp){
+                oCurObj.selApp = oCurObj.appList[0];
+                localStorage["selectedApp"] = JSON.stringify(oCurObj.selApp);
+            }
+            if(oCurObj.appList && oCurObj.appList.length){
+                oCurObj.appPageType = 'CS';
+                oCurObj.crumbsArray.push({appPageType:oCurObj.appPageType, name: 'Campagin Stats', router: '#/campaign-stat/project/'+ oCurObj.selApp.id, brdCrmbId: '2', list:oCurObj.appList, selVal: [oCurObj.selApp]});
+            }
+            if(bIsselectedFirstApp){
+                oCurObj.router.navigate(['/campaign-stat/project/' + oCurObj.selApp.id], {});
+            }
+        };
+        this.loadAllApps(fAfterGetResults);
+    }
     setBreadCrumbToInsights(response, bIsselectedFirstApp){
         var oCurObj = this;
         var fAfterGetResults = function(res){
@@ -229,6 +249,22 @@ export class NavbarComponent implements OnInit {
             this.loadAllApps(function(){
                 localStorage["selectedApp"] = JSON.stringify(this.appList[0]);
                 oCurObj.router.navigate(['/linechart/project/' + oCurObj.appList[0].id], {});
+            })
+        }
+    }
+    goToCampStatPage(){
+        var oCurObj = this;
+        if(this.selApp){
+            this.router.navigate(['/campaign-stat/project/' + this.selApp.id], {});
+        }
+        else if(this.appList && this.appList.length){
+            localStorage["selectedApp"] = JSON.stringify(this.appList[0]);
+            this.router.navigate(['/campaign-stat/project/' + this.appList[0].id], {});
+        }
+        else{
+            this.loadAllApps(function(){
+                localStorage["selectedApp"] = JSON.stringify(this.appList[0]);
+                oCurObj.router.navigate(['/campaign-stat/project/' + oCurObj.appList[0].id], {});
             })
         }
     }
@@ -303,6 +339,13 @@ export class NavbarComponent implements OnInit {
                 //this.router.navigate(['/audience-segments/' + this.selApp.id], {});
                 this.router.navigate(['/audience-segments/project/' + this.selApp.id], {});
             break;
+            case 'CS':
+            this.selApp = oSelectedItm;
+            localStorage["selectedApp"] = JSON.stringify(oSelectedItm);
+            //this.router.navigate(['/audience-segments/' + this.selApp.id], {});
+            this.router.navigate(['/campaign-stat/project/' + this.selApp.id], {});
+        break;
+            
         }
     }
     ngOnDestroy() {
