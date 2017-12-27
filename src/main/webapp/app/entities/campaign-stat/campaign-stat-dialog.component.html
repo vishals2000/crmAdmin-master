@@ -1,0 +1,60 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myCampaignStatLabel">Create or edit a Campaign Stat</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!campaignStat.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="campaignStat.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_name">Name</label>
+            <input type="text" class="form-control" name="name" id="field_name"
+                [(ngModel)]="campaignStat.name"  />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_scheduledTime">Scheduled Time</label>
+            <input type="text" class="form-control" name="scheduledTime" id="field_scheduledTime"
+                [(ngModel)]="campaignStat.scheduledTime"  />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_status">Status</label>
+            <input type="text" class="form-control" name="status" id="field_status"
+                [(ngModel)]="campaignStat.status"  />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_segmentSize">Segment Size</label>
+            <input type="number" class="form-control" name="segmentSize" id="field_segmentSize"
+                [(ngModel)]="campaignStat.segmentSize"  />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_segmentSizeAfterCommonScrubbing">Segment Size After Common Scrubbing</label>
+            <input type="number" class="form-control" name="segmentSizeAfterCommonScrubbing" id="field_segmentSizeAfterCommonScrubbing"
+                [(ngModel)]="campaignStat.segmentSizeAfterCommonScrubbing"  />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_segmentSizeAfterCommunicationScrubbing">Segment Size After Communication Scrubbing</label>
+            <input type="number" class="form-control" name="segmentSizeAfterCommunicationScrubbing" id="field_segmentSizeAfterCommunicationScrubbing"
+                [(ngModel)]="campaignStat.segmentSizeAfterCommunicationScrubbing"  />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_campaignId">Campaign Id</label>
+            <input type="text" class="form-control" name="campaignId" id="field_campaignId"
+                [(ngModel)]="campaignStat.campaignId"  />
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

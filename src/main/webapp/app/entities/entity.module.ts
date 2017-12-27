@@ -13,6 +13,7 @@ import { CrmAdminCampaignGroupModule } from './campaign-group/campaign-group.mod
 import { CrmAdminAppsModule } from './apps/apps.module';
 import { CrmAdminAudienceSegmentsModule } from './audience-segments/audience-segments.module';
 import { CrmAdminUploadSegmentsModule } from './upload-segments/upload-segments.module';
+import { CrmAdminCampaignStatModule } from './campaign-stat/campaign-stat.module';
 /* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
 
 @NgModule({
@@ -30,6 +31,7 @@ import { CrmAdminUploadSegmentsModule } from './upload-segments/upload-segments.
         CrmAdminAppsModule,
         CrmAdminAudienceSegmentsModule,
         CrmAdminUploadSegmentsModule,
+        CrmAdminCampaignStatModule,
         /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
     ],
     declarations: [],
