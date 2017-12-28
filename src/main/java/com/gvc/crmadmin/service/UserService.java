@@ -217,11 +217,9 @@ public class UserService {
                     }
                     user.getApplications().addAll(appIds);
                 } else {
-                    user.getApplications().clear();
-                    Collections.addAll(user.getApplications(), userDTO.getApplications());
+                    user.setApplications(new HashSet<>(Arrays.asList(userDTO.getApplications())));
                 }
 
-                user.setApplications(new HashSet<>(Arrays.asList(userDTO.getApplications())));
                 userRepository.save(user);
                 log.debug("Changed Information for User: {}", user);
                 return user;
