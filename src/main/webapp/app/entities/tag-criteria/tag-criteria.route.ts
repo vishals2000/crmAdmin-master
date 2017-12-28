@@ -33,7 +33,7 @@ export const tagCriteriaRoute: Routes = [
             'pagingParams': TagCriteriaResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'TagCriteria'
         },
         canActivate: [UserRouteAccessService]

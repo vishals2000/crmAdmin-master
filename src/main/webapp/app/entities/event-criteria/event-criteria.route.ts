@@ -33,7 +33,7 @@ export const eventCriteriaRoute: Routes = [
             'pagingParams': EventCriteriaResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'EventCriteria'
         },
         canActivate: [UserRouteAccessService]
@@ -41,7 +41,7 @@ export const eventCriteriaRoute: Routes = [
         path: 'event-criteria/:id',
         component: EventCriteriaDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'EventCriteria'
         },
         canActivate: [UserRouteAccessService]
@@ -53,7 +53,7 @@ export const eventCriteriaPopupRoute: Routes = [
         path: 'event-criteria-new',
         component: EventCriteriaPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'EventCriteria'
         },
         canActivate: [UserRouteAccessService],
@@ -63,7 +63,7 @@ export const eventCriteriaPopupRoute: Routes = [
         path: 'event-criteria/:id/edit',
         component: EventCriteriaPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'EventCriteria'
         },
         canActivate: [UserRouteAccessService],
@@ -73,7 +73,7 @@ export const eventCriteriaPopupRoute: Routes = [
         path: 'event-criteria/:id/delete',
         component: EventCriteriaDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'EventCriteria'
         },
         canActivate: [UserRouteAccessService],

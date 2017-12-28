@@ -33,7 +33,7 @@ export const targetGroupCriteriaRoute: Routes = [
             'pagingParams': TargetGroupCriteriaResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'TargetGroupCriteria'
         },
         canActivate: [UserRouteAccessService]
@@ -41,7 +41,7 @@ export const targetGroupCriteriaRoute: Routes = [
         path: 'target-group-criteria/:id',
         component: TargetGroupCriteriaDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'TargetGroupCriteria'
         },
         canActivate: [UserRouteAccessService]
@@ -53,7 +53,7 @@ export const targetGroupCriteriaPopupRoute: Routes = [
         path: 'target-group-criteria-new',
         component: TargetGroupCriteriaPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'TargetGroupCriteria'
         },
         canActivate: [UserRouteAccessService],
@@ -63,7 +63,7 @@ export const targetGroupCriteriaPopupRoute: Routes = [
         path: 'target-group-criteria/:id/edit',
         component: TargetGroupCriteriaPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'TargetGroupCriteria'
         },
         canActivate: [UserRouteAccessService],
@@ -73,7 +73,7 @@ export const targetGroupCriteriaPopupRoute: Routes = [
         path: 'target-group-criteria/:id/delete',
         component: TargetGroupCriteriaDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'TargetGroupCriteria'
         },
         canActivate: [UserRouteAccessService],

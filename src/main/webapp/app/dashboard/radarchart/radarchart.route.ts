@@ -6,7 +6,7 @@ export const radarchartRoute: Route = {
     path: 'radarchart',
     component: RadarchartComponent,
     data: {
-        authorities: ['ROLE_USER'],
+        authorities: ['ROLE_USER', 'ROLE_ADMIN'],
         pageTitle: 'dashboard.radarchart.home.title'
     },
     canActivate: [UserRouteAccessService]

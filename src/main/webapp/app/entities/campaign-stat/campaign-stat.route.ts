@@ -14,7 +14,7 @@ export const campaignStatRoute: Routes = [
         path: 'campaign-stat/project/:id',
         component: CampaignStatComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignStats'
         },
         canActivate: [UserRouteAccessService]
@@ -22,7 +22,7 @@ export const campaignStatRoute: Routes = [
         path: 'campaign-stat/:id',
         component: CampaignStatDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignStats'
         },
         canActivate: [UserRouteAccessService]
@@ -34,7 +34,7 @@ export const campaignStatPopupRoute: Routes = [
         path: 'campaign-stat-new',
         component: CampaignStatPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignStats'
         },
         canActivate: [UserRouteAccessService],
@@ -44,7 +44,7 @@ export const campaignStatPopupRoute: Routes = [
         path: 'campaign-stat/:id/edit',
         component: CampaignStatPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignStats'
         },
         canActivate: [UserRouteAccessService],
@@ -54,7 +54,7 @@ export const campaignStatPopupRoute: Routes = [
         path: 'campaign-stat/:id/delete',
         component: CampaignStatDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignStats'
         },
         canActivate: [UserRouteAccessService],

@@ -14,7 +14,7 @@ export const filterCriteriaRoute: Routes = [
         path: 'filter-criteria',
         component: FilterCriteriaComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'FilterCriteria'
         },
         canActivate: [UserRouteAccessService]
@@ -22,7 +22,7 @@ export const filterCriteriaRoute: Routes = [
         path: 'filter-criteria/:id',
         component: FilterCriteriaDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'FilterCriteria'
         },
         canActivate: [UserRouteAccessService]
@@ -34,7 +34,7 @@ export const filterCriteriaPopupRoute: Routes = [
         path: 'filter-criteria-new',
         component: FilterCriteriaPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'FilterCriteria'
         },
         canActivate: [UserRouteAccessService],
@@ -44,7 +44,7 @@ export const filterCriteriaPopupRoute: Routes = [
         path: 'filter-criteria/:id/edit',
         component: FilterCriteriaPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'FilterCriteria'
         },
         canActivate: [UserRouteAccessService],
@@ -54,7 +54,7 @@ export const filterCriteriaPopupRoute: Routes = [
         path: 'filter-criteria/:id/delete',
         component: FilterCriteriaDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'FilterCriteria'
         },
         canActivate: [UserRouteAccessService],

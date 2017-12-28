@@ -25,7 +25,7 @@ export const linechartRoute: Routes = [
             'pagingParams': LinechartResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'Insights'
         },
         canActivate: [UserRouteAccessService]
@@ -34,7 +34,7 @@ export const linechartRoute: Routes = [
         path: 'linechart/project/:id',
         component: LinechartComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'dashboard.linechart.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -43,7 +43,7 @@ export const linechartRoute: Routes = [
         path: 'linechart/template/:id',
         component: LinechartComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'dashboard.linechart.home.title'
         },
         canActivate: [UserRouteAccessService]

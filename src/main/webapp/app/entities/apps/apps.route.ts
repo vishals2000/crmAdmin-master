@@ -33,7 +33,7 @@ export const appsRoute: Routes = [
             'pagingParams': AppsResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'Apps'
         },
         canActivate: [UserRouteAccessService]
@@ -41,7 +41,7 @@ export const appsRoute: Routes = [
         path: 'apps/:id',
         component: AppsDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'Apps'
         },
         canActivate: [UserRouteAccessService]
@@ -53,7 +53,7 @@ export const appsPopupRoute: Routes = [
         path: 'apps-new',
         component: AppsPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'Apps'
         },
         canActivate: [UserRouteAccessService],
@@ -63,7 +63,7 @@ export const appsPopupRoute: Routes = [
         path: 'apps/:id/edit',
         component: AppsPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'Apps'
         },
         canActivate: [UserRouteAccessService],
@@ -73,7 +73,7 @@ export const appsPopupRoute: Routes = [
         path: 'apps/:id/delete',
         component: AppsDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'Apps'
         },
         canActivate: [UserRouteAccessService],

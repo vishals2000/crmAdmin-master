@@ -6,7 +6,7 @@ export const polarareachartRoute: Route = {
     path: 'polarareachart',
     component: PolarareachartComponent,
     data: {
-        authorities: ['ROLE_USER'],
+        authorities: ['ROLE_USER', 'ROLE_ADMIN'],
         pageTitle: 'dashboard.polarareachart.home.title'
     },
     canActivate: [UserRouteAccessService]

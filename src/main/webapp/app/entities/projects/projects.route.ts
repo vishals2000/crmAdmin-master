@@ -33,7 +33,7 @@ export const projectsRoute: Routes = [
             'pagingParams': ProjectsResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'Projects'
         },
         canActivate: [UserRouteAccessService]
@@ -41,7 +41,7 @@ export const projectsRoute: Routes = [
         path: 'projects/:id',
         component: ProjectsDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'Projects'
         },
         canActivate: [UserRouteAccessService]
@@ -53,7 +53,7 @@ export const projectsPopupRoute: Routes = [
         path: 'projects-new',
         component: ProjectsPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'Projects'
         },
         canActivate: [UserRouteAccessService],
@@ -63,7 +63,7 @@ export const projectsPopupRoute: Routes = [
         path: 'projects/:id/edit',
         component: ProjectsPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'Projects'
         },
         canActivate: [UserRouteAccessService],
@@ -73,7 +73,7 @@ export const projectsPopupRoute: Routes = [
         path: 'projects/:id/delete',
         component: ProjectsDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'Projects'
         },
         canActivate: [UserRouteAccessService],

@@ -33,7 +33,7 @@ export const uploadSegmentsRoute: Routes = [
             'pagingParams': UploadSegmentsResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'UploadSegments'
         },
         canActivate: [UserRouteAccessService]
@@ -41,7 +41,7 @@ export const uploadSegmentsRoute: Routes = [
         path: 'upload-segments/:id',
         component: UploadSegmentsDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'UploadSegments'
         },
         canActivate: [UserRouteAccessService]
@@ -53,7 +53,7 @@ export const uploadSegmentsPopupRoute: Routes = [
         path: 'upload-segments-new',
         component: UploadSegmentsPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'UploadSegments'
         },
         canActivate: [UserRouteAccessService],
@@ -63,7 +63,7 @@ export const uploadSegmentsPopupRoute: Routes = [
         path: 'upload-segments/:id/edit',
         component: UploadSegmentsPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'UploadSegments'
         },
         canActivate: [UserRouteAccessService],
@@ -73,7 +73,7 @@ export const uploadSegmentsPopupRoute: Routes = [
         path: 'upload-segments/:id/delete',
         component: UploadSegmentsDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'UploadSegments'
         },
         canActivate: [UserRouteAccessService],

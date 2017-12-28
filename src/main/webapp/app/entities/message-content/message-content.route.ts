@@ -33,7 +33,7 @@ export const messageContentRoute: Routes = [
             'pagingParams': MessageContentResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'MessageContents'
         },
         canActivate: [UserRouteAccessService]
@@ -41,7 +41,7 @@ export const messageContentRoute: Routes = [
         path: 'message-content/:id',
         component: MessageContentDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'MessageContents'
         },
         canActivate: [UserRouteAccessService]
@@ -53,7 +53,7 @@ export const messageContentPopupRoute: Routes = [
         path: 'message-content-new',
         component: MessageContentPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'MessageContents'
         },
         canActivate: [UserRouteAccessService],
@@ -63,7 +63,7 @@ export const messageContentPopupRoute: Routes = [
         path: 'message-content/:id/edit',
         component: MessageContentPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'MessageContents'
         },
         canActivate: [UserRouteAccessService],
@@ -73,7 +73,7 @@ export const messageContentPopupRoute: Routes = [
         path: 'message-content/:id/delete',
         component: MessageContentDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'MessageContents'
         },
         canActivate: [UserRouteAccessService],

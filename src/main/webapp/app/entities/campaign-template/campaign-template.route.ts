@@ -52,7 +52,7 @@ export const campaignTemplateRoute: Routes = [
             'pagingParams': CampaignTemplateResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignTemplates'
         }
     },
@@ -63,7 +63,7 @@ export const campaignTemplateRoute: Routes = [
             'pagingParams': CampaignTemplateResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignTemplates'
         },
         canActivate: [UserRouteAccessService]
@@ -71,7 +71,7 @@ export const campaignTemplateRoute: Routes = [
         path: 'campaign-template/:id',
         component: CampaignTemplateDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignTemplates'
         },
         canActivate: [UserRouteAccessService]
@@ -83,7 +83,7 @@ export const campaignTemplatePopupRoute: Routes = [
         path: 'campaign-template-new',
         component: CampaignTemplatePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignTemplates'
         },
         canActivate: [UserRouteAccessService],
@@ -93,7 +93,7 @@ export const campaignTemplatePopupRoute: Routes = [
         path: 'campaign-template/:id/edit',
         component: CampaignTemplatePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignTemplates'
         },
         canActivate: [UserRouteAccessService],
@@ -103,7 +103,7 @@ export const campaignTemplatePopupRoute: Routes = [
         path: 'campaign-template/:id/delete',
         component: CampaignTemplateDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignTemplates'
         },
         canActivate: [UserRouteAccessService],
@@ -113,7 +113,7 @@ export const campaignTemplatePopupRoute: Routes = [
         path: 'campaign-template/:id/launch',
         component: CampaignTemplateLaunchPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignTemplates'
         },
         canActivate: [UserRouteAccessService],
@@ -123,7 +123,7 @@ export const campaignTemplatePopupRoute: Routes = [
         path: 'campaign-template/:id/test',
         component: CampaignTemplateTestPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignTemplates'
         },
         canActivate: [UserRouteAccessService],
@@ -133,7 +133,7 @@ export const campaignTemplatePopupRoute: Routes = [
         path: 'campaign-template/:id/cancel',
         component: CampaignTemplateCancelPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignTemplates'
         },
         canActivate: [UserRouteAccessService],
@@ -145,7 +145,7 @@ export const campaignTemplatePopupRoute: Routes = [
             'pagingParams': CampaignTemplateResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignTemplates'
         },
         canActivate: [UserRouteAccessService],

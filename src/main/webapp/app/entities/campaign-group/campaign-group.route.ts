@@ -33,7 +33,7 @@ export const campaignGroupRoute: Routes = [
             'pagingParams': CampaignGroupResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignGroups'
         }
     },
@@ -44,7 +44,7 @@ export const campaignGroupRoute: Routes = [
             'pagingParams': CampaignGroupResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignGroups'
         },
         canActivate: [UserRouteAccessService]
@@ -53,7 +53,7 @@ export const campaignGroupRoute: Routes = [
         path: 'campaign-group/:id',
         component: CampaignGroupDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignGroups'
         },
         canActivate: [UserRouteAccessService]
@@ -65,7 +65,7 @@ export const campaignGroupPopupRoute: Routes = [
         path: 'campaign-group-new',
         component: CampaignGroupPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignGroups'
         },
         canActivate: [UserRouteAccessService],
@@ -75,7 +75,7 @@ export const campaignGroupPopupRoute: Routes = [
         path: 'campaign-group/:id/edit',
         component: CampaignGroupPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignGroups'
         },
         canActivate: [UserRouteAccessService],
@@ -85,7 +85,7 @@ export const campaignGroupPopupRoute: Routes = [
         path: 'campaign-group/:id/delete',
         component: CampaignGroupDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignGroups'
         },
         canActivate: [UserRouteAccessService],

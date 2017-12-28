@@ -6,7 +6,7 @@ export const barchartRoute: Route = {
     path: 'barchart',
     component: BarchartComponent,
     data: {
-        authorities: ['ROLE_USER'],
+        authorities: ['ROLE_USER', 'ROLE_ADMIN'],
         pageTitle: 'dashboard.barchart.home.title'
     },
     canActivate: [UserRouteAccessService]

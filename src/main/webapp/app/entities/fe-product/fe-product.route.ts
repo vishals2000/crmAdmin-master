@@ -14,7 +14,7 @@ export const feProductRoute: Routes = [
         path: 'fe-product',
         component: FeProductComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'FeProducts'
         },
         canActivate: [UserRouteAccessService]
@@ -22,7 +22,7 @@ export const feProductRoute: Routes = [
         path: 'fe-product/:id',
         component: FeProductDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'FeProducts'
         },
         canActivate: [UserRouteAccessService]
@@ -34,7 +34,7 @@ export const feProductPopupRoute: Routes = [
         path: 'fe-product-new',
         component: FeProductPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'FeProducts'
         },
         canActivate: [UserRouteAccessService],
@@ -44,7 +44,7 @@ export const feProductPopupRoute: Routes = [
         path: 'fe-product/:id/edit',
         component: FeProductPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'FeProducts'
         },
         canActivate: [UserRouteAccessService],
@@ -54,7 +54,7 @@ export const feProductPopupRoute: Routes = [
         path: 'fe-product/:id/delete',
         component: FeProductDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'FeProducts'
         },
         canActivate: [UserRouteAccessService],

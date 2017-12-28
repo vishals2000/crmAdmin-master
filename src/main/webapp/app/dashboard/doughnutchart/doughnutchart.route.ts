@@ -6,7 +6,7 @@ export const doughnutchartRoute: Route = {
     path: 'doughnutchart',
     component: DoughnutchartComponent,
     data: {
-        authorities: ['ROLE_USER'],
+        authorities: ['ROLE_USER', 'ROLE_ADMIN'],
         pageTitle: 'dashboard.doughnutchart.home.title'
     },
     canActivate: [UserRouteAccessService]

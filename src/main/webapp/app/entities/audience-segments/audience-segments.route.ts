@@ -35,7 +35,7 @@ export const audienceSegmentsRoute: Routes = [
             'pagingParams': AudienceSegmentsResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'AudienceSegments'
         },
         canActivate: [UserRouteAccessService]
@@ -46,7 +46,7 @@ export const audienceSegmentsRoute: Routes = [
             'pagingParams': AudienceSegmentsResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'AudienceSegments'
         },
         canActivate: [UserRouteAccessService]
@@ -58,7 +58,7 @@ export const audienceSegmentsPopupRoute: Routes = [
         path: 'audience-segments-new',
         component: AudienceSegmentsPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'AudienceSegments'
         },
         canActivate: [UserRouteAccessService],
@@ -68,7 +68,7 @@ export const audienceSegmentsPopupRoute: Routes = [
         path: 'upload-segments-new',
         component: UploadSegmentsPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'UploadSegments'
         },
         canActivate: [UserRouteAccessService],
@@ -78,7 +78,7 @@ export const audienceSegmentsPopupRoute: Routes = [
         path: 'audience-segments/:id/edit',
         component: AudienceSegmentsPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'AudienceSegments'
         },
         canActivate: [UserRouteAccessService],
@@ -88,7 +88,7 @@ export const audienceSegmentsPopupRoute: Routes = [
         path: 'audience-segments/:id/delete',
         component: AudienceSegmentsDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'AudienceSegments'
         },
         canActivate: [UserRouteAccessService],

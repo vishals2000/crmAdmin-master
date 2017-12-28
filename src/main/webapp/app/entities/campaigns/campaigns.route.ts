@@ -33,7 +33,7 @@ export const campaignsRoute: Routes = [
             'pagingParams': CampaignsResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'Campaigns'
         },
         canActivate: [UserRouteAccessService]
@@ -41,7 +41,7 @@ export const campaignsRoute: Routes = [
         path: 'campaigns/:id',
         component: CampaignsDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'Campaigns'
         },
         canActivate: [UserRouteAccessService]
@@ -53,7 +53,7 @@ export const campaignsPopupRoute: Routes = [
         path: 'campaigns-new',
         component: CampaignsPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'Campaigns'
         },
         canActivate: [UserRouteAccessService],
@@ -63,7 +63,7 @@ export const campaignsPopupRoute: Routes = [
         path: 'campaigns/:id/edit',
         component: CampaignsPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'Campaigns'
         },
         canActivate: [UserRouteAccessService],
@@ -73,7 +73,7 @@ export const campaignsPopupRoute: Routes = [
         path: 'campaigns/:id/delete',
         component: CampaignsDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'Campaigns'
         },
         canActivate: [UserRouteAccessService],
