@@ -352,6 +352,7 @@ select.custom-selectbox  {
     max-height: 38px;
     display: inherit;
     overflow-y: hidden;
+    white-space: nowrap;
 }
 
 .multiselect .c-list .c-token{
