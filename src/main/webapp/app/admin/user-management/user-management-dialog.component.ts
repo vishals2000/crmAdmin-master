@@ -30,11 +30,9 @@ export class UserMgmtDialogComponent implements OnInit {
     ngOnInit() {
         this.isSaving = false;
         this.authorities = [];
-         this.user.applications = [
-             "test1_CASINO",
-             "xzcxzc_SPORTS"
-           ];
         this.selectedApps = [];
+        let userRole = this.user.authorities[0];
+        this.user.authorities = [userRole];
         this.allApps = JSON.parse(localStorage['appList']) || [];
         if (this.allApps && this.user.applications && this.allApps.length === this.user.applications.length) {
             this.selectedApps = JSON.parse(localStorage['appList']) || [];
@@ -63,6 +61,7 @@ export class UserMgmtDialogComponent implements OnInit {
     save() {
         this.isSaving = true;
         this.mapSelectedAppsToPost();
+        this.user.authorities = [this.user.authorities];
         if (this.user.id !== null) {
             this.userService.update(this.user).subscribe((response) => this.onSaveSuccess(response), () => this.onSaveError());
         } else {

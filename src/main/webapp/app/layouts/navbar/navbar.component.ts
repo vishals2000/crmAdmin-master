@@ -238,6 +238,7 @@ export class NavbarComponent implements OnInit {
     }
     goToLineItemPage(){
         var oCurObj = this;
+        this.collapseNavbar();
         if(this.selApp){
             this.router.navigate(['/linechart/project/' + this.selApp.id], {});
         }
@@ -254,6 +255,7 @@ export class NavbarComponent implements OnInit {
     }
     goToCampStatPage(){
         var oCurObj = this;
+        this.collapseNavbar();
         if(this.selApp){
             this.router.navigate(['/campaign-stat/project/' + this.selApp.id], {});
         }
@@ -270,6 +272,7 @@ export class NavbarComponent implements OnInit {
     }
     goToSegAudPage(){
         var oCurObj = this;
+        this.collapseNavbar();
         if(this.selApp){
             this.router.navigate(['/audience-segments/project/' + this.selApp.id], {});
         }

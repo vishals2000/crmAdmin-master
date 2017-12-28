@@ -90,7 +90,7 @@
         <div class="form-group row">
             <label class='col-2 col-form-label'>Profiles</label>
             <div class="col-10">
-                <select class="form-control" multiple name="authority" [(ngModel)]="user.authorities" (change)="onAuthorityChange()">
+                <select class="form-control" name="authority" [(ngModel)]="user.authorities" (change)="onAuthorityChange()">
                     <option *ngFor="let authority of authorities" [value]="authority">{{authority}}</option>
                 </select>
             </div>
