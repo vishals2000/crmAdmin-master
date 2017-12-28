@@ -1,14 +1,13 @@
 package com.gvc.crmadmin.service.dto;
 
 import com.gvc.crmadmin.config.Constants;
-
 import com.gvc.crmadmin.domain.Authority;
 import com.gvc.crmadmin.domain.User;
-
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -53,6 +52,8 @@ public class UserDTO {
 
     private Set<String> authorities;
 
+    private String[] applications;
+
     public UserDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -61,14 +62,14 @@ public class UserDTO {
         this(user.getId(), user.getLogin(), user.getFirstName(), user.getLastName(),
             user.getEmail(), user.getActivated(), user.getImageUrl(), user.getLangKey(),
             user.getCreatedBy(), user.getCreatedDate(), user.getLastModifiedBy(), user.getLastModifiedDate(),
-            user.getAuthorities().stream().map(Authority::getName)
-                .collect(Collectors.toSet()));
+            user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet()),
+            user.getApplications());
     }
 
     public UserDTO(String id, String login, String firstName, String lastName,
         String email, boolean activated, String imageUrl, String langKey,
         String createdBy, Instant createdDate, String lastModifiedBy, Instant lastModifiedDate,
-        Set<String> authorities) {
+        Set<String> authorities, Set<String> applications) {
 
         this.id = id;
         this.login = login;
@@ -83,6 +84,7 @@ public class UserDTO {
         this.lastModifiedBy = lastModifiedBy;
         this.lastModifiedDate = lastModifiedDate;
         this.authorities = authorities;
+        this.applications = applications.toArray(new String[0]);
     }
 
     public String getId() {
@@ -165,5 +167,14 @@ public class UserDTO {
             ", lastModifiedDate=" + lastModifiedDate +
             ", authorities=" + authorities +
             "}";
+    }
+
+    public String[] getApplications() {
+        return applications;
+    }
+
+    public UserDTO setApplications(String[] applications) {
+        this.applications = applications;
+        return this;
     }
 }

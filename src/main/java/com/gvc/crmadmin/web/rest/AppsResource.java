@@ -2,7 +2,12 @@ package com.gvc.crmadmin.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.gvc.crmadmin.domain.Apps;
+import com.gvc.crmadmin.domain.Authority;
 import com.gvc.crmadmin.domain.DeleteApp;
+import com.gvc.crmadmin.domain.User;
+import com.gvc.crmadmin.repository.UserRepository;
+import com.gvc.crmadmin.security.AuthoritiesConstants;
+import com.gvc.crmadmin.security.SecurityUtils;
 import com.gvc.crmadmin.service.AppsService;
 import com.gvc.crmadmin.web.rest.util.HeaderUtil;
 import com.gvc.crmadmin.web.rest.util.PaginationUtil;
@@ -10,6 +15,7 @@ import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +28,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +45,9 @@ public class AppsResource {
     private static final String ENTITY_NAME = "apps";
 
     private final AppsService appsService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public AppsResource(AppsService appsService) {
         this.appsService = appsService;
@@ -61,6 +72,14 @@ public class AppsResource {
         Apps appFromDB = appsService.findOne(apps.getId());
         if(appFromDB == null){
             result = appsService.save(apps);
+
+            Authority adminAuthority = new Authority().setName(AuthoritiesConstants.ADMIN);
+            for(User user : userRepository.findAll()) {
+                if (user.getAuthorities().contains(adminAuthority)) {
+                    user.getApplications().add(result.getId());
+                    userRepository.save(user);
+                }
+            }
         } else{
             return ResponseEntity.badRequest()
                 .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, appFromDB.getId(), "App with the given frontEnd and product exists"))
@@ -103,7 +122,15 @@ public class AppsResource {
     @Timed
     public ResponseEntity<List<Apps>> getAllApps(@ApiParam Pageable pageable) {
         log.debug("REST request to get a page of Apps");
-        Page<Apps> page = appsService.findAll(pageable);
+        Page<Apps> page;
+        Optional<User> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            page = appsService.findByIdIn(user.getApplications(), pageable);
+        } else {
+            page = appsService.findByIdIn(Collections.emptySet(), pageable);
+        }
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/apps");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -112,8 +139,17 @@ public class AppsResource {
     @Timed
     public ResponseEntity<List<Apps>> getAllApps() {
         log.debug("REST request to get a page of Apps");
-        List<Apps> allApps = appsService.findAll();
-        return new ResponseEntity<>(allApps, HttpStatus.OK);
+        log.error("Current login " + SecurityUtils.getCurrentUserLogin());
+
+        Optional<User> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+
+        final List<Apps> restrictedApps = new ArrayList<>();
+
+        if(optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            restrictedApps.addAll(appsService.findByIdIn(user.getApplications()));
+        }
+        return new ResponseEntity<>(restrictedApps, HttpStatus.OK);
     }
 
     /**
@@ -135,7 +171,15 @@ public class AppsResource {
     public ResponseEntity<List<Apps>> getAppsByName(@ApiParam Pageable pageable, @PathVariable String appName) {
         log.debug("REST request to get Apps by name: {}", appName);
 
-        Page<Apps> page = appsService.findByName(pageable, appName);
+//        Page<Apps> page = appsService.findByName(pageable, appName);
+        Page<Apps> page;
+
+        Optional<User> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+        if (optionalUser.isPresent()) {
+             page = appsService.findByIdInAndNameLikeIgnoreCase(pageable, appName, optionalUser.get().getApplications());
+        } else {
+            page = appsService.findByIdInAndNameLikeIgnoreCase(pageable, appName, Collections.emptySet());
+        }
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/apps/search/"+appName);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);

@@ -1,5 +1,6 @@
 package com.gvc.crmadmin.service;
 
+import com.gvc.crmadmin.domain.Apps;
 import com.gvc.crmadmin.domain.Authority;
 import com.gvc.crmadmin.domain.User;
 import com.gvc.crmadmin.repository.AuthorityRepository;
@@ -12,6 +13,7 @@ import com.gvc.crmadmin.service.dto.UserDTO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -36,6 +38,9 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
+
+    @Autowired
+    private AppsService appsService;
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
         this.userRepository = userRepository;
@@ -82,7 +87,7 @@ public class UserService {
     }
 
     public User createUser(String login, String password, String firstName, String lastName, String email,
-        String imageUrl, String langKey) {
+                           String imageUrl, String langKey, String[] applications) {
 
         User newUser = new User();
         Authority authority = authorityRepository.findOne(AuthoritiesConstants.USER);
@@ -102,6 +107,18 @@ public class UserService {
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         authorities.add(authority);
         newUser.setAuthorities(authorities);
+
+        if(authorities.contains(new Authority().setName(AuthoritiesConstants.ADMIN))) {
+            List<Apps> apps = appsService.findAll();
+            final Set<String> appIds = new HashSet<>();
+            for(Apps app : apps) {
+                appIds.add(app.getId());
+            }
+            newUser.getApplications().addAll(appIds);
+        } else {
+            newUser.setApplications(new HashSet<>(Arrays.asList(applications)));
+        }
+
         userRepository.save(newUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
@@ -131,6 +148,16 @@ public class UserService {
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
         user.setActivated(true);
+        if(userDTO.getAuthorities().contains(AuthoritiesConstants.ADMIN)) {
+            List<Apps> apps = appsService.findAll();
+            final Set<String> appIds = new HashSet<>();
+            for(Apps app : apps) {
+                appIds.add(app.getId());
+            }
+            user.getApplications().addAll(appIds);
+        } else {
+            Collections.addAll(user.getApplications(), userDTO.getApplications());
+        }
         userRepository.save(user);
         log.debug("Created Information for User: {}", user);
         return user;
@@ -138,20 +165,21 @@ public class UserService {
 
     /**
      * Update basic information (first name, last name, email, language) for the current user.
-     *
-     * @param firstName first name of user
+     *  @param firstName first name of user
      * @param lastName last name of user
      * @param email email id of user
      * @param langKey language key
      * @param imageUrl image URL of user
+     * @param applications
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
+    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl, String[] applications) {
         userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(user -> {
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setEmail(email);
             user.setLangKey(langKey);
             user.setImageUrl(imageUrl);
+            user.setApplications(new HashSet<>(Arrays.asList(applications)));
             userRepository.save(user);
             log.debug("Changed Information for User: {}", user);
         });
@@ -174,11 +202,26 @@ public class UserService {
                 user.setImageUrl(userDTO.getImageUrl());
                 user.setActivated(userDTO.isActivated());
                 user.setLangKey(userDTO.getLangKey());
+
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
                 userDTO.getAuthorities().stream()
                     .map(authorityRepository::findOne)
                     .forEach(managedAuthorities::add);
+
+                if(userDTO.getAuthorities().contains(AuthoritiesConstants.ADMIN)) {
+                    List<Apps> apps = appsService.findAll();
+                    final Set<String> appIds = new HashSet<>();
+                    for(Apps app : apps) {
+                        appIds.add(app.getId());
+                    }
+                    user.getApplications().addAll(appIds);
+                } else {
+                    user.getApplications().clear();
+                    Collections.addAll(user.getApplications(), userDTO.getApplications());
+                }
+
+                user.setApplications(new HashSet<>(Arrays.asList(userDTO.getApplications())));
                 userRepository.save(user);
                 log.debug("Changed Information for User: {}", user);
                 return user;

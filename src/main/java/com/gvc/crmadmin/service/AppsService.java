@@ -4,6 +4,7 @@ import com.gvc.crmadmin.domain.Apps;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -29,6 +30,8 @@ public interface AppsService {
 
     List<Apps> findAll();
 
+    List<Apps> findAllWithRestrictions();
+
     Page<Apps> findByName(Pageable pageable, String appName);
 
     /**
@@ -45,4 +48,10 @@ public interface AppsService {
      *  @param id the id of the entity
      */
     void delete(String id);
+
+    Page<Apps> findByIdIn(Collection applications, Pageable pageable);
+
+    List<Apps> findByIdIn(Collection applications);
+
+    Page<Apps> findByIdInAndNameLikeIgnoreCase(Pageable pageable, String appName, Collection objects);
 }

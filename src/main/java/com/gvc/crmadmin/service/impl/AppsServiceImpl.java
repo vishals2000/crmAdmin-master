@@ -1,14 +1,15 @@
 package com.gvc.crmadmin.service.impl;
 
-import com.gvc.crmadmin.service.AppsService;
 import com.gvc.crmadmin.domain.Apps;
 import com.gvc.crmadmin.repository.AppsRepository;
+import com.gvc.crmadmin.service.AppsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 
@@ -19,7 +20,6 @@ import java.util.List;
 public class AppsServiceImpl implements AppsService{
 
     private final Logger log = LoggerFactory.getLogger(AppsServiceImpl.class);
-
     private final AppsRepository appsRepository;
     public AppsServiceImpl(AppsRepository appsRepository) {
         this.appsRepository = appsRepository;
@@ -56,6 +56,11 @@ public class AppsServiceImpl implements AppsService{
     }
 
     @Override
+    public List<Apps> findAllWithRestrictions() {
+        return null;
+    }
+
+    @Override
     public Page<Apps> findByName(Pageable pageable, String appName) {
     	log.debug("Request to get all Apps by name : " + appName);
 
@@ -83,5 +88,20 @@ public class AppsServiceImpl implements AppsService{
     public void delete(String id) {
         log.debug("Request to delete Apps : {}", id);
         appsRepository.delete(id);
+    }
+
+    @Override
+    public Page<Apps> findByIdIn(Collection applications, Pageable pageable) {
+        return appsRepository.findByIdIn(applications, pageable);
+    }
+
+    @Override
+    public List<Apps> findByIdIn(Collection applications) {
+        return appsRepository.findByIdIn(applications);
+    }
+
+    @Override
+    public Page<Apps> findByIdInAndNameLikeIgnoreCase(Pageable pageable, String appName, Collection objects) {
+        return appsRepository.findByIdInAndNameLikeIgnoreCase(objects, appName, pageable);
     }
 }
