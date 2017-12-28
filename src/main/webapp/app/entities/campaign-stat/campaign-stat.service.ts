@@ -19,6 +19,13 @@ export class CampaignStatService {
         });
     }
 
+    getCampStat(body: any): Observable<CampaignStat> {
+        const copy = this.convert(body);
+        return this.http.post(this.resourceUrl, copy).map((res: Response) => {
+            return res.json();
+        });
+    }
+
     update(campaignStat: CampaignStat): Observable<CampaignStat> {
         const copy = this.convert(campaignStat);
         return this.http.put(this.resourceUrl, copy).map((res: Response) => {

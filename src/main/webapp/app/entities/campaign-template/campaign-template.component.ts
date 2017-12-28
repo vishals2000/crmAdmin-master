@@ -223,6 +223,9 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
             );
         }
     }
+    gotToCampDetailPage(campaignTemplateId){
+        this.router.navigate(['/campaign-template/' + campaignTemplateId], {});
+    }
 
     private onSuccess(data, headers) {
         this.links = this.parseLinks.parse(headers.get('link'));
@@ -230,12 +233,14 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         this.queryCount = this.totalItems;
         this.campaignTemplates = data || [];
         this.eventSubscriber = this.eventManager.subscribe('campGrpDataReady', response => this.callBreadCrumbToCampTemp(response));//handling refresh scenario
-        this.campaignTemplateService.getAppCapGrpIdFromCapGrp(this.groupId).subscribe((oCampGrpInfo) => {
-            this.oCampInfo = oCampGrpInfo;
-            this.eventManager.broadcast({ name: 'selectedApp', content: this.oCampInfo.appId});
-            this.eventManager.broadcast({ name: 'selectedCampGrp', content: this.groupId});
-            this.eventManager.broadcast({ name: 'setBreadCrumbToCampTemp', content: {campGrpId : this.groupId}});
-        });
+        if(this.previousPage === 1 && this.searchValue === null && !this.oCampInfo ){
+            this.campaignTemplateService.getAppCapGrpIdFromCapGrp(this.groupId).subscribe((oCampGrpInfo) => {
+                this.oCampInfo = oCampGrpInfo;
+                this.eventManager.broadcast({ name: 'selectedApp', content: this.oCampInfo.appId});
+                this.eventManager.broadcast({ name: 'selectedCampGrp', content: this.groupId});
+                this.eventManager.broadcast({ name: 'setBreadCrumbToCampTemp', content: {campGrpId : this.groupId}});
+            });
+        }
     }
     private callBreadCrumbToCampTemp(response){
         this.eventManager.broadcast({ name: 'selectedApp', content: this.oCampInfo.appId});

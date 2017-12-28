@@ -20,7 +20,7 @@ export class CampaignTemplatePopupService {
         this.ngbModalRef = null;
     }
 
-    openWithoutRouter(component: Component, customObject: any, bisNotRoute?: boolean, id?: number | any): Promise<NgbModalRef>{
+    openWithoutRouter(component: Component, customObject: any, bisNotRoute?: boolean, id?: number | any): Promise<NgbModalRef> {
         this.isRoute = bisNotRoute;
         this.customObjectFromPage = customObject;
         return this.open(component, id);
@@ -63,22 +63,20 @@ export class CampaignTemplatePopupService {
     }
 
     campaignTemplateModalRef(component: Component, campaignTemplate: CampaignTemplate): NgbModalRef {
-        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
+        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static' });
         modalRef.componentInstance.campaignTemplate = campaignTemplate;
-        if(this.customObjectFromPage){
+        if (this.customObjectFromPage) {
             modalRef.componentInstance.dialogParamters = this.customObjectFromPage;
         }
-        else{
+        else {
             modalRef.componentInstance.dialogParamters = {};
         }
         modalRef.result.then((result) => {
-            console.log(this.ngbModalRef);
-                this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
-                this.ngbModalRef = null;
-                this.customObjectFromPage = null;
+            this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true });
+            this.ngbModalRef = null;
+            this.customObjectFromPage = null;
         }, (reason) => {
-            console.log(this.ngbModalRef);
-                this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
+            this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true });
             this.ngbModalRef = null;
             this.customObjectFromPage = null;
         });

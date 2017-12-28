@@ -122,7 +122,7 @@
                                 class="btn btn-primary btn-sm">
                                 <span class="fa fa-crosshairs"></span>
                             </button>
-                            <button type="submit" alt="View" title="View" [routerLink]="['/campaign-template', campaignTemplate.id ]" replaceUrl="true"
+                            <button type="submit" alt="View" title="View" (click)="gotToCampDetailPage(campaignTemplate.id)"
                                 class="btn btn-primary btn-sm">
                                 <span class="fa fa-eye"></span>
                             </button>

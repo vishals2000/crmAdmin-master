@@ -7,6 +7,7 @@ import { CampaignStat } from './campaign-stat.model';
 import { CampaignStatService } from './campaign-stat.service';
 import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
+import { Observable } from 'rxjs/Rx';
 
 @Component({
     selector: 'jhi-campaign-stat',
@@ -29,6 +30,7 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
     campStatDt: any;
     searchValue: any;
     previousPage: any;
+    selectedItems: any;
 
     constructor(
         private campaignStatService: CampaignStatService,
@@ -78,7 +80,7 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
         };
         this.campStatDt = todayDt1;
         this.allApps = JSON.parse(localStorage['appList']) || [];
-        this.loadAll();
+        //this.loadAll();
         this.principal.identity().then((account) => {
             this.currentAccount = account;
         });
@@ -92,7 +94,7 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
         });
         this.registerChangeInCampaignStats();
     }
-    getCampaignStatDetails() {
+    onAppSelect() {
 
     }
 
@@ -109,9 +111,9 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
 
     sort() {
         const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
-        if (this.predicate !== 'id') {
-            result.push('id');
-        }
+        // if (this.predicate !== 'id') {
+        //     result.push('id');
+        // }
         return result;
     }
 
@@ -119,13 +121,25 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
 
     }
 
-    onAppSelect() {
+    getCampaignStatDetails() {
+        let CurrentDate = this.campStatDt.year + "-" + (parseInt(this.campStatDt.month) < 10 ? '0' + this.campStatDt.month : this.campStatDt.month) + "-" + (parseInt(this.campStatDt.day) < 10 ? '0' + this.campStatDt.day : this.campStatDt.day)
+        let postObj = {
+            appId : this.selectedItems && this.selectedItems.length ? this.selectedItems[0].id: '',
+            date: CurrentDate
+        }
+        this.subscribeToSaveResponse(this.campaignStatService.getCampStat(postObj));
+    }
 
+    private subscribeToSaveResponse(result: Observable<CampaignStat>) {
+        result.subscribe((res: CampaignStat) =>
+            this.onSuccess(res, null), (res: Response) => this.onError(res));
     }
 
     private onSuccess(data, headers) {
-        this.links = this.parseLinks.parse(headers.get('link'));
-        this.totalItems = headers.get('X-Total-Count');
+        if(headers){
+            this.links = this.parseLinks.parse(headers.get('link'));
+            this.totalItems = headers.get('X-Total-Count');
+        }
         this.campaignStats = data;
     }
 

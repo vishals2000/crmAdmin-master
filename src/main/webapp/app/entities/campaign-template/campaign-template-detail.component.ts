@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { JhiEventManager, JhiLanguageService } from 'ng-jhipster';
+import { Router } from '@angular/router';
 
 import { CampaignTemplate } from './campaign-template.model';
 import { CampaignTemplateService } from './campaign-template.service';
@@ -22,6 +23,7 @@ export class CampaignTemplateDetailComponent implements OnInit, OnDestroy {
         private eventManager: JhiEventManager,
         private campaignTemplateService: CampaignTemplateService,
         private route: ActivatedRoute,
+        private router: Router
         //public breadCrumbService: BreadCrumbService
     ) {
         this.data = {
@@ -72,6 +74,7 @@ export class CampaignTemplateDetailComponent implements OnInit, OnDestroy {
 
     previousState() {
         window.history.back();
+      // this.router.navigate(['/campaign-template/group/' + this.campaignTemplate.campaignGroupId + '/' + this.campaignTemplate.campaignName], {});
     }
 
     ngOnDestroy() {
