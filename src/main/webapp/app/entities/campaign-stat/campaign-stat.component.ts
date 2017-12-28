@@ -28,6 +28,7 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
     allApps: any;
     campStatDt: any;
     searchValue: any;
+    previousPage: any;
 
     constructor(
         private campaignStatService: CampaignStatService,
@@ -42,6 +43,7 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
         this.links = {
             last: 0
         };
+        this.previousPage = 1;
         this.predicate = 'id';
         this.reverse = true;
     }
