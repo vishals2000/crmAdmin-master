@@ -31,14 +31,13 @@ export class UserMgmtDialogComponent implements OnInit {
         this.isSaving = false;
         this.authorities = [];
         this.selectedApps = [];
-        let userRole = this.user.authorities && this.user.authorities.length ? this.user.authorities[0] : '';
+        const userRole = this.user.authorities && this.user.authorities.length ? this.user.authorities[0] : '';
         this.user.authorities = [userRole];
         this.allApps = JSON.parse(localStorage['appList']) || [];
         if (this.allApps && this.user.applications && this.allApps.length === this.user.applications.length) {
             this.selectedApps = JSON.parse(localStorage['appList']) || [];
-        }
-        else if (this.user.applications && this.user.applications.length) {
-            var aSelectedApps = [];
+        } else if (this.user.applications && this.user.applications.length) {
+            const aSelectedApps = [];
             for (let i = 0; i < this.user.applications.length; i++) {
                 this.allApps.filter((obj) => {
                     if (obj.id === this.user.applications[i]) {
@@ -61,7 +60,7 @@ export class UserMgmtDialogComponent implements OnInit {
     save() {
         this.isSaving = true;
         this.mapSelectedAppsToPost();
-        this.user.authorities = Object.prototype.toString.call( this.user.authorities ) === '[object Array]' ? this.user.authorities : [this.user.authorities];
+        this.user.authorities = Object.prototype.toString.call(this.user.authorities) === '[object Array]' ? this.user.authorities : [this.user.authorities];
         if (this.user.id !== null) {
             this.userService.update(this.user).subscribe((response) => this.onSaveSuccess(response), () => this.onSaveError());
         } else {
@@ -71,25 +70,23 @@ export class UserMgmtDialogComponent implements OnInit {
     }
 
     mapSelectedAppsToPost() {
-        var listOfSelApps = [];
+        const listOfSelApps = [];
         const useAuth = this.user.authorities;
-        if(useAuth.indexOf("ROLE_ADMIN") > -1){
+        if (useAuth.indexOf('ROLE_ADMIN') > -1) {
             this.user.applications = [];
-        }
-        else{
-            for (var i = 0; i < this.selectedApps.length; i++) {
+        } else {
+            for (let i = 0; i < this.selectedApps.length; i++) {
                 listOfSelApps.push(this.selectedApps[i].id);
             }
             this.user.applications = listOfSelApps;
-        } 
+        }
     }
 
-    onAuthorityChange(){
+    onAuthorityChange() {
         const useAuth = this.user.authorities;
-        if(useAuth && useAuth.indexOf("ROLE_ADMIN") > -1){
+        if (useAuth && useAuth.indexOf('ROLE_ADMIN') > -1) {
             this.roleadmin = true;
-        }
-        else{
+        } else {
             this.roleadmin = false;
         }
     }

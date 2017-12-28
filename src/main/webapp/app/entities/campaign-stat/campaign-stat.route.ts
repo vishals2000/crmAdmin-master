@@ -11,7 +11,7 @@ import { CampaignStatDeletePopupComponent } from './campaign-stat-delete-dialog.
 
 export const campaignStatRoute: Routes = [
     {
-        path: 'campaign-stat/project/:id',
+        path: 'campaign-stat',
         component: CampaignStatComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],

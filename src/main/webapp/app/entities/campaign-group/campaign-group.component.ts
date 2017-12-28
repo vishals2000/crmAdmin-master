@@ -7,7 +7,7 @@ import { CampaignGroup } from './campaign-group.model';
 import { CampaignGroupService } from './campaign-group.service';
 import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
-//import { BreadCrumbService } from '../../layouts/navbar/navbar.service';
+// import { BreadCrumbService } from '../../layouts/navbar/navbar.service';
 
 @Component({
     selector: 'jhi-campaign-group',
@@ -44,7 +44,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
         private eventManager: JhiEventManager,
         private paginationUtil: JhiPaginationUtil,
         private paginationConfig: PaginationConfig,
-        //public breadCrumbService: BreadCrumbService
+        // public breadCrumbService: BreadCrumbService
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.routeData = this.activatedRoute.data.subscribe((data) => {
@@ -54,9 +54,9 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
             this.predicate = data['pagingParams'].predicate;
         });
     }
-    loadAll(){
-        this.campaignGroupService.queryAll({appId: this.projectId}).subscribe(
-            (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignGroupListModified', content: res.json}));
+    loadAll() {
+        this.campaignGroupService.queryAll({ appId: this.projectId }).subscribe(
+            (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignGroupListModified', content: res.json }));
     }
 
     loadAppPage() {
@@ -70,8 +70,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
                 (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
                 (res: ResponseWrapper) => this.onError(res.json)
                 );
-        }
-        else {
+        } else {
             this.campaignGroupService.query({
                 appId: this.projectId,
                 page: (this.page > 0 ? this.page - 1 : this.page),
@@ -114,7 +113,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
         this.subscription = this.route.params.subscribe((params) => {
             this.projectId = params['id'];
             this.projectName = params['name'];
-            if(this.page === 1 && !this.searchValue){
+            if (this.page === 1 && !this.searchValue) {
                 this.loadAll();
             }
             this.loadAppPage();
@@ -160,13 +159,13 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
     registerChangeInCampaignGroups() {
         this.eventSubscriber = this.eventManager.subscribe('campaignGroupListModification', (response) => this.capmnGrpModification());
     }
-    capmnGrpModification(){
+    capmnGrpModification() {
         this.loadAll();
         this.loadAppPage();
     }
     filterItems($event) {
         if (this.searchValue && this.searchValue !== '' && $event && $event.keyCode === 13) {
-            //this.campaignGroups = this.initialCampainGroups.filter((item) => item.name.toLowerCase().indexOf(this.searchValue) > -1);
+            // this.campaignGroups = this.initialCampainGroups.filter((item) => item.name.toLowerCase().indexOf(this.searchValue) > -1);
             this.page = 0;
             this.campaignGroupService.search({ appId: this.projectId, searchVal: this.searchValue }, {
                 appId: this.projectId,
@@ -200,8 +199,8 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
         // this.breadCrumbService.getBreadCrumbs().subscribe(val => {
         //     this.breadCrumbService.updateBreadCrumbs(val, { name: this.projectName, router: '#/campaign-group/project/' + this.projectId + "/" + this.projectName, brdCrmbId: '2' });
         // });
-        this.eventManager.broadcast({ name: 'selectedApp', content: this.projectId});
-        this.eventManager.broadcast({ name: 'setBreadCrumbToCampGrp', content: 'OK'});
+        this.eventManager.broadcast({ name: 'selectedApp', content: this.projectId });
+        this.eventManager.broadcast({ name: 'setBreadCrumbToCampGrp', content: 'OK' });
     }
     private onError(error) {
         this.alertService.error(error.message, null, null);

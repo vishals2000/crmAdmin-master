@@ -14,6 +14,7 @@ import {
     campaignStatRoute,
     campaignStatPopupRoute,
 } from './';
+import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
 
 const ENTITY_STATES = [
     ...campaignStatRoute,
@@ -23,7 +24,8 @@ const ENTITY_STATES = [
 @NgModule({
     imports: [
         CrmAdminSharedModule,
-        RouterModule.forRoot(ENTITY_STATES, { useHash: true })
+        RouterModule.forRoot(ENTITY_STATES, { useHash: true }),
+        AngularMultiSelectModule
     ],
     declarations: [
         CampaignStatComponent,

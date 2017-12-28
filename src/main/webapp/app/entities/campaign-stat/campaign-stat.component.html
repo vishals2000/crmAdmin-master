@@ -1,43 +1,111 @@
 <div>
     <h2>
         <span>Campaign Stats</span>
-        <button class="btn btn-primary float-right jh-create-entity create-campaign-stat" [routerLink]="['/', { outlets: { popup: ['campaign-stat-new'] } }]">
+        <!-- <button class="btn btn-primary float-right jh-create-entity create-campaign-stat" [routerLink]="['/', { outlets: { popup: ['campaign-stat-new'] } }]">
             <span class="fa fa-plus"></span>
             <span >
             Create new Campaign Stat
             </span>
-        </button>
+        </button> -->
     </h2>
     <jhi-alert></jhi-alert>
     <div class="row">
     </div>
     <br/>
-    <div class="table-responsive" *ngIf="campaignStats">
+    <div class="jumbotron vertical-center" *ngIf="previousPage === 1 && searchValue === null && campaignTemplates && campaignTemplates.length === 0">
+        <div class="container text-center">
+            <h3 style="color: #000;">No Campaign reprots for this app</h3>
+        </div>
+    </div>
+    <div class="table-responsive" *ngIf="previousPage > 1 || searchValue || campaignStats && campaignStats.length">
+        <br>
+        <div class="row">
+            <div class="col-sm-4">
+                    <angular2-multiselect [data]="allApps" [(ngModel)]="selectedItems" [settings]="{ 
+                        singleSelection: true, 
+                        text:'Select',
+                        enableCheckAll : false,
+                        selectAllText:'Select All',
+                        unSelectAllText:'UnSelect All',
+                        enableSearchFilter: true,
+                        classes:'multiselect custom-class',
+                        searchPlaceholderText : 'Search'
+                    }" (onSelect)="onAppSelect(i)" (onDeSelect)="onAppSelect(i)" (onSelectAll)="onAppSelect(i)"
+                        (onDeSelectAll)="onAppSelect(i)"></angular2-multiselect>
+            </div>
+            <div class="input-group col-sm-3">
+                <input id="campStatDt" (ngModelChange)="onDtChange()" type="text" class="form-control" name="campStatDt" [(ngModel)]="campStatDt"
+                    ngbDatepicker #campStatDtDP="ngbDatepicker" required/>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" (click)="campStatDtDP.toggle()">
+                        <i class="fa fa-calendar"></i>
+                    </button>
+                </span>
+            </div>
+            <div class="input-group col-sm-1">
+            <button class="btn btn-primary float-right jh-create-entity" (click)="getCampaignStatDetails">
+                <span >
+                Go
+                </span>
+            </button>
+          </div>
+                <div class="col-md-4">
+                    <input class="form-control" placeholder="Search" [(ngModel)]="searchValue" (ngModelChange)="onSearchKeyChange(searchValue)"
+                        (keypress)="filterItems($event)" />
+                </div>
+        </div>
+        <br>
         <table class="table table-striped">
             <thead>
-            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
-            <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="name"><span>Name</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="scheduledTime"><span>Scheduled Time</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="status"><span>Status</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="segmentSize"><span>Segment Size</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="segmentSizeAfterCommonScrubbing"><span>Segment Size After Common Scrubbing</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="segmentSizeAfterCommunicationScrubbing"><span>Segment Size After Communication Scrubbing</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="campaignId"><span>Campaign Id</span> <span class="fa fa-sort"></span></th>
-            <th></th>
-            </tr>
+                <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
+                    <th jhiSortBy="id">
+                        <span>ID</span>
+                        <span class="fa fa-sort"></span>
+                    </th>
+                    <th jhiSortBy="name">
+                        <span>Name</span>
+                        <span class="fa fa-sort"></span>
+                    </th>
+                    <th jhiSortBy="scheduledTime">
+                        <span>Scheduled Time</span>
+                        <span class="fa fa-sort"></span>
+                    </th>
+                    <th jhiSortBy="status">
+                        <span>Status</span>
+                        <span class="fa fa-sort"></span>
+                    </th>
+                    <th jhiSortBy="segmentSize">
+                        <span>Segment Size</span>
+                        <span class="fa fa-sort"></span>
+                    </th>
+                    <th jhiSortBy="segmentSizeAfterCommonScrubbing">
+                        <span>Segment Size After Common Scrubbing</span>
+                        <span class="fa fa-sort"></span>
+                    </th>
+                    <th jhiSortBy="segmentSizeAfterCommunicationScrubbing">
+                        <span>Segment Size After Communication Scrubbing</span>
+                        <span class="fa fa-sort"></span>
+                    </th>
+                    <th jhiSortBy="campaignId">
+                        <span>Campaign Id</span>
+                        <span class="fa fa-sort"></span>
+                    </th>
+                    <!-- <th></th> -->
+                </tr>
             </thead>
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
-            <tr *ngFor="let campaignStat of campaignStats ;trackBy: trackId">
-                <td><a [routerLink]="['../campaign-stat', campaignStat.id ]">{{campaignStat.id}}</a></td>
-                <td>{{campaignStat.name}}</td>
-                <td>{{campaignStat.scheduledTime}}</td>
-                <td>{{campaignStat.status}}</td>
-                <td>{{campaignStat.segmentSize}}</td>
-                <td>{{campaignStat.segmentSizeAfterCommonScrubbing}}</td>
-                <td>{{campaignStat.segmentSizeAfterCommunicationScrubbing}}</td>
-                <td>{{campaignStat.campaignId}}</td>
-                <td class="text-right">
+                <tr *ngFor="let campaignStat of campaignStats ;trackBy: trackId">
+                    <td>
+                        <a [routerLink]="['../campaign-stat', campaignStat.id ]">{{campaignStat.id}}</a>
+                    </td>
+                    <td>{{campaignStat.name}}</td>
+                    <td>{{campaignStat.scheduledTime}}</td>
+                    <td>{{campaignStat.status}}</td>
+                    <td>{{campaignStat.segmentSize}}</td>
+                    <td>{{campaignStat.segmentSizeAfterCommonScrubbing}}</td>
+                    <td>{{campaignStat.segmentSizeAfterCommunicationScrubbing}}</td>
+                    <td>{{campaignStat.campaignId}}</td>
+                    <!-- <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
                                 [routerLink]="['../campaign-stat', campaignStat.id ]"
@@ -60,8 +128,8 @@
                             <span class="hidden-md-down">Delete</span>
                         </button>
                     </div>
-                </td>
-            </tr>
+                </td> -->
+                </tr>
             </tbody>
         </table>
     </div>

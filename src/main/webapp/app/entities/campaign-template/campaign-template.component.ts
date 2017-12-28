@@ -146,9 +146,9 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
 
     sort() {
         const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
-        if (this.predicate !== 'id') {
-            result.push('id');
-        }
+        // if (this.predicate !== 'id') {
+        //     result.push('id');
+        // }
         return result;
     }
 

@@ -23,8 +23,7 @@ export class BreadCrumbService {
             if (bcArray[i].brdCrmbId === cuCrumbobj.brdCrmbId) {
                 if (bcArray[i].router === cuCrumbobj.router) {
                     currentIndex = i + 1;
-                }
-                else {
+                } else {
                     currentIndex = i;
                 }
             }
@@ -34,13 +33,17 @@ export class BreadCrumbService {
                 bcArray.push({ name: 'Apps', router: '#/apps', brdCrmbId: '1', appsData: cuCrumbobj.data });
             }
             if (cuCrumbobj.brdCrmbId === '3') {
-                bcArray.push({ name: cuCrumbobj.appName, router: '#/campaign-group/project/' + cuCrumbobj.appId + '/' + cuCrumbobj.appName, brdCrmbId: '2', appsData: cuCrumbobj.data });
+                bcArray.push({
+                    name: cuCrumbobj.appName,
+                    router: '#/campaign-group/project/' + cuCrumbobj.appId + '/' + cuCrumbobj.appName,
+                    brdCrmbId: '2',
+                    appsData: cuCrumbobj.data
+                });
             }
         }
         if (currentIndex) {
             bcArray.splice(currentIndex, bcArray.length);
-        }
-        else {
+        } else {
             bcArray.push(cuCrumbobj);
         }
     }

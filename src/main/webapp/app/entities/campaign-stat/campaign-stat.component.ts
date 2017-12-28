@@ -24,17 +24,16 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
     queryCount: any;
     reverse: any;
     totalItems: number;
-    appId: any;
-    selectedApp : any;
+    selectedApp: any;
+    allApps: any;
+    campStatDt: any;
 
     constructor(
         private campaignStatService: CampaignStatService,
         private alertService: JhiAlertService,
         private eventManager: JhiEventManager,
         private parseLinks: JhiParseLinks,
-        private principal: Principal,
-        private route: ActivatedRoute,
-        private router: Router
+        private principal: Principal
     ) {
         this.campaignStats = [];
         this.itemsPerPage = ITEMS_PER_PAGE;
@@ -54,7 +53,7 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
         }).subscribe(
             (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
             (res: ResponseWrapper) => this.onError(res.json)
-        );
+            );
     }
 
     reset() {
@@ -68,47 +67,30 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
         this.loadAll();
     }
     ngOnInit() {
-        //this.loadAll();
-        this.principal.identity().then((account) => {
-            this.currentAccount = account;
-        });
-        this.registerChangeInCampaignStats();
-        this.eventSubscriber = this.route.params.subscribe((params) => {
-            this.appId = params['id'];
-            if (this.appId) {
-                this.setDataToPageModel();
-            }
-            else {
-                this.eventManager.broadcast({ name: 'setBreadCrumbToCampStatFirstApp', content: 'OK' });
-            }
-        });
-    }
-    setDataToPageModel(){
-            this.selectedApp = JSON.parse(localStorage['selectedApp']);
-            const values: string[] = [this.selectedApp.frontEnd, this.selectedApp.product.toString()];
-            setTimeout(() => {
-                this.eventManager.broadcast({ name: 'selectedApp', content: this.appId});
-                this.eventManager.broadcast({ name: 'setBreadCrumbToCampStat', content: 'OK'});
-            }, 0);
-            
-            if(this.appId){
-                this.loadAll();
-            }
-            else{
-                this.clear();
-            }
+        const dateObj = new Date();
+        const todayDt1 = {
+            year: dateObj.getFullYear(),
+            month: dateObj.getMonth() + 1,
+            day: dateObj.getDate()
+        };
+        this.campStatDt = todayDt1;
+        this.allApps = JSON.parse(localStorage['appList']) || [];
+        this.loadAll();
         this.principal.identity().then((account) => {
             this.currentAccount = account;
         });
         this.registerChangeInCampaignStats();
     }
-   clear() {
-            this.page = 0;
-            this.router.navigate(['/campaign-stat/project/' + this.selectedApp.id, {
-                page: this.page,
-                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-            }]);
-            this.loadAll();
+    setDataToPageModel() {
+        this.selectedApp = JSON.parse(localStorage['selectedApp']);
+        const values: string[] = [this.selectedApp.frontEnd, this.selectedApp.product.toString()];
+        this.principal.identity().then((account) => {
+            this.currentAccount = account;
+        });
+        this.registerChangeInCampaignStats();
+    }
+    getCampaignStatDetails() {
+
     }
 
     ngOnDestroy() {
@@ -128,6 +110,14 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
             result.push('id');
         }
         return result;
+    }
+
+    onDtChange() {
+
+    }
+
+    onAppSelect() {
+
     }
 
     private onSuccess(data, headers) {

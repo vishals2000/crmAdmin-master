@@ -49,9 +49,9 @@ export class AppsComponent implements OnInit, OnDestroy {
             this.predicate = data['pagingParams'].predicate;
         });
     }
-    loadAll(){
+    loadAll() {
         this.appsService.queryAll({}).subscribe(
-            (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'appListModified', content: res.json}));
+            (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'appListModified', content: res.json }));
     }
     loadAppPage() {
         if (this.searchValue) {
@@ -63,8 +63,7 @@ export class AppsComponent implements OnInit, OnDestroy {
                 (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
                 (res: ResponseWrapper) => this.onError(res.json)
                 );
-        }
-        else {
+        } else {
             this.appsService.query({
                 page: (this.page > 0 ? this.page - 1 : this.page),
                 size: this.itemsPerPage,
@@ -111,7 +110,7 @@ export class AppsComponent implements OnInit, OnDestroy {
     }
     filterItems($event) {
         if (this.searchValue && this.searchValue !== '' && $event && $event.keyCode === 13) {
-            //this.apps = this.initialApps.filter((item) => item.name.toLowerCase().indexOf(this.searchValue) > -1);
+            // this.apps = this.initialApps.filter((item) => item.name.toLowerCase().indexOf(this.searchValue) > -1);
             this.page = 0;
             this.appsService.search(this.searchValue, {
                 page: (this.page > 0 ? this.page - 1 : this.page),
@@ -134,7 +133,7 @@ export class AppsComponent implements OnInit, OnDestroy {
     registerChangeInApps() {
         this.eventSubscriber = this.eventManager.subscribe('appsListModification', (response) => this.appModification());
     }
-    appModification(){
+    appModification() {
         this.loadAppPage();
         this.loadAll();
     }
@@ -153,7 +152,7 @@ export class AppsComponent implements OnInit, OnDestroy {
         this.queryCount = this.totalItems;
         // this.page = pagingParams.page;
         this.apps = data;
-        this.eventManager.broadcast({ name: 'setBreadCrumbToApp', content: 'OK'});
+        this.eventManager.broadcast({ name: 'setBreadCrumbToApp', content: 'OK' });
     }
     private onError(error) {
         this.alertService.error(error.message, null, null);

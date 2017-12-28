@@ -49,7 +49,7 @@
                             <span class="fa fa-eye"></span>
                             <!--<span class="hidden-md-down">View</span>-->
                         </button>
-                        <button type="submit" title="Edit"
+                        <button *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit" title="Edit"
                                 [routerLink]="['/', { outlets: { popup: 'apps/'+ apps.id + '/edit'} }]"
                                 replaceUrl="true"
                                 class="btn btn-primary btn-sm">

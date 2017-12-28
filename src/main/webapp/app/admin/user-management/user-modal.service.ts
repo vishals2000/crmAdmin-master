@@ -22,35 +22,35 @@ export class UserModalService {
             if (isOpen) {
                 resolve(this.ngbModalRef);
             }
-        if (this.isOpen) {
-            return;
-        }
-        this.isOpen = true;
+            if (this.isOpen) {
+                return;
+            }
+            this.isOpen = true;
 
-        if (login) {
-            this.userService.find(login).subscribe((user) => {
-                this.ngbModalRef = this.userModalRef(component, user);
-                resolve(this.ngbModalRef);
-            });
-        } else {
-             // setTimeout used as a workaround for getting ExpressionChangedAfterItHasBeenCheckedError
-             setTimeout(() => {
-                 this.ngbModalRef = this.userModalRef(component, new User());;
-                 resolve(this.ngbModalRef);
-             });
-        }
-    });
+            if (login) {
+                this.userService.find(login).subscribe((user) => {
+                    this.ngbModalRef = this.userModalRef(component, user);
+                    resolve(this.ngbModalRef);
+                });
+            } else {
+                // setTimeout used as a workaround for getting ExpressionChangedAfterItHasBeenCheckedError
+                setTimeout(() => {
+                    this.ngbModalRef = this.userModalRef(component, new User());
+                    resolve(this.ngbModalRef);
+                });
+            }
+        });
     }
 
     userModalRef(component: Component, user: User): NgbModalRef {
-        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
-        modalRef.componentInstance.user = user;      
+        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static' });
+        modalRef.componentInstance.user = user;
         modalRef.result.then((result) => {
-            this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
+            this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true });
             this.ngbModalRef = null;
             this.isOpen = false;
         }, (reason) => {
-            this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
+            this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true });
             this.ngbModalRef = null;
             this.isOpen = false;
         });
