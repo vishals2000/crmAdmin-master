@@ -179,7 +179,7 @@ public class UserService {
             user.setEmail(email);
             user.setLangKey(langKey);
             user.setImageUrl(imageUrl);
-            user.setApplications(new HashSet<>(Arrays.asList(applications)));
+            user.setApplications(applications != null ? new HashSet<>(Arrays.asList(applications)) : Collections.emptySet());
             userRepository.save(user);
             log.debug("Changed Information for User: {}", user);
         });
@@ -217,7 +217,7 @@ public class UserService {
                     }
                     user.getApplications().addAll(appIds);
                 } else {
-                    user.setApplications(new HashSet<>(Arrays.asList(userDTO.getApplications())));
+                    user.setApplications(userDTO.getApplications() != null ? new HashSet<>(Arrays.asList(userDTO.getApplications())) : Collections.emptySet());
                 }
 
                 userRepository.save(user);
