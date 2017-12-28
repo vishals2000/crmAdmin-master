@@ -7,6 +7,7 @@ export const registerRoute: Route = {
     path: 'register',
     component: RegisterComponent,
     data: {
+        authorities: ['ROLE_ADMIN'],
         pageTitle: 'Registration'
     },
     canActivate: [UserRouteAccessService]
