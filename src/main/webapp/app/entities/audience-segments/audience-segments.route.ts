@@ -10,11 +10,10 @@ import { AudienceSegmentsPopupComponent } from './audience-segments-dialog.compo
 import { AudienceSegmentsDeletePopupComponent } from './audience-segments-delete-dialog.component';
 import { UploadSegmentsPopupComponent } from './upload-segments-dialog.component';
 
-
 @Injectable()
 export class AudienceSegmentsResolvePagingParams implements Resolve<any> {
 
-    constructor(private paginationUtil: JhiPaginationUtil) {}
+    constructor(private paginationUtil: JhiPaginationUtil) { }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const page = route.queryParams['page'] ? route.queryParams['page'] : (route.params['page'] || '1');
@@ -23,7 +22,7 @@ export class AudienceSegmentsResolvePagingParams implements Resolve<any> {
             page: this.paginationUtil.parsePage(page),
             predicate: this.paginationUtil.parsePredicate(sort),
             ascending: this.paginationUtil.parseAscending(sort)
-      };
+        };
     }
 }
 

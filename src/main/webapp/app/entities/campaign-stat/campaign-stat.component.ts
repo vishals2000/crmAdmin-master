@@ -27,6 +27,7 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
     selectedApp: any;
     allApps: any;
     campStatDt: any;
+    searchValue: any;
 
     constructor(
         private campaignStatService: CampaignStatService,

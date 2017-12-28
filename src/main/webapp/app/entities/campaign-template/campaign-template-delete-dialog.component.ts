@@ -10,8 +10,6 @@ import { CampaignTemplateService } from './campaign-template.service';
 import { ResponseWrapper } from '../../shared';
 import { Observable } from 'rxjs/Rx';
 
-
-
 @Component({
     selector: 'jhi-campaign-template-delete-dialog',
     templateUrl: './campaign-template-delete-dialog.component.html'
@@ -28,7 +26,6 @@ export class CampaignTemplateDeleteDialogComponent implements OnInit {
     ) {
     }
 
-
     ngOnInit() {
         this.campaignTemplateService.currentMesage.subscribe((message) => {
             this.campaignTemplate.campaignGroupId = message[0];
@@ -36,7 +33,6 @@ export class CampaignTemplateDeleteDialogComponent implements OnInit {
             this.campaignTemplate.product = message[2];
         });
     }
-
 
     clear() {
         this.activeModal.dismiss('cancel');
@@ -101,7 +97,7 @@ export class CampaignTemplateDeletePopupComponent implements OnInit, OnDestroy {
     constructor(
         private route: ActivatedRoute,
         private campaignTemplatePopupService: CampaignTemplatePopupService
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.routeSub = this.route.params.subscribe((params) => {

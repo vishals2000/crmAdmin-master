@@ -101,14 +101,14 @@ export class CampaignTemplateFilterCriterion {
         public filterOptionComparison: string,
         public filterOptionValue: string[],
         public simpleDate: any,
-        public selectedItems : any[]
+        public selectedItems: any[]
     ) {
     }
 }
 
 export class CampaignTemplateContentCriterion {
     constructor(
-        //public contentName: string,
+        // public contentName: string,
         public contentTitle: string,
         public contentBody: string,
         public languageSelected: string,
