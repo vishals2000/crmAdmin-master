@@ -116,7 +116,7 @@ public class UserService {
             }
             newUser.getApplications().addAll(appIds);
         } else {
-            newUser.setApplications(new HashSet<>(Arrays.asList(applications)));
+            newUser.setApplications(applications!= null ? new HashSet<>(Arrays.asList(applications)) : Collections.emptySet());
         }
 
         userRepository.save(newUser);
