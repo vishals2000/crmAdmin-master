@@ -61,7 +61,7 @@ export class UserMgmtDialogComponent implements OnInit {
     save() {
         this.isSaving = true;
         this.mapSelectedAppsToPost();
-        this.user.authorities = [this.user.authorities];
+        this.user.authorities = Object.prototype.toString.call( this.user.authorities ) === '[object Array]' ? this.user.authorities : [this.user.authorities];
         if (this.user.id !== null) {
             this.userService.update(this.user).subscribe((response) => this.onSaveSuccess(response), () => this.onSaveError());
         } else {
