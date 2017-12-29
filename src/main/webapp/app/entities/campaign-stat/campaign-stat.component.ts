@@ -96,7 +96,9 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
     onAppSelect(res) {
         console.log(res);
     }
+    onSearchKeyChange(searchVal){
 
+    }
     ngOnDestroy() {
         this.eventManager.destroy(this.eventSubscriber);
     }
