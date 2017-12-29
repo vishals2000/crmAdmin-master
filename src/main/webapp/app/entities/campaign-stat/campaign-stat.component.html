@@ -9,53 +9,50 @@
         </button> -->
     </h2>
     <jhi-alert></jhi-alert>
-    <div class="row">
+
+    <div class="row" style=" margin: 0rem 1rem; ">
+        <div class="col-sm-4">
+            <angular2-multiselect [data]="allApps" [(ngModel)]="selectedItems" [settings]="{ 
+                                singleSelection: true, 
+                                text:'Select',
+                                enableCheckAll : false,
+                                selectAllText:'Select All',
+                                unSelectAllText:'UnSelect All',
+                                enableSearchFilter: true,
+                                classes:'multiselect custom-class',
+                                searchPlaceholderText : 'Search'
+                            }" (onSelect)="onAppSelect($event)" (onDeSelect)="onAppSelect($event)" (onSelectAll)="onAppSelect($event)"
+                (onDeSelectAll)="onAppSelect($event)"></angular2-multiselect>
+        </div>
+        <div class=" col-sm-3">
+            <div class="input-group">
+                <input id="campStatDt" (ngModelChange)="onDtChange()" type="text" class="form-control" name="campStatDt" [(ngModel)]="campStatDt"
+                    ngbDatepicker #campStatDtDP="ngbDatepicker" required/>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" (click)="campStatDtDP.toggle()">
+                        <i class="fa fa-calendar"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-sm-1">
+            <button class="btn btn-primary float-right jh-create-entity" (click)="getCampaignStatDetails()" [disabled]="!campStatDt">
+                <span>
+                    Go
+                </span>
+            </button>
+        </div>
+        <div class="col-md-4">
+            <input class="form-control" [disabled]="!campStatDt" placeholder="Search" [(ngModel)]="searchValue" (ngModelChange)="onSearchKeyChange(searchValue)"
+                (keypress)="filterItems($event)" />
+        </div>
     </div>
     <br/>
     <div class="table-responsive">
-        <br>
-        <div class="row" style=" margin: 0rem 1rem; ">
-            <!-- <div class="col-sm-4">
-                    <angular2-multiselect [data]="allApps" [(ngModel)]="selectedItems" [settings]="{ 
-                        singleSelection: true, 
-                        text:'Select',
-                        enableCheckAll : false,
-                        selectAllText:'Select All',
-                        unSelectAllText:'UnSelect All',
-                        enableSearchFilter: true,
-                        classes:'multiselect custom-class',
-                        searchPlaceholderText : 'Search'
-                    }" (onSelect)="onAppSelect(i)" (onDeSelect)="onAppSelect(i)" (onSelectAll)="onAppSelect(i)"
-                        (onDeSelectAll)="onAppSelect(i)"></angular2-multiselect>
-            </div>
-            <div class=" col-sm-3">
-                <div class="input-group">
-                    <input id="campStatDt" (ngModelChange)="onDtChange()" type="text" class="form-control" name="campStatDt" [(ngModel)]="campStatDt"
-                        ngbDatepicker #campStatDtDP="ngbDatepicker" required/>
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" (click)="campStatDtDP.toggle()">
-                            <i class="fa fa-calendar"></i>
-                        </button>
-                    </span>
-                </div>
-            </div> -->
-            <div class="col-sm-1">
-            <button class="btn btn-primary float-right jh-create-entity" (click)="getCampaignStatDetails()" [disabled]="!campStatDt">
-                <span >
-                Go
-                </span>
-            </button>
-          </div>
-                <div class="col-md-4">
-                    <input class="form-control"  [disabled]="!campStatDt" placeholder="Search" [(ngModel)]="searchValue" (ngModelChange)="onSearchKeyChange(searchValue)"
-                        (keypress)="filterItems($event)" />
-                </div>
-        </div>
-        <br>
         <div class="jumbotron vertical-center" *ngIf="previousPage === 1 && searchValue === null && campaignStats && campaignStats.length === 0">
-                <div class="container text-center">
-                    <h3 style="color: #000;">No Campaign reprots for this app</h3>
-                </div>
+            <div class="container text-center">
+                <h3 style="color: #000;">No Campaign reprots for this app</h3>
+            </div>
         </div>
         <table class="table table-striped" *ngIf="previousPage > 1 || searchValue || campaignStats && campaignStats.length">
             <thead>
