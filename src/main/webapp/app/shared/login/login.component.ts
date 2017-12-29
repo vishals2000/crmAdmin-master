@@ -30,6 +30,8 @@ export class JhiLoginModalComponent implements AfterViewInit {
     }
 
     ngAfterViewInit() {
+        sessionStorage.clear();
+        localStorage.clear();
         this.eventManager.broadcast({
             name: 'clearBdData', content: 'Sending Authentication Req'
         });
@@ -47,6 +49,8 @@ export class JhiLoginModalComponent implements AfterViewInit {
     }
 
     login() {
+        sessionStorage.clear();
+        localStorage.clear();
         this.loginService.login({
             username: this.username,
             password: this.password,
