@@ -48,12 +48,19 @@ export class CampaignTemplateCopyToDialogComponent implements OnInit {
             this.campaignTemplate.campaignGroupId = message[0];
             this.campaignTemplate.frontEnd = message[1];
             this.campaignTemplate.product = message[2];
+            if (sessionStorage['appList']) {
+                const appList = JSON.parse(sessionStorage['appList']);
+                let relatedAppList = [];
+                for(var i=0;i<appList.length;i++){
+                    if(appList[i].product === this.campaignTemplate.product){
+                        relatedAppList.push(appList[i]);
+                    }
+                }
+                this.appList = relatedAppList;
+            } else {
+                this.clear();
+            }
         });
-        if (localStorage['appList']) {
-            this.appList = JSON.parse(localStorage['appList']);
-        } else {
-            this.clear();
-        }
         console.log(this.campaignTemplate);
     }
     onItemSelect(itm) {

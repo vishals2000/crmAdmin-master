@@ -100,32 +100,32 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
     }
     ngOnInit() {
         this.subscription = this.route.params.subscribe((params) => {
-            this.appId = params['id'];
-            if (this.appId) {
-                this.setDataToPageModel();
-            }
-            else {
-                this.eventManager.broadcast({ name: 'setBreadCrumbToAudSegFirstApp', content: 'OK' });
-            }
+            setTimeout(() => {
+                this.appId = params['id'];
+                if (this.appId) {
+                    this.setDataToPageModel();
+                } else {
+                    this.eventManager.broadcast({ name: 'setBreadCrumbToAudSegFirstApp', content: 'OK' });
+                }
+            }, 0);
         });
     }
-    setDataToPageModel(){
+    setDataToPageModel() {
         this.showUploadDiv = false;
-            this.selectedApp = JSON.parse(localStorage['selectedApp']);
-            this.showUploadDiv = true;
-            const values: string[] = [this.selectedApp.frontEnd, this.selectedApp.product.toString()];
-            this.audienceSegmentsService.changeAppInfo(values);
-            setTimeout(() => {
-                this.eventManager.broadcast({ name: 'selectedApp', content: this.appId});
-                this.eventManager.broadcast({ name: 'setBreadCrumbToAudSeg', content: 'OK'});
-            }, 0);
-            
-            if(this.appId){
-                this.loadAll();
-            }
-            else{
-                this.clear();
-            }
+        this.selectedApp = JSON.parse(sessionStorage['selectedApp']);
+        this.showUploadDiv = true;
+        const values: string[] = [this.selectedApp.frontEnd, this.selectedApp.product.toString()];
+        this.audienceSegmentsService.changeAppInfo(values);
+        setTimeout(() => {
+            this.eventManager.broadcast({ name: 'selectedApp', content: this.appId });
+            this.eventManager.broadcast({ name: 'setBreadCrumbToAudSeg', content: 'OK' });
+        }, 0);
+
+        if (this.appId) {
+            this.loadAll();
+        } else {
+            this.clear();
+        }
         this.principal.identity().then((account) => {
             this.currentAccount = account;
         });
@@ -133,7 +133,7 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        if(this.eventSubscriberAd){
+        if (this.eventSubscriberAd) {
             this.eventManager.destroy(this.eventSubscriberAd);
         }
     }
@@ -166,7 +166,7 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
         }
         return result;
     }
-    openSegmentDetail(id){
+    openSegmentDetail(id) {
         this.router.navigate(['/audience-segments/' + id], {});
     }
 

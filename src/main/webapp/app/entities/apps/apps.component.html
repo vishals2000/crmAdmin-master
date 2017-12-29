@@ -18,13 +18,13 @@
     <div class="table-responsive" *ngIf="apps">
         <table class="table table-striped">
             <thead>
-            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="clear.bind(this)">
             <!-- <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th> -->
             <!-- <th jhiSortBy="frontEnd"><span>Front End</span> <span class="fa fa-sort"></span></th> -->
             <!-- <th jhiSortBy="product"><span>Product</span> <span class="fa fa-sort"></span></th> -->
-            <th jhiSortBy="name"><span>Name</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="name"><span>Name</span> <span class="fa fa-sort" [ngClass]="predicate === 'name' && reverse ? 'fa-sort-asc' : 'fa-sort-dsc' "></span></th>
             <!-- <th jhiSortBy="jurisdiction"><span>Jurisdiction</span> <span class="fa fa-sort"></span></th> -->
-            <th jhiSortBy="description"><span>Description</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="description"><span>Description</span> <span class="fa fa-sort" [ngClass]="predicate === 'description' && reverse ? 'fa-sort-asc' : 'fa-sort-dsc' "></span></th>
             <th></th>
             </tr>
             </thead>

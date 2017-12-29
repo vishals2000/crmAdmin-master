@@ -63,7 +63,10 @@ export class NavbarComponent implements OnInit {
             oCurObj.eventManager.broadcast({ name: 'appListModified', content: res.json })
             fcbk && fcbk();
         };
-        if (!this.appList || this.appList.length === 0) {
+        if (sessionStorage['appList']) {
+            this.appList = JSON.parse(sessionStorage['appList']);
+            fcbk && fcbk();
+        } else if (!this.appList || this.appList.length === 0) {
             this.appsService.queryAll({}).subscribe((res: ResponseWrapper) => fAfterGetResults(res));
         } else {
             fcbk && fcbk();
@@ -77,6 +80,7 @@ export class NavbarComponent implements OnInit {
         }
     }
     ngOnInit() {
+        this.currentAccount = null;
         let oCurObj = this;
         oCurObj.registerSubscribers();
         let fAfterGetResults = function (res) {
@@ -86,11 +90,18 @@ export class NavbarComponent implements OnInit {
             });
         };
         this.loadAllApps(fAfterGetResults);
-        this.principal.identity().then((account) => {
-            this.currentAccount = account;
-        });
+        if(!this.currentAccount){
+            this.loggedInSucces(null);
+        }
+    }
+    loadAllAppsForeFully(res){
+        this.appList = null;
+        sessionStorage.removeItem("appList");
+        this.loadAllApps(null);
     }
     registerSubscribers() {
+        
+        this.eventSubscriber = this.eventManager.subscribe('appsListModification', response => this.loadAllAppsForeFully(response));
         this.eventSubscriber = this.eventManager.subscribe('appListModified', response => this.setAppDataToBreadCrumbModel(response));
         this.eventSubscriber = this.eventManager.subscribe('selectedApp', response => this.setAppSelAppToBreadCrumbModel(response));
 
@@ -106,6 +117,12 @@ export class NavbarComponent implements OnInit {
         this.eventSubscriber = this.eventManager.subscribe('setBreadCrumbToAudSegFirstApp', response => this.setBreadCrumbToAudSeg(response, true));
 
         this.eventSubscriber = this.eventManager.subscribe('clearBdData', response => this.clearBdData(response));
+        this.eventSubscriber = this.eventManager.subscribe('authenticationSuccess', response => this.loggedInSucces(response));
+    }
+    loggedInSucces(res) {
+        this.principal.identity().then((account) => {
+            this.currentAccount = account;
+        });
     }
     clearBdData(res) {
         this.crumbsArray = [];
@@ -115,7 +132,7 @@ export class NavbarComponent implements OnInit {
         for (let i = 0; i < this.appList.length; i++) {
             this.appList[i].itemName = this.appList[i].name;
         }
-        localStorage['appList'] = JSON.stringify(this.appList);
+        sessionStorage['appList'] = JSON.stringify(this.appList);
     }
     setAppSelAppToBreadCrumbModel(appSelected) {
         let AppId = appSelected.content;
@@ -125,7 +142,7 @@ export class NavbarComponent implements OnInit {
                 if (oCurObj.appList[i].id === AppId || !AppId) {
                     oCurObj.selApp = oCurObj.appList[i];
                     oCurObj.selApp.itemName = oCurObj.selApp.name;
-                    localStorage['selectedApp'] = JSON.stringify(oCurObj.selApp);
+                    sessionStorage['selectedApp'] = JSON.stringify(oCurObj.selApp);
                     break;
                 }
             }
@@ -164,7 +181,7 @@ export class NavbarComponent implements OnInit {
         if (this.appList && this.appList.length) {
             if (!this.selApp) {
                 this.selApp = this.appList[0];
-                localStorage['selectedApp'] = JSON.stringify(this.selApp);
+                sessionStorage['selectedApp'] = JSON.stringify(this.selApp);
             }
             this.appPageType = 'app-CG';
             this.crumbsArray.push({
@@ -200,7 +217,7 @@ export class NavbarComponent implements OnInit {
             oCurObj.setBreadCrumbToApp(response);
             if (!oCurObj.selApp || bIsselectedFirstApp) {
                 oCurObj.selApp = oCurObj.appList[0];
-                localStorage['selectedApp'] = JSON.stringify(oCurObj.selApp);
+                sessionStorage['selectedApp'] = JSON.stringify(oCurObj.selApp);
             }
             if (oCurObj.appList && oCurObj.appList.length) {
                 oCurObj.appPageType = 'AS';
@@ -224,7 +241,7 @@ export class NavbarComponent implements OnInit {
             oCurObj.setBreadCrumbToApp(response);
             if (!oCurObj.selApp || bIsselectedFirstApp) {
                 oCurObj.selApp = oCurObj.appList[0];
-                localStorage['selectedApp'] = JSON.stringify(oCurObj.selApp);
+                sessionStorage['selectedApp'] = JSON.stringify(oCurObj.selApp);
             }
             oCurObj.appPageType = 'INS';
             oCurObj.crumbsArray.push({
@@ -247,11 +264,11 @@ export class NavbarComponent implements OnInit {
         if (this.selApp) {
             this.router.navigate(['/linechart/project/' + this.selApp.id], {});
         } else if (this.appList && this.appList.length) {
-            localStorage['selectedApp'] = JSON.stringify(this.appList[0]);
+            sessionStorage['selectedApp'] = JSON.stringify(this.appList[0]);
             this.router.navigate(['/linechart/project/' + this.appList[0].id], {});
         } else {
             this.loadAllApps(function () {
-                localStorage['selectedApp'] = JSON.stringify(this.appList[0]);
+                sessionStorage['selectedApp'] = JSON.stringify(this.appList[0]);
                 oCurObj.router.navigate(['/linechart/project/' + oCurObj.appList[0].id], {});
             })
         }
@@ -274,11 +291,11 @@ export class NavbarComponent implements OnInit {
         if (this.selApp) {
             this.router.navigate(['/audience-segments/project/' + this.selApp.id], {});
         } else if (this.appList && this.appList.length) {
-            localStorage['selectedApp'] = JSON.stringify(this.appList[0]);
+            sessionStorage['selectedApp'] = JSON.stringify(this.appList[0]);
             this.router.navigate(['/audience-segments/project/' + this.appList[0].id], {});
         } else {
             this.loadAllApps(function () {
-                localStorage['selectedApp'] = JSON.stringify(this.appList[0]);
+                sessionStorage['selectedApp'] = JSON.stringify(this.appList[0]);
                 oCurObj.router.navigate(['/audience-segments/project/' + oCurObj.appList[0].id], {});
             })
         }
@@ -320,22 +337,22 @@ export class NavbarComponent implements OnInit {
         switch (appPageType) {
             case 'app-CT':
                 this.selCampGrp = oSelectedItm;
-                this.router.navigate(['/campaign-template/group/' + this.selCampGrp.id + '/' + this.selCampGrp.name], {});
+                this.router.navigate(['/campaign-template/group/' + this.selCampGrp.id + '/' + this.selCampGrp.name], { replaceUrl: true });
                 break;
             case 'INS':
-                localStorage['selectedApp'] = JSON.stringify(oSelectedItm);
+                sessionStorage['selectedApp'] = JSON.stringify(oSelectedItm);
                 this.selApp = oSelectedItm;
-                this.router.navigate(['/linechart/project/' + this.selApp.id], {});
+                this.router.navigate(['/linechart/project/' + this.selApp.id], { replaceUrl: true });
                 break;
             case 'app-CG':
-                localStorage['selectedApp'] = JSON.stringify(oSelectedItm);
+                sessionStorage['selectedApp'] = JSON.stringify(oSelectedItm);
                 this.selApp = oSelectedItm;
-                this.router.navigate(['/campaign-group/project/' + this.selApp.id + '/' + this.selApp.name], {});
+                this.router.navigate(['/campaign-group/project/' + this.selApp.id + '/' + this.selApp.name], { replaceUrl: true });
                 break;
             case 'AS':
                 this.selApp = oSelectedItm;
-                localStorage['selectedApp'] = JSON.stringify(oSelectedItm);
-                this.router.navigate(['/audience-segments/project/' + this.selApp.id], {});
+                sessionStorage['selectedApp'] = JSON.stringify(oSelectedItm);
+                this.router.navigate(['/audience-segments/project/' + this.selApp.id], { replaceUrl: true });
                 break;
         }
     }

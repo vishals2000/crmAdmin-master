@@ -218,7 +218,7 @@
                     <span [hidden]="currentAccount && currentAccount.login">
                       Account
                     </span>
-                    <span *ngif="currentAccount && currentAccount.login">
+                    <span *ngIf="currentAccount && currentAccount.login">
                             {{currentAccount.login}}
                           </span>
                     <b class="caret"></b>

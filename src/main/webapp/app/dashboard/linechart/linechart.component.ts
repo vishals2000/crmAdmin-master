@@ -91,8 +91,8 @@ export class LinechartComponent implements OnInit {
     }
 
     setDataToPageModel() {
-        if(localStorage['selectedApp']){
-            var obj = JSON.parse(localStorage['selectedApp']);
+        if(sessionStorage['selectedApp']){
+            var obj = JSON.parse(sessionStorage['selectedApp']);
             this.app = {
                 product: obj.product,
                 frontEnd: obj.frontEnd,

@@ -33,6 +33,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
     projectId: string;
     projectName: string;
     searchValue: string;
+    pageLoadWithParam: boolean;
     constructor(
         private campaignGroupService: CampaignGroupService,
         private parseLinks: JhiParseLinks,
@@ -47,11 +48,13 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
         // public breadCrumbService: BreadCrumbService
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
+        this.searchValue = null;
         this.routeData = this.activatedRoute.data.subscribe((data) => {
             this.page = data['pagingParams'].page;
             this.previousPage = data['pagingParams'].page;
             this.reverse = data['pagingParams'].ascending;
             this.predicate = data['pagingParams'].predicate;
+            this.pageLoadWithParam = true;
         });
     }
     loadAll() {
@@ -68,7 +71,10 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
                 sort: this.sort()
             }).subscribe(
                 (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
-                (res: ResponseWrapper) => this.onError(res.json)
+                (res: ResponseWrapper) => {
+                        this.campaignGroups = [];
+                        this.onError(res.json)
+                    }
                 );
         } else {
             this.campaignGroupService.query({
@@ -78,13 +84,17 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
                 sort: this.sort()
             }).subscribe(
                 (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
-                (res: ResponseWrapper) => this.onError(res.json)
+                (res: ResponseWrapper) => {
+                    this.campaignGroups = [];
+                    this.onError(res.json)
+                }
                 );
         }
     }
     loadPage(page: number) {
         if (page !== this.previousPage) {
             this.previousPage = page;
+            this.campaignGroups = null;
             this.transition();
         }
     }
@@ -92,7 +102,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
         this.router.navigate(['/campaign-group/project/' + this.projectId + '/' + this.projectName], {
             queryParams:
                 {
-                    page: (this.page > 0 ? this.page - 1 : this.page),
+                    page: this.page,
                     size: this.itemsPerPage,
                     sort: this.sort()
                 }
@@ -101,7 +111,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
     }
 
     clear() {
-        this.page = 0;
+        this.page = 1;
         this.transition();
     }
     ngOnInit() {
@@ -111,13 +121,16 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
         });
         this.registerChangeInCampaignGroups();
         this.subscription = this.route.params.subscribe((params) => {
-            this.projectId = params['id'];
-            this.projectName = params['name'];
-            if (this.page === 1 && !this.searchValue) {
-                this.loadAll();
-            }
-            this.loadAppPage();
-            this.campaignGroupService.changeGroupId(this.projectId);
+            setTimeout(() => {
+                this.projectId = params['id'];
+                this.projectName = params['name'];
+                if (this.page === 1 && !this.searchValue) {
+                    this.loadAll();
+                }
+                this.loadAppPage();
+                this.pageLoadWithParam = false;
+                this.campaignGroupService.changeGroupId(this.projectId);
+            }, 0);
         });
     }
     //     load1(id) {
@@ -151,6 +164,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.eventManager.destroy(this.eventSubscriber);
+        this.eventManager.destroy(this.subscription);
     }
 
     trackId(index: number, item: CampaignGroup) {
@@ -165,8 +179,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
     }
     filterItems($event) {
         if (this.searchValue && this.searchValue !== '' && $event && $event.keyCode === 13) {
-            // this.campaignGroups = this.initialCampainGroups.filter((item) => item.name.toLowerCase().indexOf(this.searchValue) > -1);
-            this.page = 0;
+            this.page = 1;
             this.campaignGroupService.search({ appId: this.projectId, searchVal: this.searchValue }, {
                 appId: this.projectId,
                 page: (this.page > 0 ? this.page - 1 : this.page),
@@ -195,10 +208,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
         this.queryCount = this.totalItems;
-        this.campaignGroups = data;
-        // this.breadCrumbService.getBreadCrumbs().subscribe(val => {
-        //     this.breadCrumbService.updateBreadCrumbs(val, { name: this.projectName, router: '#/campaign-group/project/' + this.projectId + "/" + this.projectName, brdCrmbId: '2' });
-        // });
+        this.campaignGroups = data || [];
         this.eventManager.broadcast({ name: 'selectedApp', content: this.projectId });
         this.eventManager.broadcast({ name: 'setBreadCrumbToCampGrp', content: 'OK' });
     }

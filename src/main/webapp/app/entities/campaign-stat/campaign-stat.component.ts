@@ -79,7 +79,7 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
             day: dateObj.getDate()
         };
         this.campStatDt = todayDt1;
-        this.allApps = JSON.parse(localStorage['appList']) || [];
+        this.allApps = JSON.parse(sessionStorage['appList']) || [];
         //this.loadAll();
         this.principal.identity().then((account) => {
             this.currentAccount = account;
@@ -87,7 +87,7 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
         this.registerChangeInCampaignStats();
     }
     setDataToPageModel() {
-        this.selectedApp = JSON.parse(localStorage['selectedApp']);
+        this.selectedApp = JSON.parse(sessionStorage['selectedApp']);
         const values: string[] = [this.selectedApp.frontEnd, this.selectedApp.product.toString()];
         this.principal.identity().then((account) => {
             this.currentAccount = account;

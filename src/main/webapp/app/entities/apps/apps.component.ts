@@ -84,7 +84,7 @@ export class AppsComponent implements OnInit, OnDestroy {
         this.router.navigate(['/apps'], {
             queryParams:
                 {
-                    page: (this.page > 0 ? this.page - 1 : this.page),
+                    page: this.page,
                     size: this.itemsPerPage,
                     sort: this.sort()
                 }
@@ -93,14 +93,15 @@ export class AppsComponent implements OnInit, OnDestroy {
     }
 
     clear() {
-        this.page = 0;
+        this.page = 1;
         this.transition();
     }
     ngOnInit() {
-        this.loadAll();
+        //this.loadAll();
         this.loadAppPage();
         this.principal.identity().then((account) => {
             this.currentAccount = account;
+            console.log(this.currentAccount);
         });
         this.registerChangeInApps();
     }
@@ -110,8 +111,7 @@ export class AppsComponent implements OnInit, OnDestroy {
     }
     filterItems($event) {
         if (this.searchValue && this.searchValue !== '' && $event && $event.keyCode === 13) {
-            // this.apps = this.initialApps.filter((item) => item.name.toLowerCase().indexOf(this.searchValue) > -1);
-            this.page = 0;
+            this.page = 1;
             this.appsService.search(this.searchValue, {
                 page: (this.page > 0 ? this.page - 1 : this.page),
                 size: this.itemsPerPage,
@@ -140,9 +140,6 @@ export class AppsComponent implements OnInit, OnDestroy {
 
     sort() {
         const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
-        // if (this.predicate !== 'id') {
-        //     result.push('id');
-        // }
         return result;
     }
 
@@ -150,7 +147,6 @@ export class AppsComponent implements OnInit, OnDestroy {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
         this.queryCount = this.totalItems;
-        // this.page = pagingParams.page;
         this.apps = data;
         this.eventManager.broadcast({ name: 'setBreadCrumbToApp', content: 'OK' });
     }

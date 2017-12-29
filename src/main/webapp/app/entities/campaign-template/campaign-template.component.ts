@@ -22,6 +22,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     error: any;
     success: any;
     eventSubscriber: Subscription;
+    eventSubscriber1: Subscription;
     private subscription: Subscription;
 
     routeData: any;
@@ -64,6 +65,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
             this.previousPage = data['pagingParams'].page;
             this.reverse = data['pagingParams'].ascending;
             this.predicate = data['pagingParams'].predicate;
+            this.totalItems = parseInt(this.page) * parseInt(this.itemsPerPage);
         });
     }
 
@@ -105,7 +107,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         this.router.navigate(['/campaign-template/group/' + this.groupId + '/' + this.groupName], {
             queryParams:
                 {
-                    page: (this.page > 0 ? this.page - 1 : this.page),
+                    page: this.page,
                     size: this.itemsPerPage,
                     sort: this.sort()
                 }
@@ -114,7 +116,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     }
 
     clear() {
-        this.page = 0;
+        this.page = 1;
         this.transition();
     }
     ngOnInit() {
@@ -123,17 +125,27 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         });
         this.registerChangeInCampaignTemplates();
         this.subscription = this.route.params.subscribe((params) => {
-            this.groupId = params['id'];
-            this.groupName = params['name'];
-            this.loadAll();
-            this.campaignTemplateService.getFeProduct(this.groupId, 'feProduct').subscribe((response) => {
-                const values: string[] = [this.groupId, response['fe'], response['product']];
-                this.campaignTemplateService.changeMessage(values);
+            setTimeout(() => {
+                this.groupId = params['id'];
+                this.groupName = params['name'];
+                this.loadAll();
+                if(sessionStorage["selectedApp"]){
+                    const fePdTde = JSON.parse(sessionStorage["selectedApp"]);
+                    const values: string[] = [this.groupId, fePdTde.frontEnd, fePdTde.product];
+                    this.campaignTemplateService.changeMessage(values);
+                } else{
+                    this.campaignTemplateService.getFeProduct(this.groupId, 'feProduct').subscribe((response) => {
+                        const values: string[] = [this.groupId, response['fe'], response['product']];
+                        this.campaignTemplateService.changeMessage(values);
+                    });
+                }
             });
         });
     }
     ngOnDestroy() {
         this.eventManager.destroy(this.eventSubscriber);
+        this.eventManager.destroy(this.eventSubscriber1);
+       // this.eventManager.destroy(this.subscription);
     }
 
     trackId(index: number, item: CampaignTemplate) {
@@ -146,15 +158,12 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
 
     sort() {
         const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
-        // if (this.predicate !== 'id') {
-        //     result.push('id');
-        // }
         return result;
     }
 
     filterItems($event) {
         if (this.searchValue && this.searchValue !== '' && $event && $event.keyCode === 13) {
-            this.page = 0;
+            this.page = 1;
             this.campaignTemplateService.search({ campGroupId: this.groupId, searchVal: this.searchValue }, {
                 page: (this.page > 0 ? this.page - 1 : this.page),
                 size: this.itemsPerPage,
@@ -223,23 +232,34 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
             );
         }
     }
-    gotToCampDetailPage(campaignTemplateId){
-        this.router.navigate(['/campaign-template/' + campaignTemplateId], {});
-    }
+    // gotToCampDetailPage(campaignTemplateId){
+    //     this.router.navigate(['/campaign-template/' + campaignTemplateId], {});
+    // }
 
     private onSuccess(data, headers) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
         this.queryCount = this.totalItems;
         this.campaignTemplates = data || [];
-        this.eventSubscriber = this.eventManager.subscribe('campGrpDataReady', response => this.callBreadCrumbToCampTemp(response));//handling refresh scenario
-        if(this.previousPage === 1 && this.searchValue === null && !this.oCampInfo ){
+        this.eventSubscriber1 = this.eventManager.subscribe('campGrpDataReady', response => this.callBreadCrumbToCampTemp(response));//handling refresh scenario
+        const fePdTde = JSON.parse(sessionStorage["selectedApp"]);
+        if(this.previousPage === 1 && this.searchValue === null && !this.oCampInfo && !sessionStorage["selectedApp"]){
             this.campaignTemplateService.getAppCapGrpIdFromCapGrp(this.groupId).subscribe((oCampGrpInfo) => {
                 this.oCampInfo = oCampGrpInfo;
                 this.eventManager.broadcast({ name: 'selectedApp', content: this.oCampInfo.appId});
                 this.eventManager.broadcast({ name: 'selectedCampGrp', content: this.groupId});
                 this.eventManager.broadcast({ name: 'setBreadCrumbToCampTemp', content: {campGrpId : this.groupId}});
             });
+        } else if(sessionStorage["selectedApp"]){
+            this.oCampInfo = {
+                "appId" : fePdTde.id,
+                "appName" : fePdTde.name,
+                "campaignGroupId" : this.groupId,
+                "campaignGroupName" : ''
+              };
+            this.eventManager.broadcast({ name: 'selectedApp', content: this.oCampInfo.appId});
+            this.eventManager.broadcast({ name: 'selectedCampGrp', content: this.groupId});
+            this.eventManager.broadcast({ name: 'setBreadCrumbToCampTemp', content: {campGrpId : this.groupId}});
         }
     }
     private callBreadCrumbToCampTemp(response){
