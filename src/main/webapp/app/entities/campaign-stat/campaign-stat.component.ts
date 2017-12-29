@@ -80,7 +80,6 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
         };
         this.campStatDt = todayDt1;
         this.allApps = JSON.parse(sessionStorage['appList']) || [];
-        //this.loadAll();
         this.principal.identity().then((account) => {
             this.currentAccount = account;
         });
@@ -94,8 +93,8 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
         });
         this.registerChangeInCampaignStats();
     }
-    onAppSelect() {
-
+    onAppSelect(res) {
+        console.log(res);
     }
 
     ngOnDestroy() {
@@ -111,9 +110,6 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
 
     sort() {
         const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
-        // if (this.predicate !== 'id') {
-        //     result.push('id');
-        // }
         return result;
     }
 
