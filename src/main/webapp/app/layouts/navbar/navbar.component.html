@@ -215,9 +215,12 @@
             <li ngbDropdown *ngSwitchCase="true" class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
                   <span *ngIf="!getImageUrl()">
-                    <span>
+                    <span [hidden]="currentAccount && currentAccount.login">
                       Account
                     </span>
+                    <span *ngif="currentAccount && currentAccount.login">
+                            {{currentAccount.login}}
+                          </span>
                     <b class="caret"></b>
                   </span>
                   <span *ngIf="getImageUrl()">

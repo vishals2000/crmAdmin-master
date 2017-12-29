@@ -40,6 +40,7 @@ export class NavbarComponent implements OnInit {
     eventSubscriber: Subscription;
     appPageType: string;
     selCampGrp: any;
+    currentAccount: any;
 
     constructor(
         private loginService: LoginService,
@@ -85,6 +86,9 @@ export class NavbarComponent implements OnInit {
             });
         };
         this.loadAllApps(fAfterGetResults);
+        this.principal.identity().then((account) => {
+            this.currentAccount = account;
+        });
     }
     registerSubscribers() {
         this.eventSubscriber = this.eventManager.subscribe('appListModified', response => this.setAppDataToBreadCrumbModel(response));
