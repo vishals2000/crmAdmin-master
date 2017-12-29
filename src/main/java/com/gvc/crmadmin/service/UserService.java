@@ -170,16 +170,16 @@ public class UserService {
      * @param email email id of user
      * @param langKey language key
      * @param imageUrl image URL of user
-     * @param applications
+//     * @param applications
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl, String[] applications) {
+    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
         userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(user -> {
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setEmail(email);
             user.setLangKey(langKey);
             user.setImageUrl(imageUrl);
-            user.setApplications(applications != null ? new HashSet<>(Arrays.asList(applications)) : Collections.emptySet());
+//            user.setApplications(applications != null ? new HashSet<>(Arrays.asList(applications)) : Collections.emptySet());
             userRepository.save(user);
             log.debug("Changed Information for User: {}", user);
         });
