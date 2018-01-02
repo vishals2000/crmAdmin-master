@@ -1424,7 +1424,7 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
     populateSegmentParams() {
         const filterOptionLookUpComparisonVsValue: Map<string, string[]> = new Map<string, string[]>();
         filterOptionLookUpComparisonVsValue.set('is in', this.segmentNames);
-        filterOptionLookUpComparisonVsValue.set('is not in', this.segmentNames);
+        //filterOptionLookUpComparisonVsValue.set('is not in', this.segmentNames);
         this.filtersMap.set('Segment', filterOptionLookUpComparisonVsValue);
     }
     populateCountries() {
