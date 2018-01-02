@@ -17,9 +17,15 @@ import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http'
 import { NgbModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { setTimeout } from 'timers';
 import { CampaignTemplateLaunchDialogComponent } from './campaign-template-launch-dialog.component';
+import { CampaignTemplateCancelDialogComponent } from './campaign-template-cancel-dialog.component';
+
+
 
 @Component({
     selector: 'jhi-campaign-template-dialog',
+    host: {
+        '(document:click)': 'onClick($event)',
+    },
     templateUrl: './campaign-template-dialog.component.html'
 })
 export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
@@ -56,6 +62,7 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
     isRecuEndDateVisible: boolean;
     currentContentGrp: number;
     segmentNames: string[];
+    dynamicId: any;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -66,7 +73,7 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
         private http: HttpClient,
         private router: Router,
         private location: Location,
-        private campaignTemplatePopupService: CampaignTemplatePopupService,
+        private campaignTemplatePopupService: CampaignTemplatePopupService
 
     ) {
         this.filtersMap = new Map<string, Map<string, string[]>>();
@@ -90,7 +97,15 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
         });
         this.isLaunch = false;
     }
-    ngOnDestroy(){
+    onClick(event) {
+        if (this.dynamicId  && !event.target.parentElement.closest(".datePickerClass")) {
+            setTimeout(() => {
+                this.dynamicId.close();
+                this.dynamicId = null;
+            }, 0);
+        }
+    }
+    ngOnDestroy() {
         this.eventSubscriber.unsubscribe();
     }
     ngOnInit() {
@@ -151,6 +166,10 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
 
     clear() {
         this.activeModal.dismiss('cancel');
+    }
+
+    cancel() {
+        this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateCancelDialogComponent as Component, { isConfirmation: true, campaignTempInfo: this.campaignTemplate }, false, this.campaignTemplate.id);
     }
 
     save() {
@@ -236,7 +255,7 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
             contentTitle: '',
             contentBody: '',
             languageSelected: '',
-            selectedItems:[[]]
+            selectedItems: [[]]
         }));
         this.targetContentGroupSize.push('');
     }
@@ -268,7 +287,7 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
             product: (!this.campaignTemplate.product) ? '' : this.campaignTemplate.product,
             campaignName: (!this.campaignTemplate.campaignName) ? '' : this.campaignTemplate.campaignName,
             status: (!this.campaignTemplate.status) ? 'Draft' : this.campaignTemplate.status,
-           // campaignDescription: (!this.campaignTemplate.campaignDescription) ? '' : this.campaignTemplate.campaignDescription,
+            // campaignDescription: (!this.campaignTemplate.campaignDescription) ? '' : this.campaignTemplate.campaignDescription,
             startDate: (this.campaignTemplate.sendImmediately || !this.campaignTemplate.startDate) ? todayDt : this.campaignTemplate.startDate,
             sendImmediately: (!this.campaignTemplate.sendImmediately) ? false : this.campaignTemplate.sendImmediately,
             recurrenceType: (!this.campaignTemplate.recurrenceType) ? 'NONE' : this.campaignTemplate.recurrenceType,
@@ -378,9 +397,9 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
                             }
                         }
                     }
-                    if(i.filterOption === 'Country' || i.filterOption === 'Language'){
-                        for(var j=0;j<i.filterOptionValue.length;j++)
-                        fileOptArray.push({id:i.filterOptionValue[j], itemName:i.filterOptionValue[j]});
+                    if (i.filterOption === 'Country' || i.filterOption === 'Language') {
+                        for (var j = 0; j < i.filterOptionValue.length; j++)
+                            fileOptArray.push({ id: i.filterOptionValue[j], itemName: i.filterOptionValue[j] });
                     }
                     const formBuilderGroup = this.fb.group({
                         filterOption: i.filterOption,
@@ -388,7 +407,7 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
                         filterOptionLookUp: i.filterOptionLookUp,
                         filterOptionValue: [i.filterOptionValue],
                         simpleDate: simpDt,
-                        selectedItems : [fileOptArray]
+                        selectedItems: [fileOptArray]
                     });
                     this.targetGroupFilterCriteria.push(formBuilderGroup);
                 } else {
@@ -398,12 +417,12 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
         }
         if (this.campaignTemplate.targetGroupContentCriteria && this.campaignTemplate.targetGroupContentCriteria.length) {
             for (const i of this.campaignTemplate.targetGroupContentCriteria) {
-                const languageSelItm = {id:i.languageSelected, itemName:i.languageSelected};
+                const languageSelItm = { id: i.languageSelected, itemName: i.languageSelected };
                 const formBuilderGroup = this.fb.group({
                     contentTitle: i.contentTitle,
                     contentBody: i.contentBody,
                     languageSelected: i.languageSelected,
-                    selectedItems : [(i.languageSelected ? [languageSelItm] : [])]
+                    selectedItems: [(i.languageSelected ? [languageSelItm] : [])]
                 });
                 this.targetGroupContentCriteria.push(formBuilderGroup);
             }
@@ -413,7 +432,7 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
                 contentTitle: '',
                 contentBody: '',
                 languageSelected: '',
-                selectedItems:[[]]
+                selectedItems: [[]]
             }));
         }
         if (this.campaignTemplate.targetGroupMetaData) {
@@ -595,52 +614,52 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
             }
         }, 0);
     }
-    onItemSelect(index){
-       const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
-       const targetGroupFilterCriterionFormControl: AbstractControl = targetGroupFilters.at(index);
-       let aSelecteCnt = this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteria[index].selectedItems;
-       let aCntArray = [];
-       for(var i=0;i<aSelecteCnt.length;i++){
+    onItemSelect(index) {
+        const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
+        const targetGroupFilterCriterionFormControl: AbstractControl = targetGroupFilters.at(index);
+        let aSelecteCnt = this.campaignTemplateGroupCreationForm.value.targetGroupFilterCriteria[index].selectedItems;
+        let aCntArray = [];
+        for (var i = 0; i < aSelecteCnt.length; i++) {
             aCntArray.push(aSelecteCnt[i].id);
-       }
-       if(aCntArray.length){
-        targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue(aCntArray);
-       }
-       else{
-        targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue('');
-       }
+        }
+        if (aCntArray.length) {
+            targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue(aCntArray);
+        }
+        else {
+            targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue('');
+        }
     }
-    onLangContItemSelect(index){
+    onLangContItemSelect(index) {
         const targetGroupContentFilters = this.campaignTemplateGroupCreationForm.get('targetGroupContentCriteria') as FormArray;
         const targetGroupContentCriterionFormControl: AbstractControl = targetGroupContentFilters.at(index);
         let aSelecteCnt = this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria[index].selectedItems;
         let aCntArray = '';
-        for(var i=0;i<aSelecteCnt.length;i++){
-             aCntArray = aSelecteCnt[i].id;
+        for (var i = 0; i < aSelecteCnt.length; i++) {
+            aCntArray = aSelecteCnt[i].id;
         }
-        if(aCntArray.length){
+        if (aCntArray.length) {
             targetGroupContentCriterionFormControl.get('languageSelected').setValue(aCntArray);
         }
-        else{
+        else {
             targetGroupContentCriterionFormControl.get('languageSelected').setValue('');
         }
         this.targetContentGroupSize[index] = '';
-     }
+    }
     liveOddKeyUniqueCheck(index) {
         var _this = this;
         const targetGroupMetaData = _this.campaignTemplateGroupCreationForm.get('targetGroupMetaData') as FormArray;
         const currentMetaDataObj = targetGroupMetaData.at(index);
         setTimeout(() => {
-            for(var i=0;i<targetGroupMetaData.controls.length; i++){
+            for (var i = 0; i < targetGroupMetaData.controls.length; i++) {
                 let targetMetaDataObj = targetGroupMetaData.at(i);
-                if(i !== index && targetMetaDataObj.get("key").value === currentMetaDataObj.get("key").value){
+                if (i !== index && targetMetaDataObj.get("key").value === currentMetaDataObj.get("key").value) {
                     currentMetaDataObj.get("key").setValue('');
                 }
             }
         }, 0);
     }
-    openParentCampaginDetails(parentCampaignGrpDetails){
-        this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateLaunchDialogComponent as Component, {isRetarget: true}, false, parentCampaignGrpDetails);   
+    openParentCampaginDetails(parentCampaignGrpDetails) {
+        this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateLaunchDialogComponent as Component, { isRetarget: true }, false, parentCampaignGrpDetails);
     }
     private onTargetGroupContentSizeRequestSuccess(data, headers, contentGrpNo) {
         // console.log(data);
@@ -671,6 +690,13 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
     removeTargetGroupMetaDataCriterion(i) {
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupMetaData') as FormArray;
         targetGroupFilters.removeAt(i);
+    }
+    openDatepicker(id) {
+        if (this.dynamicId) {
+            this.dynamicId.close();
+            this.dynamicId = null;
+        }
+        this.dynamicId = id;
     }
     onFilterOptionChange(index) {
         const targetGroupFilters = this.campaignTemplateGroupCreationForm.get('targetGroupFilterCriteria') as FormArray;
@@ -1428,10 +1454,10 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
         this.filtersMap.set('Segment', filterOptionLookUpComparisonVsValue);
     }
     populateCountries() {
-        this.countries = [{"id":"Afghanistan","itemName":"Afghanistan"},{"id":"Aland Islands","itemName":"Aland Islands"},{"id":"Albania","itemName":"Albania"},{"id":"Algeria","itemName":"Algeria"},{"id":"American Samoa","itemName":"American Samoa"},{"id":"Andorra","itemName":"Andorra"},{"id":"Angola","itemName":"Angola"},{"id":"Anguilla","itemName":"Anguilla"},{"id":"Antarctica","itemName":"Antarctica"},{"id":"Antigua and Barbuda","itemName":"Antigua and Barbuda"},{"id":"Argentina","itemName":"Argentina"},{"id":"Armenia","itemName":"Armenia"},{"id":"Aruba","itemName":"Aruba"},{"id":"Australia","itemName":"Australia"},{"id":"Austria","itemName":"Austria"},{"id":"Azerbaijan","itemName":"Azerbaijan"},{"id":"Bahamas","itemName":"Bahamas"},{"id":"Bahrain","itemName":"Bahrain"},{"id":"Bangladesh","itemName":"Bangladesh"},{"id":"Barbados","itemName":"Barbados"},{"id":"Belarus","itemName":"Belarus"},{"id":"Belgium","itemName":"Belgium"},{"id":"Belize","itemName":"Belize"},{"id":"Benin","itemName":"Benin"},{"id":"Bermuda","itemName":"Bermuda"},{"id":"Bhutan","itemName":"Bhutan"},{"id":"Bolivia","itemName":"Bolivia"},{"id":"Bosnia and Herzegovina","itemName":"Bosnia and Herzegovina"},{"id":"Botswana","itemName":"Botswana"},{"id":"Bouvet Island","itemName":"Bouvet Island"},{"id":"Brazil","itemName":"Brazil"},{"id":"British Virgin Islands","itemName":"British Virgin Islands"},{"id":"British Indian Ocean Territory","itemName":"British Indian Ocean Territory"},{"id":"Brunei Darussalam","itemName":"Brunei Darussalam"},{"id":"Bulgaria","itemName":"Bulgaria"},{"id":"Burkina Faso","itemName":"Burkina Faso"},{"id":"Burundi","itemName":"Burundi"},{"id":"Cambodia","itemName":"Cambodia"},{"id":"Cameroon","itemName":"Cameroon"},{"id":"Canada","itemName":"Canada"},{"id":"Cape Verde","itemName":"Cape Verde"},{"id":"Cayman Islands","itemName":"Cayman Islands"},{"id":"Central African Republic","itemName":"Central African Republic"},{"id":"Chad","itemName":"Chad"},{"id":"Chile","itemName":"Chile"},{"id":"China","itemName":"China"},{"id":"Hong Kong, SAR China","itemName":"Hong Kong, SAR China"},{"id":"Macao, SAR China","itemName":"Macao, SAR China"},{"id":"Christmas Island","itemName":"Christmas Island"},{"id":"Cocos (Keeling) Islands","itemName":"Cocos (Keeling) Islands"},{"id":"Colombia","itemName":"Colombia"},{"id":"Comoros","itemName":"Comoros"},{"id":"Congo (Brazzaville)","itemName":"Congo (Brazzaville)"},{"id":"Congo, (Kinshasa)","itemName":"Congo, (Kinshasa)"},{"id":"Cook Islands","itemName":"Cook Islands"},{"id":"Costa Rica","itemName":"Costa Rica"},{"id":"Croatia","itemName":"Croatia"},{"id":"Cuba","itemName":"Cuba"},{"id":"Cyprus","itemName":"Cyprus"},{"id":"Czech Republic","itemName":"Czech Republic"},{"id":"Denmark","itemName":"Denmark"},{"id":"Djibouti","itemName":"Djibouti"},{"id":"Dominica","itemName":"Dominica"},{"id":"Dominican Republic","itemName":"Dominican Republic"},{"id":"Ecuador","itemName":"Ecuador"},{"id":"Egypt","itemName":"Egypt"},{"id":"El Salvador","itemName":"El Salvador"},{"id":"Equatorial Guinea","itemName":"Equatorial Guinea"},{"id":"Eritrea","itemName":"Eritrea"},{"id":"Estonia","itemName":"Estonia"},{"id":"Ethiopia","itemName":"Ethiopia"},{"id":"Falkland Islands (Malvinas)","itemName":"Falkland Islands (Malvinas)"},{"id":"Faroe Islands","itemName":"Faroe Islands"},{"id":"Fiji","itemName":"Fiji"},{"id":"Finland","itemName":"Finland"},{"id":"France","itemName":"France"},{"id":"French Guiana","itemName":"French Guiana"},{"id":"French Polynesia","itemName":"French Polynesia"},{"id":"French Southern Territories","itemName":"French Southern Territories"},{"id":"Gabon","itemName":"Gabon"},{"id":"Gambia","itemName":"Gambia"},{"id":"Georgia","itemName":"Georgia"},{"id":"Germany","itemName":"Germany"},{"id":"Ghana","itemName":"Ghana"},{"id":"Gibraltar","itemName":"Gibraltar"},{"id":"Greece","itemName":"Greece"},{"id":"Greenland","itemName":"Greenland"},{"id":"Grenada","itemName":"Grenada"},{"id":"Guadeloupe","itemName":"Guadeloupe"},{"id":"Guam","itemName":"Guam"},{"id":"Guatemala","itemName":"Guatemala"},{"id":"Guernsey","itemName":"Guernsey"},{"id":"Guinea","itemName":"Guinea"},{"id":"Guinea-Bissau","itemName":"Guinea-Bissau"},{"id":"Guyana","itemName":"Guyana"},{"id":"Haiti","itemName":"Haiti"},{"id":"Heard and Mcdonald Islands","itemName":"Heard and Mcdonald Islands"},{"id":"Holy See (Vatican City State)","itemName":"Holy See (Vatican City State)"},{"id":"Honduras","itemName":"Honduras"},{"id":"Hungary","itemName":"Hungary"},{"id":"Iceland","itemName":"Iceland"},{"id":"India","itemName":"India"},{"id":"Indonesia","itemName":"Indonesia"},{"id":"Iran, Islamic Republic of","itemName":"Iran, Islamic Republic of"},{"id":"Iraq","itemName":"Iraq"},{"id":"Ireland","itemName":"Ireland"},{"id":"Isle of Man","itemName":"Isle of Man"},{"id":"Israel","itemName":"Israel"},{"id":"Italy","itemName":"Italy"},{"id":"Jamaica","itemName":"Jamaica"},{"id":"Japan","itemName":"Japan"},{"id":"Jersey","itemName":"Jersey"},{"id":"Jordan","itemName":"Jordan"},{"id":"Kazakhstan","itemName":"Kazakhstan"},{"id":"Kenya","itemName":"Kenya"},{"id":"Kiribati","itemName":"Kiribati"},{"id":"Korea (North)","itemName":"Korea (North)"},{"id":"Korea (South)","itemName":"Korea (South)"},{"id":"Kuwait","itemName":"Kuwait"},{"id":"Kyrgyzstan","itemName":"Kyrgyzstan"},{"id":"Lao PDR","itemName":"Lao PDR"},{"id":"Latvia","itemName":"Latvia"},{"id":"Lebanon","itemName":"Lebanon"},{"id":"Lesotho","itemName":"Lesotho"},{"id":"Liberia","itemName":"Liberia"},{"id":"Libya","itemName":"Libya"},{"id":"Liechtenstein","itemName":"Liechtenstein"},{"id":"Lithuania","itemName":"Lithuania"},{"id":"Luxembourg","itemName":"Luxembourg"},{"id":"Macedonia, Republic of","itemName":"Macedonia, Republic of"},{"id":"Madagascar","itemName":"Madagascar"},{"id":"Malawi","itemName":"Malawi"},{"id":"Malaysia","itemName":"Malaysia"},{"id":"Maldives","itemName":"Maldives"},{"id":"Mali","itemName":"Mali"},{"id":"Malta","itemName":"Malta"},{"id":"Marshall Islands","itemName":"Marshall Islands"},{"id":"Martinique","itemName":"Martinique"},{"id":"Mauritania","itemName":"Mauritania"},{"id":"Mauritius","itemName":"Mauritius"},{"id":"Mayotte","itemName":"Mayotte"},{"id":"Mexico","itemName":"Mexico"},{"id":"Micronesia, Federated States of","itemName":"Micronesia, Federated States of"},{"id":"Moldova","itemName":"Moldova"},{"id":"Monaco","itemName":"Monaco"},{"id":"Mongolia","itemName":"Mongolia"},{"id":"Montenegro","itemName":"Montenegro"},{"id":"Montserrat","itemName":"Montserrat"},{"id":"Morocco","itemName":"Morocco"},{"id":"Mozambique","itemName":"Mozambique"},{"id":"Myanmar","itemName":"Myanmar"},{"id":"Namibia","itemName":"Namibia"},{"id":"Nauru","itemName":"Nauru"},{"id":"Nepal","itemName":"Nepal"},{"id":"Netherlands","itemName":"Netherlands"},{"id":"Netherlands Antilles","itemName":"Netherlands Antilles"},{"id":"New Caledonia","itemName":"New Caledonia"},{"id":"New Zealand","itemName":"New Zealand"},{"id":"Nicaragua","itemName":"Nicaragua"},{"id":"Niger","itemName":"Niger"},{"id":"Nigeria","itemName":"Nigeria"},{"id":"Niue","itemName":"Niue"},{"id":"Norfolk Island","itemName":"Norfolk Island"},{"id":"Northern Mariana Islands","itemName":"Northern Mariana Islands"},{"id":"Norway","itemName":"Norway"},{"id":"Oman","itemName":"Oman"},{"id":"Pakistan","itemName":"Pakistan"},{"id":"Palau","itemName":"Palau"},{"id":"Palestinian Territory","itemName":"Palestinian Territory"},{"id":"Panama","itemName":"Panama"},{"id":"Papua New Guinea","itemName":"Papua New Guinea"},{"id":"Paraguay","itemName":"Paraguay"},{"id":"Peru","itemName":"Peru"},{"id":"Philippines","itemName":"Philippines"},{"id":"Pitcairn","itemName":"Pitcairn"},{"id":"Poland","itemName":"Poland"},{"id":"Portugal","itemName":"Portugal"},{"id":"Puerto Rico","itemName":"Puerto Rico"},{"id":"Qatar","itemName":"Qatar"},{"id":"Romania","itemName":"Romania"},{"id":"Russian Federation","itemName":"Russian Federation"},{"id":"Rwanda","itemName":"Rwanda"},{"id":"Saint Helena","itemName":"Saint Helena"},{"id":"Saint Kitts and Nevis","itemName":"Saint Kitts and Nevis"},{"id":"Saint Lucia","itemName":"Saint Lucia"},{"id":"Saint-Martin (French part)","itemName":"Saint-Martin (French part)"},{"id":"Saint Pierre and Miquelon","itemName":"Saint Pierre and Miquelon"},{"id":"Saint Vincent and Grenadines","itemName":"Saint Vincent and Grenadines"},{"id":"Samoa","itemName":"Samoa"},{"id":"San Marino","itemName":"San Marino"},{"id":"Sao Tome and Principe","itemName":"Sao Tome and Principe"},{"id":"Saudi Arabia","itemName":"Saudi Arabia"},{"id":"Senegal","itemName":"Senegal"},{"id":"Serbia","itemName":"Serbia"},{"id":"Seychelles","itemName":"Seychelles"},{"id":"Sierra Leone","itemName":"Sierra Leone"},{"id":"Singapore","itemName":"Singapore"},{"id":"Slovakia","itemName":"Slovakia"},{"id":"Slovenia","itemName":"Slovenia"},{"id":"Solomon Islands","itemName":"Solomon Islands"},{"id":"Somalia","itemName":"Somalia"},{"id":"South Africa","itemName":"South Africa"},{"id":"South Georgia and the South Sandwich Islands","itemName":"South Georgia and the South Sandwich Islands"},{"id":"South Sudan","itemName":"South Sudan"},{"id":"Spain","itemName":"Spain"},{"id":"Sri Lanka","itemName":"Sri Lanka"},{"id":"Sudan","itemName":"Sudan"},{"id":"Suriname","itemName":"Suriname"},{"id":"Svalbard and Jan Mayen Islands","itemName":"Svalbard and Jan Mayen Islands"},{"id":"Swaziland","itemName":"Swaziland"},{"id":"Sweden","itemName":"Sweden"},{"id":"Switzerland","itemName":"Switzerland"},{"id":"Syrian Arab Republic (Syria)","itemName":"Syrian Arab Republic (Syria)"},{"id":"Taiwan, Republic of China","itemName":"Taiwan, Republic of China"},{"id":"Tajikistan","itemName":"Tajikistan"},{"id":"Tanzania, United Republic of","itemName":"Tanzania, United Republic of"},{"id":"Thailand","itemName":"Thailand"},{"id":"Timor-Leste","itemName":"Timor-Leste"},{"id":"Togo","itemName":"Togo"},{"id":"Tokelau","itemName":"Tokelau"},{"id":"Tonga","itemName":"Tonga"},{"id":"Trinidad and Tobago","itemName":"Trinidad and Tobago"},{"id":"Tunisia","itemName":"Tunisia"},{"id":"Turkey","itemName":"Turkey"},{"id":"Turkmenistan","itemName":"Turkmenistan"},{"id":"Turks and Caicos Islands","itemName":"Turks and Caicos Islands"},{"id":"Tuvalu","itemName":"Tuvalu"},{"id":"Uganda","itemName":"Uganda"},{"id":"Ukraine","itemName":"Ukraine"},{"id":"United Arab Emirates","itemName":"United Arab Emirates"},{"id":"United Kingdom","itemName":"United Kingdom"},{"id":"United States of America","itemName":"United States of America"},{"id":"US Minor Outlying Islands","itemName":"US Minor Outlying Islands"},{"id":"Uruguay","itemName":"Uruguay"},{"id":"Uzbekistan","itemName":"Uzbekistan"},{"id":"Vanuatu","itemName":"Vanuatu"},{"id":"Venezuela (Bolivarian Republic)","itemName":"Venezuela (Bolivarian Republic)"},{"id":"Viet Nam","itemName":"Viet Nam"},{"id":"Virgin Islands, US","itemName":"Virgin Islands, US"},{"id":"Wallis and Futuna Islands","itemName":"Wallis and Futuna Islands"},{"id":"Western Sahara","itemName":"Western Sahara"},{"id":"Yemen","itemName":"Yemen"},{"id":"Zambia","itemName":"Zambia"},{"id":"Zimbabwe","itemName":"Zimbabwe"}];
+        this.countries = [{ "id": "Afghanistan", "itemName": "Afghanistan" }, { "id": "Aland Islands", "itemName": "Aland Islands" }, { "id": "Albania", "itemName": "Albania" }, { "id": "Algeria", "itemName": "Algeria" }, { "id": "American Samoa", "itemName": "American Samoa" }, { "id": "Andorra", "itemName": "Andorra" }, { "id": "Angola", "itemName": "Angola" }, { "id": "Anguilla", "itemName": "Anguilla" }, { "id": "Antarctica", "itemName": "Antarctica" }, { "id": "Antigua and Barbuda", "itemName": "Antigua and Barbuda" }, { "id": "Argentina", "itemName": "Argentina" }, { "id": "Armenia", "itemName": "Armenia" }, { "id": "Aruba", "itemName": "Aruba" }, { "id": "Australia", "itemName": "Australia" }, { "id": "Austria", "itemName": "Austria" }, { "id": "Azerbaijan", "itemName": "Azerbaijan" }, { "id": "Bahamas", "itemName": "Bahamas" }, { "id": "Bahrain", "itemName": "Bahrain" }, { "id": "Bangladesh", "itemName": "Bangladesh" }, { "id": "Barbados", "itemName": "Barbados" }, { "id": "Belarus", "itemName": "Belarus" }, { "id": "Belgium", "itemName": "Belgium" }, { "id": "Belize", "itemName": "Belize" }, { "id": "Benin", "itemName": "Benin" }, { "id": "Bermuda", "itemName": "Bermuda" }, { "id": "Bhutan", "itemName": "Bhutan" }, { "id": "Bolivia", "itemName": "Bolivia" }, { "id": "Bosnia and Herzegovina", "itemName": "Bosnia and Herzegovina" }, { "id": "Botswana", "itemName": "Botswana" }, { "id": "Bouvet Island", "itemName": "Bouvet Island" }, { "id": "Brazil", "itemName": "Brazil" }, { "id": "British Virgin Islands", "itemName": "British Virgin Islands" }, { "id": "British Indian Ocean Territory", "itemName": "British Indian Ocean Territory" }, { "id": "Brunei Darussalam", "itemName": "Brunei Darussalam" }, { "id": "Bulgaria", "itemName": "Bulgaria" }, { "id": "Burkina Faso", "itemName": "Burkina Faso" }, { "id": "Burundi", "itemName": "Burundi" }, { "id": "Cambodia", "itemName": "Cambodia" }, { "id": "Cameroon", "itemName": "Cameroon" }, { "id": "Canada", "itemName": "Canada" }, { "id": "Cape Verde", "itemName": "Cape Verde" }, { "id": "Cayman Islands", "itemName": "Cayman Islands" }, { "id": "Central African Republic", "itemName": "Central African Republic" }, { "id": "Chad", "itemName": "Chad" }, { "id": "Chile", "itemName": "Chile" }, { "id": "China", "itemName": "China" }, { "id": "Hong Kong, SAR China", "itemName": "Hong Kong, SAR China" }, { "id": "Macao, SAR China", "itemName": "Macao, SAR China" }, { "id": "Christmas Island", "itemName": "Christmas Island" }, { "id": "Cocos (Keeling) Islands", "itemName": "Cocos (Keeling) Islands" }, { "id": "Colombia", "itemName": "Colombia" }, { "id": "Comoros", "itemName": "Comoros" }, { "id": "Congo (Brazzaville)", "itemName": "Congo (Brazzaville)" }, { "id": "Congo, (Kinshasa)", "itemName": "Congo, (Kinshasa)" }, { "id": "Cook Islands", "itemName": "Cook Islands" }, { "id": "Costa Rica", "itemName": "Costa Rica" }, { "id": "Croatia", "itemName": "Croatia" }, { "id": "Cuba", "itemName": "Cuba" }, { "id": "Cyprus", "itemName": "Cyprus" }, { "id": "Czech Republic", "itemName": "Czech Republic" }, { "id": "Denmark", "itemName": "Denmark" }, { "id": "Djibouti", "itemName": "Djibouti" }, { "id": "Dominica", "itemName": "Dominica" }, { "id": "Dominican Republic", "itemName": "Dominican Republic" }, { "id": "Ecuador", "itemName": "Ecuador" }, { "id": "Egypt", "itemName": "Egypt" }, { "id": "El Salvador", "itemName": "El Salvador" }, { "id": "Equatorial Guinea", "itemName": "Equatorial Guinea" }, { "id": "Eritrea", "itemName": "Eritrea" }, { "id": "Estonia", "itemName": "Estonia" }, { "id": "Ethiopia", "itemName": "Ethiopia" }, { "id": "Falkland Islands (Malvinas)", "itemName": "Falkland Islands (Malvinas)" }, { "id": "Faroe Islands", "itemName": "Faroe Islands" }, { "id": "Fiji", "itemName": "Fiji" }, { "id": "Finland", "itemName": "Finland" }, { "id": "France", "itemName": "France" }, { "id": "French Guiana", "itemName": "French Guiana" }, { "id": "French Polynesia", "itemName": "French Polynesia" }, { "id": "French Southern Territories", "itemName": "French Southern Territories" }, { "id": "Gabon", "itemName": "Gabon" }, { "id": "Gambia", "itemName": "Gambia" }, { "id": "Georgia", "itemName": "Georgia" }, { "id": "Germany", "itemName": "Germany" }, { "id": "Ghana", "itemName": "Ghana" }, { "id": "Gibraltar", "itemName": "Gibraltar" }, { "id": "Greece", "itemName": "Greece" }, { "id": "Greenland", "itemName": "Greenland" }, { "id": "Grenada", "itemName": "Grenada" }, { "id": "Guadeloupe", "itemName": "Guadeloupe" }, { "id": "Guam", "itemName": "Guam" }, { "id": "Guatemala", "itemName": "Guatemala" }, { "id": "Guernsey", "itemName": "Guernsey" }, { "id": "Guinea", "itemName": "Guinea" }, { "id": "Guinea-Bissau", "itemName": "Guinea-Bissau" }, { "id": "Guyana", "itemName": "Guyana" }, { "id": "Haiti", "itemName": "Haiti" }, { "id": "Heard and Mcdonald Islands", "itemName": "Heard and Mcdonald Islands" }, { "id": "Holy See (Vatican City State)", "itemName": "Holy See (Vatican City State)" }, { "id": "Honduras", "itemName": "Honduras" }, { "id": "Hungary", "itemName": "Hungary" }, { "id": "Iceland", "itemName": "Iceland" }, { "id": "India", "itemName": "India" }, { "id": "Indonesia", "itemName": "Indonesia" }, { "id": "Iran, Islamic Republic of", "itemName": "Iran, Islamic Republic of" }, { "id": "Iraq", "itemName": "Iraq" }, { "id": "Ireland", "itemName": "Ireland" }, { "id": "Isle of Man", "itemName": "Isle of Man" }, { "id": "Israel", "itemName": "Israel" }, { "id": "Italy", "itemName": "Italy" }, { "id": "Jamaica", "itemName": "Jamaica" }, { "id": "Japan", "itemName": "Japan" }, { "id": "Jersey", "itemName": "Jersey" }, { "id": "Jordan", "itemName": "Jordan" }, { "id": "Kazakhstan", "itemName": "Kazakhstan" }, { "id": "Kenya", "itemName": "Kenya" }, { "id": "Kiribati", "itemName": "Kiribati" }, { "id": "Korea (North)", "itemName": "Korea (North)" }, { "id": "Korea (South)", "itemName": "Korea (South)" }, { "id": "Kuwait", "itemName": "Kuwait" }, { "id": "Kyrgyzstan", "itemName": "Kyrgyzstan" }, { "id": "Lao PDR", "itemName": "Lao PDR" }, { "id": "Latvia", "itemName": "Latvia" }, { "id": "Lebanon", "itemName": "Lebanon" }, { "id": "Lesotho", "itemName": "Lesotho" }, { "id": "Liberia", "itemName": "Liberia" }, { "id": "Libya", "itemName": "Libya" }, { "id": "Liechtenstein", "itemName": "Liechtenstein" }, { "id": "Lithuania", "itemName": "Lithuania" }, { "id": "Luxembourg", "itemName": "Luxembourg" }, { "id": "Macedonia, Republic of", "itemName": "Macedonia, Republic of" }, { "id": "Madagascar", "itemName": "Madagascar" }, { "id": "Malawi", "itemName": "Malawi" }, { "id": "Malaysia", "itemName": "Malaysia" }, { "id": "Maldives", "itemName": "Maldives" }, { "id": "Mali", "itemName": "Mali" }, { "id": "Malta", "itemName": "Malta" }, { "id": "Marshall Islands", "itemName": "Marshall Islands" }, { "id": "Martinique", "itemName": "Martinique" }, { "id": "Mauritania", "itemName": "Mauritania" }, { "id": "Mauritius", "itemName": "Mauritius" }, { "id": "Mayotte", "itemName": "Mayotte" }, { "id": "Mexico", "itemName": "Mexico" }, { "id": "Micronesia, Federated States of", "itemName": "Micronesia, Federated States of" }, { "id": "Moldova", "itemName": "Moldova" }, { "id": "Monaco", "itemName": "Monaco" }, { "id": "Mongolia", "itemName": "Mongolia" }, { "id": "Montenegro", "itemName": "Montenegro" }, { "id": "Montserrat", "itemName": "Montserrat" }, { "id": "Morocco", "itemName": "Morocco" }, { "id": "Mozambique", "itemName": "Mozambique" }, { "id": "Myanmar", "itemName": "Myanmar" }, { "id": "Namibia", "itemName": "Namibia" }, { "id": "Nauru", "itemName": "Nauru" }, { "id": "Nepal", "itemName": "Nepal" }, { "id": "Netherlands", "itemName": "Netherlands" }, { "id": "Netherlands Antilles", "itemName": "Netherlands Antilles" }, { "id": "New Caledonia", "itemName": "New Caledonia" }, { "id": "New Zealand", "itemName": "New Zealand" }, { "id": "Nicaragua", "itemName": "Nicaragua" }, { "id": "Niger", "itemName": "Niger" }, { "id": "Nigeria", "itemName": "Nigeria" }, { "id": "Niue", "itemName": "Niue" }, { "id": "Norfolk Island", "itemName": "Norfolk Island" }, { "id": "Northern Mariana Islands", "itemName": "Northern Mariana Islands" }, { "id": "Norway", "itemName": "Norway" }, { "id": "Oman", "itemName": "Oman" }, { "id": "Pakistan", "itemName": "Pakistan" }, { "id": "Palau", "itemName": "Palau" }, { "id": "Palestinian Territory", "itemName": "Palestinian Territory" }, { "id": "Panama", "itemName": "Panama" }, { "id": "Papua New Guinea", "itemName": "Papua New Guinea" }, { "id": "Paraguay", "itemName": "Paraguay" }, { "id": "Peru", "itemName": "Peru" }, { "id": "Philippines", "itemName": "Philippines" }, { "id": "Pitcairn", "itemName": "Pitcairn" }, { "id": "Poland", "itemName": "Poland" }, { "id": "Portugal", "itemName": "Portugal" }, { "id": "Puerto Rico", "itemName": "Puerto Rico" }, { "id": "Qatar", "itemName": "Qatar" }, { "id": "Romania", "itemName": "Romania" }, { "id": "Russian Federation", "itemName": "Russian Federation" }, { "id": "Rwanda", "itemName": "Rwanda" }, { "id": "Saint Helena", "itemName": "Saint Helena" }, { "id": "Saint Kitts and Nevis", "itemName": "Saint Kitts and Nevis" }, { "id": "Saint Lucia", "itemName": "Saint Lucia" }, { "id": "Saint-Martin (French part)", "itemName": "Saint-Martin (French part)" }, { "id": "Saint Pierre and Miquelon", "itemName": "Saint Pierre and Miquelon" }, { "id": "Saint Vincent and Grenadines", "itemName": "Saint Vincent and Grenadines" }, { "id": "Samoa", "itemName": "Samoa" }, { "id": "San Marino", "itemName": "San Marino" }, { "id": "Sao Tome and Principe", "itemName": "Sao Tome and Principe" }, { "id": "Saudi Arabia", "itemName": "Saudi Arabia" }, { "id": "Senegal", "itemName": "Senegal" }, { "id": "Serbia", "itemName": "Serbia" }, { "id": "Seychelles", "itemName": "Seychelles" }, { "id": "Sierra Leone", "itemName": "Sierra Leone" }, { "id": "Singapore", "itemName": "Singapore" }, { "id": "Slovakia", "itemName": "Slovakia" }, { "id": "Slovenia", "itemName": "Slovenia" }, { "id": "Solomon Islands", "itemName": "Solomon Islands" }, { "id": "Somalia", "itemName": "Somalia" }, { "id": "South Africa", "itemName": "South Africa" }, { "id": "South Georgia and the South Sandwich Islands", "itemName": "South Georgia and the South Sandwich Islands" }, { "id": "South Sudan", "itemName": "South Sudan" }, { "id": "Spain", "itemName": "Spain" }, { "id": "Sri Lanka", "itemName": "Sri Lanka" }, { "id": "Sudan", "itemName": "Sudan" }, { "id": "Suriname", "itemName": "Suriname" }, { "id": "Svalbard and Jan Mayen Islands", "itemName": "Svalbard and Jan Mayen Islands" }, { "id": "Swaziland", "itemName": "Swaziland" }, { "id": "Sweden", "itemName": "Sweden" }, { "id": "Switzerland", "itemName": "Switzerland" }, { "id": "Syrian Arab Republic (Syria)", "itemName": "Syrian Arab Republic (Syria)" }, { "id": "Taiwan, Republic of China", "itemName": "Taiwan, Republic of China" }, { "id": "Tajikistan", "itemName": "Tajikistan" }, { "id": "Tanzania, United Republic of", "itemName": "Tanzania, United Republic of" }, { "id": "Thailand", "itemName": "Thailand" }, { "id": "Timor-Leste", "itemName": "Timor-Leste" }, { "id": "Togo", "itemName": "Togo" }, { "id": "Tokelau", "itemName": "Tokelau" }, { "id": "Tonga", "itemName": "Tonga" }, { "id": "Trinidad and Tobago", "itemName": "Trinidad and Tobago" }, { "id": "Tunisia", "itemName": "Tunisia" }, { "id": "Turkey", "itemName": "Turkey" }, { "id": "Turkmenistan", "itemName": "Turkmenistan" }, { "id": "Turks and Caicos Islands", "itemName": "Turks and Caicos Islands" }, { "id": "Tuvalu", "itemName": "Tuvalu" }, { "id": "Uganda", "itemName": "Uganda" }, { "id": "Ukraine", "itemName": "Ukraine" }, { "id": "United Arab Emirates", "itemName": "United Arab Emirates" }, { "id": "United Kingdom", "itemName": "United Kingdom" }, { "id": "United States of America", "itemName": "United States of America" }, { "id": "US Minor Outlying Islands", "itemName": "US Minor Outlying Islands" }, { "id": "Uruguay", "itemName": "Uruguay" }, { "id": "Uzbekistan", "itemName": "Uzbekistan" }, { "id": "Vanuatu", "itemName": "Vanuatu" }, { "id": "Venezuela (Bolivarian Republic)", "itemName": "Venezuela (Bolivarian Republic)" }, { "id": "Viet Nam", "itemName": "Viet Nam" }, { "id": "Virgin Islands, US", "itemName": "Virgin Islands, US" }, { "id": "Wallis and Futuna Islands", "itemName": "Wallis and Futuna Islands" }, { "id": "Western Sahara", "itemName": "Western Sahara" }, { "id": "Yemen", "itemName": "Yemen" }, { "id": "Zambia", "itemName": "Zambia" }, { "id": "Zimbabwe", "itemName": "Zimbabwe" }];
     }
     populateLanguages() {
-        this.languages = [{"id":"Afrikaans","itemName":"Afrikaans"},{"id":"Albanian","itemName":"Albanian"},{"id":"Arabic","itemName":"Arabic"},{"id":"Aragonese","itemName":"Aragonese"},{"id":"Armenian","itemName":"Armenian"},{"id":"Assamese","itemName":"Assamese"},{"id":"Avestan","itemName":"Avestan"},{"id":"Azerbaijani","itemName":"Azerbaijani"},{"id":"Bambara","itemName":"Bambara"},{"id":"Bashkir","itemName":"Bashkir"},{"id":"Belarusian","itemName":"Belarusian"},{"id":"Bengali","itemName":"Bengali"},{"id":"Bihari","itemName":"Bihari"},{"id":"Bislama","itemName":"Bislama"},{"id":"Bosnian","itemName":"Bosnian"},{"id":"Breton","itemName":"Breton"},{"id":"Bulgarian","itemName":"Bulgarian"},{"id":"Burmese","itemName":"Burmese"},{"id":"Catalan","itemName":"Catalan"},{"id":"Chamorro","itemName":"Chamorro"},{"id":"Chinese","itemName":"Chinese"},{"id":"Chuvash","itemName":"Chuvash"},{"id":"Corsican","itemName":"Corsican"},{"id":"Cree","itemName":"Cree"},{"id":"Croatian","itemName":"Croatian"},{"id":"Czech","itemName":"Czech"},{"id":"Danish","itemName":"Danish"},{"id":"Dutch","itemName":"Dutch"},{"id":"Dzongkha","itemName":"Dzongkha"},{"id":"English","itemName":"English"},{"id":"Estonian","itemName":"Estonian"},{"id":"Ewe","itemName":"Ewe"},{"id":"Faroese","itemName":"Faroese"},{"id":"Fijian","itemName":"Fijian"},{"id":"Finnish","itemName":"Finnish"},{"id":"French","itemName":"French"},{"id":"Gaelic","itemName":"Gaelic"},{"id":"Galician","itemName":"Galician"},{"id":"Georgian","itemName":"Georgian"},{"id":"German","itemName":"German"},{"id":"Greek","itemName":"Greek"},{"id":"Guarana","itemName":"Guarana"},{"id":"Gujarati","itemName":"Gujarati"},{"id":"Haitian","itemName":"Haitian"},{"id":"Hebrew","itemName":"Hebrew"},{"id":"Hindi","itemName":"Hindi"},{"id":"Hungarian","itemName":"Hungarian"},{"id":"Icelandic","itemName":"Icelandic"},{"id":"Ido","itemName":"Ido"},{"id":"Indonesian","itemName":"Indonesian"},{"id":"Irish","itemName":"Irish"},{"id":"Italian","itemName":"Italian"},{"id":"Japanese","itemName":"Japanese"},{"id":"Kannada","itemName":"Kannada"},{"id":"Khmer","itemName":"Khmer"},{"id":"Kikuyu","itemName":"Kikuyu"},{"id":"Kinyarwanda","itemName":"Kinyarwanda"},{"id":"Kongo","itemName":"Kongo"},{"id":"Korean","itemName":"Korean"},{"id":"Kyrgyz","itemName":"Kyrgyz"},{"id":"Latvian","itemName":"Latvian"},{"id":"Limburgish","itemName":"Limburgish"},{"id":"Lithuanian","itemName":"Lithuanian"},{"id":"Luxembourgish","itemName":"Luxembourgish"},{"id":"Macedonian","itemName":"Macedonian"},{"id":"Malagasy","itemName":"Malagasy"},{"id":"Malay","itemName":"Malay"},{"id":"Malayalam","itemName":"Malayalam"},{"id":"Maltese","itemName":"Maltese"},{"id":"Marshallese","itemName":"Marshallese"},{"id":"Mongolian","itemName":"Mongolian"},{"id":"Nauru","itemName":"Nauru"},{"id":"Ndonga","itemName":"Ndonga"},{"id":"Nepali","itemName":"Nepali"},{"id":"Northern Sami","itemName":"Northern Sami"},{"id":"Norwegian","itemName":"Norwegian"},{"id":"Oromo","itemName":"Oromo"},{"id":"Pashto","itemName":"Pashto"},{"id":"Persian","itemName":"Persian"},{"id":"Polish","itemName":"Polish"},{"id":"Portuguese","itemName":"Portuguese"},{"id":"Punjabi","itemName":"Punjabi"},{"id":"Romanian","itemName":"Romanian"},{"id":"Russian","itemName":"Russian"},{"id":"Samoan","itemName":"Samoan"},{"id":"Sango","itemName":"Sango"},{"id":"Sanskrit","itemName":"Sanskrit"},{"id":"Sardinian","itemName":"Sardinian"},{"id":"Serbian","itemName":"Serbian"},{"id":"Shona","itemName":"Shona"},{"id":"Sindhi","itemName":"Sindhi"},{"id":"Sinhala","itemName":"Sinhala"},{"id":"Slovak","itemName":"Slovak"},{"id":"Slovene","itemName":"Slovene"},{"id":"Somali","itemName":"Somali"},{"id":"Southern Ndebele","itemName":"Southern Ndebele"},{"id":"Southern Sotho","itemName":"Southern Sotho"},{"id":"Spanish","itemName":"Spanish"},{"id":"Swedish","itemName":"Swedish"},{"id":"Tagalog","itemName":"Tagalog"},{"id":"Tajik","itemName":"Tajik"},{"id":"Tatar","itemName":"Tatar"},{"id":"Thai","itemName":"Thai"},{"id":"Tibetan Standard","itemName":"Tibetan Standard"},{"id":"Tonga","itemName":"Tonga"},{"id":"Tswana","itemName":"Tswana"},{"id":"Turkish","itemName":"Turkish"},{"id":"Turkmen","itemName":"Turkmen"},{"id":"Twi","itemName":"Twi"},{"id":"Ukranian","itemName":"Ukranian"},{"id":"Urdu","itemName":"Urdu"},{"id":"Uyghur","itemName":"Uyghur"},{"id":"Uzbek","itemName":"Uzbek"},{"id":"Venda","itemName":"Venda"},{"id":"Vietnamese","itemName":"Vietnamese"},{"id":"Welsh","itemName":"Welsh"},{"id":"Zhuang","itemName":"Zhuang"}];
+        this.languages = [{ "id": "Afrikaans", "itemName": "Afrikaans" }, { "id": "Albanian", "itemName": "Albanian" }, { "id": "Arabic", "itemName": "Arabic" }, { "id": "Aragonese", "itemName": "Aragonese" }, { "id": "Armenian", "itemName": "Armenian" }, { "id": "Assamese", "itemName": "Assamese" }, { "id": "Avestan", "itemName": "Avestan" }, { "id": "Azerbaijani", "itemName": "Azerbaijani" }, { "id": "Bambara", "itemName": "Bambara" }, { "id": "Bashkir", "itemName": "Bashkir" }, { "id": "Belarusian", "itemName": "Belarusian" }, { "id": "Bengali", "itemName": "Bengali" }, { "id": "Bihari", "itemName": "Bihari" }, { "id": "Bislama", "itemName": "Bislama" }, { "id": "Bosnian", "itemName": "Bosnian" }, { "id": "Breton", "itemName": "Breton" }, { "id": "Bulgarian", "itemName": "Bulgarian" }, { "id": "Burmese", "itemName": "Burmese" }, { "id": "Catalan", "itemName": "Catalan" }, { "id": "Chamorro", "itemName": "Chamorro" }, { "id": "Chinese", "itemName": "Chinese" }, { "id": "Chuvash", "itemName": "Chuvash" }, { "id": "Corsican", "itemName": "Corsican" }, { "id": "Cree", "itemName": "Cree" }, { "id": "Croatian", "itemName": "Croatian" }, { "id": "Czech", "itemName": "Czech" }, { "id": "Danish", "itemName": "Danish" }, { "id": "Dutch", "itemName": "Dutch" }, { "id": "Dzongkha", "itemName": "Dzongkha" }, { "id": "English", "itemName": "English" }, { "id": "Estonian", "itemName": "Estonian" }, { "id": "Ewe", "itemName": "Ewe" }, { "id": "Faroese", "itemName": "Faroese" }, { "id": "Fijian", "itemName": "Fijian" }, { "id": "Finnish", "itemName": "Finnish" }, { "id": "French", "itemName": "French" }, { "id": "Gaelic", "itemName": "Gaelic" }, { "id": "Galician", "itemName": "Galician" }, { "id": "Georgian", "itemName": "Georgian" }, { "id": "German", "itemName": "German" }, { "id": "Greek", "itemName": "Greek" }, { "id": "Guarana", "itemName": "Guarana" }, { "id": "Gujarati", "itemName": "Gujarati" }, { "id": "Haitian", "itemName": "Haitian" }, { "id": "Hebrew", "itemName": "Hebrew" }, { "id": "Hindi", "itemName": "Hindi" }, { "id": "Hungarian", "itemName": "Hungarian" }, { "id": "Icelandic", "itemName": "Icelandic" }, { "id": "Ido", "itemName": "Ido" }, { "id": "Indonesian", "itemName": "Indonesian" }, { "id": "Irish", "itemName": "Irish" }, { "id": "Italian", "itemName": "Italian" }, { "id": "Japanese", "itemName": "Japanese" }, { "id": "Kannada", "itemName": "Kannada" }, { "id": "Khmer", "itemName": "Khmer" }, { "id": "Kikuyu", "itemName": "Kikuyu" }, { "id": "Kinyarwanda", "itemName": "Kinyarwanda" }, { "id": "Kongo", "itemName": "Kongo" }, { "id": "Korean", "itemName": "Korean" }, { "id": "Kyrgyz", "itemName": "Kyrgyz" }, { "id": "Latvian", "itemName": "Latvian" }, { "id": "Limburgish", "itemName": "Limburgish" }, { "id": "Lithuanian", "itemName": "Lithuanian" }, { "id": "Luxembourgish", "itemName": "Luxembourgish" }, { "id": "Macedonian", "itemName": "Macedonian" }, { "id": "Malagasy", "itemName": "Malagasy" }, { "id": "Malay", "itemName": "Malay" }, { "id": "Malayalam", "itemName": "Malayalam" }, { "id": "Maltese", "itemName": "Maltese" }, { "id": "Marshallese", "itemName": "Marshallese" }, { "id": "Mongolian", "itemName": "Mongolian" }, { "id": "Nauru", "itemName": "Nauru" }, { "id": "Ndonga", "itemName": "Ndonga" }, { "id": "Nepali", "itemName": "Nepali" }, { "id": "Northern Sami", "itemName": "Northern Sami" }, { "id": "Norwegian", "itemName": "Norwegian" }, { "id": "Oromo", "itemName": "Oromo" }, { "id": "Pashto", "itemName": "Pashto" }, { "id": "Persian", "itemName": "Persian" }, { "id": "Polish", "itemName": "Polish" }, { "id": "Portuguese", "itemName": "Portuguese" }, { "id": "Punjabi", "itemName": "Punjabi" }, { "id": "Romanian", "itemName": "Romanian" }, { "id": "Russian", "itemName": "Russian" }, { "id": "Samoan", "itemName": "Samoan" }, { "id": "Sango", "itemName": "Sango" }, { "id": "Sanskrit", "itemName": "Sanskrit" }, { "id": "Sardinian", "itemName": "Sardinian" }, { "id": "Serbian", "itemName": "Serbian" }, { "id": "Shona", "itemName": "Shona" }, { "id": "Sindhi", "itemName": "Sindhi" }, { "id": "Sinhala", "itemName": "Sinhala" }, { "id": "Slovak", "itemName": "Slovak" }, { "id": "Slovene", "itemName": "Slovene" }, { "id": "Somali", "itemName": "Somali" }, { "id": "Southern Ndebele", "itemName": "Southern Ndebele" }, { "id": "Southern Sotho", "itemName": "Southern Sotho" }, { "id": "Spanish", "itemName": "Spanish" }, { "id": "Swedish", "itemName": "Swedish" }, { "id": "Tagalog", "itemName": "Tagalog" }, { "id": "Tajik", "itemName": "Tajik" }, { "id": "Tatar", "itemName": "Tatar" }, { "id": "Thai", "itemName": "Thai" }, { "id": "Tibetan Standard", "itemName": "Tibetan Standard" }, { "id": "Tonga", "itemName": "Tonga" }, { "id": "Tswana", "itemName": "Tswana" }, { "id": "Turkish", "itemName": "Turkish" }, { "id": "Turkmen", "itemName": "Turkmen" }, { "id": "Twi", "itemName": "Twi" }, { "id": "Ukranian", "itemName": "Ukranian" }, { "id": "Urdu", "itemName": "Urdu" }, { "id": "Uyghur", "itemName": "Uyghur" }, { "id": "Uzbek", "itemName": "Uzbek" }, { "id": "Venda", "itemName": "Venda" }, { "id": "Vietnamese", "itemName": "Vietnamese" }, { "id": "Welsh", "itemName": "Welsh" }, { "id": "Zhuang", "itemName": "Zhuang" }];
     }
 
     private subscribeToSaveResponse(result: Observable<CampaignTemplate>) {
@@ -1458,7 +1484,7 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
         if (this.isLaunch) {
             setTimeout(() => {
                 // const pageLocation: string = decodeURI(encodeURI(location.href) + '(' + 'popup:' + 'campaign-template/' + result.id + '/launch' + ')');
-                this.router.navigate(['/', { outlets: { popup: 'campaign-template/'+ result.id + '/launch'} }]);
+                this.router.navigate(['/', { outlets: { popup: 'campaign-template/' + result.id + '/launch' } }]);
                 // alert(pageLocation);
                 // location.href = pageLocation;
                 this.isLaunch = false;

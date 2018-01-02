@@ -77,11 +77,11 @@
                         <!-- <input class="form-control" formControlName="filterOptionValue"> -->
                         <input class="form-control " formControlName="filterOptionValue" optional *ngSwitchCase="'textbox'">
                         <!-- input class="form-control" placeholder="yyyy-MM-dd" formControlName="filterOptionValue" optional *ngSwitchCase="'simpleDate'" -->
-                        <div class="input-group" *ngSwitchCase="'simpleDate'">
+                        <div class="input-group datePickerClass" *ngSwitchCase="'simpleDate'">
                             <input type="text" class="form-control" formControlName="simpleDate" ngbDatepicker #filterOptionValue1="ngbDatepicker" optional
                                 placeholder="yyyy-MM-dd" (ngModelChange)="onSimpleDateChange(i)" />
                             <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" (click)="filterOptionValue1.toggle()">
+                                <button type="button" class="btn btn-default" (click)="filterOptionValue1.toggle();openDatepicker(filterOptionValue1)">
                                     <i class="fa fa-calendar"></i>
                                 </button>
                             </span>
@@ -245,11 +245,11 @@
             <div class="form-group row">
                 <label class="form-control-label col-sm-4 col-form-label" for="field_startDate">Start Date</label>
                 <!--input type="date" name="startDate" id="field_startDate" (ngModelChange)="onStartDtChange()"  /-->
-                <div class="input-group col-sm-4" style="padding-left: 0 !important; padding-right: 0 !important;">
+                <div class="input-group col-sm-4 datePickerClass" style="padding-left: 0 !important; padding-right: 0 !important;">
                     <input id="field_startDate" type="text" class="form-control" name="startDate" ngbDatepicker [minDate]="minDate" #startDateDp="ngbDatepicker"
                         (ngModelChange)="onStartDtChange()" formControlName="startDate" required/>
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" (click)="startDateDp.toggle()">
+                        <button type="button" class="btn btn-default" (click)="startDateDp.toggle();openDatepicker(startDateDp)">
                             <i class="fa fa-calendar"></i>
                         </button>
                     </span>
@@ -276,11 +276,11 @@
             </div>
             <div class="form-group row" *ngIf="isRecuEndDateVisible">
                 <label class="form-control-label col-sm-4 col-form-label" for="field_recurrenceEndDate">Recurrence End Date{{recurrenceType}}</label>
-                <div class="input-group col-sm-4" style="padding-left: 0 !important; padding-right: 0 !important;">
+                <div class="input-group col-sm-4 datePickerClass" style="padding-left: 0 !important; padding-right: 0 !important;">
                     <input id="field_recurrenceEndDate" type="text" class="form-control" name="recurrenceEndDate" ngbDatepicker [minDate]="minDate"
                         #recurrenceEndDateDp="ngbDatepicker" formControlName="recurrenceEndDate" required/>
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" (click)="recurrenceEndDateDp.toggle()">
+                        <button type="button" class="btn btn-default" (click)="recurrenceEndDateDp.toggle();openDatepicker(recurrenceEndDateDp)">
                             <i class="fa fa-calendar"></i>
                         </button>
                     </span>
@@ -308,7 +308,7 @@
     </div>
     
     <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cancel()">
             <span class="fa fa-ban"></span>&nbsp;
             <span>Cancel</span>
         </button>

@@ -66,11 +66,11 @@
                             <div class="pull-right">
                                 <div class="insight-calendar-box">
                                     <div class="mute-text">Start date</div>
-                                    <div class="input-group">
+                                    <div class="input-group datePickerClass">
                                         <input id="startDate" (ngModelChange)="onDtChange()"  type="text" class="form-control" name="startDate" [(ngModel)]="startDate" ngbDatepicker  #startDateDp="ngbDatepicker"
                                         required/>
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default" (click)="startDateDp.toggle()"><i class="fa fa-calendar"></i></button>
+                                            <button type="button" class="btn btn-default" (click)="startDateDp.toggle();openDatepicker(startDateDp)"><i class="fa fa-calendar"></i></button>
                                         </span>
                                     </div>
                                     <div [hidden]="!(editForm.controls.startDate?.dirty && editForm.controls.startDate?.invalid)">
@@ -83,11 +83,11 @@
     
                                 <div class="insight-calendar-box">
                                     <div class="mute-text">End date</div>
-                                    <div class="input-group">
+                                    <div class="input-group datePickerClass">
                                         <input id="endDate" (ngModelChange)="onDtChange()" type="text" class="form-control" name="endDate" [(ngModel)]="endDate" ngbDatepicker [minDate]="minDate"  #endDateDp="ngbDatepicker"
                                         required/>
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default" (click)="endDateDp.toggle()"><i class="fa fa-calendar"></i></button>
+                                            <button type="button" class="btn btn-default" (click)="endDateDp.toggle();openDatepicker(endDateDp)"><i class="fa fa-calendar"></i></button>
                                         </span>
                                     </div>
                                     <div [hidden]="!(editForm.controls.endDate?.dirty && editForm.controls.endDate?.invalid)">

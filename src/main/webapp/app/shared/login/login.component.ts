@@ -49,8 +49,8 @@ export class JhiLoginModalComponent implements AfterViewInit {
     }
 
     login() {
-        sessionStorage.clear();
-        localStorage.clear();
+        sessionStorage.removeItem("selectedApp");
+        sessionStorage.removeItem("appList");
         this.loginService.login({
             username: this.username,
             password: this.password,

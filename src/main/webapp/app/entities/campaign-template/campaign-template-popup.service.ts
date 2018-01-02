@@ -32,8 +32,12 @@ export class CampaignTemplatePopupService {
             if (isOpen) {
                 resolve(this.ngbModalRef);
             }
-
-            if (id) {
+            if(this.customObjectFromPage && this.customObjectFromPage.campaignTempInfo){
+                setTimeout(() => {
+                    this.ngbModalRef = this.campaignTemplateModalRef(component, this.customObjectFromPage.campaignTempInfo);
+                    resolve(this.ngbModalRef);
+                }, 0);
+            } else if (id) {
                 this.campaignTemplateService.find(id).subscribe((campaignTemplate) => {
                     if (campaignTemplate.startDate) {
                         campaignTemplate.startDate = {

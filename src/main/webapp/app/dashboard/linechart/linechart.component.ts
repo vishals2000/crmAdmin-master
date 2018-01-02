@@ -17,7 +17,10 @@ import { setTimeout } from 'timers';
 @Component({
     selector: 'jhi-linechart',
     templateUrl: './linechart.component.html',
-    styles: []
+    styles: [],
+    host: {
+        '(document:click)': 'onClick($event)',
+    }
 })
 
 export class LinechartComponent implements OnInit {
@@ -43,6 +46,7 @@ export class LinechartComponent implements OnInit {
     month_names_short: string[];
     eventSubscriber: Subscription;
     app: any;
+    dynamicId: any;
 
     public activeModal: NgbActiveModal;
     private subscription: Subscription;
@@ -62,6 +66,14 @@ export class LinechartComponent implements OnInit {
         this.routeData = this.activatedRoute.data.subscribe((data) => {
             this.segName = data && data['pagingParams'] ? data['pagingParams'].segName : '';
         });
+    }
+    onClick(event) {
+        if(this.dynamicId  && !event.target.parentElement.closest(".datePickerClass")) {
+          setTimeout(() => {
+              this.dynamicId.close();
+              this.dynamicId = null; 
+          }, 0);
+        }
     }
 
     ngOnInit() {
@@ -263,5 +275,12 @@ export class LinechartComponent implements OnInit {
     selectData(event) {
         this.msgs = [];
         this.msgs.push({ severity: 'info', summary: 'Data Selected', 'detail': this.data.datasets[event.element._datasetIndex].data[event.element._index] });
+    }
+    openDatepicker(id){
+        if(this.dynamicId){
+            this.dynamicId.close();
+            this.dynamicId = null;
+        }
+        this.dynamicId = id;
     }
 }

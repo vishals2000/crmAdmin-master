@@ -25,11 +25,11 @@
                 (onDeSelectAll)="onAppSelect($event)"></angular2-multiselect>
         </div>
         <div class=" col-sm-3">
-            <div class="input-group">
+            <div class="input-group datePickerClass">
                 <input id="campStatDt" (ngModelChange)="onDtChange()" type="text" class="form-control" name="campStatDt" [(ngModel)]="campStatDt"
                     ngbDatepicker #campStatDtDP="ngbDatepicker" required/>
                 <span class="input-group-btn">
-                    <button type="button" class="btn btn-default" (click)="campStatDtDP.toggle()">
+                    <button type="button" class="btn btn-default" (click)="campStatDtDP.toggle();openDatepicker(campStatDtDP)">
                         <i class="fa fa-calendar"></i>
                     </button>
                 </span>

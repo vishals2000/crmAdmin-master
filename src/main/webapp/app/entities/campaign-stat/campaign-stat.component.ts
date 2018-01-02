@@ -11,7 +11,10 @@ import { Observable } from 'rxjs/Rx';
 
 @Component({
     selector: 'jhi-campaign-stat',
-    templateUrl: './campaign-stat.component.html'
+    templateUrl: './campaign-stat.component.html',
+    host: {
+        '(document:click)': 'onClick($event)',
+    }
 })
 export class CampaignStatComponent implements OnInit, OnDestroy {
 
@@ -31,6 +34,7 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
     searchValue: any;
     previousPage: any;
     selectedItems: any;
+    dynamicId: any;
 
     constructor(
         private campaignStatService: CampaignStatService,
@@ -48,6 +52,15 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
         this.previousPage = 1;
         this.predicate = 'id';
         this.reverse = true;
+    }
+
+    onClick(event) {
+        if(this.dynamicId  && !event.target.parentElement.closest(".datePickerClass")) {
+          setTimeout(() => {
+              this.dynamicId.close();
+              this.dynamicId = null; 
+          }, 0);
+        }
     }
 
     loadAll() {
@@ -129,6 +142,14 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
             date: CurrentDate
         }
         this.subscribeToSaveResponse(this.campaignStatService.getCampStat(postObj));
+    }
+
+    openDatepicker(id){
+        if(this.dynamicId){
+            this.dynamicId.close();
+            this.dynamicId = null;
+        }
+        this.dynamicId = id;
     }
 
     private subscribeToSaveResponse(result: Observable<CampaignStat>) {

@@ -17,6 +17,8 @@ import { ResponseWrapper } from '../../shared';
 export class CampaignTemplateCancelDialogComponent implements OnInit {
 
     campaignTemplate: CampaignTemplate;
+    dialogParamters: any;
+    isConfirmation : boolean;
     constructor(
         private campaignTemplateService: CampaignTemplateService,
         public activeModal: NgbActiveModal,
@@ -24,6 +26,7 @@ export class CampaignTemplateCancelDialogComponent implements OnInit {
         private http: HttpClient,
         private alertService: JhiAlertService,
     ) {
+        this.isConfirmation = false;
     }
 
     ngOnInit() {
@@ -32,6 +35,7 @@ export class CampaignTemplateCancelDialogComponent implements OnInit {
             this.campaignTemplate.frontEnd = message[1];
             this.campaignTemplate.product = message[2];
         });
+        this.isConfirmation = this.dialogParamters && this.dialogParamters.isConfirmation ? true : false;
     }
 
     clear() {
@@ -39,14 +43,20 @@ export class CampaignTemplateCancelDialogComponent implements OnInit {
     }
 
     confirmCancel(id: string) {
-        this.campaignTemplateService.getPushNotificationCampaignTemplate(
-            {
-                campaignTemplateId: id
-            }
-        ).subscribe(
-            (res: ResponseWrapper) => this.onPushNotificationCampaignTemplate(res.json, res.headers),
-            (res: ResponseWrapper) => this.onError(res.json)
-            );
+        if(this.isConfirmation){
+            this.clear();
+            this.eventManager.broadcast({ name: 'closeCampaignTemp', content: 'OK' });
+
+        }else{
+            this.campaignTemplateService.getPushNotificationCampaignTemplate(
+                {
+                    campaignTemplateId: id
+                }
+            ).subscribe(
+                (res: ResponseWrapper) => this.onPushNotificationCampaignTemplate(res.json, res.headers),
+                (res: ResponseWrapper) => this.onError(res.json)
+                );
+        }
     }
 
     private onError(error) {
