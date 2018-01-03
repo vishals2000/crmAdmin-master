@@ -60,7 +60,7 @@ export class CampaignTemplateDetailComponent implements OnInit, OnDestroy {
     }
 
     renderBreadcrumb() {
-        this.eventSubscriber = this.eventManager.subscribe('campGrpDataReady', response => this.callBreadCrumbToCampTemp(response));//handling refresh scenario
+        //this.eventSubscriber = this.eventManager.subscribe('campGrpDataReady', response => this.callBreadCrumbToCampTemp(response));//handling refresh scenario
         this.campaignTemplateService.getAppCapGrpIdFromTemp(this.campaignTemplate.id).subscribe((oCampTempInfo) => {
             this.oCampInfo = oCampTempInfo;
             this.eventManager.broadcast({ name: 'selectedApp', content: this.oCampInfo.appId});

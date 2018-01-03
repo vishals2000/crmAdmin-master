@@ -98,7 +98,7 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
         this.isLaunch = false;
     }
     onClick(event) {
-        if (this.dynamicId  && !event.target.parentElement.closest(".datePickerClass")) {
+        if (this.dynamicId && !event.target.parentElement.closest(".datePickerClass")) {
             setTimeout(() => {
                 this.dynamicId.close();
                 this.dynamicId = null;
@@ -189,6 +189,12 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
                 this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + (currentHourValue < 10 ? '0' + currentHourValue : currentHourValue) + ':' + (currentMinValue < 10 ? '0' + currentMinValue : currentMinValue) + ':00';
             }
             if (this.campaignTemplateGroupCreationForm.value.sendImmediately) {
+                const todayDt = {
+                    year: cuurentDateObj.getUTCFullYear(),
+                    month: cuurentDateObj.getUTCMonth() + 1,
+                    day: cuurentDateObj.getUTCDate()
+                };
+                this.campaignTemplateGroupCreationForm.value.startDate = todayDt;
                 this.campaignTemplateGroupCreationForm.value.scheduledTime = '' + (currentHourValue < 10 ? '0' + currentHourValue : currentHourValue) + ':' + (currentMinValue < 10 ? '0' + currentMinValue : currentMinValue) + ':00';
             }
             if (this.campaignTemplateGroupCreationForm.value.recurrenceType === 'NONE') {
@@ -274,7 +280,10 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
             this.campaignTemplate = new CampaignTemplate();
         }
         const now = new Date();
-        now.setUTCDate(now.getUTCDate() + 1);
+        if(!this.campaignTemplate.sendImmediately)
+        {
+            now.setUTCDate(now.getUTCDate() + 1);
+        }
         const todayDt = {
             year: now.getUTCFullYear(),
             month: now.getUTCMonth() + 1,

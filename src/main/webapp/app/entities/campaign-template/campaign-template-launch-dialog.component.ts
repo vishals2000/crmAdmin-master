@@ -25,9 +25,9 @@ import {
 export class CampaignTemplateLaunchDialogComponent implements OnInit {
 
     campaignTemplate: CampaignTemplate;
-    targetGroupSize: Number;
+    targetGroupSize: any;
     dialogParamters: any;
-    targetContentGroupSize: Number[];
+    targetContentGroupSize: any[];
     segmentNames: any[];
     eventSubscriber: Subscription;
     isRetarget : boolean;
@@ -41,6 +41,7 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
         private campaignTemplatePopupService: CampaignTemplatePopupService
     ) {
         this.isRetarget = false;
+        this.targetGroupSize = "Loading...";
     }
 
     ngOnInit() {
@@ -76,7 +77,7 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
         const languagesUpdated: string[] = [];
         for (var i =0;i<this.campaignTemplate.targetGroupContentCriteria.length;i++) {
             languagesUpdated.push(this.campaignTemplate.targetGroupContentCriteria[i].languageSelected);
-            this.targetContentGroupSize[i] = 0;
+            this.targetContentGroupSize[i] = "Loading...";
         }
         const body = new CampaignTargetGroupSizeRequest(
             this.campaignTemplate.frontEnd,
@@ -140,6 +141,7 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
 
     clear() {
         this.activeModal.dismiss('cancel');
+        this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateDialogComponent as Component, {}, false, this.campaignTemplate.id);
     }
 
     confirmLaunch(id: string) {

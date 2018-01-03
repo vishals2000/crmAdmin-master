@@ -66,6 +66,9 @@ export class NavbarComponent implements OnInit {
         if (sessionStorage['appList']) {
             this.appList = JSON.parse(sessionStorage['appList']);
             fcbk && fcbk();
+        } else if(!sessionStorage['appList']){
+            this.appList = [];
+            this.appsService.queryAll({}).subscribe((res: ResponseWrapper) => fAfterGetResults(res));
         } else if (!this.appList || this.appList.length === 0) {
             this.appsService.queryAll({}).subscribe((res: ResponseWrapper) => fAfterGetResults(res));
         } else {
@@ -175,6 +178,7 @@ export class NavbarComponent implements OnInit {
     setBreadCrumbToApp(response) {
         this.appPageType = 'app';
         this.crumbsArray = [{ name: 'Apps', router: '#/apps', brdCrmbId: '1', list: [], selVal: [] }];
+        this.loadAllApps(null);
     }
     setBreadCrumbToCampGrp(response) {
         this.setBreadCrumbToApp(response);
