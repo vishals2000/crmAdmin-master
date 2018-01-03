@@ -169,11 +169,11 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
     }
 
     cancel() {
-        if(this.campaignTemplate.status === 'DRAFT'){
-            this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateCancelDialogComponent as Component, { isConfirmation: true, campaignTempInfo: this.campaignTemplate }, false, this.campaignTemplate.id);
-        }else {
+        // if(this.campaignTemplate.status === 'DRAFT'){
+        //     this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateCancelDialogComponent as Component, { isConfirmation: true, campaignTempInfo: this.campaignTemplate }, false, this.campaignTemplate.id);
+        // }else {
             this.clear();
-        }
+       // }
     }
 
     save() {

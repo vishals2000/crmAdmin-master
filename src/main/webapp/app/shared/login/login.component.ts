@@ -30,8 +30,8 @@ export class JhiLoginModalComponent implements AfterViewInit {
     }
 
     ngAfterViewInit() {
-        sessionStorage.clear();
-        localStorage.clear();
+       // sessionStorage.clear();
+       // localStorage.clear();
         this.eventManager.broadcast({
             name: 'clearBdData', content: 'Sending Authentication Req'
         });
