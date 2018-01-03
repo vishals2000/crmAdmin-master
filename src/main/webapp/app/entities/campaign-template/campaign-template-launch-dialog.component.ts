@@ -138,7 +138,9 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
             this.targetGroupSize = 0;
         }
     }
-
+    close(){
+        this.activeModal.dismiss('cancel');
+    }
     clear() {
         this.activeModal.dismiss('cancel');
         this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateDialogComponent as Component, {}, false, this.campaignTemplate.id);
