@@ -118,6 +118,15 @@ export const campaignTemplatePopupRoute: Routes = [
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
+    },{
+        path: 'campaign-template/:id/launch/:fromLaunch',
+        component: CampaignTemplateLaunchPopupComponent,
+        data: {
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
+            pageTitle: 'CampaignTemplates'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
     {
         path: 'campaign-template/:id/test',

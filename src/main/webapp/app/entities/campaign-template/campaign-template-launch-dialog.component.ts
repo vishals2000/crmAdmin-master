@@ -31,6 +31,7 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
     segmentNames: any[];
     eventSubscriber: Subscription;
     isRetarget : boolean;
+    isFromLaunch: boolean;
 
     constructor(
         private campaignTemplateService: CampaignTemplateService,
@@ -42,6 +43,7 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
     ) {
         this.isRetarget = false;
         this.targetGroupSize = "Loading...";
+        this.isFromLaunch = false;
     }
 
     ngOnInit() {
@@ -54,6 +56,7 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
             this.targetContentGroupSize = [];
         });       
         this.isRetarget = this.dialogParamters && this.dialogParamters.isRetarget ? true : false;
+        this.isFromLaunch = this.dialogParamters && this.dialogParamters.isFromLaunch ? true : false;
     }
     getSegments(){
         const body = {
@@ -143,7 +146,9 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
     }
     clear() {
         this.activeModal.dismiss('cancel');
-        this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateDialogComponent as Component, {}, false, this.campaignTemplate.id);
+        if(this.isFromLaunch){
+            this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateDialogComponent as Component, {}, false, this.campaignTemplate.id);
+        }
     }
 
     confirmLaunch(id: string) {
@@ -199,7 +204,7 @@ export class CampaignTemplateLaunchPopupComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.routeSub = this.route.params.subscribe((params) => {
             this.campaignTemplatePopupService
-                .open(CampaignTemplateLaunchDialogComponent as Component, params['id']);
+                .openWithoutRouter(CampaignTemplateLaunchDialogComponent as Component, {isFromLaunch: params['fromLaunch']}, true,  params['id']);
         });
     }
 

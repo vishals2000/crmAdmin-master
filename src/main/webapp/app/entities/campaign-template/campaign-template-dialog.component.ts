@@ -169,7 +169,11 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
     }
 
     cancel() {
-        this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateCancelDialogComponent as Component, { isConfirmation: true, campaignTempInfo: this.campaignTemplate }, false, this.campaignTemplate.id);
+        if(this.campaignTemplate.status === 'DRAFT'){
+            this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateCancelDialogComponent as Component, { isConfirmation: true, campaignTempInfo: this.campaignTemplate }, false, this.campaignTemplate.id);
+        }else {
+            this.clear();
+        }
     }
 
     save() {
@@ -1493,7 +1497,7 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
         if (this.isLaunch) {
             setTimeout(() => {
                 // const pageLocation: string = decodeURI(encodeURI(location.href) + '(' + 'popup:' + 'campaign-template/' + result.id + '/launch' + ')');
-                this.router.navigate(['/', { outlets: { popup: 'campaign-template/' + result.id + '/launch' } }]);
+                this.router.navigate(['/', { outlets: { popup: 'campaign-template/' + result.id + '/launch/true' } }]);
                 // alert(pageLocation);
                 // location.href = pageLocation;
                 this.isLaunch = false;
