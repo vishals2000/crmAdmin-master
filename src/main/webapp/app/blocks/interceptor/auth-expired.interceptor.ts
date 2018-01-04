@@ -5,22 +5,54 @@ import { Injector } from '@angular/core';
 import { LoginService } from '../../shared/login/login.service';
 
 export class AuthExpiredInterceptor extends JhiHttpInterceptor {
-
+    requestCount: any;
     constructor(private injector: Injector) {
         super();
+        this.requestCount = 0;
     }
 
     requestIntercept(options?: RequestOptionsArgs): RequestOptionsArgs {
+        this.requestCount = this.requestCount + 1;
+        this.showBusyInd();
         return options;
     }
 
     responseIntercept(observable: Observable<Response>): Observable<Response> {
-        return <Observable<Response>> observable.catch((error, source) => {
+        this.requestCount = this.requestCount - 1;
+        setTimeout(() => {
+            this.hideBusyInd();
+        }, 10);
+        return <Observable<Response>>observable.catch((error, source) => {
             if (error.status === 401) {
                 const loginService: LoginService = this.injector.get(LoginService);
                 loginService.logout();
             }
             return Observable.throw(error);
         });
+    }
+
+    showBusyInd() {
+        if (this.requestCount > 0) {
+            let loadIOndCss = document.getElementById("loadingIndicatorCss");
+            if (loadIOndCss) {
+                loadIOndCss.classList.add("d-block");
+                loadIOndCss.classList.remove("d-none");
+            }
+        }
+        else {
+            setTimeout(() => {
+                this.hideBusyInd();
+            }, 10);
+        }
+    }
+
+    hideBusyInd() {
+        if (this.requestCount <= 0) {
+            let loadIOndCss = document.getElementById("loadingIndicatorCss");
+            if (loadIOndCss) {
+                loadIOndCss.classList.remove("d-block");
+                loadIOndCss.classList.add("d-none");
+            }
+        }
     }
 }
