@@ -19,9 +19,7 @@ export class AuthExpiredInterceptor extends JhiHttpInterceptor {
 
     responseIntercept(observable: Observable<Response>): Observable<Response> {
         this.requestCount = this.requestCount - 1;
-        setTimeout(() => {
-            this.hideBusyInd();
-        }, 10);
+        this.hideBusyInd();
         return <Observable<Response>>observable.catch((error, source) => {
             if (error.status === 401) {
                 const loginService: LoginService = this.injector.get(LoginService);
@@ -40,19 +38,19 @@ export class AuthExpiredInterceptor extends JhiHttpInterceptor {
             }
         }
         else {
-            setTimeout(() => {
-                this.hideBusyInd();
-            }, 10);
+            this.hideBusyInd();
         }
     }
 
     hideBusyInd() {
         if (this.requestCount <= 0) {
-            let loadIOndCss = document.getElementById("loadingIndicatorCss");
-            if (loadIOndCss) {
-                loadIOndCss.classList.remove("d-block");
-                loadIOndCss.classList.add("d-none");
-            }
+            setTimeout(() => {
+                let loadIOndCss = document.getElementById("loadingIndicatorCss");
+                if (loadIOndCss) {
+                    loadIOndCss.classList.remove("d-block");
+                    loadIOndCss.classList.add("d-none");
+                }
+            }, 100);
         }
     }
 }
