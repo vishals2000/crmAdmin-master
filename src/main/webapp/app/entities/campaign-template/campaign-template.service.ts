@@ -16,7 +16,7 @@ export class CampaignTemplateService {
     constructor(private http: Http, private dateUtils: JhiDateUtils) { }
 
     create(campaignTemplate: CampaignTemplate): Observable<CampaignTemplate> {
-        const copy = this.convert(campaignTemplate);
+        const copy = this.convert(campaignTemplate, null);
         return this.http.post(this.resourceUrl, copy).map((res: Response) => {
             const jsonResponse = res.json();
             this.convertItemFromServer(jsonResponse);
@@ -28,8 +28,8 @@ export class CampaignTemplateService {
         this.messageSource.next(message);
     }
 
-    update(campaignTemplate: CampaignTemplate): Observable<CampaignTemplate> {
-        const copy = this.convert(campaignTemplate);
+    update(campaignTemplate: CampaignTemplate, campTempFromSer: any): Observable<CampaignTemplate> {
+        const copy = this.convert(campaignTemplate, campTempFromSer);
         return this.http.put(this.resourceUrl, copy).map((res: Response) => {
             const jsonResponse = res.json();
             this.convertItemFromServer(jsonResponse);
@@ -178,7 +178,7 @@ export class CampaignTemplateService {
     }
 
     copyorRetargetCampaignTemplate(body: any, copyCount : Number, bIsRetarget:boolean): Observable<ResponseWrapper> {
-        let postObj = this.convert(body);
+        let postObj = this.convert(body, null);
         if(bIsRetarget){
             postObj.campaignName = "Retarget from " + (copyCount > 0 ? copyCount : '' )+ "-" + postObj.campaignName;
         }
@@ -262,10 +262,11 @@ export class CampaignTemplateService {
             .convertLocalDateFromServer(entity.recurrenceEndDate);
     }
 
-    private convert(campaignTemplate: CampaignTemplate): CampaignTemplate {
+    private convert(campaignTemplate: CampaignTemplate, campTempFromServ: any): CampaignTemplate {
 
         const copy: CampaignTemplate = Object.assign({}, campaignTemplate);
-        const campaignTemplateCopy: CampaignTemplate = new CampaignTemplate();
+       // const campaignTemplateCopy: CampaignTemplate = new CampaignTemplate();//past dates launch then cancel save buttion not displayed issue
+        const campaignTemplateCopy: any = Object.assign({}, campTempFromServ);
         campaignTemplateCopy.frontEnd = campaignTemplate.frontEnd;
         campaignTemplateCopy.product = campaignTemplate.product;
         campaignTemplateCopy.id = campaignTemplate.id;
@@ -348,8 +349,9 @@ export class CampaignTemplateService {
             }
         }
         campaignTemplateCopy.targetGroupMetaData = campaignTemplateMetaCriteria;
-        campaignTemplateCopy.editEnabled = undefined;
-        campaignTemplateCopy.launchEnabled = undefined;
+        //campaignTemplateCopy.editEnabled = undefined;//past dates launch then cancel save buttion not displayed issue
+       // campaignTemplateCopy.launchEnabled = undefined;
+       console.log(campaignTemplateCopy);
         return campaignTemplateCopy;
     }
 }

@@ -207,7 +207,7 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
 
             if (this.campaignTemplateGroupCreationForm.value.id !== null) {
                 this.subscribeToSaveResponse(
-                    this.campaignTemplateService.update(this.campaignTemplateGroupCreationForm.value));
+                    this.campaignTemplateService.update(this.campaignTemplateGroupCreationForm.value, this.campaignTemplate));
             } else {
                 this.subscribeToSaveResponse(
                     this.campaignTemplateService.create(this.campaignTemplateGroupCreationForm.value));
