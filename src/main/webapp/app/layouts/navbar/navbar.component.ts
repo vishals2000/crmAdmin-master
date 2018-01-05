@@ -41,6 +41,8 @@ export class NavbarComponent implements OnInit {
     appPageType: string;
     selCampGrp: any;
     currentAccount: any;
+    selAppId: any;
+    selCampaignGrpId: any;
 
     constructor(
         private loginService: LoginService,
@@ -66,7 +68,7 @@ export class NavbarComponent implements OnInit {
         if (sessionStorage['appList']) {
             this.appList = JSON.parse(sessionStorage['appList']);
             fcbk && fcbk();
-        } else if(!sessionStorage['appList']){
+        } else if (!sessionStorage['appList']) {
             this.appList = [];
             this.appsService.queryAll({}).subscribe((res: ResponseWrapper) => fAfterGetResults(res));
         } else if (!this.appList || this.appList.length === 0) {
@@ -75,41 +77,47 @@ export class NavbarComponent implements OnInit {
             fcbk && fcbk();
         }
     }
-    loadSelAppCampGrp() {
-        if ((!this.campGrpList || this.campGrpList.length === 0) && this.selApp) {
-            this.campaignGroupService.queryAll({ appId: this.selApp.id }).subscribe((res: ResponseWrapper) =>
-                this.eventManager.broadcast({ name: 'campaignGroupListModified', content: res.json })
-            );
+    loadSelAppCampGrp(fcbk) {
+        let oCurObj = this;
+        if (this.selApp || this.selAppId) {
+            let fAfterGetResults = function (res) {
+                oCurObj.campGrpList = res.json;
+                fcbk && fcbk();
+            };
+            this.campaignGroupService.queryAll({ appId: (this.selApp.id || this.selAppId) }).subscribe((res: ResponseWrapper) => fAfterGetResults(res));
         }
     }
     ngOnInit() {
         this.currentAccount = null;
         let oCurObj = this;
-        oCurObj.registerSubscribers();
         let fAfterGetResults = function (res) {
             oCurObj.profileService.getProfileInfo().subscribe((profileInfo) => {
                 oCurObj.inProduction = profileInfo.inProduction;
                 oCurObj.swaggerEnabled = profileInfo.swaggerEnabled;
             });
         };
-        this.loadAllApps(fAfterGetResults);
-        if(!this.currentAccount){
+        if (!this.currentAccount) {
             this.loggedInSucces(null);
         }
+        oCurObj.registerSubscribers();
     }
-    loadAllAppsForeFully(res){
+    loadAllAppsForeFully(res) {
         this.appList = null;
+        this.selApp = null;
+        this.selAppId = null;
         sessionStorage.removeItem("appList");
         this.loadAllApps(null);
     }
+    loadAllCampaignGrpsForceFully(res) {
+        this.selCampaignGrpId = null;
+        this.selCampGrp = null;
+        this.campGrpList = null;
+    }
     registerSubscribers() {
-        
         this.eventSubscriber = this.eventManager.subscribe('appsListModification', response => this.loadAllAppsForeFully(response));
         this.eventSubscriber = this.eventManager.subscribe('appListModified', response => this.setAppDataToBreadCrumbModel(response));
-        this.eventSubscriber = this.eventManager.subscribe('selectedApp', response => this.setAppSelAppToBreadCrumbModel(response));
 
-        this.eventSubscriber = this.eventManager.subscribe('campaignGroupListModified', response => this.setCampGrpDataToBreadCrumbModel(response));
-        this.eventSubscriber = this.eventManager.subscribe('selectedCampGrp', response => this.setAppSelCampGrpToBreadCrumbModel(response));
+        this.eventSubscriber = this.eventManager.subscribe('campaignGroupListModification', response => this.loadAllCampaignGrpsForceFully(response));
         this.eventSubscriber = this.eventManager.subscribe('setBreadCrumbToApp', response => this.setBreadCrumbToApp(response));
         this.eventSubscriber = this.eventManager.subscribe('setBreadCrumbToCampGrp', response => this.setBreadCrumbToCampGrp(response));
         this.eventSubscriber = this.eventManager.subscribe('setBreadCrumbToCampTemp', response => this.setBreadCrumbToCampTemp(response));
@@ -123,6 +131,7 @@ export class NavbarComponent implements OnInit {
         this.eventSubscriber = this.eventManager.subscribe('authenticationSuccess', response => this.loggedInSucces(response));
     }
     loggedInSucces(res) {
+        this.loadAllApps(null);
         this.principal.identity().then((account) => {
             this.currentAccount = account;
         });
@@ -137,56 +146,74 @@ export class NavbarComponent implements OnInit {
         }
         sessionStorage['appList'] = JSON.stringify(this.appList);
     }
-    setAppSelAppToBreadCrumbModel(appSelected) {
-        let AppId = appSelected.content;
+    setAppSelAppToBreadCrumbModel(appSelected, fAfterGetList) {
         let oCurObj = this;
-        let fAfterGetResults = function (res) {
-            for (let i = 0; i < oCurObj.appList.length; i++) {
+        let AppId = decodeURI(appSelected);
+        let fAfterFoundSelApp = function () {
+            let notFoundCount = 0;
+            for (let i = 0; oCurObj.appList && i < oCurObj.appList.length; i++) {
                 if (oCurObj.appList[i].id === AppId || !AppId) {
                     oCurObj.selApp = oCurObj.appList[i];
                     oCurObj.selApp.itemName = oCurObj.selApp.name;
+                    oCurObj.selAppId = oCurObj.appList[i].id;
                     sessionStorage['selectedApp'] = JSON.stringify(oCurObj.selApp);
+                    fAfterGetList();
                     break;
+                } else {
+                    notFoundCount++;
                 }
             }
-        }
-        this.loadAllApps(fAfterGetResults);
+            if (oCurObj.appList.length === 0 || notFoundCount === oCurObj.appList.length) {
+                oCurObj.router.navigate(["/apps"], { replaceUrl: true });
+            }
+        };
+        this.loadAllApps(fAfterFoundSelApp);
     }
-    setCampGrpDataToBreadCrumbModel(campGrpListModified) {
-        this.campGrpList = campGrpListModified.content || [];
-        for (let i = 0; i < this.campGrpList.length; i++) {
-            this.campGrpList[i].itemName = this.campGrpList[i].name;
-        }
-        this.eventManager.broadcast({ name: 'campGrpDataReady', content: 'OK' });
-    }
-    setAppSelCampGrpToBreadCrumbModel(campGrpSelected) {
-        let campGrpId = campGrpSelected.content;
-        this.loadSelAppCampGrp();
-        if (this.campGrpList) {
-            for (let i = 0; i < this.campGrpList.length; i++) {
-                if (this.campGrpList[i].id === campGrpId) {
-                    this.selCampGrp = this.campGrpList[i];
-                    this.selCampGrp.itemName = this.selCampGrp.name;
-                    this.eventManager.broadcast({ name: 'campaignGroupDataReady', content: 'OK' });
-                    break;
+    setAppSelCampGrpToBreadCrumbModel(campGrpSelected, fAfterGetList) {
+        let ocurObj = this;
+        let campGrpId = decodeURI(campGrpSelected);
+        let fAfterFoundSelCapmgSrp = function () {
+            let notFoundCount = 0;
+            if (ocurObj.campGrpList) {
+                for (let i = 0; i < ocurObj.campGrpList.length; i++) {
+                    if (ocurObj.campGrpList[i].id === campGrpId) {
+                        ocurObj.selCampGrp = ocurObj.campGrpList[i];
+                        ocurObj.selCampGrp.itemName = ocurObj.selCampGrp.name;
+                        ocurObj.selCampaignGrpId = campGrpId;
+                        fAfterGetList();
+                        break;
+                    } else {
+                        notFoundCount++;
+                    }
                 }
             }
+            if (ocurObj.campGrpList.length === 0 || notFoundCount === ocurObj.campGrpList.length) {
+                if (ocurObj.selApp) {
+                    ocurObj.router.navigate(["/campaign-group/project/" + decodeURI(ocurObj.selApp.id) + '/' + ocurObj.selApp.name], { replaceUrl: true });
+                } else if (ocurObj.selAppId) {
+                    ocurObj.router.navigate(["/campaign-group/project/" + ocurObj.selAppId], { replaceUrl: true });
+                }
+            }
+        };
+        if (this.campGrpList && this.selCampaignGrpId === campGrpId) {
+            fAfterFoundSelCapmgSrp();
         } else {
-
+            this.loadSelAppCampGrp(fAfterFoundSelCapmgSrp);
         }
     }
     setBreadCrumbToApp(response) {
         this.appPageType = 'app';
         this.crumbsArray = [{ name: 'Apps', router: '#/apps', brdCrmbId: '1', list: [], selVal: [] }];
-        this.loadAllApps(null);
     }
     setBreadCrumbToCampGrp(response) {
         this.setBreadCrumbToApp(response);
-        if (this.appList && this.appList.length) {
-            if (!this.selApp) {
-                this.selApp = this.appList[0];
-                sessionStorage['selectedApp'] = JSON.stringify(this.selApp);
-            }
+        if (response.content && response.content.appId) {
+            this.selAppId = response.content.appId;
+        }
+        else if (!this.selApp && this.appList.length) {
+            this.selAppId = this.appList[0].id;
+        }
+        this.setAppSelAppToBreadCrumbModel(response.content.appId, () => {
             this.appPageType = 'app-CG';
             this.crumbsArray.push({
                 appPageType: this.appPageType,
@@ -195,14 +222,13 @@ export class NavbarComponent implements OnInit {
                 list: this.appList,
                 selVal: [this.selApp]
             });
-        }
+        });
     }
     setBreadCrumbToCampTemp(response) {
+        this.selAppId = response.content.appId;
         this.setBreadCrumbToCampGrp(response);
-        if (this.campGrpList && this.campGrpList.length) {
-            if (response.content.campGrpId && !this.selCampGrp) {
-                this.eventManager.broadcast({ name: 'selectedCampGrp', content: response.content.campGrpId });
-            } else {
+        if (response.content && response.content.campGrpId) {
+            this.setAppSelCampGrpToBreadCrumbModel(response.content.campGrpId, () => {
                 this.appPageType = 'app-CT';
                 this.crumbsArray.push({
                     appPageType: this.appPageType,
@@ -212,55 +238,49 @@ export class NavbarComponent implements OnInit {
                     list: this.campGrpList,
                     selVal: [this.selCampGrp]
                 });
-            }
+            });
         }
     }
     setBreadCrumbToAudSeg(response, bIsselectedFirstApp) {
         let oCurObj = this;
-        let fAfterGetResults = function (res) {
-            oCurObj.setBreadCrumbToApp(response);
-            if (!oCurObj.selApp || bIsselectedFirstApp) {
-                oCurObj.selApp = oCurObj.appList[0];
-                sessionStorage['selectedApp'] = JSON.stringify(oCurObj.selApp);
-            }
-            if (oCurObj.appList && oCurObj.appList.length) {
-                oCurObj.appPageType = 'AS';
-                oCurObj.crumbsArray.push({
-                    appPageType: oCurObj.appPageType,
-                    name: 'Audience Segments',
-                    router: '#/audience-segments/project/' + oCurObj.selApp.id,
-                    brdCrmbId: '2', list: oCurObj.appList,
-                    selVal: [oCurObj.selApp]
-                });
-            }
-            if (bIsselectedFirstApp) {
-                oCurObj.router.navigate(['/audience-segments/project/' + oCurObj.selApp.id], {});
-            }
-        };
-        this.loadAllApps(fAfterGetResults);
+        oCurObj.setBreadCrumbToApp(response);
+        if (!oCurObj.selApp || bIsselectedFirstApp) {
+            oCurObj.selApp = oCurObj.appList[0];
+            sessionStorage['selectedApp'] = JSON.stringify(oCurObj.selApp);
+        }
+        if (oCurObj.appList && oCurObj.appList.length) {
+            oCurObj.appPageType = 'AS';
+            oCurObj.crumbsArray.push({
+                appPageType: oCurObj.appPageType,
+                name: 'Audience Segments',
+                router: '#/audience-segments/project/' + oCurObj.selApp.id,
+                brdCrmbId: '2', list: oCurObj.appList,
+                selVal: [oCurObj.selApp]
+            });
+        }
+        if (bIsselectedFirstApp) {
+            oCurObj.router.navigate(['/audience-segments/project/' + oCurObj.selApp.id], {});
+        }
     }
     setBreadCrumbToInsights(response, bIsselectedFirstApp) {
         let oCurObj = this;
-        let fAfterGetResults = function (res) {
-            oCurObj.setBreadCrumbToApp(response);
-            if (!oCurObj.selApp || bIsselectedFirstApp) {
-                oCurObj.selApp = oCurObj.appList[0];
-                sessionStorage['selectedApp'] = JSON.stringify(oCurObj.selApp);
-            }
-            oCurObj.appPageType = 'INS';
-            oCurObj.crumbsArray.push({
-                appPageType: oCurObj.appPageType,
-                name: 'Insights',
-                router: '#/linechart/project/' + oCurObj.selApp.name,
-                brdCrmbId: '2',
-                list: oCurObj.appList,
-                selVal: [oCurObj.selApp]
-            });
-            if (bIsselectedFirstApp) {
-                oCurObj.router.navigate(['/linechart/project/' + oCurObj.selApp.id], {});
-            }
-        };
-        this.loadAllApps(fAfterGetResults);
+        oCurObj.setBreadCrumbToApp(response);
+        if (!oCurObj.selApp || bIsselectedFirstApp) {
+            oCurObj.selApp = oCurObj.appList[0];
+            sessionStorage['selectedApp'] = JSON.stringify(oCurObj.selApp);
+        }
+        oCurObj.appPageType = 'INS';
+        oCurObj.crumbsArray.push({
+            appPageType: oCurObj.appPageType,
+            name: 'Insights',
+            router: '#/linechart/project/' + oCurObj.selApp.name,
+            brdCrmbId: '2',
+            list: oCurObj.appList,
+            selVal: [oCurObj.selApp]
+        });
+        if (bIsselectedFirstApp) {
+            oCurObj.router.navigate(['/linechart/project/' + oCurObj.selApp.id], {});
+        }
     }
     goToLineItemPage() {
         let oCurObj = this;
@@ -271,10 +291,8 @@ export class NavbarComponent implements OnInit {
             sessionStorage['selectedApp'] = JSON.stringify(this.appList[0]);
             this.router.navigate(['/linechart/project/' + this.appList[0].id], {});
         } else {
-            this.loadAllApps(function () {
-                sessionStorage['selectedApp'] = JSON.stringify(this.appList[0]);
-                oCurObj.router.navigate(['/linechart/project/' + oCurObj.appList[0].id], {});
-            })
+            sessionStorage['selectedApp'] = JSON.stringify(this.appList[0]);
+            oCurObj.router.navigate(['/linechart/project/' + oCurObj.appList[0].id], {});
         }
     }
     goToCampStatPage() {
@@ -284,9 +302,7 @@ export class NavbarComponent implements OnInit {
 
             this.router.navigate(['/campaign-stat/'], {});
         } else {
-            this.loadAllApps(function () {
-                oCurObj.router.navigate(['/campaign-stat/'], {});
-            })
+            oCurObj.router.navigate(['/campaign-stat/'], {});
         }
     }
     goToSegAudPage() {
@@ -298,10 +314,8 @@ export class NavbarComponent implements OnInit {
             sessionStorage['selectedApp'] = JSON.stringify(this.appList[0]);
             this.router.navigate(['/audience-segments/project/' + this.appList[0].id], {});
         } else {
-            this.loadAllApps(function () {
-                sessionStorage['selectedApp'] = JSON.stringify(this.appList[0]);
-                oCurObj.router.navigate(['/audience-segments/project/' + oCurObj.appList[0].id], {});
-            })
+            sessionStorage['selectedApp'] = JSON.stringify(this.appList[0]);
+            oCurObj.router.navigate(['/audience-segments/project/' + oCurObj.appList[0].id], {});
         }
     }
     collapseNavbar() {

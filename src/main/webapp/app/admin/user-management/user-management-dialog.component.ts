@@ -33,9 +33,9 @@ export class UserMgmtDialogComponent implements OnInit {
         this.selectedApps = [];
         const userRole = this.user.authorities && this.user.authorities.length ? this.user.authorities[0] : '';
         this.user.authorities = [userRole];
-        this.allApps = JSON.parse(sessionStorage['appList']) || [];
+        this.allApps = JSON.parse(sessionStorage['appList'] || null) || [];
         if (this.allApps && this.user.applications && this.allApps.length === this.user.applications.length) {
-            this.selectedApps = JSON.parse(sessionStorage['appList']) || [];
+            this.selectedApps = JSON.parse(sessionStorage['appList'] || null) || [];
         } else if (this.user.applications && this.user.applications.length) {
             const aSelectedApps = [];
             for (let i = 0; i < this.user.applications.length; i++) {

@@ -86,7 +86,7 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
             this.campaignTemplate.frontEnd,
             this.campaignTemplate.product,
             languagesUpdated,
-            this.campaignTemplate.targetGroupFilterCriteria);
+            this.campaignTemplate.targetGroupFilterCriteria, this.campaignTemplate.retargetedCampaign || false, this.campaignTemplate.parentCampaignTemplateId || '');
 
         this.campaignTemplateService.getTargetGroupSize(body).subscribe(
             (res: ResponseWrapper) => this.onTargetGroupSizeRequestSuccess(res, res),
@@ -109,7 +109,9 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
                 'frontEnd': this.campaignTemplate.frontEnd,
                 'product': this.campaignTemplate.product,
                 'language': this.campaignTemplate.targetGroupContentCriteria[i].languageSelected,
-                'targetGroupFilterCriteria': this.campaignTemplate.targetGroupFilterCriteria
+                'targetGroupFilterCriteria': this.campaignTemplate.targetGroupFilterCriteria,
+                'retargetedCampaign': this.campaignTemplate.retargetedCampaign || false,
+                'parentCampaignTemplateId': this.campaignTemplate.parentCampaignTemplateId || ''
             }
           
             this.campaignTemplateService.getTargetContentGroupSize(body).subscribe(

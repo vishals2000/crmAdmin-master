@@ -57,10 +57,10 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
             this.pageLoadWithParam = true;
         });
     }
-    loadAll() {
-        this.campaignGroupService.queryAll({ appId: this.projectId }).subscribe(
-            (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignGroupListModified', content: res.json }));
-    }
+    // loadAll() {
+    //     this.campaignGroupService.queryAll({ appId: this.projectId }).subscribe(
+    //         (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignGroupListModified', content: res.json }));
+    // }
 
     loadAppPage() {
         if (this.searchValue) {
@@ -124,9 +124,9 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
             setTimeout(() => {
                 this.projectId = params['id'];
                 this.projectName = params['name'];
-                if (this.page === 1 && !this.searchValue) {
-                    this.loadAll();
-                }
+                // if (this.page === 1 && !this.searchValue) {
+                //     this.loadAll();
+                // }
                 this.loadAppPage();
                 this.pageLoadWithParam = false;
                 this.campaignGroupService.changeGroupId(this.projectId);
@@ -164,6 +164,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.eventManager.destroy(this.eventSubscriber);
+        this.subscription.unsubscribe();
         this.eventManager.destroy(this.subscription);
     }
 
@@ -174,7 +175,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
         this.eventSubscriber = this.eventManager.subscribe('campaignGroupListModification', (response) => this.capmnGrpModification());
     }
     capmnGrpModification() {
-        this.loadAll();
+       // this.loadAll();
         this.loadAppPage();
     }
     filterItems($event) {
@@ -209,8 +210,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
         this.totalItems = headers.get('X-Total-Count');
         this.queryCount = this.totalItems;
         this.campaignGroups = data || [];
-        this.eventManager.broadcast({ name: 'selectedApp', content: this.projectId });
-        this.eventManager.broadcast({ name: 'setBreadCrumbToCampGrp', content: 'OK' });
+        this.eventManager.broadcast({ name: 'setBreadCrumbToCampGrp', content: {appId: this.projectId} });
     }
     private onError(error) {
         this.alertService.error(error.message, null, null);

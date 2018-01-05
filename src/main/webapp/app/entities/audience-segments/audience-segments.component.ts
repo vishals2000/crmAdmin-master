@@ -112,7 +112,7 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
     }
     setDataToPageModel() {
         this.showUploadDiv = false;
-        this.selectedApp = JSON.parse(sessionStorage['selectedApp']);
+        this.selectedApp = JSON.parse(sessionStorage['selectedApp'] || null) || {};
         this.showUploadDiv = true;
         const values: string[] = [this.selectedApp.frontEnd, this.selectedApp.product.toString()];
         this.audienceSegmentsService.changeAppInfo(values);

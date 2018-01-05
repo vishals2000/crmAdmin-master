@@ -547,7 +547,7 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
             this.campaignTemplateGroupCreationForm.get('frontEnd').value,
             this.campaignTemplateGroupCreationForm.get('product').value,
             languagesUpdated,
-            targetGroupFilterCriteria);
+            targetGroupFilterCriteria, this.campaignTemplate.retargetedCampaign || false, this.campaignTemplate.parentCampaignTemplateId || '');
 
         this.campaignTemplateService.getTargetGroupSize(body).subscribe(
             (res: ResponseWrapper) => this.onTargetGroupSizeRequestSuccess(res, res),
@@ -607,7 +607,9 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
             'frontEnd': this.campaignTemplateGroupCreationForm.get('frontEnd').value,
             'product': this.campaignTemplateGroupCreationForm.get('product').value,
             'language': this.campaignTemplateGroupCreationForm.value.targetGroupContentCriteria[i].languageSelected,
-            'targetGroupFilterCriteria': targetGroupFilterCriteria
+            'targetGroupFilterCriteria': targetGroupFilterCriteria,
+            'retargetedCampaign': this.campaignTemplate.retargetedCampaign || false,
+            'parentCampaignTemplateId': this.campaignTemplate.parentCampaignTemplateId || ''
         }
         this.currentContentGrp = i;
         this.campaignTemplateService.getTargetContentGroupSize(body).subscribe(

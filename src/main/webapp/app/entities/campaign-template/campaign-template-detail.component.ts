@@ -24,7 +24,6 @@ export class CampaignTemplateDetailComponent implements OnInit, OnDestroy {
         private campaignTemplateService: CampaignTemplateService,
         private route: ActivatedRoute,
         private router: Router
-        //public breadCrumbService: BreadCrumbService
     ) {
         this.data = {
             labels: ['A', 'B', 'C'],
@@ -56,25 +55,17 @@ export class CampaignTemplateDetailComponent implements OnInit, OnDestroy {
             this.campaignTemplate = campaignTemplate;
             this.renderBreadcrumb();
         });
-
     }
 
     renderBreadcrumb() {
-        //this.eventSubscriber = this.eventManager.subscribe('campGrpDataReady', response => this.callBreadCrumbToCampTemp(response));//handling refresh scenario
         this.campaignTemplateService.getAppCapGrpIdFromTemp(this.campaignTemplate.id).subscribe((oCampTempInfo) => {
             this.oCampInfo = oCampTempInfo;
-            this.eventManager.broadcast({ name: 'selectedApp', content: this.oCampInfo.appId});
-            this.eventManager.broadcast({ name: 'selectedCampGrp', content: this.oCampInfo.campaignGroupId});
-            this.eventManager.broadcast({ name: 'setBreadCrumbToCampTemp', content: {campGrpId : this.oCampInfo.campaignGroupId}});
+            this.eventManager.broadcast({ name: 'setBreadCrumbToCampTemp', content: { campGrpId: this.oCampInfo.campaignGroupId, appId: this.oCampInfo.appId } });
         });
-    }
-    private callBreadCrumbToCampTemp(response){
-        this.eventManager.broadcast({ name: 'setBreadCrumbToCampTemp', content: {campGrpId : this.campaignTemplate.campaignGroupId}});
     }
 
     previousState() {
         window.history.back();
-      // this.router.navigate(['/campaign-template/group/' + this.campaignTemplate.campaignGroupId + '/' + this.campaignTemplate.campaignName], {});
     }
 
     ngOnDestroy() {

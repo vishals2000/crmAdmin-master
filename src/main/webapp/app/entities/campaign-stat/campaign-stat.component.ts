@@ -92,14 +92,14 @@ export class CampaignStatComponent implements OnInit, OnDestroy {
             day: dateObj.getDate()
         };
         this.campStatDt = todayDt1;
-        this.allApps = JSON.parse(sessionStorage['appList']) || [];
+        this.allApps = JSON.parse(sessionStorage['appList'] || null) || [];
         this.principal.identity().then((account) => {
             this.currentAccount = account;
         });
         this.registerChangeInCampaignStats();
     }
     setDataToPageModel() {
-        this.selectedApp = JSON.parse(sessionStorage['selectedApp']);
+        this.selectedApp = JSON.parse(sessionStorage['selectedApp']) || null;
         const values: string[] = [this.selectedApp.frontEnd, this.selectedApp.product.toString()];
         this.principal.identity().then((account) => {
             this.currentAccount = account;

@@ -128,6 +128,8 @@ export class CampaignTargetGroupSizeRequest {
         public product: string,
         public targetGroupContentCriteria: string[],
         public targetGroupFilterCriteria?: TargetGroupFilterCriterionSizeRequest[],
+        public retargetedCampaign?: boolean,
+        public parentCampaignTemplateId?: string
     ) {
     }
 }

@@ -49,10 +49,6 @@ export class AppsComponent implements OnInit, OnDestroy {
             this.predicate = data['pagingParams'].predicate;
         });
     }
-    loadAll() {
-        this.appsService.queryAll({}).subscribe(
-            (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'appListModified', content: res.json }));
-    }
     loadAppPage() {
         if (this.searchValue) {
             this.appsService.search(this.searchValue, {
@@ -97,7 +93,6 @@ export class AppsComponent implements OnInit, OnDestroy {
         this.transition();
     }
     ngOnInit() {
-        //this.loadAll();
         this.loadAppPage();
         this.principal.identity().then((account) => {
             this.currentAccount = account;
@@ -135,7 +130,6 @@ export class AppsComponent implements OnInit, OnDestroy {
     }
     appModification() {
         this.loadAppPage();
-        this.loadAll();
     }
 
     sort() {

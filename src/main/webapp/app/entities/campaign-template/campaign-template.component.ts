@@ -22,7 +22,6 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     error: any;
     success: any;
     eventSubscriber: Subscription;
-    eventSubscriber1: Subscription;
     private subscription: Subscription;
 
     routeData: any;
@@ -40,7 +39,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     searchValue: string;
     oCampInfo: any;
     copyFromTemp: any;
-    
+
     constructor(
         private campaignTemplateService: CampaignTemplateService,
         private parseLinks: JhiParseLinks,
@@ -79,7 +78,8 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
                 (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
                 (res: ResponseWrapper) => {
                     this.campaignTemplates = [];
-                    this.onError(res.json);}
+                    this.onError(res.json);
+                }
                 );
         }
         else {
@@ -92,7 +92,8 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
                 (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
                 (res: ResponseWrapper) => {
                     this.campaignTemplates = [];
-                    this.onError(res.json);}
+                    this.onError(res.json);
+                }
                 );
         }
     }
@@ -129,11 +130,11 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
                 this.groupId = params['id'];
                 this.groupName = params['name'];
                 this.loadAll();
-                if(sessionStorage["selectedApp"]){
+                if (sessionStorage["selectedApp"]) {
                     const fePdTde = JSON.parse(sessionStorage["selectedApp"]);
                     const values: string[] = [this.groupId, fePdTde.frontEnd, fePdTde.product];
                     this.campaignTemplateService.changeMessage(values);
-                } else{
+                } else {
                     this.campaignTemplateService.getFeProduct(this.groupId, 'feProduct').subscribe((response) => {
                         const values: string[] = [this.groupId, response['fe'], response['product']];
                         this.campaignTemplateService.changeMessage(values);
@@ -144,8 +145,6 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
     }
     ngOnDestroy() {
         this.eventManager.destroy(this.eventSubscriber);
-        this.eventManager.destroy(this.eventSubscriber1);
-       // this.eventManager.destroy(this.subscription);
     }
 
     trackId(index: number, item: CampaignTemplate) {
@@ -185,36 +184,36 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         this.campaignTemplateService.search({ campGroupId: this.groupId, searchVal: copyFromTemp.campaignName }, {}).subscribe(
             (res: ResponseWrapper) => this.copyCurrentIrmWithCopyCount(res.json, bIsRetarget),
             (res: ResponseWrapper) => this.onError(res.json)
-            );
+        );
     }
-    openCampaignTempPage(campTempId){
+    openCampaignTempPage(campTempId) {
         this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateDialogComponent as Component, {}, false, campTempId);
     }
-    copyCurrentIrmWithCopyCount(acampaigns, bIsRetarget){
+    copyCurrentIrmWithCopyCount(acampaigns, bIsRetarget) {
         let count = 0;
         let copOrRetagTxt = bIsRetarget ? 'Retarget from ' : '(Copy ';
         let copyRertaEndSplitTxt = bIsRetarget ? '-' : ')';
-        if(acampaigns.length === 1){
+        if (acampaigns.length === 1) {
             this.campaignTemplateService.copyorRetargetCampaignTemplate(this.copyFromTemp, 0, bIsRetarget).subscribe(
                 (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' }),
                 (res: Response) => this.OnSaveError(res)
             );
         }
-        else{
+        else {
             let copyCountArr = [];
-            for(var i=0;i<acampaigns.length;i++){
-                if(acampaigns[i].campaignName.indexOf(copOrRetagTxt) > -1){
+            for (var i = 0; i < acampaigns.length; i++) {
+                if (acampaigns[i].campaignName.indexOf(copOrRetagTxt) > -1) {
                     let aSubName = acampaigns[i].campaignName.split(copOrRetagTxt);
-                    if(aSubName.length){
-                        aSubName.splice(0,1);
+                    if (aSubName.length) {
+                        aSubName.splice(0, 1);
                         aSubName = aSubName.join(copOrRetagTxt);
-                        if(aSubName.indexOf(copyRertaEndSplitTxt) > -1){
+                        if (aSubName.indexOf(copyRertaEndSplitTxt) > -1) {
                             let aActualCapName = aSubName.split(copyRertaEndSplitTxt);
-                            const copyCountNo = aActualCapName.splice(0,1);
+                            const copyCountNo = aActualCapName.splice(0, 1);
                             aActualCapName = aActualCapName.join(copyRertaEndSplitTxt);
-                            if(aActualCapName === this.copyFromTemp.campaignName){
-                                count ++;
-                                if(copyCountNo[0] && !isNaN(copyCountNo[0])){
+                            if (aActualCapName === this.copyFromTemp.campaignName) {
+                                count++;
+                                if (copyCountNo[0] && !isNaN(copyCountNo[0])) {
                                     copyCountArr.push(parseInt(copyCountNo[0] || 0));
                                 }
                             }
@@ -223,7 +222,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
                 }
             }
             copyCountArr.sort();
-            if(count > 0){
+            if (count > 0) {
                 count = (copyCountArr[copyCountArr.length - 1] || 0) + 1;
             }
             this.campaignTemplateService.copyorRetargetCampaignTemplate(this.copyFromTemp, count, bIsRetarget).subscribe(
@@ -241,33 +240,25 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         this.totalItems = headers.get('X-Total-Count');
         this.queryCount = this.totalItems;
         this.campaignTemplates = data || [];
-        this.eventSubscriber1 = this.eventManager.subscribe('campGrpDataReady', response => this.callBreadCrumbToCampTemp(response));//handling refresh scenario
-        const fePdTde = JSON.parse(sessionStorage["selectedApp"]);
-        if(this.previousPage === 1 && this.searchValue === null && !this.oCampInfo && !sessionStorage["selectedApp"]){
+
+        const fePdTde = JSON.parse(sessionStorage["selectedApp"] || null);
+        if (this.previousPage === 1 && this.searchValue === null && !this.oCampInfo && !fePdTde) {
             this.campaignTemplateService.getAppCapGrpIdFromCapGrp(this.groupId).subscribe((oCampGrpInfo) => {
                 this.oCampInfo = oCampGrpInfo;
-                this.eventManager.broadcast({ name: 'selectedApp', content: this.oCampInfo.appId});
-                this.eventManager.broadcast({ name: 'selectedCampGrp', content: this.groupId});
-                this.eventManager.broadcast({ name: 'setBreadCrumbToCampTemp', content: {campGrpId : this.groupId}});
+                this.eventManager.broadcast({ name: 'setBreadCrumbToCampTemp', content: { campGrpId: this.groupId, appId: this.oCampInfo.appId } });
             });
-        } else if(sessionStorage["selectedApp"]){
+        } else if (fePdTde) {
             this.oCampInfo = {
-                "appId" : fePdTde.id,
-                "appName" : fePdTde.name,
-                "campaignGroupId" : this.groupId,
-                "campaignGroupName" : ''
-              };
-            this.eventManager.broadcast({ name: 'selectedApp', content: this.oCampInfo.appId});
-            this.eventManager.broadcast({ name: 'selectedCampGrp', content: this.groupId});
-            this.eventManager.broadcast({ name: 'setBreadCrumbToCampTemp', content: {campGrpId : this.groupId}});
+                "appId": fePdTde.id,
+                "appName": fePdTde.name,
+                "campaignGroupId": this.groupId,
+                "campaignGroupName": ''
+            };
+            this.eventManager.broadcast({ name: 'setBreadCrumbToCampTemp', content: { campGrpId: this.groupId, appId: this.oCampInfo.appId } });
         }
     }
-    private callBreadCrumbToCampTemp(response){
-        this.eventManager.broadcast({ name: 'selectedApp', content: this.oCampInfo.appId});
-        this.eventManager.broadcast({ name: 'selectedCampGrp', content: this.groupId});
-        this.eventManager.broadcast({ name: 'setBreadCrumbToCampTemp', content: {campGrpId : this.groupId}});
-    }
-    private OnSaveError(error){
+
+    private OnSaveError(error) {
         try {
             error.json();
         } catch (exception) {
