@@ -201,12 +201,12 @@ public class UserResource {
     @Timed
     public ResponseEntity<Apps> deleteUser(@Valid @RequestBody DeleteUser deleteUser) {
         log.debug("REST request to delete Apps : {}", deleteUser);
-        User userFromDB = userRepository.findOne(deleteUser.getUserId());
+        Optional<User> userFromDB = userRepository.findOneByLogin(deleteUser.getUserId());
 
-        if (userFromDB == null) {
+        if (!userFromDB.isPresent()) {
             return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, deleteUser.getUserId())).build();
         } else {
-            userRepository.delete(deleteUser.getUserId());
+            userRepository.delete(userFromDB.get().getId());
             return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, deleteUser.getUserId())).build();
         }
     }
