@@ -33,7 +33,7 @@ export class UserService {
     }
 
     delete(login: string): Observable<Response> {
-        return this.http.delete(`${this.resourceUrl}/${login}`);
+        return this.http.post(this.resourceUrl+"/delete", {userId:`${login}`});
     }
 
     authorities(): Observable<string[]> {
