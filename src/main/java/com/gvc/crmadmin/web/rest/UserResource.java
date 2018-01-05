@@ -1,19 +1,20 @@
 package com.gvc.crmadmin.web.rest;
 
-import com.gvc.crmadmin.config.Constants;
 import com.codahale.metrics.annotation.Timed;
+import com.gvc.crmadmin.config.Constants;
+import com.gvc.crmadmin.domain.Apps;
+import com.gvc.crmadmin.domain.DeleteUser;
 import com.gvc.crmadmin.domain.User;
 import com.gvc.crmadmin.repository.UserRepository;
 import com.gvc.crmadmin.security.AuthoritiesConstants;
 import com.gvc.crmadmin.service.MailService;
 import com.gvc.crmadmin.service.UserService;
 import com.gvc.crmadmin.service.dto.UserDTO;
-import com.gvc.crmadmin.web.rest.vm.ManagedUserVM;
 import com.gvc.crmadmin.web.rest.util.HeaderUtil;
 import com.gvc.crmadmin.web.rest.util.PaginationUtil;
+import com.gvc.crmadmin.web.rest.vm.ManagedUserVM;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.ApiParam;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -27,7 +28,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing users.
@@ -193,5 +195,19 @@ public class UserResource {
         log.debug("REST request to delete User: {}", login);
         userService.deleteUser(login);
         return ResponseEntity.ok().headers(HeaderUtil.createAlert( "A user is deleted with identifier " + login, login)).build();
+    }
+
+    @PostMapping("/users/delete")
+    @Timed
+    public ResponseEntity<Apps> deleteUser(@Valid @RequestBody DeleteUser deleteUser) {
+        log.debug("REST request to delete Apps : {}", deleteUser);
+        User userFromDB = userRepository.findOne(deleteUser.getUserId());
+
+        if (userFromDB == null) {
+            return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, deleteUser.getUserId())).build();
+        } else {
+            userRepository.delete(deleteUser.getUserId());
+            return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, deleteUser.getUserId())).build();
+        }
     }
 }
