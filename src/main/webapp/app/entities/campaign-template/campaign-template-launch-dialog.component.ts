@@ -148,9 +148,15 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
     }
     close(){
         this.activeModal.dismiss('cancel');
+        if(this.isRetarget){
+            document.body.classList.add('modal-open');
+        }
     }
     clear() {
         this.activeModal.dismiss('cancel');
+        if(this.isRetarget){
+            document.body.classList.add('modal-open');
+        }
         if(this.isFromLaunch){
             this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateDialogComponent as Component, {}, false, this.campaignTemplate.id);
         }
