@@ -1,10 +1,12 @@
 package com.gvc.crmadmin.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.gvc.crmadmin.config.Constants;
 import com.gvc.crmadmin.domain.Apps;
 import com.gvc.crmadmin.domain.Authority;
 import com.gvc.crmadmin.domain.DeleteApp;
 import com.gvc.crmadmin.domain.User;
+import com.gvc.crmadmin.domain.campaignMgmtApi.*;
 import com.gvc.crmadmin.repository.UserRepository;
 import com.gvc.crmadmin.security.AuthoritiesConstants;
 import com.gvc.crmadmin.security.SecurityUtils;
@@ -22,6 +24,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
@@ -211,5 +214,17 @@ public class AppsResource {
             appsService.delete(deleteApp.getAppId());
             return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, deleteApp.getAppId())).build();
         }
+    }
+
+    @PostMapping("/apps/getAppInsights")
+    @Timed
+    public ResponseEntity<AppInsightsResponse> getPushNotificationTargetGroupSizeForLanguage(@Valid @RequestBody AppInsightsRequest appInsightsRequest) {
+        log.debug("REST request to get app insights", appInsightsRequest);
+
+        RestTemplate restTemplate = new RestTemplate();
+        AppInsightsResponse appInsightsResponse = restTemplate.postForObject(Constants.INSIGHTS_URL, appInsightsRequest, AppInsightsResponse.class);
+
+        System.out.println(appInsightsResponse);
+        return ResponseUtil.wrapOrNotFound(Optional.of(appInsightsResponse));
     }
 }

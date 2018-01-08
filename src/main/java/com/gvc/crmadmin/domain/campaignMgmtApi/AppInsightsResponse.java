@@ -1,9 +1,10 @@
-package com.partygaming.campaignmanagement.api.beans.campaign.push.fcm;
+package com.gvc.crmadmin.domain.campaignMgmtApi;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sun.nio.sctp.MessageInfo;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.io.Serializable;
 import java.util.Map;
