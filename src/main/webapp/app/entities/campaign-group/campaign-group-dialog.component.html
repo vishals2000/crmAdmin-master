@@ -14,7 +14,7 @@
         </div>
         <div class="form-group">
             <label class="form-control-label" for="field_name">Name</label>
-            <input type="text" class="form-control" name="name" id="field_name"
+            <input type="text" class="form-control" name="name" id="field_name" nameValidator
                 [(ngModel)]="campaignGroup.name" required minlength="3" maxlength="50" />
             <div [hidden]="!(editForm.controls.name?.dirty && editForm.controls.name?.invalid)">
                 <small class="form-text text-danger"
@@ -28,6 +28,14 @@
                 <small class="form-text text-danger"
                    [hidden]="!editForm.controls.name?.errors?.maxlength">
                    This field cannot be longer than 50 characters.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.name?.errors?.nameValidator">
+                   Name can only use: a-z A-Z 0-9 _ - .
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.name?.errors?.emptySpaces">
+                   Please enter valid name
                 </small>
             </div>
         </div>
