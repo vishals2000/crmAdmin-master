@@ -99,6 +99,8 @@ export class NavbarComponent implements OnInit {
                 oCurObj.swaggerEnabled = profileInfo.swaggerEnabled;
             });
         };
+        console.log("call every time");
+        this.loadAllAppsForeFully(null);
         if (!this.currentAccount) {
             this.loggedInSucces(null);
         }
@@ -134,7 +136,6 @@ export class NavbarComponent implements OnInit {
         this.eventSubscriber = this.eventManager.subscribe('authenticationSuccess', response => this.loggedInSucces(response));
     }
     loggedInSucces(res) {
-        this.loadAllApps(null);
         this.principal.identity().then((account) => {
             this.currentAccount = account;
         });
