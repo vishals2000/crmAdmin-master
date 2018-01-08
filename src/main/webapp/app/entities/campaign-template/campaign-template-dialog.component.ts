@@ -172,8 +172,8 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
         // if(this.campaignTemplate.status === 'DRAFT'){
         //     this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateCancelDialogComponent as Component, { isConfirmation: true, campaignTempInfo: this.campaignTemplate }, false, this.campaignTemplate.id);
         // }else {
-            this.clear();
-       // }
+        this.clear();
+        // }
     }
 
     save() {
@@ -284,8 +284,7 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
             this.campaignTemplate = new CampaignTemplate();
         }
         const now = new Date();
-        if(!this.campaignTemplate.sendImmediately)
-        {
+        if (!this.campaignTemplate.sendImmediately) {
             now.setUTCDate(now.getUTCDate() + 1);
         }
         const todayDt = {
@@ -743,7 +742,13 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
         return targetGroupFilterCriterionFormControl.get('filterOptionValue').value;
     }
     populateFilterOptions() {
-        this.filterOptions = ['App', 'App Version', 'Country', 'Event', 'Install Date', 'Language', 'Last Open Date', 'OS', 'Segment', 'Sessions', 'Tag', 'Timezone'];
+        console.log(this.campaignTemplate.retargetedCampaign);
+        if (this.campaignTemplate.retargetedCampaign) {
+            this.filterOptions = ['Message', 'Message Open'];
+        } else {
+            this.filterOptions = ['App', 'App Version', 'Country', 'Event', 'Install Date', 'Language', 'Last Open Date', 'OS', 'Segment', 'Sessions', 'Tag', 'Timezone'];
+        }
+
         this.filterOptions.sort();
     }
     populateEventsMaps() {
@@ -1079,6 +1084,22 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
                     }
                 }
                     break;
+                case 'Message': {
+                    if (this.filtersMap.has("Message")) {
+                        this.filtersMap.get('Message').forEach((value: string[], key: string) => {
+                            filterOptionComparisonValues.push(key);
+                        });
+                    }
+                }
+                    break;
+                case 'Message Open': {
+                    if (this.filtersMap.has("Message Open")) {
+                        this.filtersMap.get('Message Open').forEach((value: string[], key: string) => {
+                            filterOptionComparisonValues.push(key);
+                        });
+                    }
+                }
+                    break;
                 case 'Event': {
                     switch (product) {
                         case 'SPORTS': {
@@ -1168,6 +1189,12 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
         const productSelected: string = this.campaignTemplateGroupCreationForm.get('product').value;
         if (filterOption && filterOptionComparison) {
             switch (filterOption) {
+                case 'Message':{
+                    return this.getFormControlTypeFromFilterOptionValues(this.filtersMap.get(filterOption).get(filterOptionComparison));
+                }
+                case 'Message Open':{
+                    return this.getFormControlTypeFromFilterOptionValues(this.filtersMap.get(filterOption).get(filterOptionComparison));
+                }
                 case 'Tag': {
                     // targetGroupFilterCriterionFormControl.get('filterOptionValue').setValue('');
                     switch (productSelected) {
@@ -1281,6 +1308,8 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
                 case 'Last Open Date':
                 case 'OS':
                 case 'Segment':
+                case 'Message':
+                case 'Message Open':
                 case 'Timezone':
                     this.filtersMap.get(filterOptionSelected).get(filterOptionComparisonSelected).forEach((value: string) => {
                         optionValues.push(value);
@@ -1383,6 +1412,7 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
         return false;
     }
     populateFiltersMap() {
+        this.populateMessageParams();
         this.populateAppParams();
         this.populateAppVersionParams();
         this.populateTimeZoneParams();
@@ -1391,6 +1421,21 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
         this.populateCountryParams();
         this.populateInstallDateParams();
         this.populateOSParams();
+    }
+    populateMessageParams() {
+        const filterComparisonVsValue: Map<string, string[]> = new Map<string, string[]>();
+        let comparisonValues: string[] = [];
+        comparisonValues = ['Opened'];
+        filterComparisonVsValue.set('was', comparisonValues);
+        comparisonValues = ['Opened'];
+        filterComparisonVsValue.set('was not', comparisonValues);
+        this.filtersMap.set('Message', filterComparisonVsValue);
+
+        const fileMesage: Map<string, string[]> = new Map<string, string[]>();
+        let mesgOpenCmp: string[] = [];
+        mesgOpenCmp = ['Less than 10 minutes', 'Greater than 10 minutes'];
+        fileMesage.set('opened in', mesgOpenCmp);
+        this.filtersMap.set('Message Open', fileMesage);
     }
     populateAppParams() {
         const filterComparisonVsValue: Map<string, string[]> = new Map<string, string[]>();
