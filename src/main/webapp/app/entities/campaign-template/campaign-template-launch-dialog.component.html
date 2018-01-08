@@ -28,10 +28,10 @@
             Send immediately
         </div>
         <div *ngIf="!campaignTemplate.sendImmediately">
-            Scheduled to send at {{campaignTemplate.scheduledTime}} on {{campaignTemplate.startDate.year}}-{{campaignTemplate.startDate.month}}-{{campaignTemplate.startDate.day}} (UTC)
+            Scheduled to send at {{campaignTemplate.scheduledTime}} on {{campaignTemplate.startDate.year}}-{{getDateMonthDate(campaignTemplate.startDate.month)}}-{{getDateMonthDate(campaignTemplate.startDate.day)}} (UTC)
         </div>
 <br>
-        <p *ngIf="campaignTemplate.targetGroupFilterCriteria.length">Are you sure you want to launch this Campaign Template?</p>
+        <p [hidden]="isRetarget">Are you sure you want to launch this Campaign Template?</p>
     </div>
 
     <div class="modal-footer">

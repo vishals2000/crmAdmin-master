@@ -231,10 +231,14 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
             );
         }
     }
-    // gotToCampDetailPage(campaignTemplateId){
-    //     this.router.navigate(['/campaign-template/' + campaignTemplateId], {});
-    // }
-
+    openLaunchPopup(campaignTemp){
+        if(campaignTemp.retargetedCampaign && campaignTemp.targetGroupContentCriteria && (!campaignTemp.targetGroupContentCriteria.length || (campaignTemp.targetGroupContentCriteria.length && !campaignTemp.targetGroupContentCriteria[0].contentBody || !campaignTemp.targetGroupContentCriteria[0].contentTitle))){
+            this.openCampaignTempPage(campaignTemp.id);
+        }
+        else{
+            this.router.navigate(['/', { outlets: { popup: 'campaign-template/'+ campaignTemp.id + '/launch'} }], {});
+        }
+    }
     private onSuccess(data, headers) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');

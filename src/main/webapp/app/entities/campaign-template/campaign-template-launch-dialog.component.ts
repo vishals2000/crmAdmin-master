@@ -103,6 +103,9 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
         }
         return oFilObj.filterOption + " "+ oFilObj.filterOptionComparison + " " + oFilObj.filterOptionLookUp + " " + oFilObj.filterOptionValue;   
     }
+    getDateMonthDate(month){
+        return month <= 9 ? '0' + month : month;
+    }
     getTargetContentGroupSize() {
         for (let i =0;i<this.campaignTemplate.targetGroupContentCriteria.length;i++) {
             const body = {

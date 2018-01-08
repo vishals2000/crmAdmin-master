@@ -82,6 +82,9 @@ export class NavbarComponent implements OnInit {
         if (this.selApp || this.selAppId) {
             let fAfterGetResults = function (res) {
                 oCurObj.campGrpList = res.json;
+                for(let i=0;i<oCurObj.campGrpList.length;i++){
+                    oCurObj.campGrpList[i].itemName = oCurObj.campGrpList[i].name;
+                }
                 fcbk && fcbk();
             };
             this.campaignGroupService.queryAll({ appId: (this.selApp.id || this.selAppId) }).subscribe((res: ResponseWrapper) => fAfterGetResults(res));
