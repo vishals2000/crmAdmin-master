@@ -74,10 +74,15 @@ public class PushNotificationCampaignTemplate implements Serializable {
 
     @JsonProperty("id")
     private String campaignTemplateId;
-    
+
     @JsonProperty("targetGroupMetaData")
     private LiveOddsMetaData[] targetGroupMetaData;
 
+    @JsonProperty("retargetedCampaign")
+    private boolean retargetedCampaign;
+
+    @JsonProperty("parentCampaignTemplateId")
+    private String parentCampaignTemplateId;
 
     public String getFrontEnd() {
         return frontEnd;
@@ -214,12 +219,30 @@ public class PushNotificationCampaignTemplate implements Serializable {
     public void setTargetGroupContentCriteria(List<MessageTemplate> targetGroupContentCriteria) {
         this.targetGroupContentCriteria = targetGroupContentCriteria;
     }
-    
+
     public LiveOddsMetaData[] getTargetGroupMetaData() {
 		return targetGroupMetaData;
 	}
-    
+
     public void setTargetGroupMetaData(LiveOddsMetaData[] targetGroupMetaData) {
 		this.targetGroupMetaData = targetGroupMetaData;
 	}
+
+    public boolean isRetargetedCampaign() {
+        return retargetedCampaign;
+    }
+
+    public PushNotificationCampaignTemplate setRetargetedCampaign(boolean retargetedCampaign) {
+        this.retargetedCampaign = retargetedCampaign;
+        return this;
+    }
+
+    public String getParentCampaignTemplateId() {
+        return parentCampaignTemplateId;
+    }
+
+    public PushNotificationCampaignTemplate setParentCampaignTemplateId(String parentCampaignTemplateId) {
+        this.parentCampaignTemplateId = parentCampaignTemplateId;
+        return this;
+    }
 }

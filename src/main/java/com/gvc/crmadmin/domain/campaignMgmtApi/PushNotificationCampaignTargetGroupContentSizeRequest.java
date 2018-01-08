@@ -10,8 +10,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PushNotificationCampaignTargetGroupContentSizeRequest implements Serializable {
-
-    private static final long serialVersionUID = 2988567362137152437L;
+    private static final long serialVersionUID = -1943118134535161334L;
 
     @JsonProperty("targetGroupFilterCriteria")
     private List<TargetGroupFilterCriterion> targetGroupFilterCriteria;
@@ -24,6 +23,12 @@ public class PushNotificationCampaignTargetGroupContentSizeRequest implements Se
 
     @JsonProperty("language")
     private String language;
+
+    @JsonProperty("retargetedCampaign")
+    private boolean retargetedCampaign;
+
+    @JsonProperty("parentCampaignTemplateId")
+    private String parentCampaignTemplateId;
 
     public List<TargetGroupFilterCriterion> getTargetGroupFilterCriteria() {
         return targetGroupFilterCriteria;
@@ -63,5 +68,23 @@ public class PushNotificationCampaignTargetGroupContentSizeRequest implements Se
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public boolean isRetargetedCampaign() {
+        return retargetedCampaign;
+    }
+
+    public PushNotificationCampaignTargetGroupContentSizeRequest setRetargetedCampaign(boolean retargetedCampaign) {
+        this.retargetedCampaign = retargetedCampaign;
+        return this;
+    }
+
+    public String getParentCampaignTemplateId() {
+        return parentCampaignTemplateId;
+    }
+
+    public PushNotificationCampaignTargetGroupContentSizeRequest setParentCampaignTemplateId(String parentCampaignTemplateId) {
+        this.parentCampaignTemplateId = parentCampaignTemplateId;
+        return this;
     }
 }
