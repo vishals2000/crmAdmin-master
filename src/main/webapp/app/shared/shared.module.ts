@@ -13,8 +13,10 @@ import {
     LoginModalService,
     Principal,
     HasAnyAuthorityDirective,
-    JhiLoginModalComponent
+    JhiLoginModalComponent,
+    NameValidator
 } from './';
+
 
 @NgModule({
     imports: [
@@ -23,7 +25,8 @@ import {
     ],
     declarations: [
         JhiLoginModalComponent,
-        HasAnyAuthorityDirective
+        HasAnyAuthorityDirective,
+        NameValidator
     ],
     providers: [
         LoginService,
@@ -41,7 +44,8 @@ import {
         CrmAdminSharedCommonModule,
         JhiLoginModalComponent,
         HasAnyAuthorityDirective,
-        DatePipe
+        DatePipe,
+        NameValidator
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 

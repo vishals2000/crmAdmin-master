@@ -3,7 +3,7 @@
         <a class="jh-navbar-toggler hidden-lg-up float-right" href="javascript:void(0);" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleNavbar()">
             <i class="fa fa-bars"></i>
         </a>
-        <a class="navbar-brand logo float-left" routerLink="apps" (click)="collapseNavbar()">
+        <a class="navbar-brand logo float-left" routerLink="apps" (click)="collapseNavbar();setBreadCrumbToApp({content:'ok'})">
             <span class="navbar-title">GVC-Campaign Manager</span>
         </a>
     </div>
