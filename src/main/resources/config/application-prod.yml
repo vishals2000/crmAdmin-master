@@ -24,11 +24,22 @@ spring:
 #            uri: mongodb://localhost:27017
 #            database: crmAdmin
             port: 27017
+#            US-NJ-AT-REG1
+#            host: 10.1.107.137
+#            US-NJ-PROD
+#            host: 10.1.107.137
+#            TR-DEV
+#            host: 10.1.54.131
+#            GIB-PROD
             host: 10.166.81.37
             database: crmAdmin
             authenticationDatabase: admin
             username: jhipster
+#            password: jhipster
+#            GIB-PROD
             password: r00t_CRM_1@Production
+            #USNJ-PROD
+#            password: r00t_CRM_1@Production
     mail:
         host: localhost
         port: 25
