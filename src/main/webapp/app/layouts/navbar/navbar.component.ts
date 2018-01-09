@@ -15,6 +15,7 @@ import { BreadCrumbService } from './navbar.service';
 import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
 import { AppsService } from '../../entities/apps/apps.service';
 import { CampaignGroupService } from '../../entities/campaign-group/campaign-group.service';
+import { StateStorageService } from '../../shared/auth/state-storage.service';
 
 @Component({
     selector: 'jhi-navbar',
@@ -54,7 +55,8 @@ export class NavbarComponent implements OnInit {
         private alertService: JhiAlertService,
         private eventManager: JhiEventManager,
         private appsService: AppsService,
-        private campaignGroupService: CampaignGroupService
+        private campaignGroupService: CampaignGroupService,
+        private stateStorageService: StateStorageService
     ) {
         this.version = VERSION ? 'v' + VERSION : '';
         this.isNavbarCollapsed = true;
@@ -138,6 +140,10 @@ export class NavbarComponent implements OnInit {
     loggedInSucces(res) {
         this.principal.identity().then((account) => {
             this.currentAccount = account;
+            if(!account){
+            } else{
+                this.loadAllAppsForeFully(null);
+            }
         });
     }
     clearBdData(res) {

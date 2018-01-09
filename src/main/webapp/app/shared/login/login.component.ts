@@ -26,6 +26,7 @@ export class JhiLoginModalComponent implements AfterViewInit {
         private router: Router,
         public activeModal: NgbActiveModal
     ) {
+        this.rememberMe = true;
         this.credentials = {};
     }
 

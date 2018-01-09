@@ -20,8 +20,23 @@ export class UserRouteAccessService implements CanActivate {
         if (!authorities || authorities.length === 0) {
             return true;
         }
-
-        return this.checkLogin(authorities, state.url);
+        let url = state.url;
+        url = decodeURI(url);
+        if(route.outlet === 'popup'){
+            let urlSub;
+            for(let i=0;i<route.url.length;i++){
+                if(!urlSub){
+                    urlSub = route.url[i].path;
+                }else{
+                    urlSub = urlSub + "/" +  route.url[i].path;
+                }
+               
+            }
+            url = url.replace("(popup:" + decodeURI(urlSub) + ")", '');
+        } else{
+            url = route.url[0].path;
+        }
+        return this.checkLogin(authorities, url);
     }
 
     checkLogin(authorities: string[], url: string): Promise<boolean> {

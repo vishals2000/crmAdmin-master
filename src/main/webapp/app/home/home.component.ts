@@ -32,6 +32,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         private renderer: Renderer,
         private router: Router
     ) {
+        this.rememberMe = true;
         this.credentials = {};
     }
 
