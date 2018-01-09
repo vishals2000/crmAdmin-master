@@ -51,12 +51,19 @@ export class CampaignTemplateCopyToDialogComponent implements OnInit {
             if (sessionStorage['appList']) {
                 const appList = JSON.parse(sessionStorage['appList']);
                 let relatedAppList = [];
-                for(var i=0;i<appList.length;i++){
-                    if(appList[i].product === this.campaignTemplate.product){
-                        relatedAppList.push(appList[i]);
+                if(this.campaignTemplate.retargetedCampaign){
+                    this.appList = [JSON.parse(sessionStorage['selectedApp'])];
+                    this.selectedApp = this.appList;
+                    this.getCampaignGrpsForSelApp(this.selectedApp[0]);
+                } else{
+                    for(var i=0;i<appList.length;i++){
+                        if(appList[i].product === this.campaignTemplate.product){
+                            relatedAppList.push(appList[i]);
+                        }
                     }
+                    this.appList = relatedAppList;
                 }
-                this.appList = relatedAppList;
+                
             } else {
                 this.clear();
             }
