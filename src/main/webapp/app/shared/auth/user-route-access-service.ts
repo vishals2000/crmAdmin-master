@@ -33,8 +33,10 @@ export class UserRouteAccessService implements CanActivate {
                
             }
             url = url.replace("(popup:" + decodeURI(urlSub) + ")", '');
-        } else{
+        } else if(route.url.length){
             url = route.url[0].path;
+        } else{
+            url = state.url;
         }
         return this.checkLogin(authorities, url);
     }
