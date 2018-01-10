@@ -100,6 +100,8 @@
                         <input class="form-control " placeholder="League Name" formControlName="filterOptionValue" optional *ngSwitchCase="'leagueName'">
                         <input class="form-control " placeholder="League Name Id" formControlName="filterOptionValue" optional *ngSwitchCase="'leagueNameId'">
                         <input class="form-control " placeholder="Event Id" formControlName="filterOptionValue" optional *ngSwitchCase="'eventId'">
+                        <input class="form-control " placeholder="Type to add a tag value" formControlName="filterOptionValue" optional *ngSwitchCase="'njtaginput'">
+                        <input class="form-control " placeholder="" formControlName="filterOptionValue" optional *ngSwitchCase="'njtagEmptyinput'">
                         <input class="form-control " formControlName="filterOptionValue" min="0" type="number" optional *ngSwitchCase="'Number'">
                         <select class="form-control " formControlName="filterOptionValue" *ngSwitchCase="'dropdown'">
                             <!-- <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option> -->

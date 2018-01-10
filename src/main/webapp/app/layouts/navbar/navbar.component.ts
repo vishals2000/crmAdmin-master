@@ -89,7 +89,7 @@ export class NavbarComponent implements OnInit {
                 }
                 fcbk && fcbk();
             };
-            this.campaignGroupService.queryAll({ appId: (this.selApp.id || this.selAppId) }).subscribe((res: ResponseWrapper) => fAfterGetResults(res));
+            this.campaignGroupService.queryAll({ appId: (this.selApp ? this.selApp.id : this.selAppId) }).subscribe((res: ResponseWrapper) => fAfterGetResults(res));
         }
     }
     ngOnInit() {
@@ -174,7 +174,7 @@ export class NavbarComponent implements OnInit {
                 }
             }
             if (oCurObj.appList.length === 0 || notFoundCount === oCurObj.appList.length) {
-                oCurObj.router.navigate(["/apps"], { replaceUrl: true });
+                oCurObj.router.navigate(["/apps", { outlets: { popup: null }}], { replaceUrl: true });
             }
         };
         this.loadAllApps(fAfterFoundSelApp);
