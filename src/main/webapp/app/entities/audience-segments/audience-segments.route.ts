@@ -35,7 +35,8 @@ export const audienceSegmentsRoute: Routes = [
         },
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'AudienceSegments'
+            pageTitle: 'AudienceSegments',
+            routeAccessToPage: 'audience-segments'
         },
         canActivate: [UserRouteAccessService]
     }, {
@@ -46,7 +47,8 @@ export const audienceSegmentsRoute: Routes = [
         },
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'AudienceSegments'
+            pageTitle: 'AudienceSegments',
+            routeAccessToPage: 'audience-segments'
         },
         canActivate: [UserRouteAccessService]
     }

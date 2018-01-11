@@ -34,7 +34,8 @@ export const appsRoute: Routes = [
         },
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'Apps'
+            pageTitle: 'Apps',
+            routeAccessToPage: 'apps'
         },
         canActivate: [UserRouteAccessService]
     }, {
@@ -42,7 +43,8 @@ export const appsRoute: Routes = [
         component: AppsDetailComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'Apps'
+            pageTitle: 'Apps',
+            routeAccessToPage: 'apps'
         },
         canActivate: [UserRouteAccessService]
     }

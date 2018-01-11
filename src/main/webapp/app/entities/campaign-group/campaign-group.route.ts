@@ -34,7 +34,8 @@ export const campaignGroupRoute: Routes = [
         },
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'CampaignGroups'
+            pageTitle: 'CampaignGroups',
+            routeAccessToPage: 'campaign-group'
         }
     },
     {
@@ -45,7 +46,8 @@ export const campaignGroupRoute: Routes = [
         },
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'CampaignGroups'
+            pageTitle: 'CampaignGroups',
+            routeAccessToPage: 'campaign-group'
         },
         canActivate: [UserRouteAccessService]
     },
@@ -54,7 +56,8 @@ export const campaignGroupRoute: Routes = [
         component: CampaignGroupDetailComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'CampaignGroups'
+            pageTitle: 'CampaignGroups',
+            routeAccessToPage: 'campaign-group'
         },
         canActivate: [UserRouteAccessService]
     }

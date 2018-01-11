@@ -54,7 +54,8 @@ export const campaignTemplateRoute: Routes = [
         },
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'CampaignTemplates'
+            pageTitle: 'CampaignTemplates',
+            routeAccessToPage: 'campaign-template'
         }
     },
     {
@@ -65,7 +66,8 @@ export const campaignTemplateRoute: Routes = [
         },
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'CampaignTemplates'
+            pageTitle: 'CampaignTemplates',
+            routeAccessToPage: 'campaign-template'
         },
         canActivate: [UserRouteAccessService]
     }, {
@@ -73,7 +75,8 @@ export const campaignTemplateRoute: Routes = [
         component: CampaignTemplateDetailComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'CampaignTemplates'
+            pageTitle: 'CampaignTemplates',
+            routeAccessToPage: 'campaign-template'
         },
         canActivate: [UserRouteAccessService]
     }
