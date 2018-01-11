@@ -24,8 +24,8 @@ export class NameValidator implements Validator {
     spaceRepRegEx: RegExp;
     constructor() {
         this.validator = this.nameValidator();
-        this.nameRegEx = new RegExp("[ a-zA-Z0-9._-]+", "g");
-        this.spaceRepRegEx = new RegExp("[ ]+","g");
+        this.nameRegEx = /^[\s\w.-]*$/;
+        this.spaceRepRegEx = /^[\s]*$/;
     }
     validate(c: FormControl) {
         return this.validator(c);
