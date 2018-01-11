@@ -28,8 +28,8 @@ public final class Constants {
 //    public static final String US_NJ_PROD = "http://10.166.144.114:8080/";
 //    public static final String US_NJ_PROD_DATA = "/home/pg/data/";
 
-    public static final String ENVIRONMENT = GIB_PROD;
-    public static final String ENVIRONMENT_DATA = GIB_PROD_DATA;
+    public static final String ENVIRONMENT = TR_DEV;
+    public static final String ENVIRONMENT_DATA = TR_DEV_DATA;
 
     public static final DateTimeFormatter CAMPAIGN_SCHEDULE_TIME_FORMAT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").withZone(UTC);
 
