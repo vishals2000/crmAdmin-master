@@ -55,6 +55,8 @@ export class CampaignTemplatePopupService {
                     }
                     this.ngbModalRef = this.campaignTemplateModalRef(component, campaignTemplate);
                     resolve(this.ngbModalRef);
+                }, (res) =>{
+                    this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true });
                 });
             } else {
                 // setTimeout used as a workaround for getting ExpressionChangedAfterItHasBeenCheckedError
