@@ -47,6 +47,8 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
     pokerTagsMap: Map<string, Map<string, string[]>>;
     casinoTagsMap: Map<string, Map<string, string[]>>;
     eventSubscriber: Subscription;
+    nameRegEx: RegExp;
+    spaceRepRegEx: RegExp;
 
     countries: any[];
     languages: any[];
@@ -342,7 +344,7 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
             optimoveInstances: (!this.campaignTemplate.optimoveInstances) ? '' : this.campaignTemplate.optimoveInstances,
             pushToOptimoveInstances: (!this.campaignTemplate.pushToOptimoveInstances) ? false : this.campaignTemplate.pushToOptimoveInstances,
         });
-
+        this.addCampaignTemplateNameValidator();
         this.addTimeControl();
         this.onRecurrenceType();
         // (<FormControl>this.campaignTemplateGroupCreationForm.controls['recurrenceType']).setValue('NONE');
@@ -366,6 +368,29 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
                 _this.addTimeControl();
             }, 0);
         }
+    }
+    addCampaignTemplateNameValidator(){
+        this.nameRegEx = /^[\s\w.-]*$/;
+        this.spaceRepRegEx = /^[\s]*$/;
+        this.campaignTemplateGroupCreationForm.addControl('campaignName', new FormControl(null, (c: FormControl) => {
+            let value = c.value || '';
+            let isValid = this.nameRegEx.test(value);
+            if (value.replace(this.spaceRepRegEx, '').length === 0) {
+                return {
+                    emptySpaces: {
+                        valid: false
+                    }
+                };
+            } else if (isValid) {
+                return null;
+            } else {
+                return {
+                    nameValidator: {
+                        valid: false
+                    }
+                };
+            }
+        }));
     }
     addTimeControl() {
         const cuurentDateObj = new Date();
@@ -782,6 +807,16 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
         const appName = this.campaignTemplate.frontEnd.toLocaleLowerCase();
         let filterOptionLookUpVsComparison: Map<string, string> = new Map<string, string>();
         if (appName.indexOf('mgm') === -1 && appName.indexOf('borgata') > -1) {
+            // filterOptionLookUpVsComparison.set('did occur N days ago', 'number of days');
+            // filterOptionLookUpVsComparison.set('did occur greater than N days ago', 'number of days');
+            // filterOptionLookUpVsComparison.set('did occur less than N days ago', 'number of days');
+            // filterOptionLookUpVsComparison.set('did not occur N days ago', 'number of days');
+            // filterOptionLookUpVsComparison.set('did not occur greater than N days ago', 'number of days');
+            // filterOptionLookUpVsComparison.set('did not occur less than N days ago', 'number of days');
+            // filterOptionLookUpVsComparison.set('did occur', 'true');
+            // filterOptionLookUpVsComparison.set('did not occur', 'true');
+            // this.casinoEventsMap.set('location_disabled', filterOptionLookUpVsComparison);
+            // this.casinoEventsMap.set('notification_disabled', filterOptionLookUpVsComparison);
             filterOptionLookUpVsComparison.set('did occur N days ago', 'number of days');
             filterOptionLookUpVsComparison.set('did occur greater than N days ago', 'number of days');
             filterOptionLookUpVsComparison.set('did occur less than N days ago', 'number of days');
@@ -790,11 +825,25 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
             filterOptionLookUpVsComparison.set('did not occur less than N days ago', 'number of days');
             filterOptionLookUpVsComparison.set('did occur', 'true');
             filterOptionLookUpVsComparison.set('did not occur', 'true');
-            this.casinoEventsMap.set('location_disabled', filterOptionLookUpVsComparison);
-            this.casinoEventsMap.set('notification_disabled', filterOptionLookUpVsComparison);
+            filterOptionLookUpVsComparison.set('before', 'date');
+            filterOptionLookUpVsComparison.set('after', 'date');
             this.casinoEventsMap.set('registration', filterOptionLookUpVsComparison);
         } else if (appName.indexOf('mgm') > -1) {
             filterOptionLookUpVsComparison = new Map<string, string>();
+            // filterOptionLookUpVsComparison.set('did occur N days ago', 'number of days');
+            // filterOptionLookUpVsComparison.set('did occur greater than N days ago', 'number of days');
+            // filterOptionLookUpVsComparison.set('did occur less than N days ago', 'number of days');
+            // filterOptionLookUpVsComparison.set('did not occur N days ago', 'number of days');
+            // filterOptionLookUpVsComparison.set('did not occur greater than N days ago', 'number of days');
+            // filterOptionLookUpVsComparison.set('did not occur less than N days ago', 'number of days');
+            // filterOptionLookUpVsComparison.set('did occur', 'true');
+            // filterOptionLookUpVsComparison.set('did not occur', 'true');
+            // this.casinoEventsMap.set('browse', filterOptionLookUpVsComparison);
+            // this.casinoEventsMap.set('deposit', filterOptionLookUpVsComparison);
+            // this.casinoEventsMap.set('firstloginafterregistration', filterOptionLookUpVsComparison);
+            // this.casinoEventsMap.set('location_disabled', filterOptionLookUpVsComparison);
+            // this.casinoEventsMap.set('registrationsuccesfull', filterOptionLookUpVsComparison);
+
             filterOptionLookUpVsComparison.set('did occur N days ago', 'number of days');
             filterOptionLookUpVsComparison.set('did occur greater than N days ago', 'number of days');
             filterOptionLookUpVsComparison.set('did occur less than N days ago', 'number of days');
@@ -803,11 +852,9 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
             filterOptionLookUpVsComparison.set('did not occur less than N days ago', 'number of days');
             filterOptionLookUpVsComparison.set('did occur', 'true');
             filterOptionLookUpVsComparison.set('did not occur', 'true');
-            this.casinoEventsMap.set('browse', filterOptionLookUpVsComparison);
-            this.casinoEventsMap.set('deposit', filterOptionLookUpVsComparison);
-            this.casinoEventsMap.set('firstloginafterregistration', filterOptionLookUpVsComparison);
-            this.casinoEventsMap.set('location_disabled', filterOptionLookUpVsComparison);
-            this.casinoEventsMap.set('registrationsuccesfull', filterOptionLookUpVsComparison);
+            filterOptionLookUpVsComparison.set('before', 'date');
+            filterOptionLookUpVsComparison.set('after', 'date');
+            this.casinoEventsMap.set('registration', filterOptionLookUpVsComparison);
         } else {
             this.populateCasinoEventsMap();
         }
@@ -912,20 +959,23 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
         let filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
 
         if (appName.indexOf('mgm') === -1 && appName.toLocaleLowerCase().indexOf('borgata') > -1) {
-            filterOptionLookUpComparisonVsValue.set('is', ['njtaginput']);
-            filterOptionLookUpComparisonVsValue.set('is not', ['njtaginput']);
-            filterOptionLookUpComparisonVsValue.set('exists', ['true', 'false']);
-            filterOptionLookUpComparisonVsValue.set('contains', ['njtagEmptyinput']);
-            this.casinoTagsMap.set('NoPush', filterOptionLookUpComparisonVsValue);
-            this.casinoTagsMap.set('NoPushUS', filterOptionLookUpComparisonVsValue);
-            this.casinoTagsMap.set('hasLoggedIn_tag', filterOptionLookUpComparisonVsValue);
+            // filterOptionLookUpComparisonVsValue.set('is', ['njtaginput']);
+            // filterOptionLookUpComparisonVsValue.set('is not', ['njtaginput']);
+            // filterOptionLookUpComparisonVsValue.set('exists', ['true', 'false']);
+            // filterOptionLookUpComparisonVsValue.set('contains', ['njtagEmptyinput']);
+            // this.casinoTagsMap.set('NoPush', filterOptionLookUpComparisonVsValue);
+            // this.casinoTagsMap.set('NoPushUS', filterOptionLookUpComparisonVsValue);
+            // this.casinoTagsMap.set('hasLoggedIn_tag', filterOptionLookUpComparisonVsValue);
+            filterOptionLookUpComparisonVsValue.set('is', ['true', 'false']);
+            this.casinoTagsMap.set('hasLoggedIn', filterOptionLookUpComparisonVsValue);
         } else if (appName.indexOf('mgm') > -1) {
             filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
-            filterOptionLookUpComparisonVsValue.set('is', ['njtaginput']);
-            filterOptionLookUpComparisonVsValue.set('is not', ['njtaginput']);
-            filterOptionLookUpComparisonVsValue.set('exists', ['true', 'false']);
-            filterOptionLookUpComparisonVsValue.set('contains', ['njtagEmptyinput']);
-            this.casinoTagsMap.set('hasFailedLogin', filterOptionLookUpComparisonVsValue);
+            // filterOptionLookUpComparisonVsValue.set('is', ['njtaginput']);
+            // filterOptionLookUpComparisonVsValue.set('is not', ['njtaginput']);
+            // filterOptionLookUpComparisonVsValue.set('exists', ['true', 'false']);
+            // filterOptionLookUpComparisonVsValue.set('contains', ['njtagEmptyinput']);
+            // this.casinoTagsMap.set('hasFailedLogin', filterOptionLookUpComparisonVsValue);
+            filterOptionLookUpComparisonVsValue.set('is', ['true', 'false']);
             this.casinoTagsMap.set('hasLoggedIn', filterOptionLookUpComparisonVsValue);
         } else {
             this.populateCasinoTagsMap();
