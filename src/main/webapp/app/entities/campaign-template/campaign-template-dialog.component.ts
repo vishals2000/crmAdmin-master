@@ -1652,10 +1652,10 @@ export class CampaignTemplatePopupComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe((params) => {
-            if (params['id']) {
+        this.routeSub = this.route.data.subscribe((params) => {
+            if (params['pagingParams'] && params['pagingParams'].id) {
                 this.campaignTemplatePopupService
-                    .open(CampaignTemplateDialogComponent as Component, params['id']);
+                    .open(CampaignTemplateDialogComponent as Component, params['pagingParams'].id);
             } else {
                 this.campaignTemplatePopupService
                     .open(CampaignTemplateDialogComponent as Component);
@@ -1664,7 +1664,7 @@ export class CampaignTemplatePopupComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.routeSub.unsubscribe();
+       // this.routeSub.unsubscribe();
     }
 }
 

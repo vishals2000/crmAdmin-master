@@ -31,18 +31,19 @@ export class CampaignTemplateResolvePagingParams implements Resolve<any> {
       };
     }
 }
+
 @Injectable()
 export class CampaignTemplateDialogResolvePagingParams implements Resolve<any> {
 
     constructor(private paginationUtil: JhiPaginationUtil) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const appId = route.queryParams['appId'] ? route.queryParams['appId'] : '';
+        const tempId = route.queryParams['id'] ? route.queryParams['id'] : '';
         return {
-            appId: this.paginationUtil.parsePage(appId)
+            id: tempId
+        }
       };
     }
-}
 
 export const campaignTemplateRoute: Routes = [
     {
@@ -91,8 +92,11 @@ export const campaignTemplatePopupRoute: Routes = [
         outlet: 'popup'
     },
     {
-        path: 'campaign-template/:id/edit',
+        path: 'campaign-template/edit',
         component: CampaignTemplatePopupComponent,
+        resolve: {
+            'pagingParams': CampaignTemplateDialogResolvePagingParams
+        },
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignTemplates',

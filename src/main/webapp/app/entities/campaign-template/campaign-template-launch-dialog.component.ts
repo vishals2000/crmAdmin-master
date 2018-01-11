@@ -129,7 +129,7 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
         this.activeModal.dismiss('cancel');
         this.eventManager.broadcast({ name: 'closeCampaignTemp', content: 'OK' });
         setTimeout(() => {
-            this.router.navigate(['/', { outlets: { popup: 'campaign-template/' + this.campaignTemplate.id + '/edit' } }]);
+            this.router.navigate(['/', { outlets: { popup: 'campaign-template/edit' } }], {queryParams:{id: this.campaignTemplate.id}});
         }, 10);
         //this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateDialogComponent as Component, {}, false, this.campaignTemplate.id);
     }
@@ -164,7 +164,7 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
         if(this.isFromLaunch){
             //this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateDialogComponent as Component, {}, false, this.campaignTemplate.id);
             setTimeout(() => {
-                this.router.navigate(['/', { outlets: { popup: 'campaign-template/' + this.campaignTemplate.id + '/edit' } }]);
+                this.router.navigate(['/', { outlets: { popup: 'campaign-template/edit' } }], {queryParams:{id: this.campaignTemplate.id}});
             }, 10);
         }
     }
