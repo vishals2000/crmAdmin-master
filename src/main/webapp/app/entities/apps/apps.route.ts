@@ -54,7 +54,8 @@ export const appsPopupRoute: Routes = [
         component: AppsPopupComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'Apps'
+            pageTitle: 'Apps',
+            routeAccessToPage: 'apps'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
@@ -64,7 +65,8 @@ export const appsPopupRoute: Routes = [
         component: AppsPopupComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'Apps'
+            pageTitle: 'Apps',
+            routeAccessToPage: 'apps'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
@@ -74,7 +76,8 @@ export const appsPopupRoute: Routes = [
         component: AppsDeletePopupComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'Apps'
+            pageTitle: 'Apps',
+            routeAccessToPage: 'apps'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'

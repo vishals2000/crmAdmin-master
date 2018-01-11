@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
@@ -39,7 +39,8 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
         private eventManager: JhiEventManager,
         private http: HttpClient,
         private alertService: JhiAlertService,
-        private campaignTemplatePopupService: CampaignTemplatePopupService
+        private campaignTemplatePopupService: CampaignTemplatePopupService,
+        private router: Router
     ) {
         this.isRetarget = false;
         this.targetGroupSize = "Loading...";
@@ -127,7 +128,10 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
     goToParent(){
         this.activeModal.dismiss('cancel');
         this.eventManager.broadcast({ name: 'closeCampaignTemp', content: 'OK' });
-        this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateDialogComponent as Component, {}, false, this.campaignTemplate.id);
+        setTimeout(() => {
+            this.router.navigate(['/', { outlets: { popup: 'campaign-template/' + this.campaignTemplate.id + '/edit' } }]);
+        }, 10);
+        //this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateDialogComponent as Component, {}, false, this.campaignTemplate.id);
     }
 
     private onTargetGroupContentSizeRequestSuccess(data, headers, contentGrpNo) {
@@ -147,18 +151,21 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
         }
     }
     close(){
-        this.activeModal.dismiss('cancel');
+        this.activeModal.dismiss(this.isRetarget ? 'donotRoute' : 'cancel');
         if(this.isRetarget){
             document.body.classList.add('modal-open');
         }
     }
     clear() {
-        this.activeModal.dismiss('cancel');
+        this.activeModal.dismiss(this.isRetarget ? 'donotRoute' : 'cancel');
         if(this.isRetarget){
             document.body.classList.add('modal-open');
         }
         if(this.isFromLaunch){
-            this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateDialogComponent as Component, {}, false, this.campaignTemplate.id);
+            //this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateDialogComponent as Component, {}, false, this.campaignTemplate.id);
+            setTimeout(() => {
+                this.router.navigate(['/', { outlets: { popup: 'campaign-template/' + this.campaignTemplate.id + '/edit' } }]);
+            }, 10);
         }
     }
 

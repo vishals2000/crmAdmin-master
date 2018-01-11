@@ -86,7 +86,7 @@
                 <tr *ngFor="let campaignTemplate of campaignTemplates ;trackBy: trackId">
                     <!-- <td><a [routerLink]="['../campaign-template', campaignTemplate.id ]">{{campaignTemplate.id}}</a></td> -->
                     <td>
-                        <a style="color: #007bff !important;" (click)="openCampaignTempPage(campaignTemplate.id)">{{campaignTemplate.campaignName}}</a>
+                        <a style="color: #007bff !important;" [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/edit'} }]">{{campaignTemplate.campaignName}}</a>
                     </td>
                     <td>
                         <span class="badge" [ngClass]="{'DRAFT':'badge-default, btn-secondary btn-sm','COMPLETED':'badge-primary','PENDING':'badge-info','LIVE':'badge-success','DELETED':'badge-danger', 'CANCELLED':'badge-danger'}[campaignTemplate.status]">{{campaignTemplate.status}}</span>

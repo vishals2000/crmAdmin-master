@@ -80,7 +80,9 @@ export class CampaignTemplatePopupService {
             this.ngbModalRef = null;
             this.customObjectFromPage = null;
         }, (reason) => {
-            this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true });
+            if(reason !== 'donotRoute'){
+                this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true });
+            }
             this.ngbModalRef = null;
             this.customObjectFromPage = null;
         });

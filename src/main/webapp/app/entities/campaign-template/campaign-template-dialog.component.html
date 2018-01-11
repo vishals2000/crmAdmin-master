@@ -1,4 +1,4 @@
-<form name="editForm" [formGroup]="campaignTemplateGroupCreationForm" role="form" novalidate>
+<form name="editForm" *ngIf="campaignTemplateGroupCreationForm.value.startDate" [formGroup]="campaignTemplateGroupCreationForm" role="form" novalidate>
 
     <div class="modal-header">
         <h4 class="modal-title" id="myCampaignTemplateLabel">Create or edit a Campaign Template</h4>

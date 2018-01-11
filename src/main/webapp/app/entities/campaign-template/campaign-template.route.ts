@@ -84,7 +84,8 @@ export const campaignTemplatePopupRoute: Routes = [
         component: CampaignTemplatePopupComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'CampaignTemplates'
+            pageTitle: 'CampaignTemplates',
+            routeAccessToPage: 'campaign-template'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
@@ -94,7 +95,8 @@ export const campaignTemplatePopupRoute: Routes = [
         component: CampaignTemplatePopupComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'CampaignTemplates'
+            pageTitle: 'CampaignTemplates',
+            routeAccessToPage: 'campaign-template'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
@@ -104,7 +106,8 @@ export const campaignTemplatePopupRoute: Routes = [
         component: CampaignTemplateDeletePopupComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'CampaignTemplates'
+            pageTitle: 'CampaignTemplates',
+            routeAccessToPage: 'campaign-template'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
@@ -114,7 +117,8 @@ export const campaignTemplatePopupRoute: Routes = [
         component: CampaignTemplateLaunchPopupComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'CampaignTemplates'
+            pageTitle: 'CampaignTemplates',
+            routeAccessToPage: 'campaign-template'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
@@ -123,7 +127,8 @@ export const campaignTemplatePopupRoute: Routes = [
         component: CampaignTemplateLaunchPopupComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'CampaignTemplates'
+            pageTitle: 'CampaignTemplates',
+            routeAccessToPage: 'campaign-template'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
@@ -133,7 +138,8 @@ export const campaignTemplatePopupRoute: Routes = [
         component: CampaignTemplateTestPopupComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'CampaignTemplates'
+            pageTitle: 'CampaignTemplates',
+            routeAccessToPage: 'campaign-template'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
@@ -143,7 +149,8 @@ export const campaignTemplatePopupRoute: Routes = [
         component: CampaignTemplateCancelPopupComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'CampaignTemplates'
+            pageTitle: 'CampaignTemplates',
+            routeAccessToPage: 'campaign-template'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
@@ -155,7 +162,8 @@ export const campaignTemplatePopupRoute: Routes = [
         },
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'CampaignTemplates'
+            pageTitle: 'CampaignTemplates',
+            routeAccessToPage: 'campaign-template'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'

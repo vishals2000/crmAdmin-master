@@ -17,6 +17,7 @@ export class UserRouteAccessService implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Promise<boolean> {
 
         const authorities = route.data['authorities'];
+        const routerAccess = route.data['routeAccessToPage'];
         if (!authorities || authorities.length === 0) {
             return true;
         }
@@ -38,14 +39,18 @@ export class UserRouteAccessService implements CanActivate {
         } else{
             url = state.url;
         }
-        return this.checkLogin(authorities, url);
+        return this.checkLogin(authorities, url, routerAccess);
     }
 
-    checkLogin(authorities: string[], url: string): Promise<boolean> {
+    checkLogin(authorities: string[], url: string, routerAccess: string): Promise<boolean> {
         const principal = this.principal;
         return Promise.resolve(principal.identity().then((account) => {
 
             if (account && principal.hasAnyAuthorityDirect(authorities)) {
+                if(routerAccess && (url.indexOf(routerAccess) !== 0 && url.indexOf(routerAccess) !== 1)){
+                    this.router.navigate(['apps']);
+                    return false;
+                }
                 return true;
             }
 

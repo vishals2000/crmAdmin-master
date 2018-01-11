@@ -119,33 +119,36 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
             this.campaignTemplate.campaignGroupId = message[0];
             this.campaignTemplate.frontEnd = message[1];
             this.campaignTemplate.product = message[2];
+            if(message && message.length){
+                const body = {
+                    'frontEnd': this.campaignTemplate.frontEnd,
+                    'product': this.campaignTemplate.product
+                }
+                this.campaignTemplateService.getSegments(body).subscribe(
+                    (res: ResponseWrapper) => {
+                        this.segmentNames = res['segments'];
+                        this.populateSegmentParams();
+                    },
+                    (res: ResponseWrapper) => this.onError(res.json)
+                );
+                this.createForm();
+                this.prepareData();
+                this.populateCountries();
+                this.populateLanguages();
+                this.populateFilterOptions();
+                this.populateEventsMaps();
+                this.populateTagsMaps();
+                this.populateFiltersMap();
+                this.populateLanguagesList();
+                const now = new Date();
+                this.minDate = {
+                    year: now.getUTCFullYear(),
+                    month: now.getUTCMonth() + 1,
+                    day: now.getUTCDate()
+                };
+            }
         });
-        const body = {
-            'frontEnd': this.campaignTemplate.frontEnd,
-            'product': this.campaignTemplate.product
-        }
-        this.campaignTemplateService.getSegments(body).subscribe(
-            (res: ResponseWrapper) => {
-                this.segmentNames = res['segments'];
-                this.populateSegmentParams();
-            },
-            (res: ResponseWrapper) => this.onError(res.json)
-        );
-        this.createForm();
-        this.prepareData();
-        this.populateCountries();
-        this.populateLanguages();
-        this.populateFilterOptions();
-        this.populateEventsMaps();
-        this.populateTagsMaps();
-        this.populateFiltersMap();
-        this.populateLanguagesList();
-        const now = new Date();
-        this.minDate = {
-            year: now.getUTCFullYear(),
-            month: now.getUTCMonth() + 1,
-            day: now.getUTCDate()
-        };
+        
         // this.ctrl = new FormControl('', (control: FormControl) => {
         //     const value = control.value;
 
