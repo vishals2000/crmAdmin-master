@@ -77,7 +77,7 @@ export class LinechartComponent implements OnInit {
     }
 
     ngOnInit() {
-        var dateObj = new Date();
+        let dateObj = new Date();
         const todayDt1 = {
             year: dateObj.getFullYear(),
             month: dateObj.getMonth() + 1,
@@ -94,7 +94,10 @@ export class LinechartComponent implements OnInit {
         this.subscription = this.route.params.subscribe((params) => {
             this.appId = params['id'];
             if (this.appId) {
-                this.setDataToPageModel();
+                let cbk = () => {
+                    this.setDataToPageModel();
+                };
+                this.eventManager.broadcast({ name: 'setBreadCrumbToInsights', content: {appId: this.appId}, callBackFunction: cbk });
             }
             else {
                 this.eventManager.broadcast({ name: 'setBreadCrumbToInsightsFirstApp', content: 'OK' });
@@ -154,8 +157,8 @@ export class LinechartComponent implements OnInit {
 
     private onError(error) {
         this.alertService.error((error && error.message ? error.message : error), null, null);
-        this.eventManager.broadcast({ name: 'selectedApp', content: this.appId });
-        this.eventManager.broadcast({ name: 'setBreadCrumbToInsights', content: 'OK' });
+        // this.eventManager.broadcast({ name: 'selectedApp', content: this.appId });
+        //this.eventManager.broadcast({ name: 'setBreadCrumbToInsights', content: {appId: this.appId} });
     }
 
     private onInsightsSuccess(response, headers) {
@@ -164,8 +167,8 @@ export class LinechartComponent implements OnInit {
         this.sessions = response.sessions;
         this.dailyUniqueUsers = response.dailyUniqueUsers;
         this.totalUsers = response.totalUsers;
-        this.eventManager.broadcast({ name: 'selectedApp', content: this.appId });
-        this.eventManager.broadcast({ name: 'setBreadCrumbToInsights', content: 'OK' });
+        //this.eventManager.broadcast({ name: 'selectedApp', content: this.appId });
+        //this.eventManager.broadcast({ name: 'setBreadCrumbToInsights', content: {appId: this.appId} });
         this.getMessages();
     }
 

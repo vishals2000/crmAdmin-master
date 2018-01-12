@@ -273,24 +273,28 @@ export class NavbarComponent implements OnInit {
         }
     }
     setBreadCrumbToInsights(response, bIsselectedFirstApp) {
-        let oCurObj = this;
-        oCurObj.setBreadCrumbToApp(response);
-        if (!oCurObj.selApp || bIsselectedFirstApp) {
-            oCurObj.selApp = oCurObj.appList[0];
-            sessionStorage['selectedApp'] = JSON.stringify(oCurObj.selApp);
+        this.setBreadCrumbToApp(response);
+        if (response.content && response.content.appId) {
+            this.selAppId = response.content.appId;
         }
-        oCurObj.appPageType = 'INS';
-        oCurObj.crumbsArray.push({
-            appPageType: oCurObj.appPageType,
-            name: 'Insights',
-            router: '#/linechart/project/' + oCurObj.selApp.name,
-            brdCrmbId: '2',
-            list: oCurObj.appList,
-            selVal: [oCurObj.selApp]
+        else if (!this.selApp && this.appList.length) {
+            this.selAppId = this.appList[0].id;
+        }
+        this.setAppSelAppToBreadCrumbModel(response.content.appId, () => {
+            this.appPageType = 'INS';
+            this.crumbsArray.push({
+                appPageType: this.appPageType,
+                name: 'Insights',
+                router: '#/linechart/project/' + this.selApp.name,
+                brdCrmbId: '2',
+                list: this.appList,
+                selVal: [this.selApp]
+            });
+            if (bIsselectedFirstApp) {
+                this.router.navigate(['/linechart/project/' + this.selApp.id], {});
+            }
+            response.callBackFunction && response.callBackFunction();
         });
-        if (bIsselectedFirstApp) {
-            oCurObj.router.navigate(['/linechart/project/' + oCurObj.selApp.id], {});
-        }
     }
     goToLineItemPage() {
         let oCurObj = this;
