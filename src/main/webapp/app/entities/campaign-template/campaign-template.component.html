@@ -64,10 +64,10 @@
                         <span>End Date</span>
                         <span class="fa fa-sort" [ngClass]="predicate === 'recurrenceEndDate' && reverse ? 'fa-sort-asc' : 'fa-sort-dsc' "></span>
                     </th>
-                    <!-- <th jhiSortBy="scheduledTime">
+                    <th jhiSortBy="scheduledTime">
                         <span>Scheduled Time (UTC)</span>
                         <span class="fa fa-sort"></span>
-                    </th> -->
+                    </th>
                     <!-- <th jhiSortBy="inPlayerTimezone"><span>In Player Timezone</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="campaignGroupId"><span>Campaign Group Id</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="filterOption"><span>Filter Option</span> <span class="fa fa-sort"></span></th>
@@ -96,7 +96,7 @@
                     <td class="nowrap">{{campaignTemplate.startDate | date:'mediumDate'}}</td>
                     <!-- <td>{{campaignTemplate.recurrenceType}}</td> -->
                     <td class="nowrap">{{campaignTemplate.recurrenceEndDate | date:'mediumDate'}}</td>
-                    <!-- <td>{{campaignTemplate.scheduledTime}}</td> -->
+                    <td>{{campaignTemplate.scheduledTime}}</td>
                     <!-- <td>{{campaignTemplate.inPlayerTimezone}}</td>
                 <td>{{campaignTemplate.campaignGroupId}}</td>
                 <td>{{campaignTemplate.filterOption}}</td>
