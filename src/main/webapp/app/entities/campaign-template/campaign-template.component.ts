@@ -178,59 +178,59 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
             this.clear();
         }
     }
-    copyOrRetargetCurrentTemp(copyFromTemp, bIsRetarget) {
-        console.log(copyFromTemp);
-        this.copyFromTemp = copyFromTemp;
-        this.campaignTemplateService.search({ campGroupId: this.groupId, searchVal: copyFromTemp.campaignName }, {}).subscribe(
-            (res: ResponseWrapper) => this.copyCurrentIrmWithCopyCount(res.json, bIsRetarget),
-            (res: ResponseWrapper) => this.onError(res.json)
-        );
-    }
+    // copyOrRetargetCurrentTemp(copyFromTemp, bIsRetarget) {
+    //     console.log(copyFromTemp);
+    //     this.copyFromTemp = copyFromTemp;
+    //     this.campaignTemplateService.search({ campGroupId: this.groupId, searchVal: copyFromTemp.campaignName }, {}).subscribe(
+    //         (res: ResponseWrapper) => this.copyCurrentIrmWithCopyCount(res.json, bIsRetarget),
+    //         (res: ResponseWrapper) => this.onError(res.json)
+    //     );
+    // }
     openCampaignTempPage(campTempId) {
         this.campaignTemplatePopupService.openWithoutRouter(CampaignTemplateDialogComponent as Component, {}, false, campTempId);
     }
-    copyCurrentIrmWithCopyCount(acampaigns, bIsRetarget) {
-        let count = 0;
-        let copOrRetagTxt = bIsRetarget ? 'Retarget from ' : '(Copy ';
-        let copyRertaEndSplitTxt = bIsRetarget ? '-' : ')';
-        if (acampaigns.length === 1) {
-            this.campaignTemplateService.copyorRetargetCampaignTemplate(this.copyFromTemp, 0, bIsRetarget).subscribe(
-                (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' }),
-                (res: Response) => this.OnSaveError(res)
-            );
-        }
-        else {
-            let copyCountArr = [];
-            for (var i = 0; i < acampaigns.length; i++) {
-                if (acampaigns[i].campaignName.indexOf(copOrRetagTxt) > -1) {
-                    let aSubName = acampaigns[i].campaignName.split(copOrRetagTxt);
-                    if (aSubName.length) {
-                        aSubName.splice(0, 1);
-                        aSubName = aSubName.join(copOrRetagTxt);
-                        if (aSubName.indexOf(copyRertaEndSplitTxt) > -1) {
-                            let aActualCapName = aSubName.split(copyRertaEndSplitTxt);
-                            const copyCountNo = aActualCapName.splice(0, 1);
-                            aActualCapName = aActualCapName.join(copyRertaEndSplitTxt);
-                            if (aActualCapName === this.copyFromTemp.campaignName) {
-                                count++;
-                                if (copyCountNo[0] && !isNaN(copyCountNo[0])) {
-                                    copyCountArr.push(parseInt(copyCountNo[0] || 0));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            copyCountArr.sort();
-            if (count > 0) {
-                count = (copyCountArr[copyCountArr.length - 1] || 0) + 1;
-            }
-            this.campaignTemplateService.copyorRetargetCampaignTemplate(this.copyFromTemp, count, bIsRetarget).subscribe(
-                (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' }),
-                (res: Response) => this.OnSaveError(res)
-            );
-        }
-    }
+    // copyCurrentIrmWithCopyCount(acampaigns, bIsRetarget) {
+    //     let count = 0;
+    //     let copOrRetagTxt = bIsRetarget ? 'Retarget from ' : '(Copy ';
+    //     let copyRertaEndSplitTxt = bIsRetarget ? '-' : ')';
+    //     if (acampaigns.length === 1) {
+    //         this.campaignTemplateService.copyorRetargetCampaignTemplate(this.copyFromTemp, 0, bIsRetarget).subscribe(
+    //             (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' }),
+    //             (res: Response) => this.OnSaveError(res)
+    //         );
+    //     }
+    //     else {
+    //         let copyCountArr = [];
+    //         for (var i = 0; i < acampaigns.length; i++) {
+    //             if (acampaigns[i].campaignName.indexOf(copOrRetagTxt) > -1) {
+    //                 let aSubName = acampaigns[i].campaignName.split(copOrRetagTxt);
+    //                 if (aSubName.length) {
+    //                     aSubName.splice(0, 1);
+    //                     aSubName = aSubName.join(copOrRetagTxt);
+    //                     if (aSubName.indexOf(copyRertaEndSplitTxt) > -1) {
+    //                         let aActualCapName = aSubName.split(copyRertaEndSplitTxt);
+    //                         const copyCountNo = aActualCapName.splice(0, 1);
+    //                         aActualCapName = aActualCapName.join(copyRertaEndSplitTxt);
+    //                         if (aActualCapName === this.copyFromTemp.campaignName) {
+    //                             count++;
+    //                             if (copyCountNo[0] && !isNaN(copyCountNo[0])) {
+    //                                 copyCountArr.push(parseInt(copyCountNo[0] || 0));
+    //                             }
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         copyCountArr.sort();
+    //         if (count > 0) {
+    //             count = (copyCountArr[copyCountArr.length - 1] || 0) + 1;
+    //         }
+    //         this.campaignTemplateService.copyorRetargetCampaignTemplate(this.copyFromTemp, count, bIsRetarget).subscribe(
+    //             (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' }),
+    //             (res: Response) => this.OnSaveError(res)
+    //         );
+    //     }
+    // }
     openLaunchPopup(campaignTemp){
         if(campaignTemp.retargetedCampaign && campaignTemp.targetGroupContentCriteria && (!campaignTemp.targetGroupContentCriteria.length || (campaignTemp.targetGroupContentCriteria.length && !campaignTemp.targetGroupContentCriteria[0].contentBody || !campaignTemp.targetGroupContentCriteria[0].contentTitle))){
             this.openCampaignTempPage(campaignTemp.id);

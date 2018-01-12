@@ -148,7 +148,9 @@ export class NavbarComponent implements OnInit {
         });
     }
     clearBdData(res) {
-        this.crumbsArray = [];
+        setTimeout(() => {
+            this.crumbsArray = [];
+        }, 0);
     }
     setAppDataToBreadCrumbModel(appListModified) {
         this.appList = appListModified.content || [];
@@ -175,7 +177,9 @@ export class NavbarComponent implements OnInit {
                 }
             }
             if (oCurObj.appList.length === 0 || notFoundCount === oCurObj.appList.length) {
-                oCurObj.router.navigate(["/apps", { outlets: { popup: null }}], { replaceUrl: true });
+                setTimeout(() => {
+                    oCurObj.router.navigate(["/apps", { outlets: { popup: null }}], { replaceUrl: true });
+                },0);
             }
         };
         this.loadAllApps(fAfterFoundSelApp);
@@ -233,24 +237,28 @@ export class NavbarComponent implements OnInit {
                 list: this.appList,
                 selVal: [this.selApp]
             });
+            response.callBackFunction && response.callBackFunction();
         });
     }
     setBreadCrumbToCampTemp(response) {
         this.selAppId = response.content.appId;
-        this.setBreadCrumbToCampGrp(response);
-        if (response.content && response.content.campGrpId) {
-            this.setAppSelCampGrpToBreadCrumbModel(response.content.campGrpId, () => {
-                this.appPageType = 'app-CT';
-                this.crumbsArray.push({
-                    appPageType: this.appPageType,
-                    name: 'Messages',
-                    router: '#/campaign-template/group/' + this.selCampGrp.id + '/' + this.selCampGrp.name,
-                    brdCrmbId: '2',
-                    list: this.campGrpList,
-                    selVal: [this.selCampGrp]
+        let callBackFun = () =>{
+            if (response.content && response.content.campGrpId) {
+                this.setAppSelCampGrpToBreadCrumbModel(response.content.campGrpId, () => {
+                    this.appPageType = 'app-CT';
+                    this.crumbsArray.push({
+                        appPageType: this.appPageType,
+                        name: 'Messages',
+                        router: '#/campaign-template/group/' + this.selCampGrp.id + '/' + this.selCampGrp.name,
+                        brdCrmbId: '2',
+                        list: this.campGrpList,
+                        selVal: [this.selCampGrp]
+                    });
                 });
-            });
-        }
+            }
+        };
+        response.callBackFunction = callBackFun;
+        this.setBreadCrumbToCampGrp(response);
     }
     setBreadCrumbToAudSeg(response, bIsselectedFirstApp) {
         let oCurObj = this;

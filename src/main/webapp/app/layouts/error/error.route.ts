@@ -9,8 +9,10 @@ export const errorRoute: Routes = [
         component: ErrorComponent,
         data: {
             authorities: [],
-            pageTitle: 'Error page!'
+            pageTitle: 'Error page!',
+            routeAccessToPage:'accessdenied'
         },
+        canActivate: [UserRouteAccessService],
     },
     {
         path: 'accessdenied',
@@ -18,7 +20,9 @@ export const errorRoute: Routes = [
         data: {
             authorities: [],
             pageTitle: 'Error page!',
-            error403: true
+            error403: true,
+            routeAccessToPage:'accessdenied'
         },
+        canActivate: [UserRouteAccessService],
     }
 ];

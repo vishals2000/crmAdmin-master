@@ -25,29 +25,16 @@ export class UserRouteAccessService implements CanActivate {
         let url = state.url;
         url = decodeURI(url);
         if(route.outlet === 'popup'){
-            let urlSub, firstPopUpParam;
-            for(let i=0;i<route.url.length;i++){
-                if(!urlSub){
-                    urlSub = route.url[i].path;
-                    firstPopUpParam = urlSub;
-                }else{
-                    urlSub = urlSub + "/" +  route.url[i].path;
-                }
-               
-            }
+            let firstPopUpParam = route.url[0].path;
             if(routerAccess && state.url.indexOf(routerAccess) !== 0 && state.url.indexOf(routerAccess) !==1){
                 routerAccessDenied = true;
             } else if(!routerAccess && firstPopUpParam && state.url.indexOf(firstPopUpParam) !== 0 && state.url.indexOf(firstPopUpParam) !==1){
                 routerAccessDenied = true;
             }
-            url = url.replace("(popup:" + decodeURI(urlSub) + ")", '');
-        } else if(route.url.length){
-            url = route.url[0].path;
-            if(url !== state.url && state.url.indexOf('popup:') === 0){
+        } else if(route.url.length === 1){
+            if(route.url.length === 1 && route.url[0].path !== state.url && state.url.indexOf('popup:') > -1){
                 routerAccessDenied = true;
             }
-        } else{
-            url = state.url;
         }
         return this.checkLogin(authorities, url, routerAccessDenied);
     }
@@ -61,12 +48,28 @@ export class UserRouteAccessService implements CanActivate {
             }
 
             this.stateStorageService.storeUrl(url);
-            this.router.navigate(['accessdenied']).then(() => {
-                // only show the login dialog, if the user hasn't logged in yet
-                if (!account) {
-                    this.loginModalService.open();
-                }
+
+            var event = new MouseEvent('click', {
+                view: window,
+                bubbles: true,
+                cancelable: true
             });
+            var popupClose = document.querySelectorAll('.close') || [];
+            for(var i=0;i<popupClose.length;i++){
+                popupClose[i].dispatchEvent(event);
+            }
+            setTimeout(() => {
+                this.router.navigate(['accessdenied', { outlets: { popup: null }}], { replaceUrl: true }).then(() => {
+                    // only show the login dialog, if the user hasn't logged in yet
+                    if (!account) {
+                        this.loginModalService.open();
+                    }
+                    else{
+                        
+                    }
+                });
+            }, 100);
+            
             return false;
         }));
     }

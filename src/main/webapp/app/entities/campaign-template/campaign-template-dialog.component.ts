@@ -770,7 +770,6 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
         return targetGroupFilterCriterionFormControl.get('filterOptionValue').value;
     }
     populateFilterOptions() {
-        console.log(this.campaignTemplate.retargetedCampaign);
         if (this.campaignTemplate.retargetedCampaign) {
             this.filterOptions = ['Message', 'Message Open'];
         } else {
