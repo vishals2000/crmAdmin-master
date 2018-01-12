@@ -959,13 +959,6 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
         let filterOptionLookUpComparisonVsValue = new Map<string, string[]>();
 
         if (appName.indexOf('mgm') === -1 && appName.toLocaleLowerCase().indexOf('borgata') > -1) {
-            // filterOptionLookUpComparisonVsValue.set('is', ['njtaginput']);
-            // filterOptionLookUpComparisonVsValue.set('is not', ['njtaginput']);
-            // filterOptionLookUpComparisonVsValue.set('exists', ['true', 'false']);
-            // filterOptionLookUpComparisonVsValue.set('contains', ['njtagEmptyinput']);
-            // this.casinoTagsMap.set('NoPush', filterOptionLookUpComparisonVsValue);
-            // this.casinoTagsMap.set('NoPushUS', filterOptionLookUpComparisonVsValue);
-            // this.casinoTagsMap.set('hasLoggedIn_tag', filterOptionLookUpComparisonVsValue);
             filterOptionLookUpComparisonVsValue.set('is', ['true', 'false']);
             this.casinoTagsMap.set('hasLoggedIn', filterOptionLookUpComparisonVsValue);
         } else if (appName.indexOf('mgm') > -1) {
@@ -1358,6 +1351,7 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
                                 switch (this.casinoEventsMap.get(filterOptionLookUp).get(filterOptionComparison)) {
                                     case 'number of days': return 'daysCounter';
                                     case 'date': return 'simpleDate';
+                                    case 'true': return 'dropdown';
                                     default: return 'textbox';
                                 }
                             }
@@ -1493,10 +1487,6 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
                 return 'leagueNameId';
             } else if (formOptionValues[0] === 'eventId') {
                 return 'eventId';
-            } else if (formOptionValues[0] === 'njtaginput') {
-                return 'njtaginput';
-            } else if (formOptionValues[0] === 'njtagEmptyinput') {
-                return 'njtagEmptyinput';
             } else if (formOptionValues[0] === 'Number') {
                 return 'Number';
             } else if (formOptionValues[0]) {

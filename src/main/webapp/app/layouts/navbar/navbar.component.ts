@@ -93,6 +93,7 @@ export class NavbarComponent implements OnInit {
         }
     }
     ngOnInit() {
+        this.crumbsArray = [];
         this.currentAccount = null;
         let oCurObj = this;
         let fAfterGetResults = function (res) {

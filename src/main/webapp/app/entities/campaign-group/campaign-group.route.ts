@@ -36,7 +36,8 @@ export const campaignGroupRoute: Routes = [
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignGroups',
             routeAccessToPage: 'campaign-group'
-        }
+        },
+        canActivate: [UserRouteAccessService]
     },
     {
         path: 'campaign-group',

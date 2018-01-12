@@ -56,7 +56,8 @@ export const campaignTemplateRoute: Routes = [
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignTemplates',
             routeAccessToPage: 'campaign-template'
-        }
+        },
+        canActivate: [UserRouteAccessService]
     },
     {
         path: 'campaign-template',
