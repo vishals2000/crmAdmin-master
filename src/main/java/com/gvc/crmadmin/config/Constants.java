@@ -25,37 +25,13 @@ public final class Constants {
     public static final String US_NJ_AT_REG1 = "http://10.1.107.151:8080/";
     public static final String US_NJ_AT_REG1_DATA = "/home/qauser/data";
 
-//    public static final String US_NJ_PROD = "http://10.166.144.114:8080/";
-//    public static final String US_NJ_PROD_DATA = "/home/pg/data/";
+    public static final String US_NJ_PROD = "http://10.63.76.135:8080/";
+    public static final String US_NJ_PROD_DATA = "/home/pg/data/";
 
     public static final String ENVIRONMENT = TR_DEV;
     public static final String ENVIRONMENT_DATA = TR_DEV_DATA;
 
     public static final DateTimeFormatter CAMPAIGN_SCHEDULE_TIME_FORMAT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").withZone(UTC);
-
-
-    //Production
-//    public static final String REFRESH_URL = "http://10.166.144.114:8080/api/rest/cmsgateway/v1/getTargetGroupSize";
-//    public static final String LAUNCH_URL = "http://10.166.144.114:8080/api/rest/cmsgateway/v1/pushNotificationCampaign";
-//    public static final String TEST_URL = "http://10.166.144.114:8080/api/rest/cmsgateway/v1/sendPushNotificationForScreenName";
-//    public static final String OPTIMOVE_INSTANCES_URL = "http://10.166.144.114:8080/api/rest/cmsgateway/v1/getOptimoveInstances";
-//    public static final String ADD_OPTIMOVE_CHANNEL_TEMPLATE_URL = "http://10.166.144.114:8080/api/rest/cmsgateway/v1/addChannelTemplate";
-//    public static final String INSIGHTS_URL = "http://10.166.144.114:8080/api/rest/cmsgateway/v1/getAppInsights";
-//    public static final String CANCEL_URL = "http://10.166.144.114:8080/api/rest/cmsgateway/v1/cancelPushNotificationCampaign";
-//    public static final String DATA_DIR = "/home/pg/data/";
-//    public static final int BULK_SAVE_BATCH_SIZE = 10000;
-
-
-    // TR-DEV
-//    public static final String REFRESH_URL = "http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/getTargetGroupSize";
-//    public static final String LAUNCH_URL = "http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/pushNotificationCampaign";
-//    public static final String TEST_URL = "http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/sendPushNotificationForScreenName";
-//    public static final String OPTIMOVE_INSTANCES_URL = "http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/getOptimoveInstances";
-//    public static final String ADD_OPTIMOVE_CHANNEL_TEMPLATE_URL = "http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/addChannelTemplate";
-//    public static final String INSIGHTS_URL = "http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/getAppInsights";
-//    public static final String CANCEL_URL = "http://trdev-campaign-api-container.ivycomptech.co.in/api/rest/cmsgateway/v1/cancelPushNotificationCampaign";
-//    public static final String DATA_DIR = "/home/ppoker/data/";
-//    public static final int BULK_SAVE_BATCH_SIZE = 10000;
 
     public static final String REFRESH_URL = ENVIRONMENT + "api/rest/cmsgateway/v1/getTargetGroupSize";
     public static final String LAUNCH_URL = ENVIRONMENT + "api/rest/cmsgateway/v1/pushNotificationCampaign";
