@@ -38,6 +38,9 @@
                 <td>{{apps.description}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
+                        <!-- Don not remove this temporary fix for admin and user login in two different tabs -->
+                        <button type="submit" [hidden]="true" (click)="alert(1)">
+                        </button>
                         <button type="submit" title="Insights"
                             [routerLink]="['/linechart/project', apps.id]"
                             class="btn btn-info btn-sm">

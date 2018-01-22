@@ -99,7 +99,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
         }
     }
     transition() {
-        this.router.navigate(['/campaign-group/project/' + this.projectId + '/' + this.projectName], {
+        this.router.navigate(['/campaign-group/project', this.projectId, this.projectName], {
             queryParams:
                 {
                     page: this.page,

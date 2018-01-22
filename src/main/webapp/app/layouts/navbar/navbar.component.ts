@@ -84,7 +84,7 @@ export class NavbarComponent implements OnInit {
         if (this.selApp || this.selAppId) {
             let fAfterGetResults = function (res) {
                 oCurObj.campGrpList = res.json;
-                for(let i=0;i<oCurObj.campGrpList.length;i++){
+                for (let i = 0; i < oCurObj.campGrpList.length; i++) {
                     oCurObj.campGrpList[i].itemName = oCurObj.campGrpList[i].name;
                 }
                 fcbk && fcbk();
@@ -141,8 +141,8 @@ export class NavbarComponent implements OnInit {
     loggedInSucces(res) {
         this.principal.identity().then((account) => {
             this.currentAccount = account;
-            if(!account){
-            } else{
+            if (!account) {
+            } else {
                 this.loadAllAppsForeFully(null);
             }
         });
@@ -177,9 +177,19 @@ export class NavbarComponent implements OnInit {
                 }
             }
             if (oCurObj.appList.length === 0 || notFoundCount === oCurObj.appList.length) {
+                var event = new MouseEvent('click', {
+                    view: window,
+                    bubbles: true,
+                    cancelable: true
+                });
+                var popupClose = document.querySelectorAll('.close') || [];
+                for (var i = 0; i < popupClose.length; i++) {
+                    popupClose[i].dispatchEvent(event);
+                }
                 setTimeout(() => {
-                    oCurObj.router.navigate(["/apps", { outlets: { popup: null }}], { replaceUrl: true });
-                },0);
+                    console.log(oCurObj.router);
+                    oCurObj.router.navigateByUrl("/apps");
+                }, 0);
             }
         };
         this.loadAllApps(fAfterFoundSelApp);
@@ -204,9 +214,9 @@ export class NavbarComponent implements OnInit {
             }
             if (ocurObj.campGrpList.length === 0 || notFoundCount === ocurObj.campGrpList.length) {
                 if (ocurObj.selApp) {
-                    ocurObj.router.navigate(["/campaign-group/project/" + decodeURI(ocurObj.selApp.id) + '/' + ocurObj.selApp.name], { replaceUrl: true });
+                    ocurObj.router.navigate(["/campaign-group/project", decodeURI(ocurObj.selApp.id), + ocurObj.selApp.name], { replaceUrl: true });
                 } else if (ocurObj.selAppId) {
-                    ocurObj.router.navigate(["/campaign-group/project/" + ocurObj.selAppId], { replaceUrl: true });
+                    ocurObj.router.navigate(["/campaign-group/project", ocurObj.selAppId], { replaceUrl: true });
                 }
             }
         };
@@ -242,7 +252,7 @@ export class NavbarComponent implements OnInit {
     }
     setBreadCrumbToCampTemp(response) {
         this.selAppId = response.content.appId;
-        let callBackFun = () =>{
+        let callBackFun = () => {
             if (response.content && response.content.campGrpId) {
                 this.setAppSelCampGrpToBreadCrumbModel(response.content.campGrpId, () => {
                     this.appPageType = 'app-CT';
@@ -261,25 +271,46 @@ export class NavbarComponent implements OnInit {
         this.setBreadCrumbToCampGrp(response);
     }
     setBreadCrumbToAudSeg(response, bIsselectedFirstApp) {
-        let oCurObj = this;
-        oCurObj.setBreadCrumbToApp(response);
-        if (!oCurObj.selApp || bIsselectedFirstApp) {
-            oCurObj.selApp = oCurObj.appList[0];
-            sessionStorage['selectedApp'] = JSON.stringify(oCurObj.selApp);
+        // let oCurObj = this;
+        // oCurObj.setBreadCrumbToApp(response);
+        // if (!oCurObj.selApp || bIsselectedFirstApp) {
+        //     oCurObj.selApp = oCurObj.appList[0];
+        //     sessionStorage['selectedApp'] = JSON.stringify(oCurObj.selApp);
+        // }
+        // if (oCurObj.appList && oCurObj.appList.length) {
+        //     oCurObj.appPageType = 'AS';
+        //     oCurObj.crumbsArray.push({
+        //         appPageType: oCurObj.appPageType,
+        //         name: 'Audience Segments',
+        //         router: '#/audience-segments/project/' + oCurObj.selApp.id,
+        //         brdCrmbId: '2', list: oCurObj.appList,
+        //         selVal: [oCurObj.selApp]
+        //     });
+        // }
+        // if (bIsselectedFirstApp) {
+        //     oCurObj.router.navigate(['/audience-segments/project/' + oCurObj.selApp.id], {});
+        // }
+        this.setBreadCrumbToApp(response);
+        if (response.content && response.content.appId) {
+            this.selAppId = response.content.appId;
         }
-        if (oCurObj.appList && oCurObj.appList.length) {
-            oCurObj.appPageType = 'AS';
-            oCurObj.crumbsArray.push({
-                appPageType: oCurObj.appPageType,
+        else if (!this.selApp && this.appList.length) {
+            this.selAppId = this.appList[0].id;
+        }
+        this.setAppSelAppToBreadCrumbModel(response.content.appId, () => {
+            this.appPageType = 'AS';
+            this.crumbsArray.push({
+                appPageType: this.appPageType,
                 name: 'Audience Segments',
-                router: '#/audience-segments/project/' + oCurObj.selApp.id,
-                brdCrmbId: '2', list: oCurObj.appList,
-                selVal: [oCurObj.selApp]
+                router: '#/audience-segments/project/' + this.selApp.id,
+                brdCrmbId: '2', list: this.appList,
+                selVal: [this.selApp]
             });
-        }
-        if (bIsselectedFirstApp) {
-            oCurObj.router.navigate(['/audience-segments/project/' + oCurObj.selApp.id], {});
-        }
+            if (bIsselectedFirstApp) {
+                this.router.navigate(['/audience-segments/project', this.selApp.id], {});
+            }
+            response.callBackFunction && response.callBackFunction();
+        });
     }
     setBreadCrumbToInsights(response, bIsselectedFirstApp) {
         this.setBreadCrumbToApp(response);
@@ -300,7 +331,7 @@ export class NavbarComponent implements OnInit {
                 selVal: [this.selApp]
             });
             if (bIsselectedFirstApp) {
-                this.router.navigate(['/linechart/project/' + this.selApp.id], {});
+                this.router.navigate(['/linechart/project', this.selApp.id], {});
             }
             response.callBackFunction && response.callBackFunction();
         });
@@ -309,13 +340,13 @@ export class NavbarComponent implements OnInit {
         let oCurObj = this;
         this.collapseNavbar();
         if (this.selApp) {
-            this.router.navigate(['/linechart/project/' + this.selApp.id], {});
+            this.router.navigate(['/linechart/project', this.selApp.id], {});
         } else if (this.appList && this.appList.length) {
             sessionStorage['selectedApp'] = JSON.stringify(this.appList[0]);
-            this.router.navigate(['/linechart/project/' + this.appList[0].id], {});
+            this.router.navigate(['/linechart/project', this.appList[0].id], {});
         } else {
             sessionStorage['selectedApp'] = JSON.stringify(this.appList[0]);
-            oCurObj.router.navigate(['/linechart/project/' + oCurObj.appList[0].id], {});
+            oCurObj.router.navigate(['/linechart/project', oCurObj.appList[0].id], {});
         }
     }
     goToCampStatPage() {
@@ -332,13 +363,13 @@ export class NavbarComponent implements OnInit {
         let oCurObj = this;
         this.collapseNavbar();
         if (this.selApp) {
-            this.router.navigate(['/audience-segments/project/' + this.selApp.id], {});
+            this.router.navigate(['/audience-segments/project', this.selApp.id], {});
         } else if (this.appList && this.appList.length) {
             sessionStorage['selectedApp'] = JSON.stringify(this.appList[0]);
-            this.router.navigate(['/audience-segments/project/' + this.appList[0].id], {});
+            this.router.navigate(['/audience-segments/project', this.appList[0].id], {});
         } else {
             sessionStorage['selectedApp'] = JSON.stringify(this.appList[0]);
-            oCurObj.router.navigate(['/audience-segments/project/' + oCurObj.appList[0].id], {});
+            oCurObj.router.navigate(['/audience-segments/project', oCurObj.appList[0].id], {});
         }
     }
     collapseNavbar() {
@@ -378,22 +409,22 @@ export class NavbarComponent implements OnInit {
         switch (appPageType) {
             case 'app-CT':
                 this.selCampGrp = oSelectedItm;
-                this.router.navigate(['/campaign-template/group/' + this.selCampGrp.id + '/' + this.selCampGrp.name], { replaceUrl: true });
+                this.router.navigate(['/campaign-template/group', this.selCampGrp.id , this.selCampGrp.name], { replaceUrl: true });
                 break;
             case 'INS':
                 sessionStorage['selectedApp'] = JSON.stringify(oSelectedItm);
                 this.selApp = oSelectedItm;
-                this.router.navigate(['/linechart/project/' + this.selApp.id], { replaceUrl: true });
+                this.router.navigate(['/linechart/project', this.selApp.id], { replaceUrl: true });
                 break;
             case 'app-CG':
                 sessionStorage['selectedApp'] = JSON.stringify(oSelectedItm);
                 this.selApp = oSelectedItm;
-                this.router.navigate(['/campaign-group/project/' + this.selApp.id + '/' + this.selApp.name], { replaceUrl: true });
+                this.router.navigate(['/campaign-group/project', this.selApp.id, this.selApp.name], { replaceUrl: true });
                 break;
             case 'AS':
                 this.selApp = oSelectedItm;
                 sessionStorage['selectedApp'] = JSON.stringify(oSelectedItm);
-                this.router.navigate(['/audience-segments/project/' + this.selApp.id], { replaceUrl: true });
+                this.router.navigate(['/audience-segments/project', this.selApp.id], { replaceUrl: true });
                 break;
         }
     }

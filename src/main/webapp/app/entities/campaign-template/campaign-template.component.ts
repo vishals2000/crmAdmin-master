@@ -105,7 +105,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         }
     }
     transition() {
-        this.router.navigate(['/campaign-template/group/' + this.groupId + '/' + this.groupName], {
+        this.router.navigate(['/campaign-template/group', this.groupId , this.groupName], {
             queryParams:
                 {
                     page: this.page,
