@@ -246,7 +246,7 @@ export class NavbarComponent implements OnInit {
             this.crumbsArray.push({
                 appPageType: this.appPageType,
                 name: 'Campaigns',
-                router: '#/campaign-group/project/' + this.selApp.id + '/' + this.selApp.name, brdCrmbId: '2',
+                router: '#/campaign-group/project/' + encodeURIComponent(this.selApp.id) + '/' + encodeURIComponent(this.selApp.name), brdCrmbId: '2',
                 list: this.appList,
                 selVal: [this.selApp]
             });
@@ -262,7 +262,7 @@ export class NavbarComponent implements OnInit {
                     this.crumbsArray.push({
                         appPageType: this.appPageType,
                         name: 'Messages',
-                        router: '#/campaign-template/group/' + this.selCampGrp.id + '/' + this.selCampGrp.name,
+                        router: '#/campaign-template/group/' + encodeURIComponent(this.selCampGrp.id) + '/' + encodeURIComponent(this.selCampGrp.name),
                         brdCrmbId: '2',
                         list: this.campGrpList,
                         selVal: [this.selCampGrp]
@@ -305,7 +305,7 @@ export class NavbarComponent implements OnInit {
             this.crumbsArray.push({
                 appPageType: this.appPageType,
                 name: 'Audience Segments',
-                router: '#/audience-segments/project/' + this.selApp.id,
+                router: '#/audience-segments/project/' + encodeURIComponent(this.selApp.id),
                 brdCrmbId: '2', list: this.appList,
                 selVal: [this.selApp]
             });
@@ -328,7 +328,7 @@ export class NavbarComponent implements OnInit {
             this.crumbsArray.push({
                 appPageType: this.appPageType,
                 name: 'Insights',
-                router: '#/linechart/project/' + this.selApp.name,
+                router: '#/linechart/project/' + encodeURIComponent(this.selApp.id),
                 brdCrmbId: '2',
                 list: this.appList,
                 selVal: [this.selApp]
