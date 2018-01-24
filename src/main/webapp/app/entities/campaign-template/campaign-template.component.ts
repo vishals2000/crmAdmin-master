@@ -193,13 +193,13 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         let count = 0;
         let copOrRetagTxt = bIsRetarget ? 'Retarget from ' : '(Copy ';
         let copyRertaEndSplitTxt = bIsRetarget ? '-' : ')';
-        if (acampaigns.length === 1) {
-            this.campaignTemplateService.copyorRetargetCampaignTemplate(this.copyFromTemp, 0, bIsRetarget).subscribe(
-                (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' }),
-                (res: Response) => this.OnSaveError(res)
-            );
-        }
-        else {
+        // if (acampaigns.length === 1) {
+        //     this.campaignTemplateService.copyorRetargetCampaignTemplate(this.copyFromTemp, 0, bIsRetarget).subscribe(
+        //         (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' }),
+        //         (res: Response) => this.OnSaveError(res)
+        //     );
+        // }
+        // else {
             let copyCountArr = [];
             for (var i = 0; i < acampaigns.length; i++) {
                 if (acampaigns[i].campaignName.indexOf(copOrRetagTxt) > -1) {
@@ -229,7 +229,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
                 (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' }),
                 (res: Response) => this.OnSaveError(res)
             );
-        }
+        //}
     }
     openLaunchPopup(campaignTemp){
         if(campaignTemp.retargetedCampaign && campaignTemp.targetGroupContentCriteria && (!campaignTemp.targetGroupContentCriteria.length || (campaignTemp.targetGroupContentCriteria.length && !campaignTemp.targetGroupContentCriteria[0].contentBody || !campaignTemp.targetGroupContentCriteria[0].contentTitle))){
