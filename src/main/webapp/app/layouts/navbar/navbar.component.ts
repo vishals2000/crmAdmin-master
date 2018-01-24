@@ -375,8 +375,10 @@ export class NavbarComponent implements OnInit {
             oCurObj.router.navigate(['/audience-segments/project', oCurObj.appList[0].id], {});
         }
     }
-    collapseNavbar() {
+    clearBd(){
         this.crumbsArray = [];
+    }
+    collapseNavbar() {
         this.isNavbarCollapsed = true;
     }
 
