@@ -221,7 +221,9 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
                     }
                 }
             }
-            copyCountArr.sort();
+            copyCountArr = copyCountArr.sort((num: any, num1: any) => {
+                return num - num1;
+            });
             if (count > 0) {
                 count = (copyCountArr[copyCountArr.length - 1] || 0) + 1;
             }
