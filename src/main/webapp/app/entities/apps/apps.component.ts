@@ -42,6 +42,7 @@ export class AppsComponent implements OnInit, OnDestroy {
         private paginationConfig: PaginationConfig
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
+        this.searchValue = null;
         this.routeData = this.activatedRoute.data.subscribe((data) => {
             this.page = data['pagingParams'].page;
             this.previousPage = data['pagingParams'].page;
@@ -57,7 +58,10 @@ export class AppsComponent implements OnInit, OnDestroy {
                 sort: this.sort()
             }).subscribe(
                 (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
-                (res: ResponseWrapper) => this.onError(res.json)
+                (res: ResponseWrapper) => {
+                    this.apps = [];
+                    this.onError(res.json);
+                }
                 );
         } else {
             this.appsService.query({
@@ -66,13 +70,17 @@ export class AppsComponent implements OnInit, OnDestroy {
                 sort: this.sort()
             }).subscribe(
                 (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
-                (res: ResponseWrapper) => this.onError(res.json)
+                (res: ResponseWrapper) => {
+                    this.apps = [];
+                    this.onError(res.json);
+                }
                 );
         }
     }
     loadPage(page: number) {
         if (page !== this.previousPage) {
             this.previousPage = page;
+            this.apps = null;
             this.transition();
         }
     }
@@ -141,10 +149,11 @@ export class AppsComponent implements OnInit, OnDestroy {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
         this.queryCount = this.totalItems;
-        this.apps = data;
+        this.apps = data || [];
         this.eventManager.broadcast({ name: 'setBreadCrumbToApp', content: 'OK' });
     }
     private onError(error) {
         this.alertService.error(error.message, null, null);
+        this.eventManager.broadcast({ name: 'setBreadCrumbToApp', content: 'OK' });
     }
 }

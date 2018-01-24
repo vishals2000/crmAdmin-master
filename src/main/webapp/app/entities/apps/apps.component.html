@@ -1,21 +1,44 @@
 <div>
     <h2>
         <span>Apps</span>      
-        <button *jhiHasAnyAuthority="'ROLE_ADMIN'" class="btn btn-primary float-right jh-create-entity create-apps" [routerLink]="['/', { outlets: { popup: ['apps-new'] } }]">
+        <!-- <button *jhiHasAnyAuthority="'ROLE_ADMIN'" class="btn btn-primary float-right jh-create-entity create-apps" [routerLink]="['/', { outlets: { popup: ['apps-new'] } }]">
             <span class="fa fa-plus"></span>
             <span >
             Create new Apps
             </span>
-        </button>
+        </button> -->
     </h2>
-    <div style="overflow:hidden;">
+    <!-- <div style="overflow:hidden;">
         <input class="form-control" placeholder="Search" [(ngModel)]="searchValue" (ngModelChange)="onSearchKeyChange(searchValue)" (keypress)="filterItems($event)" style="max-width:500px;float:right;"/>
-        </div>
+        </div> -->
     <jhi-alert></jhi-alert>
-    <div class="row">
-    </div>
+    <div class="jumbotron vertical-center" *ngIf="previousPage === 1 && searchValue === null && apps && apps.length === 0">
+            <div class="container text-center">
+                <h3 *jhiHasAnyAuthority="'ROLE_ADMIN'" style="color: #000;">You haven't created any Apps</h3>
+                <h3 *ngIf="currentAccount && currentAccount.authorities.indexOf('ROLE_ADMIN') === -1" style="color: #000;">You don't have any Apps</h3>
+                <button *jhiHasAnyAuthority="'ROLE_ADMIN'" class="btn btn-primary create-apps" [routerLink]="['/', { outlets: { popup: ['apps-new'] } }]">
+                    <span class="fa fa-plus"></span>
+                    <span >
+                    Create new Apps
+                    </span>
+                </button>
+            </div>
+        </div>
     <br/>
-    <div class="table-responsive" *ngIf="apps">
+    <div class="table-responsive" *ngIf="previousPage > 1 || searchValue || apps && apps.length">
+        <br>
+            <div class="row container-fluid" style=" justify-content: flex-end;">
+                <div class="col-md-4">
+                        <input class="form-control" placeholder="Search" [(ngModel)]="searchValue" (ngModelChange)="onSearchKeyChange(searchValue)" (keypress)="filterItems($event)" style="max-width:500px;float:right;"/>
+                </div>
+                <button *jhiHasAnyAuthority="'ROLE_ADMIN'" class="btn btn-primary float-right jh-create-entity create-apps" [routerLink]="['/', { outlets: { popup: ['apps-new'] } }]">
+                    <span class="fa fa-plus"></span>
+                    <span >
+                    Create new Apps
+                    </span>
+                </button>
+            </div>
+        <br>
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="clear.bind(this)">
@@ -72,7 +95,7 @@
             </tbody>
         </table>
     </div>
-        <div *ngIf="apps && apps.length">
+        <div *ngIf="previousPage > 1 || searchValue || apps && apps.length">
             <div class="row justify-content-center">
                 <jhi-item-count [page]="page" [total]="queryCount" [itemsPerPage]="itemsPerPage"></jhi-item-count>
             </div>

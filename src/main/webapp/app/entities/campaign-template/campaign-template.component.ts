@@ -244,7 +244,10 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         this.totalItems = headers.get('X-Total-Count');
         this.queryCount = this.totalItems;
         this.campaignTemplates = data || [];
+        this.setBreadCrumbs();
+    }
 
+    private setBreadCrumbs(){
         const fePdTde = JSON.parse(sessionStorage["selectedApp"] || null);
         if (this.previousPage === 1 && this.searchValue === null && !this.oCampInfo && !fePdTde) {
             this.campaignTemplateService.getAppCapGrpIdFromCapGrp(this.groupId).subscribe((oCampGrpInfo) => {
@@ -268,9 +271,11 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         } catch (exception) {
             error.message = error.text();
         }
-        this.onError(error);
+        //this.onError(error);
+        this.alertService.error(error.message, null, null);
     }
     private onError(error) {
         this.alertService.error(error.message, null, null);
+        this.setBreadCrumbs();
     }
 }

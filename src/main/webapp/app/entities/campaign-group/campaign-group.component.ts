@@ -214,5 +214,6 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
     }
     private onError(error) {
         this.alertService.error(error.message, null, null);
+        this.eventManager.broadcast({ name: 'setBreadCrumbToCampGrp', content: {appId: this.projectId} });
     }
 }

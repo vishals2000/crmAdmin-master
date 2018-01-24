@@ -29,6 +29,7 @@ import { StateStorageService } from '../../shared/auth/state-storage.service';
 export class NavbarComponent implements OnInit {
 
     inProduction: boolean;
+    NoAppData: boolean;
     isNavbarCollapsed: boolean;
     languages: any[];
     swaggerEnabled: boolean;
@@ -58,12 +59,14 @@ export class NavbarComponent implements OnInit {
         private campaignGroupService: CampaignGroupService,
         private stateStorageService: StateStorageService
     ) {
+        this.NoAppData = true;
         this.version = VERSION ? 'v' + VERSION : '';
         this.isNavbarCollapsed = true;
     }
     loadAllApps(fcbk) {
         let oCurObj = this;
         let fAfterGetResults = function (res) {
+            oCurObj.NoAppData = res.json.length === 0;
             oCurObj.eventManager.broadcast({ name: 'appListModified', content: res.json })
             fcbk && fcbk();
         };

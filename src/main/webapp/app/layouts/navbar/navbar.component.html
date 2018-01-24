@@ -19,12 +19,12 @@
                     <span>Apps</span>
                 </a>
             </li>
-            <li *ngSwitchCase="true" class="nav-item">
+            <li *ngSwitchCase="true" class="nav-item" [hidden]="NoAppData">
                 <a class="nav-link" routerLink="audience-segments" (click)="goToSegAudPage()">
                         <span>Audience Segments</span>
                     </a>
             </li>
-            <li *ngSwitchCase="true" class="nav-item" >
+            <li *ngSwitchCase="true" class="nav-item" [hidden]="NoAppData">
         
                 <a class="nav-link" (click)="goToLineItemPage()" id="dashboard-menu">
                     <span>
