@@ -150,6 +150,18 @@ public class CampaignGroupResource {
     }
     */
 
+    @PostMapping("/campaign-group/project/app/search/")
+    @Timed
+    public ResponseEntity<List<CampaignGroup>> getAllCampaignGroupsbyProjectIdAndName(@ApiParam Pageable pageable, @Valid @RequestBody CampaignGroupSearchRequest campaignGroupSearchRequest) {
+        log.debug("REST request to get a page of CampaignGroups with projectId : " + campaignGroupSearchRequest.getAppId() + " campaignGroupName :  " + campaignGroupSearchRequest.getSearchValue());
+
+        Page<CampaignGroup> page = campaignGroupService.findByProjectIdAndName(pageable, campaignGroupSearchRequest.getAppId(), campaignGroupSearchRequest.getSearchValue());
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/campaign-group/project/" + campaignGroupSearchRequest.getAppId() + "/search/" + campaignGroupSearchRequest.getSearchValue());
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /*
     @GetMapping("/campaign-group/project/{projectId}/search/{campaignGroupName}")
     @Timed
     public ResponseEntity<List<CampaignGroup>> getAllCampaignGroupsbyProjectIdAndName(@ApiParam Pageable pageable, @PathVariable String projectId, @PathVariable String campaignGroupName) {
@@ -160,6 +172,7 @@ public class CampaignGroupResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/campaign-group/project/" + projectId + "/search/" + campaignGroupName);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+    */
 
     @GetMapping("/campaign-group/feProduct/{campaignGroupId}")
     @Timed

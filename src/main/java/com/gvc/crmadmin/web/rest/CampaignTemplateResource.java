@@ -331,6 +331,22 @@ public class CampaignTemplateResource {
     }
     */
 
+    @PostMapping("/campaign-templates/appCampaignGroupInfoWithCampaignTemplateId/")
+    @Timed
+    public ResponseEntity<AppCampaignGroupInfo> getAppCampaignGroupInfoWithCampaignTemplateId(@Valid @RequestBody AppCampaignGroupInfoRequest appCampaignGroupInfoRequest) {
+        log.debug("REST request to get AppCampaignGroupInfo : {}", appCampaignGroupInfoRequest.toString());
+        CampaignTemplate campaignTemplate = campaignTemplateService.findOne(appCampaignGroupInfoRequest.getCampaignTemplateId());
+        CampaignGroup campaignGroup = campaignGroupService.findOne(campaignTemplate.getCampaignGroupId());
+        Apps app = appsService.findOne(campaignGroup.getProjectId());
+        AppCampaignGroupInfo appCampaignGroupInfo = new AppCampaignGroupInfo();
+        appCampaignGroupInfo.setAppId(app.getId())
+            .setAppName(app.getName())
+            .setCampaignGroupId(campaignGroup.getId())
+            .setCampaignGroupName(campaignGroup.getName());
+        return ResponseUtil.wrapOrNotFound(Optional.of(appCampaignGroupInfo));
+    }
+
+    /*
     @GetMapping("/campaign-templates/appCampaignGroupInfoWithCampaignTemplateId/{campaignTemplateId}")
     @Timed
     public ResponseEntity<AppCampaignGroupInfo> getAppCampaignGroupInfoWithCampaignTemplateId(@PathVariable String campaignTemplateId) {
@@ -344,6 +360,7 @@ public class CampaignTemplateResource {
             .setCampaignGroupName(campaignGroup.getName());
         return ResponseUtil.wrapOrNotFound(Optional.of(appCampaignGroupInfo));
     }
+    */
 
     @GetMapping("/campaign-templates/appCampaignGroupInfoWithCampaignGroupId/{campaignGroupId}")
     @Timed
@@ -387,6 +404,19 @@ public class CampaignTemplateResource {
     }
     */
 
+    @PostMapping("/campaign-templates/group/search")
+    @Timed
+    public ResponseEntity<List<CampaignTemplate>> getAllCampaignsForCampaignGroupByName(@ApiParam Pageable pageable, @Valid @RequestBody CampaignTemplateSearchRequest campaignTemplateSearchRequest) {
+        log.debug("REST request to get a page of CampaignTemplates with campaignGroupId : " + campaignTemplateSearchRequest.getCampaignGroupId() + " campaignTemplateName : " + campaignTemplateSearchRequest.getSearchValue());
+        Page<CampaignTemplate> page = campaignTemplateService.findByCampaignGroupIdAndName(pageable, campaignTemplateSearchRequest.getCampaignGroupId(), campaignTemplateSearchRequest.getSearchValue());
+
+        updateCampaignTemplates(page);
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/campaign-templates/group/" + campaignTemplateSearchRequest.getCampaignGroupId() + "/search/" + campaignTemplateSearchRequest.getSearchValue());
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /*
     @GetMapping("/campaign-templates/group/{campaignGroupId}/search/{campaignTemplateName}")
     @Timed
     public ResponseEntity<List<CampaignTemplate>> getAllCampaignsForCampaignGroupByName(@ApiParam Pageable pageable, @PathVariable String campaignGroupId, @PathVariable String campaignTemplateName) {
@@ -398,6 +428,7 @@ public class CampaignTemplateResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/campaign-templates/group/" + campaignGroupId + "/search/" + campaignTemplateName);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+    */
 
     private void updateCampaignTemplates(Page<CampaignTemplate> page) {
         final DateTime currentDateTime = new DateTime(DateTimeZone.UTC).withSecondOfMinute(0).withMillisOfSecond(0);
@@ -565,6 +596,23 @@ public class CampaignTemplateResource {
         return getDateTimeFromString(Constants.CAMPAIGN_SCHEDULE_TIME_FORMAT, campaignTemplate.getRecurrenceEndDate().toString() + " " + campaignTemplate.getScheduledTime());
     }
 
+    @PostMapping("/campaign-templates/feProduct/")
+    @Timed
+    public ResponseEntity<FrontendProduct> getFeProduct(@Valid @RequestBody FrontendProductRequest frontendProductRequest) {
+        log.debug("REST request to get frontEnd and Product for campaign-templates - campaign group " + frontendProductRequest);
+        CampaignGroup campaignGroup = campaignGroupService.findOne(frontendProductRequest.getCampaignGroupId());
+
+        FrontendProduct frontendProduct = new FrontendProduct("","");
+        if(campaignGroup != null) {
+            Apps app = appsService.findOne(campaignGroup.getProjectId());
+            if(app != null) {
+                frontendProduct = new FrontendProduct(app.getFrontEnd(), app.getProduct().name());
+            }
+        }
+        return ResponseUtil.wrapOrNotFound(Optional.of(frontendProduct));
+    }
+
+    /*
     @GetMapping("/campaign-templates/feProduct/{campaignGroupId}")
     @Timed
     public ResponseEntity<FrontendProduct> getFeProduct(@PathVariable String campaignGroupId) {
@@ -580,6 +628,8 @@ public class CampaignTemplateResource {
         }
         return ResponseUtil.wrapOrNotFound(Optional.of(frontendProduct));
     }
+
+    */
 
     /**
      * Deletes a push Notification campaign template

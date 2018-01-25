@@ -2,11 +2,9 @@ package com.gvc.crmadmin.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.gvc.crmadmin.config.Constants;
-import com.gvc.crmadmin.domain.Apps;
-import com.gvc.crmadmin.domain.Authority;
-import com.gvc.crmadmin.domain.DeleteApp;
-import com.gvc.crmadmin.domain.User;
-import com.gvc.crmadmin.domain.campaignMgmtApi.*;
+import com.gvc.crmadmin.domain.*;
+import com.gvc.crmadmin.domain.campaignMgmtApi.AppInsightsRequest;
+import com.gvc.crmadmin.domain.campaignMgmtApi.AppInsightsResponse;
 import com.gvc.crmadmin.repository.UserRepository;
 import com.gvc.crmadmin.security.AuthoritiesConstants;
 import com.gvc.crmadmin.security.SecurityUtils;
@@ -169,6 +167,27 @@ public class AppsResource {
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(apps));
     }
 
+    @PostMapping("/campaign-group/project/app/search/")
+    @Timed
+    public ResponseEntity<List<Apps>> getAllCampaignGroupsbyProjectIdAndName(@ApiParam Pageable pageable, @Valid @RequestBody AppSearchRequest appSearchRequest) {
+        log.debug("REST request to get Apps by name: {}", appSearchRequest);
+
+//        Page<Apps> page = appsService.findByName(pageable, appName);
+        Page<Apps> page;
+
+        Optional<User> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+        if (optionalUser.isPresent()) {
+            page = appsService.findByIdInAndNameLikeIgnoreCase(pageable, appSearchRequest.getSearchValue(), optionalUser.get().getApplications());
+        } else {
+            page = appsService.findByIdInAndNameLikeIgnoreCase(pageable, appSearchRequest.getSearchValue(), Collections.emptySet());
+        }
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/apps/search/"+appSearchRequest.getSearchValue());
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /*
+
     @GetMapping("/apps/search/{appName}")
     @Timed
     public ResponseEntity<List<Apps>> getAppsByName(@ApiParam Pageable pageable, @PathVariable String appName) {
@@ -187,6 +206,8 @@ public class AppsResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/apps/search/"+appName);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
+    */
 
     /**
      * DELETE  /apps/:id : delete the "id" apps.
