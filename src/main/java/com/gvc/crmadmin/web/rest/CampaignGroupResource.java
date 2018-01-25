@@ -1,10 +1,7 @@
 package com.gvc.crmadmin.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.gvc.crmadmin.domain.Apps;
-import com.gvc.crmadmin.domain.CampaignGroup;
-import com.gvc.crmadmin.domain.DeleteCampaignGroup;
-import com.gvc.crmadmin.domain.FrontendProduct;
+import com.gvc.crmadmin.domain.*;
 import com.gvc.crmadmin.service.AppsService;
 import com.gvc.crmadmin.service.CampaignGroupService;
 import com.gvc.crmadmin.web.rest.util.HeaderUtil;
@@ -66,9 +63,9 @@ public class CampaignGroupResource {
 
         CampaignGroup result;
         CampaignGroup campaignGroupFromDB = campaignGroupService.findOne(campaignGroup.getId());
-        if(campaignGroupFromDB == null){
+        if (campaignGroupFromDB == null) {
             result = campaignGroupService.save(campaignGroup);
-        } else{
+        } else {
             return ResponseEntity.badRequest()
                 .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, campaignGroupFromDB.getId(), "Campaign Group with the given name exists"))
                 .body(campaignGroupFromDB);
@@ -115,15 +112,35 @@ public class CampaignGroupResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+    @PostMapping("/campaign-group/project")
+    @Timed
+    public ResponseEntity<List<CampaignGroup>> getAllCampaignGroups(@ApiParam Pageable pageable, @Valid @RequestBody CampaignGroupRequest campaignGroupRequest) {
+        log.debug("REST request to get a page of CampaignGroups with projectId " + campaignGroupRequest);
+        Page<CampaignGroup> page = campaignGroupService.findByProjectId(pageable, campaignGroupRequest.getAppId());
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/campaign-group");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /*
     @GetMapping("/campaign-group/project/{projectId}")
     @Timed
-    public ResponseEntity<List<CampaignGroup>> getAllCampaignGroups(@ApiParam Pageable pageable,@PathVariable String projectId) {
+    public ResponseEntity<List<CampaignGroup>> getAllCampaignGroups(@ApiParam Pageable pageable, @PathVariable String projectId) {
         log.debug("REST request to get a page of CampaignGroups with projectId");
         Page<CampaignGroup> page = campaignGroupService.findByProjectId(pageable, projectId);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/campaign-group");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+    */
 
+    @PostMapping("/campaign-group/project/allCampaignGroups/")
+    @Timed
+    public ResponseEntity<List<CampaignGroup>> getAllCampaignGroups(@Valid @RequestBody CampaignGroupRequest campaignGroupRequest) {
+        log.debug("REST request to get all CampaignGroups with projectId " + campaignGroupRequest);
+        List<CampaignGroup> campaignGroups = campaignGroupService.findByProjectId(campaignGroupRequest.getAppId());
+        return new ResponseEntity<>(campaignGroups, HttpStatus.OK);
+    }
+
+    /*
     @GetMapping("/campaign-group/project/allCampaignGroups/{projectId}")
     @Timed
     public ResponseEntity<List<CampaignGroup>> getAllCampaignGroups(@PathVariable String projectId) {
@@ -131,6 +148,7 @@ public class CampaignGroupResource {
         List<CampaignGroup> campaignGroups = campaignGroupService.findByProjectId(projectId);
         return new ResponseEntity<>(campaignGroups, HttpStatus.OK);
     }
+    */
 
     @GetMapping("/campaign-group/project/{projectId}/search/{campaignGroupName}")
     @Timed
@@ -139,7 +157,7 @@ public class CampaignGroupResource {
 
         Page<CampaignGroup> page = campaignGroupService.findByProjectIdAndName(pageable, projectId, campaignGroupName);
 
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/campaign-group/project/"+ projectId + "/search/" + campaignGroupName);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/campaign-group/project/" + projectId + "/search/" + campaignGroupName);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
@@ -149,10 +167,10 @@ public class CampaignGroupResource {
         log.debug("REST request to get frontEnd and Product for campaign group " + campaignGroupId);
         CampaignGroup campaignGroup = campaignGroupService.findOne(campaignGroupId);
 
-        FrontendProduct frontendProduct = new FrontendProduct("","");
-        if(campaignGroup != null) {
+        FrontendProduct frontendProduct = new FrontendProduct("", "");
+        if (campaignGroup != null) {
             Apps app = appsService.findOne(campaignGroup.getProjectId());
-            if(app != null) {
+            if (app != null) {
                 frontendProduct = new FrontendProduct(app.getFrontEnd(), app.getProduct().name());
             }
         }
@@ -192,9 +210,10 @@ public class CampaignGroupResource {
     public ResponseEntity<Void> deleteCampaignGroup(@Valid @RequestBody DeleteCampaignGroup deleteCampaignGroup) {
         log.debug("REST request to delete CampaignGroup : {}", deleteCampaignGroup);
         CampaignGroup campaignGroupFromDB = campaignGroupService.findOne(deleteCampaignGroup.getGroupId());
-        if(campaignGroupFromDB == null){
+        if (campaignGroupFromDB == null) {
             return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, deleteCampaignGroup.getGroupId())).build();
-        } else{campaignGroupService.delete(deleteCampaignGroup.getGroupId());
+        } else {
+            campaignGroupService.delete(deleteCampaignGroup.getGroupId());
             return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, deleteCampaignGroup.getGroupId())).build();
         }
     }

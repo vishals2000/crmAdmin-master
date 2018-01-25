@@ -307,12 +307,21 @@ public class CampaignTemplateResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+    @PostMapping("/campaign-templates/")
+    @Timed
+    public ResponseEntity<CampaignTemplate> getCampaignTemplate(@Valid @RequestBody CampaignTemplatesRequest campaignTemplatesRequest) {
+        log.debug("REST request to get CampaignTemplate : {}", campaignTemplatesRequest.getCampaignTemplateId());
+        CampaignTemplate campaignTemplate = campaignTemplateService.findOne(campaignTemplatesRequest.getCampaignTemplateId());
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(campaignTemplate));
+    }
+
     /**
      * GET  /campaign-templates/:id : get the "id" campaignTemplate.
      *
      * @param id the id of the campaignTemplate to retrieve
      * @return the ResponseEntity with status 200 (OK) and with body the campaignTemplate, or with status 404 (Not Found)
      */
+    /*
     @GetMapping("/campaign-templates/{id}")
     @Timed
     public ResponseEntity<CampaignTemplate> getCampaignTemplate(@PathVariable String id) {
@@ -320,6 +329,7 @@ public class CampaignTemplateResource {
         CampaignTemplate campaignTemplate = campaignTemplateService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(campaignTemplate));
     }
+    */
 
     @GetMapping("/campaign-templates/appCampaignGroupInfoWithCampaignTemplateId/{campaignTemplateId}")
     @Timed
@@ -348,9 +358,22 @@ public class CampaignTemplateResource {
         return ResponseUtil.wrapOrNotFound(Optional.of(appCampaignGroupInfo));
     }
 
+    @PostMapping("/campaign-templates/group/")
+    @Timed
+    public ResponseEntity<List<CampaignTemplate>> getAllCampaignsForCampaignGroup(@ApiParam Pageable pageable, @Valid @RequestBody CampaignTemplatesRequest campaignTemplatesRequest) {
+        log.debug("REST request to get a page of CampaignTemplates with campaignGroupId : " + campaignTemplatesRequest);
+        Page<CampaignTemplate> page = campaignTemplateService.findByCampaignGroupId(pageable, campaignTemplatesRequest.getCampaignGroupId());
+
+        updateCampaignTemplates(page);
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/campaign-templates/group/" + campaignTemplatesRequest.getCampaignGroupId());
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
     /**
      * This is used to get all campaign templates for a campaign group
      * */
+    /*
     @GetMapping("/campaign-templates/group/{campaignGroupId}")
     @Timed
     public ResponseEntity<List<CampaignTemplate>> getAllCampaignsForCampaignGroup(@ApiParam Pageable pageable, @PathVariable String campaignGroupId) {
@@ -362,6 +385,7 @@ public class CampaignTemplateResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/campaign-templates/group/" + campaignGroupId);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+    */
 
     @GetMapping("/campaign-templates/group/{campaignGroupId}/search/{campaignTemplateName}")
     @Timed
