@@ -34,8 +34,7 @@ export const campaignGroupRoute: Routes = [
         },
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'CampaignGroups',
-            routeAccessToPage: 'campaign-group'
+            pageTitle: 'CampaignGroups'
         },
         canActivate: [UserRouteAccessService]
     },
@@ -47,8 +46,7 @@ export const campaignGroupRoute: Routes = [
         },
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'CampaignGroups',
-            routeAccessToPage: 'campaign-group'
+            pageTitle: 'CampaignGroups'
         },
         canActivate: [UserRouteAccessService]
     },
@@ -57,8 +55,7 @@ export const campaignGroupRoute: Routes = [
         component: CampaignGroupDetailComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'CampaignGroups',
-            routeAccessToPage: 'campaign-group'
+            pageTitle: 'CampaignGroups'
         },
         canActivate: [UserRouteAccessService]
     }
@@ -70,8 +67,7 @@ export const campaignGroupPopupRoute: Routes = [
         component: CampaignGroupPopupComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'CampaignGroups',
-            routeAccessToPage: 'campaign-group'
+            pageTitle: 'CampaignGroups'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
@@ -81,8 +77,7 @@ export const campaignGroupPopupRoute: Routes = [
         component: CampaignGroupPopupComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'CampaignGroups',
-            routeAccessToPage: 'campaign-group'
+            pageTitle: 'CampaignGroups'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
@@ -92,8 +87,7 @@ export const campaignGroupPopupRoute: Routes = [
         component: CampaignGroupDeletePopupComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'CampaignGroups',
-            routeAccessToPage: 'campaign-group'
+            pageTitle: 'CampaignGroups'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'

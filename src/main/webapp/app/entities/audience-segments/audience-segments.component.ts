@@ -79,7 +79,7 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
         }
     }
     transition() {
-        this.router.navigate(['/audience-segments/project/' + this.selectedApp.id], {
+        this.router.navigate(['/audience-segments/project', this.selectedApp.id], {
             queryParams:
                 {
                     page: this.page,
@@ -92,7 +92,7 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
 
     clear() {
         this.page = 0;
-        this.router.navigate(['/audience-segments/project/' + this.selectedApp.id, {
+        this.router.navigate(['/audience-segments/project', this.selectedApp.id, {
             page: this.page,
             sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
         }]);
@@ -103,8 +103,12 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
             setTimeout(() => {
                 this.appId = params['id'];
                 if (this.appId) {
-                    this.setDataToPageModel();
-                } else {
+                    let cbk = () => {
+                        this.setDataToPageModel();
+                    };
+                    this.eventManager.broadcast({ name: 'setBreadCrumbToAudSeg', content: {appId: this.appId}, callBackFunction: cbk });
+                }
+                else {
                     this.eventManager.broadcast({ name: 'setBreadCrumbToAudSegFirstApp', content: 'OK' });
                 }
             }, 0);
@@ -116,10 +120,10 @@ export class AudienceSegmentsComponent implements OnInit, OnDestroy {
         this.showUploadDiv = true;
         const values: string[] = [this.selectedApp.frontEnd, this.selectedApp.product.toString()];
         this.audienceSegmentsService.changeAppInfo(values);
-        setTimeout(() => {
-            this.eventManager.broadcast({ name: 'selectedApp', content: this.appId });
-            this.eventManager.broadcast({ name: 'setBreadCrumbToAudSeg', content: 'OK' });
-        }, 0);
+        // setTimeout(() => {
+        //     this.eventManager.broadcast({ name: 'selectedApp', content: this.appId });
+        //     this.eventManager.broadcast({ name: 'setBreadCrumbToAudSeg', content: 'OK' });
+        // }, 0);
 
         if (this.appId) {
             this.loadAll();

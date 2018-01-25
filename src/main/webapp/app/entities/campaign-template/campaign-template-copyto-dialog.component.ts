@@ -51,19 +51,19 @@ export class CampaignTemplateCopyToDialogComponent implements OnInit {
             if (sessionStorage['appList']) {
                 const appList = JSON.parse(sessionStorage['appList']);
                 let relatedAppList = [];
-                if(this.campaignTemplate.retargetedCampaign){
+                if (this.campaignTemplate.retargetedCampaign) {
                     this.appList = [JSON.parse(sessionStorage['selectedApp'])];
                     this.selectedApp = this.appList;
                     this.getCampaignGrpsForSelApp(this.selectedApp[0]);
-                } else{
-                    for(var i=0;i<appList.length;i++){
-                        if(appList[i].product === this.campaignTemplate.product){
+                } else {
+                    for (var i = 0; i < appList.length; i++) {
+                        if (appList[i].product === this.campaignTemplate.product) {
                             relatedAppList.push(appList[i]);
                         }
                     }
                     this.appList = relatedAppList;
                 }
-                
+
             } else {
                 this.clear();
             }
@@ -112,49 +112,54 @@ export class CampaignTemplateCopyToDialogComponent implements OnInit {
         let count = 0;
         let copOrRetagTxt = '(Copy ';
         let copyRertaEndSplitTxt = ')';
-        if (acampaigns.length === 1) {
-            this.campaignTemplate.campaignGroupId = this.selectedCampGrp[0].id;
-            this.campaignTemplateService.copyorRetargetCampaignTemplate(this.campaignTemplate, 0, false).subscribe(
-                (res: ResponseWrapper) => this.onSaveSuccess(),
-                (res: Response) => this.OnSaveError(res)
-            );
-        } else {
-            let copyCountArr = [];
-            for (var i = 0; i < acampaigns.length; i++) {
-                if (acampaigns[i].campaignName.indexOf(copOrRetagTxt) > -1) {
-                    let aSubName = acampaigns[i].campaignName.split(copOrRetagTxt);
-                    if (aSubName.length) {
-                        aSubName.splice(0, 1);
-                        aSubName = aSubName.join(copOrRetagTxt);
-                        if (aSubName.indexOf(copyRertaEndSplitTxt) > -1) {
-                            let aActualCapName = aSubName.split(copyRertaEndSplitTxt);
-                            const copyCountNo = aActualCapName.splice(0, 1);
-                            aActualCapName = aActualCapName.join(copyRertaEndSplitTxt);
-                            if (aActualCapName === this.campaignTemplate.campaignName) {
-                                count++;
-                                if (copyCountNo[0] && !isNaN(copyCountNo[0])) {
-                                    copyCountArr.push(parseInt(copyCountNo[0] || 0));
-                                }
+        // if (acampaigns.length === 1) {
+        //     this.campaignTemplate.campaignGroupId = this.selectedCampGrp[0].id;
+        //     this.campaignTemplateService.copyorRetargetCampaignTemplate(this.campaignTemplate, 0, false).subscribe(
+        //         (res: ResponseWrapper) => this.onSaveSuccess(),
+        //         (res: Response) => this.OnSaveError(res)
+        //     );
+        // } else {
+        let copyCountArr = [];
+        for (var i = 0; i < acampaigns.length; i++) {
+            if (acampaigns[i].campaignName.indexOf(copOrRetagTxt) > -1) {
+                let aSubName = acampaigns[i].campaignName.split(copOrRetagTxt);
+                if (aSubName.length) {
+                    aSubName.splice(0, 1);
+                    aSubName = aSubName.join(copOrRetagTxt);
+                    if (aSubName.indexOf(copyRertaEndSplitTxt) > -1) {
+                        let aActualCapName = aSubName.split(copyRertaEndSplitTxt);
+                        const copyCountNo = aActualCapName.splice(0, 1);
+                        aActualCapName = aActualCapName.join(copyRertaEndSplitTxt);
+                        if (aActualCapName === this.campaignTemplate.campaignName) {
+                            count++;
+                            if (copyCountNo[0] && !isNaN(copyCountNo[0])) {
+                                copyCountArr.push(parseInt(copyCountNo[0] || 0));
                             }
                         }
                     }
                 }
             }
-            copyCountArr.sort();
-            if (count > 0) {
-                count = (copyCountArr[copyCountArr.length - 1] || 0) + 1;
-            }
-            this.campaignTemplate.campaignGroupId = this.selectedCampGrp[0].id;
-            this.campaignTemplateService.copyorRetargetCampaignTemplate(this.campaignTemplate, count, false).subscribe(
-                (res: ResponseWrapper) => this.onSaveSuccess(),
-                (res: Response) => this.OnSaveError(res)
-            );
         }
+        copyCountArr = copyCountArr.sort((num: any, num1: any) => {
+            return num - num1;
+        });
+        if (count > 0) {
+            count = (copyCountArr[copyCountArr.length - 1] || 0) + 1;
+        }
+        this.campaignTemplate.campaignGroupId = this.selectedCampGrp[0].id;
+        this.campaignTemplateService.copyorRetargetCampaignTemplate(this.campaignTemplate, count, false).subscribe(
+            (res: ResponseWrapper) => this.onSaveSuccess(),
+            (res: Response) => this.OnSaveError(res)
+        );
+        // }
     }
     clear() {
         this.activeModal.dismiss('cancel');
     }
     private onSaveSuccess() {
+        if (this.campaignTemplate.campaignGroupId === this.selectedCampGrp[0].id) {
+            this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' });
+        }
         this.activeModal.dismiss();
     }
     private OnSaveError(error) {

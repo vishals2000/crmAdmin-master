@@ -150,13 +150,13 @@
                 <!-- <h4>TargetGroupContentCriterion #{{i + 1}}</h4> -->
                 <div>
                     <div class="form-row">
-                        <div class="form-group  col-md-1" [hidden]="targetGroupContentCriteria.controls.length === 1 ? true : false ">
-                            <label></label>
-                            <button type="submit" alt="Remove Language" title="Remove Language" (click)="removeTargetGroupContentCriterion(i)" class="btn btn-normal">
+                        <div class="form-group  col-md-1">
+                            <label class="form-control-label" ></label>
+                            <button [hidden]="targetGroupContentCriteria.controls.length === 1 ? true : false "  type="submit" alt="Remove Language" title="Remove Language" (click)="removeTargetGroupContentCriterion(i)" class="btn btn-normal">
                                 <span class="fa fa-minus-circle"></span>
                             </button>
                         </div>
-                        <div class="form-group form-group col-md-7">
+                        <div class="form-group form-group col-md-6">
                             <label class="form-control-label" for="field_contentTitle">Content Title</label>
                             <input type="text" class="form-control" name="contentTitle" id="field_contentTitle" formControlName="contentTitle" required/>
                         </div>                        
@@ -179,7 +179,7 @@
                                 (onDeSelectAll)="onLangContItemSelect(i)"></angular2-multiselect>
                         </div>
                         <div class="form-group  col-md-2">
-                            <label></label>
+                            <label class="form-control-label" ></label>
                             <button type="submit" alt="Target Content Group Size" [disabled]="getTargetContentGroupRefreshBtnEnabled(i)" title="Target Content Group Size"
                                 (click)="getTargetContentGroupSize(i)" class="btn btn-normal">
                                 <span class="fa fa-refresh">{{targetContentGroupSize[i]}}</span>
@@ -189,7 +189,8 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group form-group col-md-10">
+                        <div class="form-group  col-md-1"></div>
+                        <div class="form-group col-md-10">
                             <label class="form-control-label" for="field_contentBody">Content Body</label>
                             <!-- <input type="text" class="form-control" name="contentBody" id="field_contentBody" formControlName="contentBody" required/> -->
                             <textarea class="form-control" name="contentBody" id="field_contentBody" rows="5" formControlName="contentBody" required></textarea>
@@ -204,19 +205,20 @@
             <span class="fa fa-language">Add Language</span>
         </button>
         </br>
+        <span class="pad"></span>
         <div formArrayName="targetGroupMetaData" class="overrideInvalid well well-lg">
             <div class="overrideInvalid" *ngFor="let targetGroupMetaDataCriterion of targetGroupMetaData.controls; let i=index" [formGroupName]="i">
                 <!-- The repeated address template -->
                 <!-- <h4>targetGroupMetaDataCriterion #{{i + 1}}</h4> -->
                 <div class="form-row">
                     <div class="form-group  col-md-1">
-                        <label></label>
+                        <!-- <label></label> -->
                         <button type="submit" alt="Remove MetaData" title="Remove MetaData" (click)="removeTargetGroupMetaDataCriterion(i)" class="btn btn-normal">
                             <span class="fa fa-minus-circle"></span>
                         </button>
                     </div>
                     <div class="form-group col-md-4">
-                        <label class="form-control-label col-sm-2 col-form-label">Key*</label>
+                        <!-- <label class="form-control-label col-sm-2 col-form-label">Key*</label> -->
                         <input type="text" placeholder="Key*" class="form-control" name="key" formControlName="key" required (keypress)="liveOddKeyUniqueCheck(i)"
                         />
                         <div [hidden]="!targetGroupMetaDataCriterion.controls.key?.invalid" class="">
@@ -226,7 +228,7 @@
                         </div>
                     </div>
                     <div class="form-group col-md-4">
-                        <label class="form-control-label col-sm-2 col-form-label">Value*</label>
+                        <!-- <label class="form-control-label col-sm-2 col-form-label">Value*</label> -->
                         <input type="text" placeholder="Value*" class="form-control" name="value" formControlName="value" required/>
                     </div>
                 </div>

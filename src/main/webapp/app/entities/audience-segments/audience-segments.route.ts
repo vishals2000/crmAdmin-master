@@ -35,8 +35,7 @@ export const audienceSegmentsRoute: Routes = [
         },
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'AudienceSegments',
-            routeAccessToPage: 'audience-segments'
+            pageTitle: 'AudienceSegments'
         },
         canActivate: [UserRouteAccessService]
     }, {
@@ -47,8 +46,18 @@ export const audienceSegmentsRoute: Routes = [
         },
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'AudienceSegments',
-            routeAccessToPage: 'audience-segments'
+            pageTitle: 'AudienceSegments'
+        },
+        canActivate: [UserRouteAccessService]
+    }, {
+        path: 'audience-segments',
+        component: AudienceSegmentsDetailComponent,
+        resolve: {
+            'pagingParams': AudienceSegmentsResolvePagingParams
+        },
+        data: {
+            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
+            pageTitle: 'AudienceSegments'
         },
         canActivate: [UserRouteAccessService]
     }
@@ -60,8 +69,7 @@ export const audienceSegmentsPopupRoute: Routes = [
         component: AudienceSegmentsPopupComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'AudienceSegments',
-            routeAccessToPage: 'audience-segments'
+            pageTitle: 'AudienceSegments'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
@@ -71,8 +79,7 @@ export const audienceSegmentsPopupRoute: Routes = [
         component: UploadSegmentsPopupComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'UploadSegments',
-            routeAccessToPage: 'audience-segments'
+            pageTitle: 'UploadSegments'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
@@ -82,8 +89,7 @@ export const audienceSegmentsPopupRoute: Routes = [
         component: AudienceSegmentsPopupComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'AudienceSegments',
-            routeAccessToPage: 'audience-segments'
+            pageTitle: 'AudienceSegments'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
@@ -93,8 +99,7 @@ export const audienceSegmentsPopupRoute: Routes = [
         component: AudienceSegmentsDeletePopupComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-            pageTitle: 'AudienceSegments',
-            routeAccessToPage: 'audience-segments'
+            pageTitle: 'AudienceSegments'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'

@@ -99,7 +99,7 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
         }
     }
     transition() {
-        this.router.navigate(['/campaign-group/project/' + this.projectId + '/' + this.projectName], {
+        this.router.navigate(['/campaign-group/project', this.projectId, this.projectName], {
             queryParams:
                 {
                     page: this.page,
@@ -214,5 +214,6 @@ export class CampaignGroupComponent implements OnInit, OnDestroy {
     }
     private onError(error) {
         this.alertService.error(error.message, null, null);
+        this.eventManager.broadcast({ name: 'setBreadCrumbToCampGrp', content: {appId: this.projectId} });
     }
 }

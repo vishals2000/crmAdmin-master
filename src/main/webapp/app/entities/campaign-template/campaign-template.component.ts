@@ -105,7 +105,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         }
     }
     transition() {
-        this.router.navigate(['/campaign-template/group/' + this.groupId + '/' + this.groupName], {
+        this.router.navigate(['/campaign-template/group', this.groupId , this.groupName], {
             queryParams:
                 {
                     page: this.page,
@@ -193,13 +193,13 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         let count = 0;
         let copOrRetagTxt = bIsRetarget ? 'Retarget from ' : '(Copy ';
         let copyRertaEndSplitTxt = bIsRetarget ? '-' : ')';
-        if (acampaigns.length === 1) {
-            this.campaignTemplateService.copyorRetargetCampaignTemplate(this.copyFromTemp, 0, bIsRetarget).subscribe(
-                (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' }),
-                (res: Response) => this.OnSaveError(res)
-            );
-        }
-        else {
+        // if (acampaigns.length === 1) {
+        //     this.campaignTemplateService.copyorRetargetCampaignTemplate(this.copyFromTemp, 0, bIsRetarget).subscribe(
+        //         (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' }),
+        //         (res: Response) => this.OnSaveError(res)
+        //     );
+        // }
+        // else {
             let copyCountArr = [];
             for (var i = 0; i < acampaigns.length; i++) {
                 if (acampaigns[i].campaignName.indexOf(copOrRetagTxt) > -1) {
@@ -221,7 +221,9 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
                     }
                 }
             }
-            copyCountArr.sort();
+            copyCountArr = copyCountArr.sort((num: any, num1: any) => {
+                return num - num1;
+            });
             if (count > 0) {
                 count = (copyCountArr[copyCountArr.length - 1] || 0) + 1;
             }
@@ -229,7 +231,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
                 (res: ResponseWrapper) => this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' }),
                 (res: Response) => this.OnSaveError(res)
             );
-        }
+        //}
     }
     openLaunchPopup(campaignTemp){
         if(campaignTemp.retargetedCampaign && campaignTemp.targetGroupContentCriteria && (!campaignTemp.targetGroupContentCriteria.length || (campaignTemp.targetGroupContentCriteria.length && !campaignTemp.targetGroupContentCriteria[0].contentBody || !campaignTemp.targetGroupContentCriteria[0].contentTitle))){
@@ -244,7 +246,10 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         this.totalItems = headers.get('X-Total-Count');
         this.queryCount = this.totalItems;
         this.campaignTemplates = data || [];
+        this.setBreadCrumbs();
+    }
 
+    private setBreadCrumbs(){
         const fePdTde = JSON.parse(sessionStorage["selectedApp"] || null);
         if (this.previousPage === 1 && this.searchValue === null && !this.oCampInfo && !fePdTde) {
             this.campaignTemplateService.getAppCapGrpIdFromCapGrp(this.groupId).subscribe((oCampGrpInfo) => {
@@ -268,9 +273,11 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
         } catch (exception) {
             error.message = error.text();
         }
-        this.onError(error);
+        //this.onError(error);
+        this.alertService.error(error.message, null, null);
     }
     private onError(error) {
         this.alertService.error(error.message, null, null);
+        this.setBreadCrumbs();
     }
 }

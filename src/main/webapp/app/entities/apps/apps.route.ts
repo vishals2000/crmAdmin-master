@@ -35,7 +35,6 @@ export const appsRoute: Routes = [
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'Apps',
-            routeAccessToPage: 'apps'
         },
         canActivate: [UserRouteAccessService]
     }, {
@@ -44,7 +43,6 @@ export const appsRoute: Routes = [
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'Apps',
-            routeAccessToPage: 'apps'
         },
         canActivate: [UserRouteAccessService]
     }
@@ -57,7 +55,6 @@ export const appsPopupRoute: Routes = [
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'Apps',
-            routeAccessToPage: 'apps'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
@@ -68,7 +65,6 @@ export const appsPopupRoute: Routes = [
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'Apps',
-            routeAccessToPage: 'apps'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
@@ -79,7 +75,6 @@ export const appsPopupRoute: Routes = [
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'Apps',
-            routeAccessToPage: 'apps'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
