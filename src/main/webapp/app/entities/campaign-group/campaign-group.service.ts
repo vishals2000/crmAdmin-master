@@ -46,18 +46,31 @@ export class CampaignGroupService {
         );
     }
     query(req?: any): Observable<ResponseWrapper> {
-        const options = createRequestOption(req);
-        return this.http.get(this.resourceUrl + '/project/' + req.appId + "/", options)
-            .map((res: Response) => this.convertResponse(res));
+         const postObj = {
+            appId: req.appId
+         };
+         req.appId = null;
+         const options = createRequestOption(req);
+        return this.http.post(this.resourceUrl + '/project/', postObj, options)
+        .map((res: Response) => this.convertResponse(res));
     }
     queryAll(req?: any): Observable<ResponseWrapper> {
-        return this.http.get(this.resourceUrl + '/project/allCampaignGroups/' + req.appId + "/")
+        const postObj = {
+            appId: req.appId
+         };
+        return this.http.post(this.resourceUrl + '/project/allCampaignGroups/', postObj)
             .map((res: Response) => this.convertResponse(res));
     }
 
     search(req?: any, option?: any): Observable<ResponseWrapper> {
+        const postObj= {
+            appId: req.appId,
+            searchValue: req.searchVal
+        }
+        req.appId = undefined;
+        req.searchVal = undefined;
         const options = createRequestOption(option);
-        return this.http.get(this.resourceUrl + '/project/' + req.appId + '/search/' + req.searchVal + "/", options)
+        return this.http.post(this.resourceUrl + '/project/search/', postObj, options)
             .map((res: Response) => this.convertResponse(res));
     }
 

@@ -1647,7 +1647,7 @@ export class CampaignTemplateDialogComponent implements OnInit, OnDestroy {
         if (this.isLaunch) {
             setTimeout(() => {
                 // const pageLocation: string = decodeURI(encodeURI(location.href) + '(' + 'popup:' + 'campaign-template/' + result.id + '/launch' + ')');
-                this.router.navigate(['/', { outlets: { popup: 'campaign-template/' + result.id + '/launch/true' } }]);
+                this.router.navigate(['/', { outlets: { popup: 'campaign-template/' + encodeURIComponent(result.id) + '/launch/true' } }]);
                 // alert(pageLocation);
                 // location.href = pageLocation;
                 this.isLaunch = false;

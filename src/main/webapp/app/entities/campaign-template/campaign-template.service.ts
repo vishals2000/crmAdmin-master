@@ -93,7 +93,7 @@ export class CampaignTemplateService {
     }
 
     find(id: string): Observable<CampaignTemplate> {
-        return this.http.get(`${this.resourceUrl}/${id}/`).map((res: Response) => {
+        return this.http.post(this.resourceUrl + "/", {campaignTemplateId: id}).map((res: Response) => {
             const jsonResponse = res.json();
             this.convertItemFromServer(jsonResponse);
             return jsonResponse;
@@ -101,7 +101,7 @@ export class CampaignTemplateService {
     }
 
     getFeProduct(id: string, name: string): Observable<Response> {
-        return this.http.get(`${this.resourceUrl}/${name}/${id}/`).map((res: Response) => {
+        return this.http.post(`${this.resourceUrl}/${name}/`, {campaignGroupId: id}).map((res: Response) => {
             return res.json();
         });
     }
@@ -126,20 +126,30 @@ export class CampaignTemplateService {
     }
 
     query(req?: any): Observable<ResponseWrapper> {
+        const postObj={
+            campaignGroupId : req.campGroupId
+        };
+        req.campGroupId = undefined;
         const options = createRequestOption(req);
-        return this.http.get(this.resourceUrl + '/group/' + req.campGroupId + "/", options)
+        return this.http.post(this.resourceUrl + '/group/', postObj , options)
             .map((res: Response) => this.convertResponse(res));
     }
 
     search(req?: any, option?: any): Observable<ResponseWrapper> {
+        const postObj = {
+            campaignGroupId : req.campGroupId,
+            searchValue: req.searchVal
+        };
+        req.campGroupId = undefined;
+        req.searchValue = undefined;
         const options = createRequestOption(option);
-        return this.http.get(this.resourceUrl + '/group/' + req.campGroupId + '/search/' + req.searchVal + "/", options)
+        return this.http.post(this.resourceUrl + '/group/search/',postObj , options)
             .map((res: Response) => this.convertResponse(res));
     }
 
     getPushNotificationCampaignTemplate(req?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(req);
-        return this.http.get(`${this.resourceUrl}/${req.campaignTemplateId}/`, options)
+        return this.http.post(`${this.resourceUrl}/`, {campaignTemplateId: req.campaignTemplateId}, options)
             .map((res: Response) => this.convertResponse(res));
     }
 
@@ -166,13 +176,13 @@ export class CampaignTemplateService {
     }
 
     getAppCapGrpIdFromTemp(id: string): Observable<Response> {
-        return this.http.get(this.resourceUrl + '/appCampaignGroupInfoWithCampaignTemplateId/' + id + "/").map((res: Response) => {
+        return this.http.post(this.resourceUrl + '/appCampaignGroupInfoWithCampaignTemplateId/', {campaignTemplateId: id }).map((res: Response) => {
             return res.json();
         });
     }
 
     getAppCapGrpIdFromCapGrp(id: string): Observable<Response> {
-        return this.http.get(this.resourceUrl + '/appCampaignGroupInfoWithCampaignGroupId/' + id + "/").map((res: Response) => {
+        return this.http.post(this.resourceUrl + '/appCampaignGroupInfoWithCampaignGroupId/', {campaignGroupId: id }).map((res: Response) => {
             return res.json();
         });
     }

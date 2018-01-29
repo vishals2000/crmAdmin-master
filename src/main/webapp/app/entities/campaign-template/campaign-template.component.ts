@@ -238,7 +238,7 @@ export class CampaignTemplateComponent implements OnInit, OnDestroy {
             this.openCampaignTempPage(campaignTemp.id);
         }
         else{
-            this.router.navigate(['/', { outlets: { popup: 'campaign-template/'+ campaignTemp.id + '/launch'} }], {});
+            this.router.navigate(['/', { outlets: { popup: ['campaign-template', campaignTemp.id, 'launch']} }], {});
         }
     }
     private onSuccess(data, headers) {

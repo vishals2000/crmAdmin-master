@@ -199,10 +199,10 @@ export class CampaignTemplateLaunchDialogComponent implements OnInit {
     private onPushNotificationLaunchSuccess(response, headers) {
         if (response.result) {
             this.alertService.success(response.message);
+            this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' });
         } else {
             this.alertService.error(response.message);
         }
-        this.eventManager.broadcast({ name: 'campaignTemplateListModification', content: 'OK' });
     }
 }
 
@@ -222,7 +222,7 @@ export class CampaignTemplateLaunchPopupComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.routeSub = this.route.params.subscribe((params) => {
             this.campaignTemplatePopupService
-                .openWithoutRouter(CampaignTemplateLaunchDialogComponent as Component, {isFromLaunch: params['fromLaunch']}, true,  params['id']);
+                .openWithoutRouter(CampaignTemplateLaunchDialogComponent as Component, {isFromLaunch: params['fromLaunch']}, true,  decodeURIComponent(params['id']));
         });
     }
 

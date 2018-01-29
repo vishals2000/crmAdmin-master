@@ -1,6 +1,8 @@
 import { Component, OnDestroy } from '@angular/core';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { Subscription } from 'rxjs/Rx';
+import { elementDef } from '@angular/core/src/view/element';
+import { elementAt } from 'rxjs/operator/elementAt';
 
 @Component({
     selector: 'jhi-alert-error',
@@ -100,5 +102,17 @@ export class JhiAlertErrorComponent implements OnDestroy {
                 this.alerts
             )
         );
+        setTimeout(() => {
+            let alretEl = document.querySelectorAll('.alerts') || [];
+            let bodyRect = document.body.getBoundingClientRect();
+            let offset = 0;
+            if(alretEl.length){
+                let elemRect = alretEl[0].getBoundingClientRect();
+                offset   = elemRect.top - bodyRect.top;
+            }
+            offset = Math.round(offset);
+            document.body.scrollTop = offset;
+            document.documentElement.scrollTop = offset;
+        },  0);
     }
 }

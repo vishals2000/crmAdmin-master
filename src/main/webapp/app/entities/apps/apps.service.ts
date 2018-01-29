@@ -34,7 +34,7 @@ export class AppsService {
 
     search(id: string, req?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(req);
-        return this.http.get(`${this.resourceUrl}/search/${id}/`, options)
+        return this.http.post(`${this.resourceUrl}/search/`, {searchValue: id}, options)
             .map((res: Response) => this.convertResponse(res));
     }
 

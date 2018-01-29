@@ -136,7 +136,7 @@
                             <button type="submit" alt="Copy selected template to another campaign" title="Copy selected template to another campaign" [routerLink]="['/', { outlets: { popup: 'campaign-template/copyTo'} }]" [queryParams]="{ appId: campaignTemplate.id }" class="btn btn-primary btn-sm">
                                 <span class="fa fa-external-link"></span>
                             </button>
-                            <button type="submit" alt="Test" title="Test" [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/test'} }]"
+                            <button type="submit" alt="Test" title="Test" [routerLink]="['/', { outlets: { popup: ['campaign-template', campaignTemplate.id, 'test']} }]"
                                 class="btn btn-info btn-sm">
                                 <span class="fa fa-sticky-note"></span>
                             </button>
@@ -145,11 +145,11 @@
                                 class="btn btn-info btn-sm">
                                 <span class="fa fa-rocket" [ngClass]="{'disabled':!campaignTemplate.launchEnabled}"></span>
                             </button>
-                            <button type="submit" alt="Cancel" title="Cancel" [disabled]="!campaignTemplate.cancelEnabled" [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/cancel'} }]"
+                            <button type="submit" alt="Cancel" title="Cancel" [disabled]="!campaignTemplate.cancelEnabled" [routerLink]="['/', { outlets: { popup: ['campaign-template', campaignTemplate.id, 'cancel']} }]"
                                 replaceUrl="true" class="btn btn-danger btn-sm">
                                 <span class="fa fa-remove" [ngClass]="{'disabled':!campaignTemplate.cancelEnabled}"></span>
                             </button>
-                            <button type="submit" alt="Delete" title="Delete" [disabled]="!campaignTemplate.deleteEnabled" [routerLink]="['/', { outlets: { popup: 'campaign-template/'+ campaignTemplate.id + '/delete'} }]"
+                            <button type="submit" alt="Delete" title="Delete" [disabled]="!campaignTemplate.deleteEnabled" [routerLink]="['/', { outlets: { popup: ['campaign-template', campaignTemplate.id, 'delete']} }]"
                                 replaceUrl="true" class="btn btn-danger btn-sm">
                                 <span class="fa fa-trash" [ngClass]="{'disabled':!campaignTemplate.deleteEnabled}"></span>
                             </button>
