@@ -167,9 +167,9 @@ public class AppsResource {
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(apps));
     }
 
-    @PostMapping("/campaign-group/project/app/search/")
+    @PostMapping("/apps/search/")
     @Timed
-    public ResponseEntity<List<Apps>> getAllCampaignGroupsbyProjectIdAndName(@ApiParam Pageable pageable, @Valid @RequestBody AppSearchRequest appSearchRequest) {
+    public ResponseEntity<List<Apps>> getAppsByName(@ApiParam Pageable pageable, @Valid @RequestBody AppSearchRequest appSearchRequest) {
         log.debug("REST request to get Apps by name: {}", appSearchRequest);
 
 //        Page<Apps> page = appsService.findByName(pageable, appName);
