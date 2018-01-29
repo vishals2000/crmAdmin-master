@@ -29,7 +29,6 @@ public class CampaignTemplate implements Serializable {
     @Field("campaign_name")
     private String campaignName;
 
-    @NotNull
     @Field("start_date")
     private LocalDate startDate;
 
@@ -37,11 +36,9 @@ public class CampaignTemplate implements Serializable {
     @Field("recurrence_type")
     private RecurrenceType recurrenceType;
 
-    @NotNull
     @Field("recurrence_end_date")
     private LocalDate recurrenceEndDate;
 
-    @NotNull
     @Field("scheduled_time")
     private String scheduledTime;
 
