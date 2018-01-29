@@ -126,7 +126,7 @@
                                 class="btn btn-primary btn-sm">
                                 <span class="fa fa-crosshairs"></span>
                             </button>
-                            <button type="submit" alt="View" title="View" [routerLink]="['/campaign-template', campaignTemplate.id ]"
+                            <button type="submit" alt="View" title="View" [routerLink]="['/campaign-template/detail']" [queryParams]="{id: campaignTemplate.id}"
                                 class="btn btn-primary btn-sm">
                                 <span class="fa fa-eye"></span>
                             </button>

@@ -44,8 +44,15 @@ export class CampaignTemplateDetailComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.subscription = this.route.params.subscribe((params) => {
-            this.load(params['id']);
+        // this.subscription = this.route.params.subscribe((params) => {
+        //     this.load(params['id']);
+        // });
+        this.subscription = this.route.data.subscribe((params) => {
+            if (params['pagingParams'] && params['pagingParams'].id) {
+                this.load(params['pagingParams'].id);
+            } else {
+               this.router.navigate(['/apps']);
+            }
         });
         this.registerChangeInCampaignTemplates();
     }

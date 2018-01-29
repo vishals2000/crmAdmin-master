@@ -23,11 +23,13 @@ export class CampaignTemplateResolvePagingParams implements Resolve<any> {
         const page = route.queryParams['page'] ? route.queryParams['page'] : '1';
         const sort = route.queryParams['sort'] ? route.queryParams['sort'] : 'modifiedAt,desc';
         const appId = route.queryParams['appId'] ? route.queryParams['appId'] : '';
+        const id = route.queryParams['id'] ? route.queryParams['id'] : '';
         return {
             page: this.paginationUtil.parsePage(page),
             predicate: this.paginationUtil.parsePredicate(sort),
             ascending: this.paginationUtil.parseAscending(sort),
-            appId: this.paginationUtil.parsePredicate(appId)
+            appId: this.paginationUtil.parsePredicate(appId),
+            id: this.paginationUtil.parsePredicate(id)
       };
     }
 }
@@ -70,8 +72,11 @@ export const campaignTemplateRoute: Routes = [
         },
         canActivate: [UserRouteAccessService]
     }, {
-        path: 'campaign-template/:id',
+        path: 'campaign-template/detail',
         component: CampaignTemplateDetailComponent,
+        resolve: {
+            'pagingParams': CampaignTemplateResolvePagingParams
+        },
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],
             pageTitle: 'CampaignTemplates'
