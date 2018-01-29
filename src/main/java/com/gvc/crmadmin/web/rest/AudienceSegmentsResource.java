@@ -1,9 +1,9 @@
 package com.gvc.crmadmin.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.gvc.crmadmin.domain.AudienceSegmentUploadRequest;
 import com.gvc.crmadmin.domain.AudienceSegments;
-import com.gvc.crmadmin.domain.CampaignTemplatesRequest;
+import com.gvc.crmadmin.domain.CampaignGroup;
+import com.gvc.crmadmin.domain.DeleteCampaignGroup;
 import com.gvc.crmadmin.domain.DeleteSegment;
 import com.gvc.crmadmin.domain.campaignMgmtApi.*;
 import com.gvc.crmadmin.service.AudienceSegmentsService;
@@ -51,13 +51,14 @@ public class AudienceSegmentsResource {
     }
 
     @PostMapping("/audience-segments/upload-segment")
-    public ResponseEntity<AudienceSegmentUploadResponse> handleFileUpload(@Valid @RequestBody AudienceSegmentUploadRequest audienceSegmentUploadRequest) throws URISyntaxException, UnsupportedEncodingException {
+    public ResponseEntity<AudienceSegmentUploadResponse> handleFileUpload(@RequestParam("frontEnd") String frontEnd, @RequestParam("product") String product,
+    		@RequestParam("name") String name, @RequestParam("file") MultipartFile file) throws URISyntaxException, UnsupportedEncodingException {
 
-    	System.out.println("" + audienceSegmentUploadRequest);
+    	System.out.println("frontEnd = " + frontEnd + " product = " + product + " name = " + name);
 
     	AudienceSegmentUploadResponse response = new AudienceSegmentUploadResponse();
 
-    	String id = getSegmentId(audienceSegmentUploadRequest.getProduct(), audienceSegmentUploadRequest.getFrontEnd(), audienceSegmentUploadRequest.getName());
+    	String id = getSegmentId(product, frontEnd, name);
     	AudienceSegments existingSegment = audienceSegmentsService.findOne(id);
 
     	if(existingSegment != null) {//already existing
@@ -73,15 +74,15 @@ public class AudienceSegmentsResource {
     	AudienceSegments segments = new AudienceSegments();
     	segments.setId(id);
 
-    	segments.setProduct(audienceSegmentUploadRequest.getProduct());
-    	segments.setFrontEnd(audienceSegmentUploadRequest.getFrontEnd());
-    	segments.setName(audienceSegmentUploadRequest.getName());
+    	segments.setProduct(product);
+    	segments.setFrontEnd(frontEnd);
+    	segments.setName(name);
     	segments.setType("MANUAL_UPLOAD");
     	segments.setCreatedAt(CAMPAIGN_SCHEDULE_TIME_FORMAT.print(new DateTime()));
 
     	AudienceSegments result = audienceSegmentsService.save(segments);
 
-    	StoreFileResponse storeFileResponse = audienceSegmentsService.store(id, audienceSegmentUploadRequest.getFile());
+    	StoreFileResponse storeFileResponse = audienceSegmentsService.store(id, file);
 
     	if(storeFileResponse.isResult()) {
     		return ResponseEntity.created(new URI(URLEncoder.encode("/api/audience-segments/upload-segment/" + id, "UTF-8")))
@@ -94,7 +95,7 @@ public class AudienceSegmentsResource {
     		response.setCode(-2);
     		response.setMessage(storeFileResponse.getMessage());
     		return ResponseEntity.badRequest()
-                    .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, audienceSegmentUploadRequest.getName(), storeFileResponse.getMessage()))
+                    .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, name, storeFileResponse.getMessage()))
                     .body(response);
     	}
     }
