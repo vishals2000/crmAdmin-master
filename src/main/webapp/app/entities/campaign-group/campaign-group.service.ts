@@ -70,7 +70,7 @@ export class CampaignGroupService {
         req.appId = undefined;
         req.searchVal = undefined;
         const options = createRequestOption(option);
-        return this.http.post(this.resourceUrl + '/project/search/', postObj, options)
+        return this.http.post(this.resourceUrl + '/project/app/search/', postObj, options)
             .map((res: Response) => this.convertResponse(res));
     }
 
