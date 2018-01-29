@@ -362,6 +362,21 @@ public class CampaignTemplateResource {
     }
     */
 
+    @PostMapping("/campaign-templates/appCampaignGroupInfoWithCampaignGroupId/")
+    @Timed
+    public ResponseEntity<AppCampaignGroupInfo> getAppCampaignGroupInfoWithCampaignGroupId(@Valid @RequestBody AppCampaignGroupInfoWithCampaignGroupIdRequest appCampaignGroupInfoWithCampaignGroupIdRequest) {
+        log.debug("REST request to getAppCampaignGroupInfoWithCampaignGroupId : {}", appCampaignGroupInfoWithCampaignGroupIdRequest.toString());
+        CampaignGroup campaignGroup = campaignGroupService.findOne(appCampaignGroupInfoWithCampaignGroupIdRequest.getCampaignGroupId());
+        Apps app = appsService.findOne(campaignGroup.getProjectId());
+        AppCampaignGroupInfo appCampaignGroupInfo = new AppCampaignGroupInfo();
+        appCampaignGroupInfo.setAppId(app.getId())
+            .setAppName(app.getName())
+            .setCampaignGroupId(campaignGroup.getId())
+            .setCampaignGroupName(campaignGroup.getName());
+        return ResponseUtil.wrapOrNotFound(Optional.of(appCampaignGroupInfo));
+    }
+
+    /*
     @GetMapping("/campaign-templates/appCampaignGroupInfoWithCampaignGroupId/{campaignGroupId}")
     @Timed
     public ResponseEntity<AppCampaignGroupInfo> getAppCampaignGroupInfoWithCampaignGroupId(@PathVariable String campaignGroupId) {
@@ -374,6 +389,7 @@ public class CampaignTemplateResource {
             .setCampaignGroupName(campaignGroup.getName());
         return ResponseUtil.wrapOrNotFound(Optional.of(appCampaignGroupInfo));
     }
+    */
 
     @PostMapping("/campaign-templates/group/")
     @Timed
